@@ -1,8 +1,10 @@
 import initHector from './init';
 
 // Base emissions scenario for Hector
-const baseEmissionsScenario = '/hector/rcp26.to_2050.json';
-const defaultEmissionsScenario = '/hector/rcp26.default_emissions.json';
+// Paths are relative to the page's base URL so the game
+// also works when hosted under a subpath (e.g. GitHub Pages).
+const baseEmissionsScenario = 'hector/rcp26.to_2050.json';
+const defaultEmissionsScenario = 'hector/rcp26.default_emissions.json';
 const START_YEAR = 1765; // Should match `baseEmissionsScenario["startYear"]`
 
 const hectorOutputVars = {
@@ -23,22 +25,26 @@ class Temperature {
       data: {},
     };
 
-    fetch('/hector/config.json')
-      .then((resp) => resp.json())
-      .then((config) => {
-        this.config = config;
-      });
+    // Emissions added or restored before the data files below finish
+    // loading are held here and applied once loading is done.
+    this.restored = null;
+    this.pending = [];
 
-    fetch(defaultEmissionsScenario)
-      .then((resp) => resp.json())
-      .then((defaultEmissions) => {
-        this.defaultEmissions = defaultEmissions;
-      });
+    const getJSON = (url) => fetch(url).then((resp) => resp.json());
+    this.loaded = Promise.all([
+      getJSON('hector/config.json'),
+      getJSON(defaultEmissionsScenario),
+      getJSON(baseEmissionsScenario),
+    ]).then(([config, defaultEmissions, baseScenario]) => {
+      this.config = config;
+      this.defaultEmissions = defaultEmissions;
 
-    // Load the base emissions scenario history,
-    // for computing temperature changes
-    fetch(baseEmissionsScenario)
-      .then((resp) => resp.json()).then((baseScenario) => {
+      if (this.restored) {
+        // A saved emissions history (from earlier planning cycles) was
+        // restored while we were loading. Keep it: replacing it with the
+        // base scenario would erase every year of the player's emissions.
+        this.emissions.data = this.restored;
+      } else {
         this.emissions = {
           startYear: baseScenario['startYear'],
           data: {}
@@ -49,16 +55,28 @@ class Temperature {
         Object.keys(baseScenario['data']).forEach((k) => {
           this.emissions['data'][k] = baseScenario['data'][k].slice(0, baseYears);
         });
-      });
+      }
+
+      this.pending.forEach((emissions) => this._pushEmissions(emissions));
+      this.pending = [];
+    });
   }
 
   /*
    * Adds a year of emissions data.
    * `emissions` should have keys and values for each required
-   * emissions type. Refer to `/assets/hector/rcp.to_2050.json`
+   * emissions type. Refer to `/assets/hector/rcp26.to_2050.json`
    * for the required keys.
    */
   addEmissions(emissions) {
+    if (!this.defaultEmissions) {
+      this.pending.push(emissions);
+      return;
+    }
+    this._pushEmissions(emissions);
+  }
+
+  _pushEmissions(emissions) {
     Object.keys(this.defaultEmissions).forEach((k) => {
       let val = emissions[k] !== undefined ? emissions[k] : this.defaultEmissions[k];
       this.emissions['data'][k].push(val);
@@ -67,6 +85,7 @@ class Temperature {
 
   setEmissions(emissions) {
     this.emissions.data = emissions;
+    this.restored = emissions;
   }
 
   getEmissions() {
@@ -74,11 +93,11 @@ class Temperature {
   }
 
   updateTemperature() {
-    let ready = this._hector ?
-      Promise.resolve(this._hector) :
+    let ready = this.loaded.then(() => this._hector ?
+      this._hector :
       initHector(this.config, hectorOutputVars).then((hector) => {
         this._hector = hector;
-      });
+      }));
 
     return ready.then(() => {
       // Calculate new avg global temp
