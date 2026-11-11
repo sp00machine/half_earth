@@ -31695,6 +31695,106 @@
             "notes": "https://daily.jstor.org/climate-changes-dangerous-effects-on-the-boreal-forest/#:~:text=Of%20all%20the%20biomes%20with,that%20is%20generally%20below%20freezing.\n\nhttps://newscenter.lbl.gov/2013/05/05/boreal/\nBoreal forests are the largest \u201cbiome\u201d, or ecosystem, anywhere on the Earth\u2019s land surface and account for 30% of the world\u2019s forests. They are a very important store of carbon. While there is a lot of uncertainty around the precise amount of carbon they hold, estimates suggest it is more than one third of all terrestrial carbon. \n\nAnd about a third of the boreal biome is underlain by permafrost."
         },
         {
+            "name": "Environmental Injustice - Lithium",
+            "locked": true,
+            "occurred": false,
+            "id": "f3a8d1c6-5b27-4e94-9c0a-7e2b4d6f8a13",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Likely",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "d33f1063-298a-487a-bfde-1e2a0817bcd4",
+                                "Inactive"
+                            ]
+                        },
+                        {
+                            "ProjectStatus": [
+                                "b7f2c9a4-1e63-4d58-8a0f-5c3d9e2b7146",
+                                "Finished"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -2.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "655dd0c3-3542-4524-98bb-97d61a318669",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        -1.0
+                    ]
+                },
+                {
+                    "ProjectRequest": [
+                        "d33f1063-298a-487a-bfde-1e2a0817bcd4",
+                        true,
+                        20
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Citizen",
+                            "text": "They're pumping the brine out from under the salt flat faster than the rain can ever replace it."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Citizen",
+                            "text": "The lagoons are drying up, the flamingos are gone, and our wells are next."
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Citizen",
+                            "text": "They call this a green transition. Green for whom?"
+                        },
+                        {
+                            "id": 3,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The communities around the mines are demanding a say over their land. Recognizing Indigenous sovereignty would give them one."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646239122.878121.png"
+                    },
+                    "attribution": "National Archives at College Park, Public domain, via Wikimedia Commons"
+                }
+            },
+            "notes": "[three-quarters fork] New event. Fires after Expand Lithium Mining while Indigenous Sovereignty is not in place; requests Indigenous Sovereignty."
+        },
+        {
             "name": "Environmental Injustice - Copper",
             "locked": false,
             "occurred": false,
@@ -42718,6 +42818,408 @@
             "notes": ""
         },
         {
+            "id": "a1d7e4b9-3c52-4f08-b6e1-9d2a7c5f3e84",
+            "name": "Battery Recycling",
+            "kind": "Initiative",
+            "group": "Electrification",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "BatteryRecycling",
+                        0.5
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [
+                {
+                    "cost": 5,
+                    "effects": [
+                        {
+                            "WorldVariable": [
+                                "BatteryRecycling",
+                                0.85
+                            ]
+                        }
+                    ],
+                    "active": false
+                }
+            ],
+            "active_outcome": null,
+            "supporters": [
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "opposers": [],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645635433.169463.png"
+                    },
+                    "attribution": "UniEnergy Technologies (CC BY-SA 4.0)"
+                },
+                "description": "Collect and recycle worn-out batteries from the grid and from vehicles, recovering the lithium, nickel and cobalt inside instead of mining more.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Engineer",
+                                "text": "Old battery packs are coming back to the plants by the trainload."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "Half the lithium in a new battery now comes from an old one."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New project. Recovers 50% (upgraded: 85%) of the lithium in retired batteries."
+        },
+        {
+            "id": "c9e3a7f1-6d24-4b85-a0c7-3f8e1d5b9a62",
+            "name": "Sodium-Ion Batteries",
+            "kind": "Research",
+            "group": "Electrification",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "SodiumIonBatteries"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868",
+                "655dd0c3-3542-4524-98bb-97d61a318669"
+            ],
+            "opposers": [],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645635433.169463.png"
+                    },
+                    "attribution": "UniEnergy Technologies (CC BY-SA 4.0)"
+                },
+                "description": "Develop batteries built from sodium, which is abundant everywhere, instead of lithium. They're a bit heavier and less efficient, which is fine for storage that doesn't need to move.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Engineer",
+                                "text": "Salt water instead of salt flats. The new cells work."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "They're too heavy for cars, but for grid storage nobody cares what a battery weighs."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New project. Sodium-ion batteries take over 40% of battery grid storage (no lithium, 88% round-trip efficiency vs 90%)."
+        },
+        {
+            "id": "e2b8f5d3-7a19-4c60-9e4b-1d6c3a8f7b25",
+            "name": "Pumped Hydro Storage",
+            "kind": "Initiative",
+            "group": "Electrification",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 15
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "PumpedHydroStorage"
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "opposers": [
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1648793805.649031.png"
+                    },
+                    "attribution": "Ninara, CC BY 2.0"
+                },
+                "description": "Pump water uphill into reservoirs when there's spare power and let it run back down through turbines when there isn't. It needs no lithium, but it needs the right hills and valleys, and reservoirs flood habitat.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Engineer",
+                                "text": "The upper reservoirs are filling. Every sunny afternoon we bank the surplus as water."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Environmentalist",
+                                "text": "And every valley we flood is one less valley."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New project. Pumped hydro takes over 15% of grid storage (no lithium, 80% round-trip efficiency), limited by geography; +1 extinction rate from reservoirs."
+        },
+        {
+            "id": "d4c6b2e8-9f31-4a75-8b0d-2e7f5a1c3d96",
+            "name": "Long-Duration Storage",
+            "kind": "Research",
+            "group": "Electrification",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 15
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "LongDurationStorage"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "opposers": [],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645632812.58978.png"
+                    },
+                    "attribution": "UniEnergy Technologies (CC BY-SA 4.0)"
+                },
+                "description": "Research cheap storage that can hold energy for days or weeks, like iron-air batteries that rust and un-rust iron. It needs no lithium, but loses more than half the energy it stores.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Engineer",
+                                "text": "It's basically a battery that rusts on purpose."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "It wastes a lot, but it can carry the grid through a windless week, and it's made of iron and air."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New project. Long-duration storage takes over 30% of grid storage (no lithium, 45% round-trip efficiency)."
+        },
+        {
+            "id": "b7f2c9a4-1e63-4d58-8a0f-5c3d9e2b7146",
+            "name": "Expand Lithium Mining",
+            "kind": "Initiative",
+            "group": "Materials",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "LithiumMining",
+                        1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                },
+                {
+                    "AddEvent": "f3a8d1c6-5b27-4e94-9c0a-7e2b4d6f8a13"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868",
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "opposers": [
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651671398.928571.png"
+                    },
+                    "attribution": "NOAA Office of Ocean Exploration and Research (Public Domain)"
+                },
+                "description": "Fast-track new lithium mines and brine fields to keep up with demand for batteries. Much of the world's lithium lies under salt flats and Indigenous land.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Engineer",
+                                "text": "New brine fields are coming online across the Andes."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Fanonist",
+                                "text": "And the people who live there? They were told, not asked."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New project. New lithium mines open twice as fast. Unlocks the lithium injustice event if Indigenous Sovereignty isn't in place."
+        },
+        {
             "id": "bd0558a1-7188-42c1-8a12-c0ffaad552ae",
             "name": "Battery Storage Network",
             "kind": "Initiative",
@@ -42745,12 +43247,6 @@
                     ]
                 },
                 {
-                    "OutputForFeature": [
-                        "IsIntermittent",
-                        0.1
-                    ]
-                },
-                {
                     "OutputForProcess": [
                         "1db29e91-98a7-4264-bb2b-874458ea44b7",
                         0.1
@@ -42758,6 +43254,12 @@
                 },
                 {
                     "UnlocksProject": "f8b508d6-5aba-4b0e-9e00-311475ec558a"
+                },
+                {
+                    "WorldVariable": [
+                        "StorageLosses",
+                        -0.25
+                    ]
                 }
             ],
             "outcomes": [
@@ -42803,7 +43305,7 @@
                     }
                 ]
             },
-            "notes": "Could you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL"
+            "notes": "[three-quarters fork] Was +10% output for all intermittent processes, a stand-in for storage. Storage is now modeled (engine/src/storage.rs), so this instead cuts storage round-trip losses by 25% through smarter dispatch and transmission.\n\nCould you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL"
         },
         {
             "id": "532d9684-e653-4eee-a181-f1c958ee2d8b",
@@ -44789,6 +45291,12 @@
                         "Deforestation",
                         -0.3
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "LithiumMining",
+                        -0.3
+                    ]
                 }
             ],
             "outcomes": [
@@ -44841,7 +45349,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Was a flat -0.35 Gt/yr. Indigenous-managed land sees far less deforestation, so this now cuts background deforestation by 30% instead.\n\nhttps://drawdown.org/solutions/indigenous-peoples-forest-tenure#:~:text=Impact%3A,of%20carbon%20dioxide%20emissions%20avoided.\n\n\"Impact: Indigenous peoples have secure land tenure on 497 million hectares globally, though they live on and manage much more. If forestland under secure tenure grows by 995\u20131141million hectares by 2050, reduced deforestation could result in 8.7\u201312.9 gigatons of carbon dioxide emissions avoided. This solution could bring the total forest area under indigenous management to 1.14 billion hectares, securing an estimated protected stock of 187\u2013215 gigatons of carbon, roughly equivalent to over 687\u2013786 gigatons of carbon dioxide if released into the atmosphere.\"\n\nThis is 12.9 Gt from 2020-2050, so 0.43Gt/yr."
+            "notes": "[three-quarters fork] Also slows how fast lithium mining can expand by 30%: mining needs consent from the communities whose land and water it uses.\n\n[three-quarters fork] Was a flat -0.35 Gt/yr. Indigenous-managed land sees far less deforestation, so this now cuts background deforestation by 30% instead.\n\nhttps://drawdown.org/solutions/indigenous-peoples-forest-tenure#:~:text=Impact%3A,of%20carbon%20dioxide%20emissions%20avoided.\n\n\"Impact: Indigenous peoples have secure land tenure on 497 million hectares globally, though they live on and manage much more. If forestland under secure tenure grows by 995\u20131141million hectares by 2050, reduced deforestation could result in 8.7\u201312.9 gigatons of carbon dioxide emissions avoided. This solution could bring the total forest area under indigenous management to 1.14 billion hectares, securing an estimated protected stock of 187\u2013215 gigatons of carbon, roughly equivalent to over 687\u2013786 gigatons of carbon dioxide if released into the atmosphere.\"\n\nThis is 12.9 Gt from 2020-2050, so 0.43Gt/yr."
         },
         {
             "id": "171b3433-9eb3-4d04-aef2-27659e1101c1",

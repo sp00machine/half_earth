@@ -30,6 +30,15 @@ pub enum WorldVariable {
 
     /// Fractional change to how fast freed land regrows (0.2 is 20% faster).
     Regrowth,
+
+    /// Share of lithium recovered from retired batteries (absolute change).
+    BatteryRecycling,
+
+    /// Fractional change to how fast lithium mining can grow.
+    LithiumMining,
+
+    /// Fractional change to energy lost in storage round trips.
+    StorageLosses,
 }
 
 #[derive(

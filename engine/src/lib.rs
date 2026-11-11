@@ -5,6 +5,7 @@ mod industries;
 mod kinds;
 pub mod land;
 pub mod materials;
+pub mod storage;
 mod npcs;
 mod production;
 mod projects;

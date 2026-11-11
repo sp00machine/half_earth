@@ -410,6 +410,21 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                     })
                 }
             }
+            Var::Electricity => {
+                let storage = state.storage.last;
+                for (name, amount) in [
+                    (t!("Storage Losses"), storage.losses),
+                    (t!("Wasted for Lack of Storage"), storage.curtailed),
+                ] {
+                    if amount > 0. {
+                        rankings.push(Factor::Event {
+                            name: name.to_string(),
+                            amount,
+                            display: Some(display::to_energy_units(amount).round_to(1).to_string()),
+                        });
+                    }
+                }
+            }
             Var::Emissions => {
                 // Land-use change, broken out by source.
                 let land = state.land_carbon.last;

@@ -138,6 +138,9 @@ impl Condition {
                     WorldVariable::Precipitation => state.world.precipitation,
                     WorldVariable::Deforestation => state.land_carbon.deforestation_modifier,
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier,
+                    WorldVariable::BatteryRecycling => state.storage.recycling,
+                    WorldVariable::LithiumMining => state.storage.mining_modifier,
+                    WorldVariable::StorageLosses => state.storage.losses_modifier,
                 };
                 comp.eval(val, *other_val)
             }

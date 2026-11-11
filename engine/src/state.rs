@@ -6,6 +6,7 @@ use crate::{
     kinds::*,
     land::LandCarbon,
     materials::Infrastructure,
+    storage::{Storage, StorageTech},
     npcs::NPC,
     outputs,
     production::{ProcessChanges, ProcessFeature, calculate_required, produce},
@@ -77,6 +78,10 @@ pub struct State {
     #[serde(default)]
     pub land_carbon: LandCarbon,
 
+    /// Grid storage and lithium.
+    #[serde(default)]
+    pub storage: Storage,
+
     /// Energy infrastructure built, and the materials it took.
     #[serde(default)]
     pub infrastructure: Infrastructure,
@@ -144,6 +149,7 @@ impl State {
             land_carbon: LandCarbon::default(),
             yield_years: 0.,
             infrastructure: Infrastructure::default(),
+            storage: Storage::default(),
             produced: Production::default(),
             output_demand: OutputDemand::default(),
             resource_demand: ResourceDemand::default(),
@@ -354,6 +360,14 @@ impl State {
         self.output_demand.base.electricity += required_resources.electricity;
         self.output_demand.base.fuel += required_resources.fuel;
 
+        // Storage round-trip losses, and energy wasted for lack of storage.
+        let electricity = self.output_demand.total().electricity;
+        self.output_demand.base.electricity += self.storage.extra_demand(
+            electricity,
+            self.intermittent_share(),
+            self.storage_tech(),
+        );
+
         // Now re-calculate orders
         let total_demand = self.output_demand.total();
         let orders = self.world.processes.orders(&total_demand);
@@ -390,6 +404,8 @@ impl State {
         self.resources.available.electricity = self.produced.amount.electricity;
 
         self.feedstocks.consumed = consumed_feedstocks;
+        // Lithium for batteries (grid storage and vehicles).
+        self.feedstocks.consumed[Feedstock::Lithium] += self.storage.last.lithium_mined;
         self.feedstocks.required = required_feedstocks;
 
         self.byproducts.base = production_byproducts + industry_byproducts;
@@ -440,6 +456,42 @@ impl State {
             &mut self.world.industries,
             lic_pop,
         );
+
+        // Batteries for grid storage and electric vehicles.
+        let ev_electricity = self
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Road Transport")
+            .map(|i| i.total_demand_for_resource(lic_pop, Resource::Electricity))
+            .unwrap_or(0.);
+        let lithium_left = self.feedstocks.available[Feedstock::Lithium];
+        self.storage.step(
+            self.produced.amount.electricity,
+            self.intermittent_share(),
+            ev_electricity,
+            self.storage_tech(),
+            lithium_left,
+        );
+    }
+
+    /// Share of electricity planned from intermittent sources (wind, solar).
+    pub fn intermittent_share(&self) -> f32 {
+        self.world
+            .processes
+            .iter()
+            .filter(|p| p.output == Output::Electricity && p.features.contains(&ProcessFeature::IsIntermittent))
+            .map(|p| p.mix_percent())
+            .sum::<f32>()
+            .min(1.)
+    }
+
+    pub fn storage_tech(&self) -> StorageTech {
+        StorageTech {
+            sodium_ion: self.flags.contains(&Flag::SodiumIonBatteries),
+            pumped_hydro: self.flags.contains(&Flag::PumpedHydroStorage),
+            long_duration: self.flags.contains(&Flag::LongDurationStorage),
+        }
     }
 
     fn step_world(&mut self, tgav: f32) -> Vec<Update> {

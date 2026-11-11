@@ -285,6 +285,18 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
             icons::BAN,
             t!("Fossil fuel processes can no longer be expanded."),
         ),
+        Flag::SodiumIonBatteries => tip(
+            icons::ELECTRICITY,
+            t!("Sodium-ion batteries take over part of grid storage, needing no lithium."),
+        ),
+        Flag::PumpedHydroStorage => tip(
+            icons::ELECTRICITY,
+            t!("Pumped hydro takes over part of grid storage, needing no lithium."),
+        ),
+        Flag::LongDurationStorage => tip(
+            icons::ELECTRICITY,
+            t!("Long-duration storage takes over part of grid storage. It needs no lithium but loses more energy."),
+        ),
         Flag::LifeGoesOn => tip(icons::ALERT, t!("The game never ends.")),
     }
 }
@@ -563,6 +575,54 @@ impl DisplayEffect {
                         "land",
                         &t!(
                             "%{changeDir} how fast freed land regrows by %{amount}%.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount * 100.)
+                        ),
+                    ),
+                ),
+                WorldVariable::BatteryRecycling => (
+                    tip(
+                        icons::ELECTRICITY,
+                        t!(
+                            "Lithium from worn-out batteries can be recovered for new ones. Currently %{percent}% is recovered.",
+                            percent = format!("{:.0}", state.storage.recycling * 100.)
+                        ),
+                    ),
+                    icon_text(
+                        "electricity",
+                        &t!(
+                            "%{changeDir} battery recycling by %{amount}%.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount * 100.)
+                        ),
+                    ),
+                ),
+                WorldVariable::LithiumMining => (
+                    tip(
+                        icons::ELECTRICITY,
+                        t!(
+                            "Batteries need lithium, and new mines take time to open. About %{amount}kt can be mined this year.",
+                            amount = format!("{:.0}", state.storage.mining_capacity * 1e-9)
+                        ),
+                    ),
+                    icon_text(
+                        "electricity",
+                        &t!(
+                            "%{changeDir} how fast lithium mining can expand by %{amount}%.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount * 100.)
+                        ),
+                    ),
+                ),
+                WorldVariable::StorageLosses => (
+                    tip(
+                        icons::ELECTRICITY,
+                        t!("Grids with lots of wind and solar store energy for later, losing some on every round trip."),
+                    ),
+                    icon_text(
+                        "electricity",
+                        &t!(
+                            "%{changeDir} energy lost in storage by %{amount}%.",
                             changeDir = self.change_dir(*amount),
                             amount = self.fmt_param(amount * 100.)
                         ),

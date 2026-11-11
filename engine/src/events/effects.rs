@@ -47,6 +47,9 @@ pub enum Flag {
     LifeGoesOn,
     WarFooting,
     FossilMoratorium,
+    SodiumIonBatteries,
+    PumpedHydroStorage,
+    LongDurationStorage,
 }
 impl std::fmt::Display for Flag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -62,6 +65,9 @@ impl std::fmt::Display for Flag {
             Self::BailedOut => "You've been bailed out once",
             Self::WarFooting => "Energy, electrification and buildings projects take 40% less time to complete.",
             Self::FossilMoratorium => "Fossil fuel processes can no longer be expanded.",
+            Self::SodiumIonBatteries => "Sodium-ion batteries take over part of grid storage, needing no lithium.",
+            Self::PumpedHydroStorage => "Pumped hydro takes over part of grid storage, needing no lithium.",
+            Self::LongDurationStorage => "Long-duration storage takes over part of grid storage, needing no lithium but losing more energy.",
             Self::FastDevelopment => "Underdeveloped regions develop more quickly.",
             Self::Degrowth => "Wealthy regions income levels and consumption will decline.",
             Self::MetalsShortage => "Infrastructure projects take 20% longer to finish.",
@@ -342,6 +348,9 @@ impl Effect {
                         state.land_carbon.deforestation_modifier += *change
                     }
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier += *change,
+                    WorldVariable::BatteryRecycling => state.storage.recycling += *change,
+                    WorldVariable::LithiumMining => state.storage.mining_modifier += *change,
+                    WorldVariable::StorageLosses => state.storage.losses_modifier += *change,
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier += *change
                     }
@@ -590,6 +599,9 @@ impl Effect {
                         state.land_carbon.deforestation_modifier -= *change
                     }
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier -= *change,
+                    WorldVariable::BatteryRecycling => state.storage.recycling -= *change,
+                    WorldVariable::LithiumMining => state.storage.mining_modifier -= *change,
+                    WorldVariable::StorageLosses => state.storage.losses_modifier -= *change,
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier -= *change
                     }
