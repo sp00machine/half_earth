@@ -16,7 +16,7 @@ use crate::{
 use super::{AsCard, CARD_HEIGHT, project::npc_support};
 use egui::{Color32, CornerRadius, Margin, Stroke, StrokeKind};
 use egui_taffy::{TuiBuilderLogic, taffy};
-use hes_engine::{Collection, Feedstock, NPC, Process};
+use hes_engine::{Collection, Feedstock, NPC, Process, ProcessFeature};
 use rust_i18n::t;
 
 fn describe_estimate(estimate: f32) -> Cow<'static, str> {
@@ -456,6 +456,36 @@ impl AsCard for Process {
                     for feat in &self.features {
                         let tip = tip(feat.icon(), t!(feat.title()));
                         add_tip(tip, ui.add(feat.icon().size(24.)));
+                    }
+
+                    // Materials for building this process's capacity.
+                    if let Some(m) = &self.materials {
+                        let tip = tip(
+                            icons::IRON_AND_STEEL,
+                            t!(
+                                "Building each gigawatt of this takes about %{steel}kt of steel, %{cement}kt of cement and %{energy}GWh of manufacturing energy. These are made by industry as capacity is built, so their emissions depend on how clean industry is.",
+                                steel = format!("{:.0}", m.steel),
+                                cement = format!("{:.0}", m.cement),
+                                energy = format!("{:.0}", m.other_energy * 1e-3)
+                            ),
+                        );
+                        add_tip(tip, ui.add(icons::IRON_AND_STEEL.size(24.)));
+                    }
+
+                    // Wind and solar need storage, which needs lithium.
+                    if self.features.contains(&ProcessFeature::IsIntermittent) {
+                        let storage = &state.storage;
+                        let years = state.feedstocks.until_exhaustion(Feedstock::Lithium);
+                        let tip = tip(
+                            icons::LITHIUM,
+                            t!(
+                                "Once wind and solar pass about 30% of electricity, the grid needs storage, and most batteries need lithium. %{built}% of the storage the grid needs is built. %{mined}kt of lithium was mined this year, and reserves would last %{years} years at this rate.",
+                                built = format!("{:.0}", (1. - storage.last.shortfall) * 100.),
+                                mined = format!("{:.0}", storage.last.lithium_mined * 1e-9),
+                                years = if years.is_finite() { format!("{years:.0}") } else { "∞".to_string() }
+                            ),
+                        );
+                        add_tip(tip, ui.add(icons::LITHIUM.size(24.)));
                     }
                 });
             });

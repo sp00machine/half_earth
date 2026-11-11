@@ -63,7 +63,7 @@ impl std::fmt::Display for Flag {
             Self::Electrified => "80% of fuel demand becomes electricity demand.",
             Self::Vegan => "90% of animal calorie demand is met with plant calories.",
             Self::BailedOut => "You've been bailed out once",
-            Self::WarFooting => "Energy, electrification and buildings projects take 40% less time to complete.",
+            Self::WarFooting => "Energy, electrification and buildings projects take 20% less time to complete.",
             Self::FossilMoratorium => "Fossil fuel processes can no longer be expanded.",
             Self::SodiumIonBatteries => "Sodium-ion batteries take over part of grid storage, needing no lithium.",
             Self::PumpedHydroStorage => "Pumped hydro takes over part of grid storage, needing no lithium.",
@@ -959,7 +959,7 @@ mod tests {
 
         Effect::AddFlag(Flag::WarFooting).apply(&mut state, None);
         state.step_year(state.world.temperature);
-        assert!((state.world.projects[&energy].cost as f32) < energy_before as f32 * 0.8);
+        assert!((state.world.projects[&energy].cost as f32) < energy_before as f32 * 0.9);
         assert!(state.world.projects[&food].cost >= food_before);
     }
 

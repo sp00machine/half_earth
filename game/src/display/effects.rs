@@ -279,7 +279,7 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
         Flag::SkipTutorial => tip(icons::ALERT, t!("Skip the tutorial.")),
         Flag::WarFooting => tip(
             icons::THE_AUTHORITARIAN,
-            t!("Energy, electrification and buildings projects take 40% less time to complete."),
+            t!("Energy, electrification and buildings projects take 20% less time to complete."),
         ),
         Flag::FossilMoratorium => tip(
             icons::BAN,

@@ -274,6 +274,22 @@ pub struct LandSplit {
     pub wild: f32,
 }
 
+/// Energy used by industry to build energy infrastructure
+/// (the steel, cement and manufacturing for new capacity).
+fn construction_factor(state: &State, resource: Resource) -> Option<Factor> {
+    let amount: f32 = state
+        .world
+        .industries
+        .iter()
+        .map(|ind| ind.extra_demand.max(0.) * ind.adj_resources()[resource])
+        .sum();
+    (amount > 0.).then(|| Factor::Event {
+        name: t!("Energy Infrastructure Construction").to_string(),
+        amount,
+        display: Some(display::to_energy_units(amount).round_to(1).to_string()),
+    })
+}
+
 fn emission_gases<S: HasImpacts>(source: &S, impact: Impact, state: &State) -> Option<Gases> {
     (impact == Impact::Emissions)
         .then(|| Gases::from_byproducts(&source.byproducts(), source.demand(state)))
@@ -452,7 +468,15 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                     })
                 }
             }
+            Var::Fuel => {
+                if let Some(factor) = construction_factor(state, Resource::Fuel) {
+                    rankings.push(factor);
+                }
+            }
             Var::Electricity => {
+                if let Some(factor) = construction_factor(state, Resource::Electricity) {
+                    rankings.push(factor);
+                }
                 let storage = state.storage.last;
                 for (name, amount) in [
                     (t!("Storage Losses"), storage.losses),

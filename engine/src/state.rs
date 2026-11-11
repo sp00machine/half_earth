@@ -685,7 +685,7 @@ impl State {
                     Group::Energy | Group::Electrification | Group::Buildings
                 )
             {
-                group_modifier *= 0.6;
+                group_modifier *= 0.8;
             }
             project.update_cost(
                 self.world.year,

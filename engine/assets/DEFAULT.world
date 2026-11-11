@@ -16569,13 +16569,51 @@
             "phase": "WorldMain",
             "probabilities": [
                 {
-                    "likelihood": "Rare",
+                    "likelihood": "Likely",
                     "conditions": [
                         {
-                            "Demand": [
-                                "AnimalCalories",
+                            "WorldVariable": [
+                                "Temperature",
+                                "GreaterEqual",
+                                2.5
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
                                 "Greater",
-                                0.0
+                                2025.0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "Temperature",
+                                "GreaterEqual",
+                                2.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Unlikely",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "Temperature",
+                                "GreaterEqual",
+                                1.5
                             ]
                         },
                         {
@@ -16625,51 +16663,13 @@
                     ]
                 },
                 {
-                    "likelihood": "Likely",
+                    "likelihood": "Rare",
                     "conditions": [
                         {
-                            "WorldVariable": [
-                                "Temperature",
-                                "GreaterEqual",
-                                2.5
-                            ]
-                        },
-                        {
-                            "WorldVariable": [
-                                "Year",
+                            "ProcessMixShareFeature": [
+                                "UsesLivestock",
                                 "Greater",
-                                2025.0
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "likelihood": "Random",
-                    "conditions": [
-                        {
-                            "WorldVariable": [
-                                "Temperature",
-                                "GreaterEqual",
-                                2.0
-                            ]
-                        },
-                        {
-                            "WorldVariable": [
-                                "Year",
-                                "Greater",
-                                2025.0
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "likelihood": "Unlikely",
-                    "conditions": [
-                        {
-                            "WorldVariable": [
-                                "Temperature",
-                                "GreaterEqual",
-                                1.5
+                                0.0
                             ]
                         },
                         {
@@ -16765,7 +16765,7 @@
                     "attribution": "Dicklyon, CC BY-SA 3.0Dicklyon, CC BY-SA 3.0"
                 }
             },
-            "notes": "TV. Not sure how to structure this event. If the player has lots of animal agriculture, then desertification will get worse--does not matter if the output is organic, industrial, etc."
+            "notes": "[three-quarters fork] Conditions are checked in order and the first match wins, so the Cellular Meat and Vegan Mandate exemptions used to come after an always-true 'any animal calorie demand' entry and never applied. Now: severe warming (1.5C+) can cause it regardless; otherwise it can't happen with >80% cellular meat or a vegan mandate; otherwise livestock farming or 1C+ of warming gives a rare chance.\n\nTV. Not sure how to structure this event. If the player has lots of animal agriculture, then desertification will get worse--does not matter if the output is organic, industrial, etc."
         },
         {
             "name": "Day Zero - Water Restrictions in Place",
@@ -17629,6 +17629,30 @@
                     "likelihood": "Likely",
                     "conditions": [
                         {
+                            "WorldVariable": [
+                                "StorageShortfall",
+                                "GreaterEqual",
+                                0.5
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "StorageShortfall",
+                                "GreaterEqual",
+                                0.25
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Likely",
+                    "conditions": [
+                        {
                             "OutputDemandGap": [
                                 "Electricity",
                                 "GreaterEqual",
@@ -17668,7 +17692,7 @@
                 },
                 "image": null
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
         },
         {
             "name": "Unrest - Revolts",
@@ -19776,6 +19800,18 @@
             "phase": "Icon",
             "probabilities": [
                 {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "StorageShortfall",
+                                "GreaterEqual",
+                                0.7
+                            ]
+                        }
+                    ]
+                },
+                {
                     "likelihood": "Likely",
                     "conditions": [
                         {
@@ -19818,7 +19854,7 @@
                 },
                 "image": null
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
         },
         {
             "name": "Ally - The Utopian",
@@ -28416,6 +28452,18 @@
                     "likelihood": "Likely",
                     "conditions": [
                         {
+                            "WorldVariable": [
+                                "StorageShortfall",
+                                "GreaterEqual",
+                                0.3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Likely",
+                    "conditions": [
+                        {
                             "ProcessMixShareFeature": [
                                 "IsIntermittent",
                                 "GreaterEqual",
@@ -28580,7 +28628,7 @@
                     "attribution": "kishjar? (CC BY 2.0)"
                 }
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
         },
         {
             "name": "Copper Shortage",
@@ -40072,7 +40120,12 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"PlayerVariable": ["PoliticalCapital", 15.0]},
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        15.0
+                    ]
+                },
                 {
                     "AddFlag": "WarFooting"
                 },
@@ -40084,6 +40137,9 @@
                         "Outlook",
                         -2.0
                     ]
+                },
+                {
+                    "LocksProject": "b0602718-aed6-4bd1-b358-1a16cd0b5999"
                 }
             ],
             "outcomes": [
@@ -40112,7 +40168,7 @@
                     },
                     "attribution": ""
                 },
-                "description": "Mobilize the economy the way nations once mobilized for war: factories retooled overnight, labor directed where it is needed, and red tape cut to ribbons. Energy, electrification and building projects finish far faster, but life under mobilization is hard and people chafe at it.",
+                "description": "Mobilize the economy the way nations once mobilized for war: factories retooled overnight, labor directed where it is needed, and red tape cut to ribbons. Energy, electrification and building projects finish faster, but life under mobilization is hard and people chafe at it.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -40143,7 +40199,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
+            "notes": "[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
         },
         {
             "id": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
@@ -40958,17 +41014,17 @@
                         "b6694f1d-5597-4bb8-a484-254930838982",
                         -5.0
                     ]
+                },
+                {
+                    "ModifyIndustryDemand": [
+                        "4b8e2d61-7a35-4c90-9f1e-6d3a8c5b2e07",
+                        -1.0
+                    ]
                 }
             ],
             "outcomes": [
                 {
                     "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -2.5
-                            ]
-                        },
                         {
                             "ModifyEventProbability": [
                                 "177af2fa-f472-4894-b111-07345846c6fc",
@@ -41028,7 +41084,7 @@
                     }
                 ]
             },
-            "notes": "Emissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
+            "notes": "[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
         },
         {
             "id": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9",
@@ -41993,6 +42049,9 @@
                         "Fuel",
                         0.05
                     ]
+                },
+                {
+                    "LocksProject": "3f9a2c6e-1b7d-4e58-9c0a-6d2e8f41b7a5"
                 }
             ],
             "outcomes": [
@@ -42044,7 +42103,7 @@
                     }
                 ]
             },
-            "notes": "Got the picture here. TV. https://www.globalsecurity.org/jhtml/jframe.html#https://www.globalsecurity.org/military/world/russia/images/stakhanovite-2.jpg|||\n\nPerhaps it would be simpler to just make all research and infrastructure 20% cheaper but discontent grows by 20% (i.e. by 4). Also, should use more fuel and electricity. TV\n"
+            "notes": "[three-quarters fork] Locks Climate War Footing: both are ways of mobilizing labor, so they don't stack.\n\nGot the picture here. TV. https://www.globalsecurity.org/jhtml/jframe.html#https://www.globalsecurity.org/military/world/russia/images/stakhanovite-2.jpg|||\n\nPerhaps it would be simpler to just make all research and infrastructure 20% cheaper but discontent grows by 20% (i.e. by 4). Also, should use more fuel and electricity. TV\n"
         },
         {
             "id": "0565fbf7-dbc9-4927-8f0f-7cd6e4ed2634",
@@ -50137,7 +50196,7 @@
                 "fuel": 29.37297
             },
             "byproducts": {
-                "co2": 29.13,
+                "co2": 29130.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -50164,7 +50223,47 @@
                 },
                 "description": "Plastics, pharmaceuticals, cleaning agents, pesticides, and other sorts of compounds that are found scattered throughout our lives and the world."
             },
-            "notes": "Electricity and water are part of \"Other Industry\"\nWhat about methane and pollution?"
+            "notes": "[three-quarters fork] co2 was 29.13, which totals only ~1.2 Mt; it looks like it was entered in kg rather than g. Now 29130.0 (~0.0 Gt), in line with real-world process emissions (cement calcination is ~1.6 Gt CO2).\n\nElectricity and water are part of \"Other Industry\"\nWhat about methane and pollution?"
+        },
+        {
+            "id": "4b8e2d61-7a35-4c90-9f1e-6d3a8c5b2e07",
+            "name": "Military",
+            "resources": {
+                "land": 0.0,
+                "water": 0.0,
+                "electricity": 0.0,
+                "fuel": 0.0
+            },
+            "byproducts": {
+                "co2": 60193.0,
+                "ch4": 0.0,
+                "n2o": 0.0,
+                "biodiversity": 0.0
+            },
+            "resource_modifiers": {
+                "land": 0.0,
+                "water": 0.0,
+                "electricity": 0.0,
+                "fuel": 0.0
+            },
+            "byproduct_modifiers": {
+                "co2": 0.0,
+                "ch4": 0.0,
+                "n2o": 0.0,
+                "biodiversity": 0.0
+            },
+            "demand_modifier": 1.0,
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1639493184.84341.png"
+                    },
+                    "attribution": "Superbass (CC BY-SA 4.0)"
+                },
+                "description": "The world's armed forces: their jets, warships, vehicles, bases and the industry that supplies them."
+            },
+            "notes": "[three-quarters fork] New industry. Militaries account for ~5.5% of global emissions (Conflict and Environment Observatory / Scientists for Global Responsibility, 2022), ~2.5 Gt CO2. Modeled as direct emissions (military fuel use is hard to decarbonize); the equivalent fuel was moved out of Other Industry so starting emissions are unchanged. Global Demilitarization removes it.",
+            "extra_demand": 0.0
         },
         {
             "id": "baad588c-5f84-47f3-8476-95cc20786e6a",
@@ -50173,7 +50272,7 @@
                 "land": 0.0,
                 "water": 20489.19,
                 "electricity": 249.418,
-                "fuel": 535.04
+                "fuel": 316.94
             },
             "byproducts": {
                 "co2": 0.0,
@@ -50203,7 +50302,7 @@
                 },
                 "description": "All other industries not specified elsewhere--including the water and electricity usage across most industries."
             },
-            "notes": "Catch-all for industries not otherwise specified or for resource/byproducts that weren't disaggregated into specific industries (and for our purposes don't need to be). For example, we don't have water usage for each industry but we do have aggregate industrial water usage.\n\nBecause settlement and infrastructure land use is only 1% of total habitable land use (versus 50% for agriculture), see https://ourworldindata.org/land-use, assume land use for these industries is basically negligible.\n\nA note on \"low-income-capita\" (LIC)--these are the per-capita rates for a person in a low-income country. If the world was just low-income people but had equivalent total of material footprint, the population would be 37 billion. A different LIC scaling rate is calculated for different resources--all industries are scaled based on material footprint, but household water consumption, electricity, fuel, and plant and animal calories have different scaling rates (see `Consts`)."
+            "notes": "[three-quarters fork] Fuel reduced by 218.1 kWh/unit (535.04 -> 316.94), now its own Military industry.\n\nCatch-all for industries not otherwise specified or for resource/byproducts that weren't disaggregated into specific industries (and for our purposes don't need to be). For example, we don't have water usage for each industry but we do have aggregate industrial water usage.\n\nBecause settlement and infrastructure land use is only 1% of total habitable land use (versus 50% for agriculture), see https://ourworldindata.org/land-use, assume land use for these industries is basically negligible.\n\nA note on \"low-income-capita\" (LIC)--these are the per-capita rates for a person in a low-income country. If the world was just low-income people but had equivalent total of material footprint, the population would be 37 billion. A different LIC scaling rate is calculated for different resources--all industries are scaled based on material footprint, but household water consumption, electricity, fuel, and plant and animal calories have different scaling rates (see `Consts`)."
         },
         {
             "id": "6d5d8b53-9fbc-4721-91d6-c021e41ee519",
@@ -50254,7 +50353,7 @@
                 "fuel": 64.63
             },
             "byproducts": {
-                "co2": 39.72,
+                "co2": 39720.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -50281,7 +50380,7 @@
                 },
                 "description": "The industry that produces, processes, and transports this ubiquitous and fundamental material."
             },
-            "notes": "Really, \"Non-metallic Minerals\" which also includes things like glass, aside from some process-specific emissions, all others assumed to come from fuel use."
+            "notes": "[three-quarters fork] co2 was 39.72, which totals only ~1.6 Mt; it looks like it was entered in kg rather than g. Now 39720.0 (~0.0 Gt), in line with real-world process emissions (cement calcination is ~1.6 Gt CO2).\n\nReally, \"Non-metallic Minerals\" which also includes things like glass, aside from some process-specific emissions, all others assumed to come from fuel use."
         },
         {
             "id": "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
