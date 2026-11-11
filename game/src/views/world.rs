@@ -403,5 +403,9 @@ fn get_emissions(state: &State) -> HashMap<&'static str, f64> {
     emissions.insert("ffi_emissions", (co2 * emissions_factor) as f64);
     emissions.insert("CH4_emissions", (ch4 * emissions_factor) as f64);
     emissions.insert("N2O_emissions", (n2o * emissions_factor) as f64);
+    emissions.insert(
+        "luc_emissions",
+        (state.emissions.land_for_hector() * emissions_factor) as f64,
+    );
     emissions
 }

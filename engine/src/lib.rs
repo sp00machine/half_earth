@@ -3,6 +3,7 @@ mod events;
 pub mod flavor;
 mod industries;
 mod kinds;
+pub mod land;
 mod npcs;
 mod production;
 mod projects;

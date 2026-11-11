@@ -4,6 +4,7 @@ use crate::{
     Collection, Id,
     events::{Condition, Effect, Event, EventPool, Flag, Phase, Request},
     kinds::*,
+    land::LandCarbon,
     npcs::NPC,
     outputs,
     production::{ProcessChanges, ProcessFeature, calculate_required, produce},
@@ -64,6 +65,10 @@ pub struct State {
     pub emissions: Emissions,
     pub last_outlook: f32,
 
+    /// Carbon from clearing and regrowing land.
+    #[serde(default)]
+    pub land_carbon: LandCarbon,
+
     pub events: Vec<Event>,
 
     pub event_pool: EventPool,
@@ -118,6 +123,7 @@ impl State {
             last_outlook: 0.,
             shortages_outlook: 0.,
             emissions: Emissions::default(),
+            land_carbon: LandCarbon::default(),
             produced: Production::default(),
             output_demand: OutputDemand::default(),
             resource_demand: ResourceDemand::default(),
@@ -372,6 +378,14 @@ impl State {
             .max(0.);
 
         self.world.update_extinction_rate(&self.produced.by_process);
+
+        // Land-use change emissions, once per year.
+        let land_emissions = self.land_carbon.step(
+            self.resources.consumed.land,
+            self.world.starting_resources.land,
+            self.protected_land,
+        );
+        self.emissions.land = land_emissions.total();
     }
 
     fn step_world(&mut self, tgav: f32) -> Vec<Update> {
@@ -710,6 +724,10 @@ pub struct Emissions {
     pub co2: f32,
     pub ch4: f32,
     pub n2o: f32,
+
+    /// Net CO2 from land-use change (clearing, regrowth, deforestation), g CO2.
+    #[serde(default)]
+    pub land: f32,
 }
 impl Emissions {
     pub fn update(&mut self, byproducts: ByproductMap) {
@@ -719,7 +737,12 @@ impl Emissions {
     }
 
     pub fn as_co2eq(&self) -> f32 {
-        self.co2 + (self.n2o * 298.) + (self.ch4 * 36.)
+        self.co2 + self.land + (self.n2o * 298.) + (self.ch4 * 36.)
+    }
+
+    /// Land-use change emissions in the units Hector expects (Pg C/y).
+    pub fn land_for_hector(&self) -> f32 {
+        self.land * 12. / 44. * 1e-15
     }
 
     pub fn as_gtco2eq(&self) -> f32 {
