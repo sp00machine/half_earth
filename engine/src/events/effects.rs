@@ -322,7 +322,7 @@ impl Effect {
                         state.emissions.co2 += *change * 1e15; // Apply immediately
                     }
                     WorldVariable::ExtinctionRate => {
-                        state.byproducts.modifier.biodiversity -= *change
+                        state.world.extinction_rate_modifier += *change
                     }
                     WorldVariable::Outlook => {
                         state.world.base_outlook += *change;
@@ -564,7 +564,7 @@ impl Effect {
                         state.emissions.co2 -= *change * 1e15; // Apply immediately
                     }
                     WorldVariable::ExtinctionRate => {
-                        state.byproducts.modifier.biodiversity += *change
+                        state.world.extinction_rate_modifier -= *change
                     }
                     WorldVariable::Outlook => state.world.base_outlook -= *change,
                     WorldVariable::Temperature => state.world.temperature_modifier -= *change,
@@ -806,6 +806,22 @@ mod tests {
     use crate::Status;
 
     use super::*;
+
+    #[test]
+    fn test_extinction_rate_effects_apply() {
+        let mut state = State::default();
+        state.world.update_extinction_rate(&state.produced.by_process);
+        let before = state.world.extinction_rate;
+
+        let effect = Effect::WorldVariable(WorldVariable::ExtinctionRate, 7.);
+        effect.apply(&mut state, None);
+        state.world.update_extinction_rate(&state.produced.by_process);
+        assert!((state.world.extinction_rate - (before + 7.)).abs() < 1e-3);
+
+        effect.unapply(&mut state, None);
+        state.world.update_extinction_rate(&state.produced.by_process);
+        assert!((state.world.extinction_rate - before).abs() < 1e-3);
+    }
 
     #[test]
     fn test_termination_shock() {

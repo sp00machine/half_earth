@@ -32,6 +32,11 @@ pub struct World {
     pub temperature: f32,    // global temp anomaly, C
     pub sea_level_rise: f32, // meters
     pub temperature_modifier: f32,
+
+    /// Direct changes to the extinction rate from projects and events
+    /// (`WorldVariable::ExtinctionRate` effects).
+    #[serde(default)]
+    pub extinction_rate_modifier: f32,
     pub population_growth_modifier: f32,
     pub sea_level_rise_modifier: f32, // meters
     pub precipitation: f32,           // global precip avg
@@ -109,8 +114,8 @@ impl World {
         let from_industries = self.industries.iter().fold(0., |acc, ind| {
             acc + ind.extinction_rate(self.starting_resources.land) * ind.demand(lic_pop)
         });
-        let rate = base + from_industries + from_processes;
-        self.extinction_rate = rate;
+        let rate = base + from_industries + from_processes + self.extinction_rate_modifier;
+        self.extinction_rate = rate.max(0.);
     }
 
     /// Contribution to extinction rate from the tgav
