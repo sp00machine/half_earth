@@ -371,13 +371,51 @@ mod changes {
                 + changed.extinction_rate,
         };
 
-        Changes { before, after }
+        let clearing = state.land_carbon.estimate_clearing(
+            before.land_use,
+            after.land_use,
+            state.world.starting_resources.land,
+        );
+        Changes {
+            before,
+            after,
+            clearing,
+        }
     }
 
     #[derive(Clone)]
     pub struct Changes {
         before: Usage,
         after: Usage,
+        /// Estimated CO2 from clearing land for these changes (g).
+        clearing: f32,
+    }
+    impl Changes {
+        /// A warning (or good news) about land being cleared or freed.
+        fn land_note(&self, ui: &mut egui::Ui) {
+            let change = (self.after.land_use - self.before.land_use) * 1e-12;
+            let (text, color) = if change > 0.05 && self.clearing > 0. {
+                (
+                    t!(
+                        "This will clear about %{area} million km² of land, releasing about %{amount}Gt of CO₂, most of it right away.",
+                        area = format!("{change:.1}"),
+                        amount = format!("{:.0}", self.clearing * 1e-15)
+                    ),
+                    Color32::from_rgb(0xEF, 0x38, 0x38),
+                )
+            } else if change < -0.05 {
+                (
+                    t!(
+                        "About %{area} million km² of farmland will start growing back into wild land, slowly taking carbon back out of the air.",
+                        area = format!("{:.1}", -change)
+                    ),
+                    Color32::from_rgb(0x6a, 0xc8, 0x6a),
+                )
+            } else {
+                return;
+            };
+            ui.add(egui::Label::new(egui::RichText::new(text).color(color)).wrap());
+        }
     }
     impl Changes {
         pub fn render_compact(&self, ui: &mut egui::Ui) {
@@ -481,6 +519,7 @@ mod changes {
                     for desc in descs {
                         ui.add(desc);
                     }
+                    self.land_note(ui);
                 })
                 .response
             }

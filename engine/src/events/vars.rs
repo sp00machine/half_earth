@@ -39,6 +39,15 @@ pub enum WorldVariable {
 
     /// Fractional change to energy lost in storage round trips.
     StorageLosses,
+
+    /// This year's CO2 from clearing land, in Gt (for conditions only).
+    LandClearing,
+
+    /// This year's CO2 taken up by regrowing land, in Gt (for conditions only).
+    LandRegrowth,
+
+    /// Share of needed battery storage that couldn't be built (for conditions only).
+    StorageShortfall,
 }
 
 #[derive(

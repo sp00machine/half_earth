@@ -34997,6 +34997,210 @@
             "notes": "[three-quarters fork] Unlocked by Great Barrier Reef Dead. Needs temperatures back near pre-collapse levels (at or below +1.2C)."
         },
         {
+            "name": "Land Clearing - Intro",
+            "locked": false,
+            "occurred": false,
+            "id": "0b4e7c2a-93d1-4f68-a5e2-8c1f6d3b9e47",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "LandClearing",
+                                "GreaterEqual",
+                                1.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2022.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "We're clearing wild land for farms again."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Most of the carbon in those forests and grasslands goes up in smoke right away, and the soil keeps leaking it for decades."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "The Ecologist",
+                            "text": "Even if we let the land grow back, it'll take most of a century to recover what we just lost."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645606175.091682.png"
+                    },
+                    "attribution": "Unknown"
+                }
+            },
+            "notes": "[three-quarters fork] New intro event: fires the first time a year's land clearing releases at least 1 Gt CO2."
+        },
+        {
+            "name": "Regrowth - Intro",
+            "locked": false,
+            "occurred": false,
+            "id": "6d2a9f5e-1b84-4c37-9e06-3a7d5c8b2f91",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "LandRegrowth",
+                                "GreaterEqual",
+                                1.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2022.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Farmland we no longer need is going wild again."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "It'll be decades before it's real forest or prairie, but it's already pulling carbon out of the air."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "The Ecologist",
+                            "text": "Just don't clear it again. We'd lose everything it's regrown."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646239698.641604.png"
+                    },
+                    "attribution": "Asurnipal, CC BY-SA 4.0, via Wikimedia Commons"
+                }
+            },
+            "notes": "[three-quarters fork] New intro event: fires the first time regrowing land takes up at least 1 Gt CO2 in a year."
+        },
+        {
+            "name": "Storage Shortfall - Intro",
+            "locked": false,
+            "occurred": false,
+            "id": "9c7f1e3b-4a26-4d85-b0e9-5f2c8a6d1e73",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "StorageShortfall",
+                                "GreaterEqual",
+                                0.2
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2022.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Engineer",
+                            "text": "We're building wind and solar faster than we can build batteries to go with them."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Engineer",
+                            "text": "On sunny, windy days we have more power than we can use or store, so we just throw it away."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "The Engineer",
+                            "text": "New lithium mines take years to open. Recycling, sodium-ion batteries or pumped hydro would help us catch up."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645632812.58978.png"
+                    },
+                    "attribution": "UniEnergy Technologies (CC BY-SA 4.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New intro event: fires the first time at least 20% of the battery storage the grid needs can't be built."
+        },
+        {
             "name": "Endangered Species Recover",
             "locked": false,
             "occurred": false,

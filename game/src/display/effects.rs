@@ -628,7 +628,10 @@ impl DisplayEffect {
                         ),
                     ),
                 ),
-                WorldVariable::Year => return Err(()),
+                WorldVariable::Year
+                | WorldVariable::LandClearing
+                | WorldVariable::LandRegrowth
+                | WorldVariable::StorageShortfall => return Err(()),
             },
             Effect::PlayerVariable(var, amount) => match var {
                 PlayerVariable::ResearchPoints => (

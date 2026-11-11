@@ -131,6 +131,28 @@ impl LandCarbon {
         (integral(b) - integral(a)) / (b - a)
     }
 
+    /// Estimated total CO2 (g) released by going from `from` to `to` m² of
+    /// land in use, counting soil losses that come later. Mirrors `step`:
+    /// regrowing land is cleared first, then wild land at the frontier.
+    pub fn estimate_clearing(&self, from: f32, to: f32, total: f32) -> f32 {
+        let mut to_clear = (to - from).max(0.);
+        let speed = self.regrowth_speed();
+        let mut released = 0.;
+        for cohort in self.cohorts.iter().rev() {
+            if to_clear <= 0. {
+                break;
+            }
+            let take = cohort.area.min(to_clear);
+            released += take * cohort.stock_at(cohort.age, speed);
+            to_clear -= take;
+        }
+        if to_clear > 0. {
+            let edge = (from + self.regrowing_area()) / total;
+            released += to_clear * Self::mean_density(edge, edge + to_clear / total);
+        }
+        released * CO2_PER_C
+    }
+
     pub fn regrowing_area(&self) -> f32 {
         self.cohorts.iter().map(|c| c.area).sum()
     }
@@ -294,6 +316,20 @@ mod tests {
         let wild = fresh.step(START_USED + 5e12, TOTAL, START_PROTECTION);
         assert!(reclear.clearing < wild.clearing * 0.3);
         assert!(land.cohorts.is_empty());
+    }
+
+    #[test]
+    fn clearing_estimate_matches_what_happens() {
+        let mut land = LandCarbon::default();
+        land.step(START_USED, TOTAL, START_PROTECTION);
+        let estimate = land.estimate_clearing(START_USED, START_USED + 3e12, TOTAL);
+        let debt_before = land.soil_debt;
+        let year = land.step(START_USED + 3e12, TOTAL, START_PROTECTION);
+        // Immediate release plus the soil carbon that leaks out later.
+        let deforestation_soil = year.deforestation / CO2_PER_C / IMMEDIATE_SHARE * (1. - IMMEDIATE_SHARE);
+        let soil_added = land.soil_debt - debt_before - deforestation_soil + year.soil / CO2_PER_C;
+        let actual = year.clearing + soil_added * CO2_PER_C;
+        assert!((estimate - actual).abs() / actual < 0.01, "{estimate} vs {actual}");
     }
 
     #[test]

@@ -141,6 +141,9 @@ impl Condition {
                     WorldVariable::BatteryRecycling => state.storage.recycling,
                     WorldVariable::LithiumMining => state.storage.mining_modifier,
                     WorldVariable::StorageLosses => state.storage.losses_modifier,
+                    WorldVariable::LandClearing => state.land_carbon.last.clearing * 1e-15,
+                    WorldVariable::LandRegrowth => -state.land_carbon.last.regrowth * 1e-15,
+                    WorldVariable::StorageShortfall => state.storage.last.shortfall,
                 };
                 comp.eval(val, *other_val)
             }

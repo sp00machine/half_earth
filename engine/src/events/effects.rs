@@ -351,6 +351,9 @@ impl Effect {
                     WorldVariable::BatteryRecycling => state.storage.recycling += *change,
                     WorldVariable::LithiumMining => state.storage.mining_modifier += *change,
                     WorldVariable::StorageLosses => state.storage.losses_modifier += *change,
+                    WorldVariable::LandClearing
+                    | WorldVariable::LandRegrowth
+                    | WorldVariable::StorageShortfall => {}
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier += *change
                     }
@@ -602,6 +605,9 @@ impl Effect {
                     WorldVariable::BatteryRecycling => state.storage.recycling -= *change,
                     WorldVariable::LithiumMining => state.storage.mining_modifier -= *change,
                     WorldVariable::StorageLosses => state.storage.losses_modifier -= *change,
+                    WorldVariable::LandClearing
+                    | WorldVariable::LandRegrowth
+                    | WorldVariable::StorageShortfall => {}
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier -= *change
                     }
