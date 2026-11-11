@@ -867,6 +867,17 @@ mod tests {
     }
 
     #[test]
+    fn test_vertical_farming_gets_one_share() {
+        let state = State::default();
+        let vf = state.world.processes.iter().find(|p| p.name == "Vertical Farming").unwrap();
+        let mut demand = state.output_demand.total();
+        for plant_demand in [6.9e15, 1.0e16, 1.35e16] {
+            demand.plant_calories = plant_demand;
+            assert_eq!(vf.max_share(&demand, &state.feedstocks.available), 1, "at {plant_demand:e}");
+        }
+    }
+
+    #[test]
     fn test_termination_shock() {
         let mut state = State::default();
         let temp_prev = state.world.temperature;
