@@ -48813,7 +48813,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 115.0,
+                "co2": 12.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 1.0
@@ -48843,7 +48843,7 @@
                 },
                 "description": "Produced by nuclear fission of uranium and plutonium in power plants."
             },
-            "notes": "Per this article from the Rocky Mountain Institute: https://rmi.org/wp-content/uploads/2017/05/2011-07_RenewableEnergysFootprintMyth.pdf, which cites https://www.sciencedirect.com/science/article/abs/pii/S1364032108001354 (V. Fthenakis & H.C. Kim, Renewable and Sustainable Energy Reviews 13:1465\u20131474 (2009)):\n\n119 m2/GWh for nuclear (in the US) so 0.000119m2/kWh\nI believe this accounts for extraction etc\n\nhttps://css.umich.edu/factsheets/nuclear-energy-factsheet\n> -  A uranium fuel pellet (~1/2 in. height and diameter) contains the energy equivalent of one ton of coal or 149 gallons of oil.10 Typical reactors hold 18 million pellets.6\n> - Each kWh of nuclear electricity requires 0.1-0.3 kWh of life cycle energy inputs.20 [say 0.2 and split 50/50 between electricity and fuel]\n> - The life cycle GHG intensity of nuclear power is estimated to be 34-60 gCO2e/kWh far below baseload sources such as coal (1,001 gCO2e/kWh).21,22 [say 47gCO2e/kWh]\n> - Nuclear power plants consume 270-670 gallons of water/MWh, depending on operating efficiency and site conditions.23 [say 470 gallons/MWh, or 2136.66L/MWh]\n\nFor energy inputs, this also gives a range of 5-15 EROI for nuclear, so 0.2 to 0.06kWh/kWh.\n\nThe CO2e estimate above is close to this:\n\"Emeritus Professor of Physics at Imperial College London Keith Barnham contends, \u201cFar from coming in at six grams of CO2 per unit of electricity for Hinkley C,\u201d the new reactor being built in the UK, \u201cthe true figure is probably well above 50 grams breaching the [Committee on Climate Change\u2019s] recommended limit for new sources of power generation beyond 2030.\u201d\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change\n\nanother source for co2 intensity:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nhttps://whatisnuclear.com/energy-density.html\n> A single fuel pellet may weigh about 10 grams so it contains 40,000 MJ in a typical reactor [LWR] and 800,000 MJ in a breeder reactor.\nSo about 10g/11111.111kWh = 0.0009g/kWh\n\n\"Another limitation of nuclear power is that it is not a long-term solution, in one crucial respect: it depends on fissile materials that are nonrenewable, namely uranium-233, uranium-235, and plutonium. At current rates of consumption, there may be between 130 and 230 years of recoverable uranium available globally. Derek Abbott, Professor of Electrical and Electronic Engineering at the University of Adelaide, has calculated that scaling nuclear production up to meet global demand could leave just five years of uranium supplies.\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change"
+            "notes": "[three-quarters fork] co2 was 115 (the notes above estimated ~47). Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nPer this article from the Rocky Mountain Institute: https://rmi.org/wp-content/uploads/2017/05/2011-07_RenewableEnergysFootprintMyth.pdf, which cites https://www.sciencedirect.com/science/article/abs/pii/S1364032108001354 (V. Fthenakis & H.C. Kim, Renewable and Sustainable Energy Reviews 13:1465\u20131474 (2009)):\n\n119 m2/GWh for nuclear (in the US) so 0.000119m2/kWh\nI believe this accounts for extraction etc\n\nhttps://css.umich.edu/factsheets/nuclear-energy-factsheet\n> -  A uranium fuel pellet (~1/2 in. height and diameter) contains the energy equivalent of one ton of coal or 149 gallons of oil.10 Typical reactors hold 18 million pellets.6\n> - Each kWh of nuclear electricity requires 0.1-0.3 kWh of life cycle energy inputs.20 [say 0.2 and split 50/50 between electricity and fuel]\n> - The life cycle GHG intensity of nuclear power is estimated to be 34-60 gCO2e/kWh far below baseload sources such as coal (1,001 gCO2e/kWh).21,22 [say 47gCO2e/kWh]\n> - Nuclear power plants consume 270-670 gallons of water/MWh, depending on operating efficiency and site conditions.23 [say 470 gallons/MWh, or 2136.66L/MWh]\n\nFor energy inputs, this also gives a range of 5-15 EROI for nuclear, so 0.2 to 0.06kWh/kWh.\n\nThe CO2e estimate above is close to this:\n\"Emeritus Professor of Physics at Imperial College London Keith Barnham contends, \u201cFar from coming in at six grams of CO2 per unit of electricity for Hinkley C,\u201d the new reactor being built in the UK, \u201cthe true figure is probably well above 50 grams breaching the [Committee on Climate Change\u2019s] recommended limit for new sources of power generation beyond 2030.\u201d\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change\n\nanother source for co2 intensity:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nhttps://whatisnuclear.com/energy-density.html\n> A single fuel pellet may weigh about 10 grams so it contains 40,000 MJ in a typical reactor [LWR] and 800,000 MJ in a breeder reactor.\nSo about 10g/11111.111kWh = 0.0009g/kWh\n\n\"Another limitation of nuclear power is that it is not a long-term solution, in one crucial respect: it depends on fissile materials that are nonrenewable, namely uranium-233, uranium-235, and plutonium. At current rates of consumption, there may be between 130 and 230 years of recoverable uranium available globally. Derek Abbott, Professor of Electrical and Electronic Engineering at the University of Adelaide, has calculated that scaling nuclear production up to meet global demand could leave just five years of uranium supplies.\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change"
         },
         {
             "id": "0ed8138c-ff16-4ad9-9f79-b7c32f74110c",
@@ -48865,7 +48865,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 83.7,
+                "co2": 38.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 5.0
@@ -48889,7 +48889,7 @@
                 },
                 "description": "Geothermal energy uses the heat from the Earth's core, which is as hot as the surface of the sun. Currently, power plants can only gather such heat from permeable rock not far from the surface. The number of easy to identify and tap sites is limited. Produces a steady source of power useful to baseload power generation."
             },
-            "notes": "TV\n--BECCS already includes geothermal?? Should sort that out.\n---Use for data: https://drawdown.org/solutions/geothermal-power\n--for power density number, I used median figure from 'The spatial extent of renewable and non-renewable power generation: A review and meta-analysis of power densities and their application in the U.S.'\n--apparently lots of potential geothermal is near biodiverse areas: Ng, Cheryl & White, Thomas & Katariya, Vineet & Pollard, Edward. (2021). Geothermal power generation and biodiversity: the business case for managing risk and creating opportunity. \n--installed geothermal is about 16 GW, https://www.geothermal-energy.org/pdf/IGAstandard/WGC/2020/01017.pdf\n--how should I relate this to mix share? I suppose one would round it to zero anyways\n--I made the output limit 200GW (did I do that properly?)\n--We should have a card for 'enhanced geothermal systems', which have to be researched, but have huge potential capacity and would be a great baseload energy source\n--might cause small earthquakes\n--not sure how to fill out 'fuel' and 'electricity'\n--useful essay: https://www.vox.com/energy-and-environment/2020/10/21/21515461/renewable-energy-geothermal-egs-ags-supercritical\n--122g of CO2 per kWh: https://europeangeothermalcongress.eu/wp-content/uploads/2019/07/291.pdf\n--also produces some SO2\n--in terms of water use of L per kWh, I used this: file:///C:/Users/troyv/Downloads/ANL_EVS_R-10_5.pdf\n\nconverting GW to kWh/yr:\nhere gives a 90% capacity factor: https://css.umich.edu/factsheets/geothermal-energy-factsheet\nso 200GW * 24 * 365 * 0.9 = 1576800GWh/yr = 1576800000000 kWh/yr\n\nper Justin, dividing old value by 10 for 20GW limit."
+            "notes": "[three-quarters fork] co2 was 83.7. Set to 38 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nTV\n--BECCS already includes geothermal?? Should sort that out.\n---Use for data: https://drawdown.org/solutions/geothermal-power\n--for power density number, I used median figure from 'The spatial extent of renewable and non-renewable power generation: A review and meta-analysis of power densities and their application in the U.S.'\n--apparently lots of potential geothermal is near biodiverse areas: Ng, Cheryl & White, Thomas & Katariya, Vineet & Pollard, Edward. (2021). Geothermal power generation and biodiversity: the business case for managing risk and creating opportunity. \n--installed geothermal is about 16 GW, https://www.geothermal-energy.org/pdf/IGAstandard/WGC/2020/01017.pdf\n--how should I relate this to mix share? I suppose one would round it to zero anyways\n--I made the output limit 200GW (did I do that properly?)\n--We should have a card for 'enhanced geothermal systems', which have to be researched, but have huge potential capacity and would be a great baseload energy source\n--might cause small earthquakes\n--not sure how to fill out 'fuel' and 'electricity'\n--useful essay: https://www.vox.com/energy-and-environment/2020/10/21/21515461/renewable-energy-geothermal-egs-ags-supercritical\n--122g of CO2 per kWh: https://europeangeothermalcongress.eu/wp-content/uploads/2019/07/291.pdf\n--also produces some SO2\n--in terms of water use of L per kWh, I used this: file:///C:/Users/troyv/Downloads/ANL_EVS_R-10_5.pdf\n\nconverting GW to kWh/yr:\nhere gives a 90% capacity factor: https://css.umich.edu/factsheets/geothermal-energy-factsheet\nso 200GW * 24 * 365 * 0.9 = 1576800GWh/yr = 1576800000000 kWh/yr\n\nper Justin, dividing old value by 10 for 20GW limit."
         },
         {
             "id": "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
@@ -48963,7 +48963,7 @@
             },
             "byproducts": {
                 "co2": -500.0,
-                "ch4": 9.65,
+                "ch4": 0.1,
                 "n2o": 0.06337,
                 "biodiversity": 3.0
             },
@@ -48988,7 +48988,7 @@
                 },
                 "description": "Grow biofuels, burn them for energy, then capture and store the CO2 emitted."
             },
-            "notes": "The 2.5% figure actually includes geothermal, tidal/wave, as well as biomass...others seem marginal enough that we can just assign it all to biomass.\n\nThe book has 0.3W/m2 for liquid biofuels (ethanol/biodiesel) and 0.9W/m2 for solid biofuels (wood) and gaseous biofuels (phytomass). We'll assume the latter for all biomass electricity, so that's 7.884kWh/m2 or 0.1268m2/kWh\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a water footprint of 48,000-500,000 m3/TJ net energy for firewood; going to be very crude and assume that all BECCS are using wood pellets and that firewood is equivalent to that. So say 274,000 m3/TJ or 986.4L/kWh\n\nthis paper gives different numbers: https://www.pnas.org/doi/10.1073/pnas.0812619106\n> For electricity, sugar beet, maize, and sugar cane are the most favorable crops [50 m3/gigajoule (GJ)]. Rapeseed and jatropha, typical energy crops, are disadvantageous (400 m3/GJ). For ethanol, sugar beet, and potato (60 and 100 m3/GJ) are the most advantageous, followed by sugar cane (110 m3/GJ); sorghum (400 m3/GJ) is the most unfavorable. For biodiesel, soybean and rapeseed show to be the most favorable WF (400 m3/GJ); jatropha has an adverse WF (600 m3/GJ).\nThese are all way, way lower than the firewood estimate. For BECCS we'll use 50m3/GJ (0.18L/kWh); for biofuels we'll use 80m3/GJ (0.29L/kWh).\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives the following EROIs:\n- Ethanol (sugarcane): 0.8 to 10\n- Corn-based ethanol: 0.8 to 1.6\n- Biodiesel: 1.3\nLet's say 5.4, or 0.185kWh/kWh, split between electricity and fuel.\n\nThis plant in the UK is supposed to capture 350tCO2/year while generating 300MWh/year: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/911268/potential-of-bioenergy-with-carbon-capture.pdf (from 1/2020) using 100% wood pellets (other figures I've found were for biomass/coal co-firing plants). This would be about 1166.67g CO2 sequestered/kWh\n\nAs for N2O emissions, assuming the biomass is grown similar to industrial agriculture, we have 0.0001473g N2O for our industrial ag crop process, and with the conversion of 860.421kcals/kWh we get about 0.12674g N2O/kWh from fertilizer application. The problem with this conversion is that with our industrial ag crop process we are only counting human-consumed kcals; in practice inedible parts of the plants are also burned for energy. So this figure is almost certainly an overestimate, maybe just hand wave and cut it into half to 0.06337gN2O/kWh."
+            "notes": "[three-quarters fork] ch4 was 9.65 g/kWh, which made BECCS warm the planet on a 20-year horizon. Biomass combustion emits very little methane; set to 0.1.\n\nThe 2.5% figure actually includes geothermal, tidal/wave, as well as biomass...others seem marginal enough that we can just assign it all to biomass.\n\nThe book has 0.3W/m2 for liquid biofuels (ethanol/biodiesel) and 0.9W/m2 for solid biofuels (wood) and gaseous biofuels (phytomass). We'll assume the latter for all biomass electricity, so that's 7.884kWh/m2 or 0.1268m2/kWh\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a water footprint of 48,000-500,000 m3/TJ net energy for firewood; going to be very crude and assume that all BECCS are using wood pellets and that firewood is equivalent to that. So say 274,000 m3/TJ or 986.4L/kWh\n\nthis paper gives different numbers: https://www.pnas.org/doi/10.1073/pnas.0812619106\n> For electricity, sugar beet, maize, and sugar cane are the most favorable crops [50 m3/gigajoule (GJ)]. Rapeseed and jatropha, typical energy crops, are disadvantageous (400 m3/GJ). For ethanol, sugar beet, and potato (60 and 100 m3/GJ) are the most advantageous, followed by sugar cane (110 m3/GJ); sorghum (400 m3/GJ) is the most unfavorable. For biodiesel, soybean and rapeseed show to be the most favorable WF (400 m3/GJ); jatropha has an adverse WF (600 m3/GJ).\nThese are all way, way lower than the firewood estimate. For BECCS we'll use 50m3/GJ (0.18L/kWh); for biofuels we'll use 80m3/GJ (0.29L/kWh).\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives the following EROIs:\n- Ethanol (sugarcane): 0.8 to 10\n- Corn-based ethanol: 0.8 to 1.6\n- Biodiesel: 1.3\nLet's say 5.4, or 0.185kWh/kWh, split between electricity and fuel.\n\nThis plant in the UK is supposed to capture 350tCO2/year while generating 300MWh/year: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/911268/potential-of-bioenergy-with-carbon-capture.pdf (from 1/2020) using 100% wood pellets (other figures I've found were for biomass/coal co-firing plants). This would be about 1166.67g CO2 sequestered/kWh\n\nAs for N2O emissions, assuming the biomass is grown similar to industrial agriculture, we have 0.0001473g N2O for our industrial ag crop process, and with the conversion of 860.421kcals/kWh we get about 0.12674g N2O/kWh from fertilizer application. The problem with this conversion is that with our industrial ag crop process we are only counting human-consumed kcals; in practice inedible parts of the plants are also burned for energy. So this figure is almost certainly an overestimate, maybe just hand wave and cut it into half to 0.06337gN2O/kWh."
         },
         {
             "id": "ce753d51-dcb2-4a69-81da-bed7e1e27422",
@@ -49158,7 +49158,7 @@
             },
             "byproducts": {
                 "co2": 9.0,
-                "ch4": 0.0,
+                "ch4": 0.42,
                 "n2o": 0.0,
                 "biodiversity": 5.0
             },
@@ -49181,7 +49181,7 @@
                 },
                 "description": "Uses the natural flow of moving water to generate electricity."
             },
-            "notes": "https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of >100, so we'll just say 100 which gives us 0.01kWh/kWh.\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives us a massive range for water usage, 300-850,000m3/TJ net energy...we'll say 425,150m3/TJ or 1530.5L/kWh\n\nhttp://www.ipcc-wg3.de/report/IPCC_SRREN_Ch05.pdf gives a range of 4-14gCO2eq/kWh, so we'll say 9gCO2eq/kWh\n\nFor land use, https://www.researchgate.net/publication/350358598_Land-use_intensity_of_electricity_production_and_tomorrow%27s_energy_landscape gives a median of 650ha/TWh/y or 0.0065m2/kWh\n\nIdeas for tempering hydro:\n\n-Ceiling at ~1.9TW\ngreat resource on this (1.9 taken from the technical limitation assessment range of 1.6-2.3TW)\nhttps://dothemath.ucsd.edu/2011/12/how-much-dam-energy-can-we-get/\n\n-Decrease in generation with climate change\nAlthough big floods can virtually shut down hydro plants, they can also increase generation. The research I'm finding is show a pretty minimal effect, maybe 1%/degree C\nhttps://www.sciencedirect.com/science/article/abs/pii/S0360544214013218\n\nLimit: in kWh, https://www.hydropower.org/status-report\nper Drew's suggestion at a limit of 2000 * 1300 MW plants, or 28470TWh/yr or  2.847e13 kWh\n\nThis paper suggests a limit of 53 PWh/yr https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0171844\n\nIn the end we decided on 16PWh as a limit (1.6e+13 kWh)\nhttp://newmaeweb.ucsd.edu/courses/MAE119/WI_2018/ewExternalFiles/Estimate%20of%20Global%20Hydropower%20Potential%20-%20Zhou%20-RSC%202015.pdf"
+            "notes": "[three-quarters fork] ch4 was 0. Added 0.42 g/kWh of reservoir methane (x36 = ~15 gCO2e) so the total is ~24 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of >100, so we'll just say 100 which gives us 0.01kWh/kWh.\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives us a massive range for water usage, 300-850,000m3/TJ net energy...we'll say 425,150m3/TJ or 1530.5L/kWh\n\nhttp://www.ipcc-wg3.de/report/IPCC_SRREN_Ch05.pdf gives a range of 4-14gCO2eq/kWh, so we'll say 9gCO2eq/kWh\n\nFor land use, https://www.researchgate.net/publication/350358598_Land-use_intensity_of_electricity_production_and_tomorrow%27s_energy_landscape gives a median of 650ha/TWh/y or 0.0065m2/kWh\n\nIdeas for tempering hydro:\n\n-Ceiling at ~1.9TW\ngreat resource on this (1.9 taken from the technical limitation assessment range of 1.6-2.3TW)\nhttps://dothemath.ucsd.edu/2011/12/how-much-dam-energy-can-we-get/\n\n-Decrease in generation with climate change\nAlthough big floods can virtually shut down hydro plants, they can also increase generation. The research I'm finding is show a pretty minimal effect, maybe 1%/degree C\nhttps://www.sciencedirect.com/science/article/abs/pii/S0360544214013218\n\nLimit: in kWh, https://www.hydropower.org/status-report\nper Drew's suggestion at a limit of 2000 * 1300 MW plants, or 28470TWh/yr or  2.847e13 kWh\n\nThis paper suggests a limit of 53 PWh/yr https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0171844\n\nIn the end we decided on 16PWh as a limit (1.6e+13 kWh)\nhttp://newmaeweb.ucsd.edu/courses/MAE119/WI_2018/ewExternalFiles/Estimate%20of%20Global%20Hydropower%20Potential%20-%20Zhou%20-RSC%202015.pdf"
         },
         {
             "id": "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
@@ -49258,7 +49258,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 34.1,
+                "co2": 11.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -49287,7 +49287,7 @@
                 },
                 "description": "Land-based wind energy technologies harness kinetic energy from the wind to generate electricity."
             },
-            "notes": "This % is all wind power--what % is offshore?\nPer the book, assume 50W/m2 (per year) or 438kWh/m2 or 0.00228m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 18, so 0.0556kWh/kWh\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives 0.2-12m3/TJ net energy, we'll say 6.1m3/TJ, or 0.022L/kWh\n\nhttps://www.nrel.gov/docs/fy13osti/57131.pdf gives ~10gCO2eq/kWh\n\nFor feedstock, like solar we assume that it's all captured through land use (of course would vary according to wind speeds but I believe that land use number encapsulates an average of those)\n\nIf I'm reading these right, wind power limit is very high:\nhttps://esd.copernicus.org/articles/2/1/2011/esd-2-1-2011.pdf - says 18-68TW from land, or 157680TWh - 595680TWh annually\nhttps://www.pnas.org/content/106/27/10933 - says 123PWh annually, including offshore"
+            "notes": "[three-quarters fork] co2 was 34.1. Set to 11 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for onshore wind.\n\nThis % is all wind power--what % is offshore?\nPer the book, assume 50W/m2 (per year) or 438kWh/m2 or 0.00228m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 18, so 0.0556kWh/kWh\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives 0.2-12m3/TJ net energy, we'll say 6.1m3/TJ, or 0.022L/kWh\n\nhttps://www.nrel.gov/docs/fy13osti/57131.pdf gives ~10gCO2eq/kWh\n\nFor feedstock, like solar we assume that it's all captured through land use (of course would vary according to wind speeds but I believe that land use number encapsulates an average of those)\n\nIf I'm reading these right, wind power limit is very high:\nhttps://esd.copernicus.org/articles/2/1/2011/esd-2-1-2011.pdf - says 18-68TW from land, or 157680TWh - 595680TWh annually\nhttps://www.pnas.org/content/106/27/10933 - says 123PWh annually, including offshore"
         },
         {
             "id": "4d3c29cb-4c72-490d-9090-75821a50b43f",
@@ -49309,7 +49309,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 115.0,
+                "co2": 12.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 1.0
@@ -49338,7 +49338,7 @@
                 },
                 "description": "Nuclear fuel made from both uranium and thorium."
             },
-            "notes": "LC: More pros cons in descriptor for projects.\n\nthorium estimate:\nhttp://energyeconomy.net/thorium-energy/\n\nother estimates are rough, borrowed from uranium, while considering 3X abundance of thorium versus uranium:\nhttp://large.stanford.edu/courses/2018/ph241/dai1/"
+            "notes": "[three-quarters fork] co2 was 115, copied from conventional nuclear. Set to 12 gCO2e/kWh to match it (IPCC AR5 WG3 Annex III lifecycle median for nuclear).\n\nLC: More pros cons in descriptor for projects.\n\nthorium estimate:\nhttp://energyeconomy.net/thorium-energy/\n\nother estimates are rough, borrowed from uranium, while considering 3X abundance of thorium versus uranium:\nhttp://large.stanford.edu/courses/2018/ph241/dai1/"
         },
         {
             "id": "f819f861-af6c-43d0-abc5-8d9d0da4936d",
@@ -49720,7 +49720,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 34.1,
+                "co2": 12.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -49746,7 +49746,7 @@
                 },
                 "description": "Offshore wind turbines mounted on a floating structure that allowing the turbine to generate electricity on water where terrestrial is not possible."
             },
-            "notes": "The resources/byproducts are just copied over from terrestrial wind power"
+            "notes": "[three-quarters fork] co2 was 34.1. Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for offshore wind.\n\nThe resources/byproducts are just copied over from terrestrial wind power"
         },
         {
             "id": "d33b57e4-ad34-46fe-8330-acbbd12803df",
@@ -49870,8 +49870,8 @@
             },
             "byproducts": {
                 "co2": 174.86,
-                "ch4": 9.65,
-                "n2o": 0.06337,
+                "ch4": 0.0,
+                "n2o": 0.0,
                 "biodiversity": 3.0
             },
             "feedstock": [
@@ -49894,7 +49894,7 @@
                 },
                 "description": "Renewable resource, derived from biomass wood, crop residues, sugar, corn, or miscanthus.\n\nHas a low power-density and thus takes up great swathes of land."
             },
-            "notes": "The 13.56% figure actually includes waste as well, but for simplicity just assigning it all to biomass.\n\nhttps://en.wikipedia.org/wiki/Environmental_impact_of_biodiesel#/media/File:BiodieselsCountryOfOrigin.jpg\nGives an average of 48.57gCO2/MJ, or about 174.86g/kWh\nBut this does not account for LUC\n\nTV--shouldn't this have some biodiversity pressure???\n\nsee BECCS for water calculations"
+            "notes": "[three-quarters fork] ch4 was 9.65 and n2o 0.06337, identical to BECCS (copied). The co2 figure (~175 g/kWh) is already a lifecycle estimate, so both were set to 0. Land-use change emissions will come from the land clearing system instead.\n\nThe 13.56% figure actually includes waste as well, but for simplicity just assigning it all to biomass.\n\nhttps://en.wikipedia.org/wiki/Environmental_impact_of_biodiesel#/media/File:BiodieselsCountryOfOrigin.jpg\nGives an average of 48.57gCO2/MJ, or about 174.86g/kWh\nBut this does not account for LUC\n\nTV--shouldn't this have some biodiversity pressure???\n\nsee BECCS for water calculations"
         },
         {
             "id": "3d13995d-c42f-4282-bd73-c5b6a99f5c4d",
@@ -50069,7 +50069,7 @@
             "byproducts": {
                 "co2": 0.32000312,
                 "ch4": 0.0,
-                "n2o": 0.0,
+                "n2o": 0.0004,
                 "biodiversity": 0.5
             },
             "feedstock": [
@@ -50096,7 +50096,7 @@
                 },
                 "description": "No synthetic fertilizers and pesticides. Uses fertilizers of organic origin such as compost manure, green manure, and bone meal."
             },
-            "notes": "LC: Some organic farming is not necessarily less carbon intensive, for example the organic cotton industry. From an FDA (label and regulation) point of view organic ag is mostly about the pesticides and fertilizers even though the movement claims to be much more similar to regenerative ag."
+            "notes": "[three-quarters fork] n2o was 0. Manure and legume nitrogen also emit N2O; set to roughly industrial crop ag's 0.000404 g/kcal.\n\nLC: Some organic farming is not necessarily less carbon intensive, for example the organic cotton industry. From an FDA (label and regulation) point of view organic ag is mostly about the pesticides and fertilizers even though the movement claims to be much more similar to regenerative ag."
         },
         {
             "id": "a249071c-e722-4364-a39e-a07f66ca75ad",
@@ -50151,7 +50151,7 @@
             "id": "add29249-56ad-4e7d-a900-c3c0d51178e9",
             "name": "Vertical Farming",
             "mix_share": 0,
-            "limit": 1026000000000000.0,
+            "limit": 68400000000000.0,
             "output": "PlantCalories",
             "output_modifier": 0.0,
             "byproduct_modifiers": {
@@ -50191,7 +50191,7 @@
                 },
                 "description": "Automated indoor vertical farming. Requires  less water but relies on lights not the sun. Potential to  bring fresh foods directly into communities."
             },
-            "notes": "Lucy -  at this point the facility and conditions required to maintain larger scale vertical farming setups in the US is not significantly more energy efficient. Niel Mattson, professor of horticulture at Cornell University \"One of the things that we\u2019ve found is that if we look at like New York City, production in a greenhouse had very similar energy use and carbon footprint to growing in California and shipping 3000 miles. It was ever so slightly higher, but just a few percentage points higher than field production. However, a vertical farm had about twice the energy cost and twice the carbon footprint of growing 3000 miles away.\"\nhttps://gastropod.com/transcript-dig-for-victory/\n\nTV: for me, it seems that it trades fertilizer and water for electricity. Yet, it can only really apply to salad greens and the like and cannot replace more than 10-20percent of crops at most, and definitely can't be used for animal fodder.\n\n\nEnergy use:\n\n> For example, strawberries grown on a conventional farm in Chile require 0.4524 kiloWatt hours (kWh) of electricity per square metre per year (sq.m/year). Whereas strawberries grown on a vertical farm in Russia require over 3,000% more energy at 1,404 kWh/sq.m/year. To put that in context, a four-room HDB\u2019s average electricity consumption is 3.99 kWh/sq.m/year.\nhttps://www.rsis.edu.sg/rsis-publication/nts/vertical-farms-are-they-sustainable/\n\nOther figures here (per m2): https://ifarm.fi/blog/2020/12/how-much-electricity-does-a-vertical-farm-consume\nRomaine lettuce: 65.26 kWh / Month\nRocket: 52.51 kWh / Month\nStrawberries: 117.10 kWh / Month (in fact, I think this is the Russian vertical farm referenced above)\n\nA major downside that's not really captured here is that vertical farming has a much more limited range of crops it can produce (most often leafy greens).\n\n\n\nOther values from here (Table 3): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7516583/\n\n    water_use = 1 # L/kg/year\n    energy_use = 250 # kWh/kg/year\n    co2_emissions = 158 # kg/ton\n    land_use = 100 # kg/m2, 80-120kg/m2\n\n15kcal/100g of green lettuce, which gives us 15kcal/100g * 1000g/1kg * 1kg/250kWh = 0.6kcal/1kWh = 1.67kWh/kcal\n\nFor \"traditional/outdoor\" farming they give 0.3kWh/kg/year, which, using the same numbers, gives (15/100)*(1000/0.3) = 500, so 1/500 = 0.002kWh/kcal, which is also substantially higher than what we have for industrial plant calorie agriculture (about 0.0001kWh/kcal, so about 20x higher). We could fudge the number to scale the vertical farming estimate down by 20x, but that wouldn't really change much.\n\nPer Troy's suggestion to limit vertical farming output to 10-20% of current demand, the limit is set at 1026000000000000kcals (15% of starting in-game plant calorie demand).\n\nFurther reducing to 684000000000000kcals (10% of starting demand) b/c energy usage is so high that the player instantly loses. I think this will happen even at 5 or 10% of demand though. - FT"
+            "notes": "[three-quarters fork] limit was 1.026e15 kcal (15% of starting demand). Vertical farms mostly grow leafy greens, which provide very few calories; set to 6.84e13, about 1% of starting demand.\n\nLucy -  at this point the facility and conditions required to maintain larger scale vertical farming setups in the US is not significantly more energy efficient. Niel Mattson, professor of horticulture at Cornell University \"One of the things that we\u2019ve found is that if we look at like New York City, production in a greenhouse had very similar energy use and carbon footprint to growing in California and shipping 3000 miles. It was ever so slightly higher, but just a few percentage points higher than field production. However, a vertical farm had about twice the energy cost and twice the carbon footprint of growing 3000 miles away.\"\nhttps://gastropod.com/transcript-dig-for-victory/\n\nTV: for me, it seems that it trades fertilizer and water for electricity. Yet, it can only really apply to salad greens and the like and cannot replace more than 10-20percent of crops at most, and definitely can't be used for animal fodder.\n\n\nEnergy use:\n\n> For example, strawberries grown on a conventional farm in Chile require 0.4524 kiloWatt hours (kWh) of electricity per square metre per year (sq.m/year). Whereas strawberries grown on a vertical farm in Russia require over 3,000% more energy at 1,404 kWh/sq.m/year. To put that in context, a four-room HDB\u2019s average electricity consumption is 3.99 kWh/sq.m/year.\nhttps://www.rsis.edu.sg/rsis-publication/nts/vertical-farms-are-they-sustainable/\n\nOther figures here (per m2): https://ifarm.fi/blog/2020/12/how-much-electricity-does-a-vertical-farm-consume\nRomaine lettuce: 65.26 kWh / Month\nRocket: 52.51 kWh / Month\nStrawberries: 117.10 kWh / Month (in fact, I think this is the Russian vertical farm referenced above)\n\nA major downside that's not really captured here is that vertical farming has a much more limited range of crops it can produce (most often leafy greens).\n\n\n\nOther values from here (Table 3): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7516583/\n\n    water_use = 1 # L/kg/year\n    energy_use = 250 # kWh/kg/year\n    co2_emissions = 158 # kg/ton\n    land_use = 100 # kg/m2, 80-120kg/m2\n\n15kcal/100g of green lettuce, which gives us 15kcal/100g * 1000g/1kg * 1kg/250kWh = 0.6kcal/1kWh = 1.67kWh/kcal\n\nFor \"traditional/outdoor\" farming they give 0.3kWh/kg/year, which, using the same numbers, gives (15/100)*(1000/0.3) = 500, so 1/500 = 0.002kWh/kcal, which is also substantially higher than what we have for industrial plant calorie agriculture (about 0.0001kWh/kcal, so about 20x higher). We could fudge the number to scale the vertical farming estimate down by 20x, but that wouldn't really change much.\n\nPer Troy's suggestion to limit vertical farming output to 10-20% of current demand, the limit is set at 1026000000000000kcals (15% of starting in-game plant calorie demand).\n\nFurther reducing to 684000000000000kcals (10% of starting demand) b/c energy usage is so high that the player instantly loses. I think this will happen even at 5 or 10% of demand though. - FT"
         }
     ],
     "project_lockers": {
