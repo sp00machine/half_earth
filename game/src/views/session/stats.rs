@@ -954,8 +954,14 @@ fn render_history(ui: &mut egui::Ui, state: &State, metric: &mut HistoryMetric) 
                 painter.text(egui::pos2(rect.left(), p.y), egui::Align2::LEFT_CENTER, fmt(v), font.clone(), axis);
                 painter.line_segment([p, egui::pos2(plot.right(), p.y)], egui::Stroke::new(0.5, Color32::from_gray(200)));
             }
+            // Year labels, skipping any that would overlap the previous one.
+            let mut last_label_x = f32::MIN;
             for x in [x_min, points.last().unwrap().0, x_max] {
                 let p = to_screen(x, y_min);
+                if p.x - last_label_x < 36. {
+                    continue;
+                }
+                last_label_x = p.x;
                 painter.text(egui::pos2(p.x, rect.bottom()), egui::Align2::CENTER_BOTTOM, format!("{x:.0}"), font.clone(), axis);
             }
 
