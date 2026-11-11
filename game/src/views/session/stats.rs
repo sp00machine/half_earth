@@ -871,7 +871,12 @@ fn render_history(ui: &mut egui::Ui, state: &State, metric: &mut HistoryMetric) 
         .corner_radius(6)
         .inner_margin(10)
         .show(ui, |ui| {
-            ui.set_width(ui.available_width().min(680.));
+            // Size from the screen, not the available width, which can be
+            // wider than the screen on small devices.
+            let screen_width = ui.ctx().content_rect().width() - 48.;
+            let width = ui.available_width().min(screen_width).min(680.).max(200.);
+            ui.set_width(width);
+            ui.set_max_width(width);
             ui.horizontal_wrapped(|ui| {
                 for (m, label) in [
                     (HistoryMetric::Temperature, t!("Temperature")),
@@ -928,7 +933,7 @@ fn render_history(ui: &mut egui::Ui, state: &State, metric: &mut HistoryMetric) 
             let x_max = forecast.last().map(|p| p.0).unwrap_or(points.last().unwrap().0).max(x_min + 1.);
 
             let height = 170.;
-            let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), height), egui::Sense::hover());
+            let (rect, _) = ui.allocate_exact_size(egui::vec2(width, height), egui::Sense::hover());
             let painter = ui.painter_at(rect);
             let plot = rect.shrink2(egui::vec2(28., 12.));
             let to_screen = |x: f32, y: f32| {
@@ -987,7 +992,11 @@ fn render_history(ui: &mut egui::Ui, state: &State, metric: &mut HistoryMetric) 
                 HistoryMetric::Extinction => t!("Biodiversity pressure. Below 20 is a goal."),
                 HistoryMetric::LandUse => t!("Share of all land used for farming and infrastructure."),
             };
-            ui.add(egui::Label::new(egui::RichText::new(note).size(11.)).wrap());
+            ui.scope(|ui| {
+                ui.set_max_width(width);
+                ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Wrap);
+                ui.add(egui::Label::new(egui::RichText::new(note).size(11.)).wrap());
+            });
         });
 }
 
