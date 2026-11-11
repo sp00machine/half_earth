@@ -42,6 +42,12 @@ pub struct Process {
     pub name: String,
     pub mix_share: usize,
     pub limit: Option<f32>,
+
+    /// Output cap set by a freeze (e.g. a moratorium on new capacity),
+    /// on top of `limit`.
+    #[serde(default)]
+    pub frozen_limit: Option<f32>,
+
     pub output: Output,
 
     pub output_modifier: f32,
@@ -89,7 +95,7 @@ impl Process {
         // Production order amount can't be more than the process's limit,
         // if there is one.
         let mut amount = demand[self.output] * self.mix_percent();
-        if let Some(limit) = self.limit {
+        if let Some(limit) = self.effective_limit() {
             amount = f32::min(amount, limit);
         }
         ProductionOrder {
@@ -108,6 +114,14 @@ impl Process {
 
     pub fn is_banned(&self) -> bool {
         self.mix_share == 0
+    }
+
+    /// The lower of the process's own limit and any freeze.
+    pub fn effective_limit(&self) -> Option<f32> {
+        match (self.limit, self.frozen_limit) {
+            (Some(a), Some(b)) => Some(a.min(b)),
+            (a, b) => a.or(b),
+        }
     }
 
     pub fn adj_resources(&self) -> ResourceMap {
@@ -137,7 +151,7 @@ impl Process {
         let demand = output_demand[self.output];
 
         // Hard-coded limit
-        if let Some(limit) = self.limit {
+        if let Some(limit) = self.effective_limit() {
             max_share = (limit / demand).min(1.);
         }
 

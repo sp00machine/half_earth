@@ -1775,6 +1775,17 @@ impl Editable
                     },
                 );
             }
+            Effect::FreezeProcess(id) => {
+                ui.add(parts::help(
+"Cap the specified process's output at what it is producing when this effect is applied. Removing the effect lifts the cap."
+                ));
+                ui.add(
+                    edit((id, processes))
+                        .label("Process")
+                        .help("Which process is affected.")
+                        .inline(),
+                );
+            }
             Effect::ProcessLimit(id, value) => {
                 ui.add(parts::help(
 "Modify the limit of the specified process by an absolute amount. If no process limit is defined for the process this will do nothing."

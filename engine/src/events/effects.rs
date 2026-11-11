@@ -117,6 +117,9 @@ pub enum Effect {
     CO2ForFeature(ProcessFeature, f32),
     BiodiversityPressureForFeature(ProcessFeature, f32),
     ProcessLimit(Id, f32),
+
+    /// Cap a process's output at what it produces when this is applied.
+    FreezeProcess(Id),
     Feedstock(Feedstock, f32),
 
     AddEvent(Id),
@@ -190,6 +193,7 @@ impl Effect {
                 Effect::BiodiversityPressureForFeature(ProcessFeature::IsCCS, 0.)
             }
             EffectKind::ProcessLimit => Effect::ProcessLimit(default_process, 0.),
+            EffectKind::FreezeProcess => Effect::FreezeProcess(default_process),
             EffectKind::Feedstock => Effect::Feedstock(Feedstock::Coal, 0.),
             EffectKind::AddEvent => Effect::AddEvent(default_event),
             EffectKind::TriggerEvent => Effect::TriggerEvent(default_event, 5),
@@ -232,6 +236,7 @@ impl Effect {
         match self {
             Effect::OutputForProcess(id, _)
             | Effect::ProcessLimit(id, _)
+            | Effect::FreezeProcess(id)
             | Effect::UnlocksProcess(id)
             | Effect::ProcessRequest(id, ..)
             | Effect::ModifyProcessByproducts(id, ..) => Some(*id),
@@ -412,6 +417,10 @@ impl Effect {
                 {
                     process.byproduct_modifiers.biodiversity += pct_change;
                 }
+            }
+            Effect::FreezeProcess(id) => {
+                let produced = state.produced.by_process.get(id).copied().unwrap_or(0.);
+                state.world.processes[id].frozen_limit = Some(produced);
             }
             Effect::ProcessLimit(id, change) => {
                 let process = &mut state.world.processes[id];
@@ -656,6 +665,9 @@ impl Effect {
                 {
                     process.byproduct_modifiers.biodiversity -= pct_change;
                 }
+            }
+            Effect::FreezeProcess(id) => {
+                state.world.processes[id].frozen_limit = None;
             }
             Effect::ProcessLimit(id, change) => {
                 let process = &mut state.world.processes[id];
@@ -963,6 +975,31 @@ mod tests {
         regrow.unapply(&mut state, None);
         assert_eq!(state.land_carbon.deforestation_modifier, 0.);
         assert_eq!(state.land_carbon.regrowth_modifier, 0.);
+    }
+
+    #[test]
+    fn test_factory_farm_moratorium_freezes_output() {
+        use crate::Output;
+        let mut state = State::default();
+        let livestock = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap().id;
+        let effects = state.world.projects.iter().find(|p| p.name == "Factory Farm Moratorium").unwrap().effects.clone();
+        state.step_year(state.world.temperature);
+        let frozen_at = state.produced.by_process[&livestock];
+        state.apply_effects(&effects, None);
+
+        // Meat demand keeps growing, but industrial livestock can't.
+        for _ in 0..10 {
+            state.step_year(state.world.temperature);
+        }
+        assert!(state.produced.by_process[&livestock] <= frozen_at * 1.0001);
+        assert!(state.produced.amount.animal_calories < state.output_demand.of(Output::AnimalCalories));
+
+        // Repealing lifts the freeze.
+        for effect in &effects {
+            effect.unapply(&mut state, None);
+        }
+        state.step_year(state.world.temperature);
+        assert!(state.produced.by_process[&livestock] > frozen_at);
     }
 
     #[test]

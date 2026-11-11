@@ -631,6 +631,14 @@ impl DisplayEffect {
                 );
                 (tip(icons::ALERT, text.clone()), text.to_string())
             }
+            Effect::FreezeProcess(id) => {
+                let process = &state.world.processes[id];
+                let text = t!(
+                    "Freezes output of %{process} at its current level. Demand beyond that goes unmet unless it's reduced or met another way.",
+                    process = t!(&process.name),
+                );
+                (tip(icons::ALERT, text.clone()), text.to_string())
+            }
             Effect::RegionHabitability(lat, amount) => (
                 tip(
                     icons::HABITABILITY,

@@ -40032,6 +40032,96 @@
             "notes": "[three-quarters fork] New emergency policy: while active, fossil processes (IsFossil) cannot have their mix share increased (FossilMoratorium flag)."
         },
         {
+            "id": "5d2e9b14-8c3a-4f71-b6e0-2a9c7d4f1e85",
+            "name": "Factory Farm Moratorium",
+            "kind": "Policy",
+            "group": "Food",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "FreezeProcess": "c0045e2a-e1d7-4cb7-9d36-870525b46c54"
+                },
+                {
+                    "NPCRelationship": [
+                        "5cd771c9-2622-4bd9-8478-c2cbf2294080",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "5cd771c9-2622-4bd9-8478-c2cbf2294080",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645617990.334266.png"
+                    },
+                    "attribution": "\"Undercover Investigation at Manitoba Pork Factory Farm\" by Mercy For Animals Canada is licensed under CC BY 2.0."
+                },
+                "description": "No new feedlots, barns or slaughterhouses. Industrial livestock farming is frozen at its current size: if demand for meat keeps growing, it will go unmet unless diets change or other sources fill the gap.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Animal Liberationist",
+                                "text": "Not one more shed. It's a start."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Consumerist",
+                                "text": "And when the butcher's shelves are empty, who are people going to blame?"
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "Gossy",
+                                "text": "If meat demand keeps rising we'll have shortages. We should start shifting diets, or find other ways to make up the difference."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New policy. Freezes Industrial Livestock Ag output at its current level (FreezeProcess effect); extra demand becomes a shortage unless demand is cut or met by other processes."
+        },
+        {
             "id": "2042b2f5-b8a8-4f5d-b483-a22d9a964848",
             "name": "Factory Farming Reform",
             "kind": "Policy",
