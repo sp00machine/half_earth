@@ -83,6 +83,10 @@ impl Tip {
                         }
                         TipCard::NPC(card) => card.render(ui, state, false),
                         TipCard::Changes(changes) => ui.add(&(*changes)),
+                        TipCard::Storage => {
+                            set_tip_width(ui);
+                            render_storage_card(ui, state)
+                        }
                         TipCard::EditableProject(cards) => {
                             ui.push_id("editable-project", |ui| {
                                 ui.set_height(ui.ctx().content_rect().height().min(640.));
@@ -254,6 +258,8 @@ pub enum TipCard {
     NPC(Card<NPC>),
     Changes(Changes),
     EditableProject(Cards<Project>),
+    /// Grid storage and lithium.
+    Storage,
 }
 impl From<Project> for TipCard {
     fn from(value: Project) -> Self {
@@ -299,4 +305,70 @@ impl TipCard {
     pub fn editable_project(value: Project) -> Self {
         TipCard::EditableProject(Cards::new(std::iter::once(value)))
     }
+}
+
+/// A summary of grid storage and lithium supply.
+fn render_storage_card(ui: &mut egui::Ui, state: &GameState) -> egui::Response {
+    use hes_engine::{Feedstock, storage::StorageMix};
+    use rust_i18n::t;
+
+    let storage = &state.storage;
+    let report = storage.last;
+    let reserves = state.feedstocks.available[Feedstock::Lithium];
+    let years = state.feedstocks.until_exhaustion(Feedstock::Lithium);
+    let mix = StorageMix::new(state.storage_tech());
+
+    egui::Frame::NONE
+        .inner_margin(8)
+        .fill(Color32::from_black_alpha(160))
+        .corner_radius(4)
+        .show(ui, |ui| {
+            ui.style_mut().visuals.override_text_color = Some(Color32::WHITE);
+            ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Wrap);
+            ui.horizontal(|ui| {
+                ui.add(icons::LITHIUM.size(24.));
+                ui.label(egui::RichText::new(t!("Storage & Lithium")).size(18.));
+            });
+            ui.add_space(4.);
+            let row = |ui: &mut egui::Ui, label: String, value: String| {
+                ui.horizontal(|ui| {
+                    ui.label(label);
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        ui.label(egui::RichText::new(value).strong());
+                    });
+                });
+            };
+            row(ui, t!("Wind & solar share of electricity").to_string(), format!("{:.0}%", state.intermittent_share() * 100.));
+            row(ui, t!("Energy passed through storage").to_string(), format!("{:.1} PWh", report.stored * 1e-12));
+            row(ui, t!("Storage the grid needs that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
+            row(ui, t!("Lost in storage round trips").to_string(), format!("{:.1} PWh", report.losses * 1e-12));
+            row(ui, t!("Wasted for lack of storage").to_string(), format!("{:.1} PWh", report.curtailed * 1e-12));
+            ui.separator();
+            row(ui, t!("Lithium in batteries in use").to_string(), format!("{:.1} Mt", storage.lithium_in_use * 1e-12));
+            row(ui, t!("Lithium mined this year").to_string(), format!("{:.0} kt", report.lithium_mined * 1e-9));
+            row(ui, t!("Mining capacity").to_string(), format!("{:.0} kt", storage.mining_capacity * 1e-9));
+            row(ui, t!("Recovered by recycling").to_string(), format!("{:.0}%", storage.recycling.clamp(0., 1.) * 100.));
+            row(
+                ui,
+                t!("Reserves left").to_string(),
+                if years.is_finite() {
+                    format!("{:.0} Mt ({years:.0} yrs)", reserves * 1e-12)
+                } else {
+                    format!("{:.0} Mt", reserves * 1e-12)
+                },
+            );
+            ui.separator();
+            ui.label(t!("Grid storage mix"));
+            for (name, share) in [
+                (t!("Lithium-ion batteries"), mix.lithium),
+                (t!("Sodium-ion batteries"), mix.sodium),
+                (t!("Pumped hydro"), mix.pumped_hydro),
+                (t!("Long-duration storage"), mix.long_duration),
+            ] {
+                if share > 0. {
+                    row(ui, format!("  {name}"), format!("{:.0}%", share * 100.));
+                }
+            }
+        })
+        .response
 }

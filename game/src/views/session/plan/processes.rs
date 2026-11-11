@@ -60,7 +60,9 @@ impl Processes {
         let allow_back = self.points == 0;
 
         let has_changes = state.ui.has_any_process_mix_changes();
-        let changes_time = state.ui.all_process_mix_change_time();
+        let changes_time = state
+            .ui
+            .all_process_mix_change_time(crate::consts::process_points_per_cycle(&state.core));
 
         let mut tabs: Vec<_> = Output::iter()
             .map(|output| TabItem {

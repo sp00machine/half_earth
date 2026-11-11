@@ -9,7 +9,7 @@ use crate::{
     },
     parts::{center_center, fill_bar, flex_justified, flex_spaced, h_center, new_icon},
     state::{GameState, StateExt},
-    tips::{add_tip, tip},
+    tips::{TipCard, add_tip, tip},
     vars::{Impact, Var},
 };
 
@@ -460,16 +460,33 @@ impl AsCard for Process {
 
                     // Materials for building this process's capacity.
                     if let Some(m) = &self.materials {
-                        let tip = tip(
+                        let industry = |name: &str| {
+                            state.world.industries.iter().find(|i| i.name == name).cloned()
+                        };
+                        let mut steel_tip = tip(
                             icons::IRON_AND_STEEL,
                             t!(
-                                "Building each gigawatt of this takes about %{steel}kt of steel, %{cement}kt of cement and %{energy}GWh of manufacturing energy. These are made by industry as capacity is built, so their emissions depend on how clean industry is.",
+                                "Building each gigawatt of this takes about %{steel}kt of steel and %{energy}GWh of other manufacturing energy, made by industry as capacity is built. Their emissions depend on how clean industry is.",
                                 steel = format!("{:.0}", m.steel),
-                                cement = format!("{:.0}", m.cement),
                                 energy = format!("{:.0}", m.other_energy * 1e-3)
                             ),
                         );
-                        add_tip(tip, ui.add(icons::IRON_AND_STEEL.size(24.)));
+                        if let Some(ind) = industry("Iron and Steel") {
+                            steel_tip = steel_tip.card(ind);
+                        }
+                        add_tip(steel_tip, ui.add(icons::IRON_AND_STEEL.size(24.)));
+
+                        let mut cement_tip = tip(
+                            icons::CONCRETE,
+                            t!(
+                                "Building each gigawatt of this takes about %{cement}kt of cement, made by the concrete industry as capacity is built.",
+                                cement = format!("{:.0}", m.cement)
+                            ),
+                        );
+                        if let Some(ind) = industry("Concrete") {
+                            cement_tip = cement_tip.card(ind);
+                        }
+                        add_tip(cement_tip, ui.add(icons::CONCRETE.size(24.)));
                     }
 
                     // Wind and solar need storage, which needs lithium.
@@ -485,7 +502,7 @@ impl AsCard for Process {
                                 years = if years.is_finite() { format!("{years:.0}") } else { "∞".to_string() }
                             ),
                         );
-                        add_tip(tip, ui.add(icons::LITHIUM.size(24.)));
+                        add_tip(tip.card(TipCard::Storage), ui.add(icons::LITHIUM.size(24.)));
                     }
                 });
             });

@@ -246,8 +246,8 @@ pub impl State {
 
     fn update_processes(&mut self, changes: &mut EnumMap<Output, BTreeMap<Id, isize>>) {
         for (_output, changes) in changes.iter_mut() {
-            let mut rem_pts = consts::PROCESS_POINTS_PER_CYCLE;
-            let mut add_pts = consts::PROCESS_POINTS_PER_CYCLE;
+            let mut rem_pts = consts::process_points_per_cycle(self);
+            let mut add_pts = rem_pts;
             let mut total = changes.values().map(|val| val.abs()).sum::<isize>();
             while (rem_pts > 0 || add_pts > 0) && total > 0 {
                 for (process_id, change) in changes.iter_mut() {

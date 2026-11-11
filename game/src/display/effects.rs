@@ -8,7 +8,7 @@ use crate::{
         icons::{self, HasIcon},
     },
     text::bbcode,
-    tips::{Tip, add_tip, tip},
+    tips::{Tip, TipCard, add_tip, tip},
 };
 use egui::ahash::HashSet;
 use hes_engine::*;
@@ -279,7 +279,7 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
         Flag::SkipTutorial => tip(icons::ALERT, t!("Skip the tutorial.")),
         Flag::WarFooting => tip(
             icons::THE_AUTHORITARIAN,
-            t!("Energy, electrification and buildings projects take 20% less time to complete."),
+            t!("Energy, electrification and buildings projects take 20% less time to complete, and production can shift 30% per planning cycle instead of 25%."),
         ),
         Flag::FossilMoratorium => tip(
             icons::BAN,
@@ -288,15 +288,18 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
         Flag::SodiumIonBatteries => tip(
             icons::ELECTRICITY,
             t!("Sodium-ion batteries take over part of grid storage, needing no lithium."),
-        ),
+        )
+        .card(TipCard::Storage),
         Flag::PumpedHydroStorage => tip(
             icons::ELECTRICITY,
             t!("Pumped hydro takes over part of grid storage, needing no lithium."),
-        ),
+        )
+        .card(TipCard::Storage),
         Flag::LongDurationStorage => tip(
             icons::ELECTRICITY,
             t!("Long-duration storage takes over part of grid storage. It needs no lithium but loses more energy."),
-        ),
+        )
+        .card(TipCard::Storage),
         Flag::LifeGoesOn => tip(icons::ALERT, t!("The game never ends.")),
     }
 }
@@ -587,7 +590,8 @@ impl DisplayEffect {
                             "Lithium from worn-out batteries can be recovered for new ones. Currently %{percent}% is recovered.",
                             percent = format!("{:.0}", state.storage.recycling * 100.)
                         ),
-                    ),
+                    )
+                    .card(TipCard::Storage),
                     icon_text(
                         "electricity",
                         &t!(
@@ -604,7 +608,8 @@ impl DisplayEffect {
                             "Batteries need lithium, and new mines take time to open. About %{amount}kt can be mined this year.",
                             amount = format!("{:.0}", state.storage.mining_capacity * 1e-9)
                         ),
-                    ),
+                    )
+                    .card(TipCard::Storage),
                     icon_text(
                         "electricity",
                         &t!(
@@ -618,7 +623,8 @@ impl DisplayEffect {
                     tip(
                         icons::ELECTRICITY,
                         t!("Grids with lots of wind and solar store energy for later, losing some on every round trip."),
-                    ),
+                    )
+                    .card(TipCard::Storage),
                     icon_text(
                         "electricity",
                         &t!(

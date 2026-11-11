@@ -211,18 +211,18 @@ impl UIState {
         Output::iter().any(|output| self.has_process_mix_changes(output))
     }
 
-    pub fn process_mix_change_time(&self, output: Output) -> f32 {
+    pub fn process_mix_change_time(&self, output: Output, points_per_cycle: usize) -> f32 {
         let total = self.process_mix_changes[output]
             .values()
             .map(|change| change.abs())
             .sum::<isize>() as f32;
         let changing_points = (total / 2.).ceil();
-        changing_points / consts::PROCESS_POINTS_PER_CYCLE as f32
+        changing_points / points_per_cycle as f32
     }
 
-    pub fn all_process_mix_change_time(&self) -> f32 {
+    pub fn all_process_mix_change_time(&self, points_per_cycle: usize) -> f32 {
         Output::iter()
-            .map(|output| self.process_mix_change_time(output))
+            .map(|output| self.process_mix_change_time(output, points_per_cycle))
             .reduce(f32::max)
             .unwrap_or_default()
     }

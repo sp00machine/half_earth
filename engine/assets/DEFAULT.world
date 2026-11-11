@@ -35249,6 +35249,482 @@
             "notes": "[three-quarters fork] New intro event: fires the first time at least 20% of the battery storage the grid needs can't be built."
         },
         {
+            "name": "Lax Oversight",
+            "locked": false,
+            "occurred": false,
+            "id": "2a6f9c1d-8e43-4b57-a0d2-6c9e3f7b1a58",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "HasFlag": "WarFooting"
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        2.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Environmentalist",
+                            "text": "A fast-tracked transmission line was bulldozed straight through the last nesting grounds of the Tawny Shrike-Warbler."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Environmentalist",
+                            "text": "Nobody did a survey. Nobody had time to."
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Engineer",
+                            "text": "The line will carry clean power to forty million people. Every month of delay is more coal burned."
+                        },
+                        {
+                            "id": 3,
+                            "next": null,
+                            "speaker": "The Environmentalist",
+                            "text": "And extinction is forever."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646527498.837254.png"
+                    },
+                    "attribution": ""
+                }
+            },
+            "notes": "[three-quarters fork] New event. Can happen while Climate War Footing is active: cutting red tape means cutting environmental review."
+        },
+        {
+            "name": "Rushed Construction",
+            "locked": false,
+            "occurred": false,
+            "id": "5e1b8d3f-2c97-4a64-9b0e-8f3a6d2c4b19",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Unlikely",
+                    "conditions": [
+                        {
+                            "HasFlag": "WarFooting"
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "OutputForProcess": [
+                        "92b188fc-1461-4ea0-9aef-7f38eab7a76d",
+                        -0.05
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Engineer",
+                            "text": "Gearboxes are failing across a whole generation of wind farms built during the mobilization."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Engineer",
+                            "text": "We skipped testing to hit our targets. Now we're paying for it in repairs."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Wind output is down until they're fixed."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1648794138.300263.png"
+                    },
+                    "attribution": "Timothy Tolle, CC BY 2.0"
+                }
+            },
+            "notes": "[three-quarters fork] New event. Can happen while Climate War Footing is active: -5% onshore wind output."
+        },
+        {
+            "name": "Mobilization Fatigue",
+            "locked": false,
+            "occurred": false,
+            "id": "8c4a2e7b-1f59-4d36-b8e0-3a7c9d5f2e64",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Unlikely",
+                    "conditions": [
+                        {
+                            "HasFlag": "WarFooting"
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "GreaterEqual",
+                                2035.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "IncomeOutlookChange": -1.0
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Citizen",
+                            "text": "They told us it was an emergency. That was years ago."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Citizen",
+                            "text": "When does the emergency end and life start again?"
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Support for the mobilization is fading, especially in the wealthier regions."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645388311.168973.png"
+                    },
+                    "attribution": ""
+                }
+            },
+            "notes": "[three-quarters fork] New event. Can happen when Climate War Footing is still active from 2035 on."
+        },
+        {
+            "name": "Victory Gardens",
+            "locked": false,
+            "occurred": false,
+            "id": "3d7e5a9c-6b18-4f2d-a3c4-9e1b7f8d2a35",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
+                                "Active"
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "Output": [
+                        "PlantCalories",
+                        0.02
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Citizen",
+                            "text": "Our whole block tore up the lawns and planted beans and squash."
+                        },
+                        {
+                            "id": 1,
+                            "next": null,
+                            "speaker": "The Citizen",
+                            "text": "I didn't know my neighbors before the rationing. Now we have dinner together every Sunday."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645638792.210244.png"
+                    },
+                    "attribution": "Seattle Parks and Recreation (CC BY 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New event. Can happen while Wartime Rationing is active."
+        },
+        {
+            "name": "Ration Black Markets",
+            "locked": false,
+            "occurred": false,
+            "id": "6f9b3c1e-4d82-4a75-b1e6-2c8d5a7f9b40",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
+                                "Active"
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "b6694f1d-5597-4bb8-a484-254930838982",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "Gossy",
+                            "text": "There's a thriving black market in meat and fuel ration coupons."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Consumerist",
+                            "text": "People will always find a way to get what they want. You can't plan away human nature!"
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "A few examples made of the smugglers would end this quickly. I'm happy to help, Planner."
+                        },
+                        {
+                            "id": 3,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "...let's keep that offer in mind, I suppose."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1651671264.730638.png"
+                    },
+                    "attribution": "Kurt Kaiser (CC0 1.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New event. Can happen while Wartime Rationing is active; the Authoritarian offers to help."
+        },
+        {
+            "name": "Swords into Turbines",
+            "locked": false,
+            "occurred": false,
+            "id": "9a2d6f4b-3e71-4c58-8d9a-5b2f7e1c3d86",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Likely",
+                    "conditions": [
+                        {
+                            "HasFlag": "WarFooting"
+                        },
+                        {
+                            "ProjectStatus": [
+                                "2e463e40-efc0-4861-908a-c1cb0f392cc0",
+                                "Finished"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        2.0
+                    ]
+                },
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        10.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Engineer",
+                            "text": "The old munitions plants have been retooled. They're turning out turbine blades instead of missiles."
+                        },
+                        {
+                            "id": 1,
+                            "next": null,
+                            "speaker": "The Utopian",
+                            "text": "Swords into plowshares, at last. Or into turbines, anyway."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645618306.478858.png"
+                    },
+                    "attribution": "Cpl. Trent Randolph (Public Domain)"
+                }
+            },
+            "notes": "[three-quarters fork] New event. Happens when Climate War Footing is active after Global Demilitarization."
+        },
+        {
             "name": "Endangered Species Recover",
             "locked": false,
             "occurred": false,
@@ -40168,7 +40644,7 @@
                     },
                     "attribution": ""
                 },
-                "description": "Mobilize the economy the way nations once mobilized for war: factories retooled overnight, labor directed where it is needed, and red tape cut to ribbons. Energy, electrification and building projects finish faster, but life under mobilization is hard and people chafe at it.",
+                "description": "Mobilize the economy the way nations once mobilized for war: factories retooled overnight, labor directed where it is needed, and red tape cut to ribbons. Energy and building projects finish faster and production can be reorganized more quickly, but environmental review gets skipped, and life under mobilization is hard.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -40199,7 +40675,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
+            "notes": "[three-quarters fork] Also allows 6 process mix changes per sector per cycle instead of 5 (30% instead of 25%). Enables the Lax Oversight, Rushed Construction and Mobilization Fatigue events, and Swords into Turbines after Global Demilitarization.\n\n[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
         },
         {
             "id": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",

@@ -10,6 +10,16 @@ pub const PC_PER_COMPLETED_PROJECT: usize = 5;
 
 pub const PROCESS_POINTS_PER_CYCLE: usize = 5;
 
+/// Process mix points per cycle, given the current flags
+/// (Climate War Footing cuts the red tape and allows more change).
+pub fn process_points_per_cycle(state: &hes_engine::State) -> usize {
+    if state.flags.contains(&hes_engine::Flag::WarFooting) {
+        PROCESS_POINTS_PER_CYCLE + 1
+    } else {
+        PROCESS_POINTS_PER_CYCLE
+    }
+}
+
 pub const MAX_RELATIONSHIP: u8 = 6;
 
 /// Bonus PC for the first n years
