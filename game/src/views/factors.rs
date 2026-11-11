@@ -4,7 +4,12 @@ use rust_i18n::t;
 
 use crate::{
     consts,
-    display::{self, HasIcon, Icon, factors::Factor, icons, intensity::intensity_bar},
+    display::{
+        self, HasIcon, Icon,
+        factors::{Factor, Gases},
+        icons,
+        intensity::intensity_bar,
+    },
     parts::flex_justified,
     state::FACTORS,
     vars::Var,
@@ -16,6 +21,47 @@ pub struct FactorsCard {
     pub kind: Var,
     pub total: f32,
     pub current: Option<String>,
+    /// For emissions, the total split by gas.
+    pub gases: Option<Gases>,
+}
+
+const CO2_COLOR: Color32 = Color32::from_rgb(0x9a, 0x9a, 0x9a);
+const CH4_COLOR: Color32 = Color32::from_rgb(0xf2, 0xa9, 0x3b);
+const N2O_COLOR: Color32 = Color32::from_rgb(0x9b, 0x7b, 0xd4);
+
+/// A thin bar showing how emissions split between gases, plus a short label.
+fn gas_bar(ui: &mut egui::Ui, gases: &Gases, label: bool) {
+    let parts = [
+        (gases.co2, CO2_COLOR, "CO₂"),
+        (gases.ch4, CH4_COLOR, "CH₄"),
+        (gases.n2o, N2O_COLOR, "N₂O"),
+    ];
+    let positive: f32 = parts.iter().map(|(v, ..)| v.max(0.)).sum();
+    if positive > 0. {
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 5.), egui::Sense::hover());
+        let mut x = rect.left();
+        for (value, color, _) in parts {
+            if value > 0. {
+                let w = rect.width() * value / positive;
+                ui.painter().rect_filled(
+                    egui::Rect::from_min_size(egui::pos2(x, rect.top()), egui::vec2(w, rect.height())),
+                    0.,
+                    color,
+                );
+                x += w;
+            }
+        }
+    }
+    if label {
+        ui.horizontal(|ui| {
+            ui.style_mut().spacing.item_spacing.x = 8.;
+            for (value, color, name) in parts {
+                if value.abs() >= 0.05 {
+                    ui.label(egui::RichText::new(format!("{name} {value:+.1}")).color(color).small());
+                }
+            }
+        });
+    }
 }
 impl FactorsCard {
     pub fn render(&self, ui: &mut egui::Ui) -> egui::Response {
@@ -63,6 +109,18 @@ impl FactorsCard {
                                     });
                                 });
                             });
+                            if let Some(gases) = &self.gases {
+                                gas_bar(ui, gases, true);
+                                ui.add(
+                                    egui::Label::new(
+                                        egui::RichText::new(t!(
+                                            "CO₂ stays in the air for centuries. Methane (CH₄) fades in about 12 years; nitrous oxide (N₂O) in about 110."
+                                        ))
+                                        .small(),
+                                    )
+                                    .wrap(),
+                                );
+                            }
                         });
 
                     egui::ScrollArea::vertical().show(ui, |ui| {
@@ -92,6 +150,11 @@ impl FactorsCard {
                                     }
                                     ui.label(t!(name));
                                     render_factor_line(ui, name, user, &relation, self.icon);
+                                    if let Factor::Process { gases: Some(gases), .. }
+                                    | Factor::Industry { gases: Some(gases), .. } = user
+                                    {
+                                        gas_bar(ui, gases, true);
+                                    }
                                 });
                         }
                     });

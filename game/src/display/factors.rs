@@ -108,6 +108,8 @@ pub enum Factor {
         output: Output,
         produced: f32,
         display_produced: String,
+        #[serde(default)]
+        gases: Option<Gases>,
     },
     Industry {
         name: String,
@@ -115,6 +117,8 @@ pub enum Factor {
         produced: f32,
         intensity: usize,
         display: String,
+        #[serde(default)]
+        gases: Option<Gases>,
     },
     Event {
         name: String,
@@ -239,6 +243,33 @@ struct Impacts {
     display: String,
 }
 
+/// Emissions split by gas, each in CO2-equivalent (Gt).
+#[derive(Debug, Clone, Copy, PartialEq, Default, Serialize, Deserialize)]
+pub struct Gases {
+    pub co2: f32,
+    pub ch4: f32,
+    pub n2o: f32,
+}
+impl Gases {
+    /// From byproducts in grams.
+    pub fn from_byproducts(b: &ByproductMap, amount: f32) -> Self {
+        Gases {
+            co2: b.co2 * amount * 1e-15,
+            ch4: b.ch4 * 36. * amount * 1e-15,
+            n2o: b.n2o * 298. * amount * 1e-15,
+        }
+    }
+
+    pub fn total(&self) -> f32 {
+        self.co2 + self.ch4 + self.n2o
+    }
+}
+
+fn emission_gases<S: HasImpacts>(source: &S, impact: Impact, state: &State) -> Option<Gases> {
+    (impact == Impact::Emissions)
+        .then(|| Gases::from_byproducts(&source.byproducts(), source.demand(state)))
+}
+
 trait HasImpacts {
     fn resources(&self) -> ResourceMap;
     fn byproducts(&self) -> ByproductMap;
@@ -344,6 +375,7 @@ fn production_factors(impact: Impact, state: &State) -> Vec<Factor> {
                 display: display_amount,
                 intensity: inten,
                 display_produced,
+                gases: emission_gases(proc, impact, state),
             }
         })
         .chain(state.world.industries.iter().map(|ind| {
@@ -360,6 +392,7 @@ fn production_factors(impact: Impact, state: &State) -> Vec<Factor> {
                 display,
                 intensity: inten,
                 amount: total,
+                gases: emission_gases(ind, impact, state),
             }
         }))
         .filter(|fac| fac.amount() != 0.)
@@ -523,6 +556,11 @@ pub fn factors_card(current_name: Option<String>, var: Var, state: &State) -> Fa
         icon: var.icon(),
         kind: var,
         current: current_name,
+        gases: (var == Var::Emissions).then(|| Gases {
+            co2: (state.emissions.co2 + state.emissions.land) * 1e-15,
+            ch4: state.emissions.ch4 * 36. * 1e-15,
+            n2o: state.emissions.n2o * 298. * 1e-15,
+        }),
         total: match var {
             Var::Emissions => state.emissions.as_gtco2eq(),
             Var::Biodiversity => state.world.extinction_rate.round().max(0.),
