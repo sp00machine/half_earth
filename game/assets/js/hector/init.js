@@ -49,7 +49,11 @@ function set_emissions(h, scenario, wasm) {
 }
 
 async function initHector(config, outputs) {
-  return new wasmHector().then((wasm) => {
+  // Fetch the wasm binary ourselves, relative to the page's base URL,
+  // so it loads correctly when the game is hosted under a subpath.
+  const wasmUrl = new URL('hector/hector.wasm', document.baseURI);
+  const wasmBinary = await fetch(wasmUrl).then((resp) => resp.arrayBuffer());
+  return new wasmHector({ wasmBinary }).then((wasm) => {
     const hector = new wasm.Hector();
 
     // Set config

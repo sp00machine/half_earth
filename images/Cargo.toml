@@ -14,7 +14,7 @@ fastrand = { workspace = true }
 rust-embed = { version = "8.7.2" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-web-sys = { version = "0.3", default-features = false, features = ["Window", "Location"] }
+web-sys = { version = "0.3", default-features = false, features = ["Window", "Location", "Document", "Node"] }
 
 [build-dependencies]
 glob = "0.3.1"

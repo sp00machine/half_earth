@@ -72,13 +72,22 @@ mod content {
     use egui::ImageSource;
     use web_sys::window;
 
-    fn get_origin() -> String {
-        window().and_then(|w| w.location().origin().ok()).unwrap()
+    /// The page's base URL (always ends with a slash), so images
+    /// load correctly when the game is hosted under a subpath.
+    fn get_base() -> String {
+        window()
+            .and_then(|w| w.document())
+            .and_then(|d| d.base_uri().ok().flatten())
+            .map(|base| match base.rfind('/') {
+                Some(i) => base[..=i].to_string(),
+                None => format!("{base}/"),
+            })
+            .unwrap()
     }
 
     pub fn load<'a>(fname: &str) -> ImageSource<'a> {
-        let origin = get_origin();
-        ImageSource::Uri(format!("{origin}/images/content/{fname}").into())
+        let base = get_base();
+        ImageSource::Uri(format!("{base}images/content/{fname}").into())
     }
 
     include!(concat!(env!("OUT_DIR"), "/sharing.rs"));
@@ -86,8 +95,8 @@ mod content {
     fn rand_image<'a>(opts: &[&'static str], faction: &str) -> Option<ImageSource<'a>> {
         let image_opts: Vec<_> = opts.iter().filter(|path| path.contains(faction)).collect();
         fastrand::choice(&image_opts).map(|path| {
-            let origin = get_origin();
-            ImageSource::Uri(format!("{origin}/{path}").into())
+            let base = get_base();
+            ImageSource::Uri(format!("{base}{path}").into())
         })
     }
 

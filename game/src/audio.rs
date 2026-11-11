@@ -189,15 +189,15 @@ mod engine {
                     get_audio_manager().unmute();
                 }
                 AudioRequest::Ping => {
-                    get_audio_manager().play_one_shot("/sounds/notification.ogg");
+                    get_audio_manager().play_one_shot("sounds/notification.ogg");
                 }
                 AudioRequest::Loop(track) => {
                     let url = match track {
-                        Track::Intro => "/sounds/music/intro.ogg",
-                        Track::Planning => "/sounds/music/planning.ogg",
-                        Track::Interstitial => "/sounds/music/city_noise.ogg",
-                        Track::ReportBad => "/sounds/music/report_bad.ogg",
-                        Track::ReportGood => "/sounds/music/report_good.ogg",
+                        Track::Intro => "sounds/music/intro.ogg",
+                        Track::Planning => "sounds/music/planning.ogg",
+                        Track::Interstitial => "sounds/music/city_noise.ogg",
+                        Track::ReportBad => "sounds/music/report_bad.ogg",
+                        Track::ReportGood => "sounds/music/report_good.ogg",
                     };
                     let fade = false;
                     let manager = get_audio_manager();
