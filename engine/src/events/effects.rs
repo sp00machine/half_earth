@@ -847,9 +847,9 @@ mod tests {
             state.apply_effects(&effects, None);
         }
         let end = find_process(&state, "Smallholder Farms");
-        // Biodiversity pressure 0.5 * (1 - 3) = -1, spread over 25% more output.
-        assert!((end.byproducts.biodiversity * (1. + end.byproduct_modifiers.biodiversity) + 1.).abs() < 1e-4);
-        assert!((end.byproduct_modifiers.n2o + 0.75).abs() < 1e-4);
+        // Biodiversity pressure 0.1 * (1 - 5) = -0.4, with half the N2O.
+        assert!((end.byproducts.biodiversity * (1. + end.byproduct_modifiers.biodiversity) + 0.4).abs() < 1e-4);
+        assert!((end.byproduct_modifiers.n2o + 0.5).abs() < 1e-4);
         assert!(end.adj_resources().land < start.adj_resources().land);
 
         // The pesticide ban costs industrial ag yield but halves its biodiversity pressure.

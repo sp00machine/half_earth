@@ -37480,8 +37480,8 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"OutputForProcess": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", 0.25]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -1.5]},
+                {"OutputForProcess": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", 0.15]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -2.5]},
                 {
                     "Output": [
                         "PlantCalories",
@@ -37584,7 +37584,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also improves smallholder farms: +25% yield, much less biodiversity pressure.\n\nScenarios in the Netherlands\nhttps://ec.europa.eu/eip/agriculture/en/find-connect/projects/ruralization-opening-rural-areas-renew-rural"
+            "notes": "[three-quarters fork] Also improves smallholder farms: +15% yield, much less biodiversity pressure.\n\nScenarios in the Netherlands\nhttps://ec.europa.eu/eip/agriculture/en/find-connect/projects/ruralization-opening-rural-areas-renew-rural"
         },
         {
             "id": "cf745bf7-96ba-4fde-8f92-ab6b7e1b3c33",
@@ -40397,7 +40397,7 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.5]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.75]},
                 {
                     "WorldVariable": [
                         "ExtinctionRate",
@@ -42671,8 +42671,8 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.25]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.25]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.375]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.15]},
                 {
                     "WorldVariable": [
                         "Emissions",
@@ -43254,8 +43254,8 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.5]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.25]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -1.0]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.2]},
                 {
                     "ModifyProcessByproducts": [
                         "a6321414-cfff-4f90-b11a-676edf0f9389",
@@ -46812,8 +46812,8 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.25]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.25]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.375]},
+                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.15]},
                 {
                     "WorldVariable": [
                         "Emissions",
@@ -49032,7 +49032,7 @@
                 "biodiversity": 0.0
             },
             "resources": {
-                "land": 0.0018,
+                "land": 0.0016,
                 "water": 1.1085,
                 "electricity": 2.8901846e-05,
                 "fuel": 8.122272e-05
@@ -49041,7 +49041,7 @@
                 "co2": 0.17454715,
                 "ch4": 0.0,
                 "n2o": 0.0003,
-                "biodiversity": 0.5
+                "biodiversity": 0.1
             },
             "feedstock": [
                 "Soil",
@@ -49069,7 +49069,7 @@
                 },
                 "description": "Peasants tending small farms (<2 Ha) for subsistence production. These small farms produce a large share of the world's crops with relatively few environmental costs, but require more labour than industrial agriculture."
             },
-            "notes": "[three-quarters fork] Smallholders now start as subsistence agriculture as it is today: land 0.0015 -> 0.0018 (on par with industrial), n2o 0 -> 0.0003, biodiversity -1 -> 0.5, and they use synthetic fertilizer and pesticides. Reconcile Town and Country, Regenerative Agriculture, Multistrata Agroforestry, Compost and Biochar each improve them; with all five they reach land ~0.00144, biodiversity -1 and a quarter of the N2O. The Enforce Pesticide Ban policy is the drastic shortcut.\n\nhttps://ourworldindata.org/smallholder-food-production\nSmallholders use 24% of ag land, produce 29% of crops (in kcals), some of which go into fuel and feed, and ultimately contribute to 32% of the food supply (directly consumed crops).\n\nTV, similar numbers here: Ricciardi, Vincent, Navin Ramankutty, Zia Mehrabi, Larissa Jarvis, and Brenton Chookolingo. \"How much of the world's food do smallholders produce?.\" Global food security 17 (2018): 64-72.\n\nThey tend to have higher yields (more labor intensive, less land intensive) and better biodiversity effects.\n\nNicholas suggests 40-50% max. Starting kcal demand is 6840000000000000, so that would be 2736000000000000.0-3420000000000000.0, let's do 3078000000000000.0 which is in the middle."
+            "notes": "[three-quarters fork] Smallholders now start as subsistence agriculture is today: land 0.0015 -> 0.0016, n2o 0 -> 0.0003, biodiversity -1 -> 0.1, and they use synthetic fertilizer and pesticides. Reconcile Town and Country (+15% yield, biodiversity modifier -2.5), Regenerative Agriculture (-1.0), Multistrata Agroforestry (-0.75), Compost and Biochar (-0.375 each) improve them; with all five they reach land ~0.00139, biodiversity -0.4 and half the N2O. The Enforce Pesticide Ban policy is the drastic shortcut.\n\nhttps://ourworldindata.org/smallholder-food-production\nSmallholders use 24% of ag land, produce 29% of crops (in kcals), some of which go into fuel and feed, and ultimately contribute to 32% of the food supply (directly consumed crops).\n\nTV, similar numbers here: Ricciardi, Vincent, Navin Ramankutty, Zia Mehrabi, Larissa Jarvis, and Brenton Chookolingo. \"How much of the world's food do smallholders produce?.\" Global food security 17 (2018): 64-72.\n\nThey tend to have higher yields (more labor intensive, less land intensive) and better biodiversity effects.\n\nNicholas suggests 40-50% max. Starting kcal demand is 6840000000000000, so that would be 2736000000000000.0-3420000000000000.0, let's do 3078000000000000.0 which is in the middle."
         },
         {
             "id": "b5cb5cd5-f339-4918-b8a6-0488b89e5679",
