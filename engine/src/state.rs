@@ -6,7 +6,7 @@ use crate::{
     kinds::*,
     npcs::NPC,
     outputs,
-    production::{ProcessChanges, calculate_required, produce},
+    production::{ProcessChanges, ProcessFeature, calculate_required, produce},
     projects::{Group, Outcome, Project, ProjectChanges, Status, Type as ProjectType},
     resources,
     world::World,
@@ -447,7 +447,17 @@ impl State {
     pub fn process_max_share(&self, process_id: &Id) -> usize {
         let output_demand = self.output_demand.total();
         let feedstocks = self.feedstocks.available;
-        self.world.processes[process_id].max_share(&output_demand, &feedstocks)
+        let process = &self.world.processes[process_id];
+        let max_share = process.max_share(&output_demand, &feedstocks);
+
+        // Under a fossil fuel moratorium, fossil processes can shrink but not grow.
+        if self.flags.contains(&Flag::FossilMoratorium)
+            && process.features.contains(&ProcessFeature::IsFossil)
+        {
+            max_share.min(process.mix_share)
+        } else {
+            max_share
+        }
     }
 
     pub fn roll_events(&mut self, phase: Phase) -> Vec<ResolvedEvent> {
@@ -548,6 +558,14 @@ impl State {
             if self.flags.contains(&Flag::EcosystemModeling) && project.group == Group::Restoration
             {
                 group_modifier *= 1.1;
+            }
+            if self.flags.contains(&Flag::WarFooting)
+                && matches!(
+                    project.group,
+                    Group::Energy | Group::Electrification | Group::Buildings
+                )
+            {
+                group_modifier *= 0.6;
             }
             project.update_cost(
                 self.world.year,

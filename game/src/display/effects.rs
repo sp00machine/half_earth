@@ -277,6 +277,14 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
         Flag::BailedOut => tip(icons::ALERT, t!("You were bailed out.")),
         Flag::RepeatTutorial => tip(icons::ALERT, t!("Repeat the tutorial.")),
         Flag::SkipTutorial => tip(icons::ALERT, t!("Skip the tutorial.")),
+        Flag::WarFooting => tip(
+            icons::THE_AUTHORITARIAN,
+            t!("Energy, electrification and buildings projects take 40% less time to complete."),
+        ),
+        Flag::FossilMoratorium => tip(
+            icons::BAN,
+            t!("Fossil fuel processes can no longer be expanded."),
+        ),
         Flag::LifeGoesOn => tip(icons::ALERT, t!("The game never ends.")),
     }
 }

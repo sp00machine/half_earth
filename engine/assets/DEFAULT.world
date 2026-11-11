@@ -20339,6 +20339,7 @@
                 }
             ],
             "effects": [
+                {"AddEvent": "d7a3c1e5-9b28-4f60-b4d2-1e8c7a5f3b90"},
                 {
                     "WorldVariable": [
                         "Outlook",
@@ -24467,6 +24468,7 @@
                 }
             ],
             "effects": [
+                {"AddEvent": "e9c5b7d3-1a46-4e82-9d0f-3c6a8b2e7f51"},
                 {
                     "WorldVariable": [
                         "ExtinctionRate",
@@ -27549,6 +27551,7 @@
                 }
             ],
             "effects": [
+                {"AddEvent": "b1e6f3a2-7c94-4d05-8a1e-2f9b6c4d8e17"},
                 {
                     "WorldVariable": [
                         "Outlook",
@@ -34530,6 +34533,370 @@
             "notes": ""
         },
         {
+            "name": "Mountain Gorillas Return",
+            "locked": true,
+            "occurred": false,
+            "id": "b1e6f3a2-7c94-4d05-8a1e-2f9b6c4d8e17",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                "LessEqual",
+                                25.0
+                            ]
+                        },
+                        {
+                            "ProjectStatus": [
+                                "ce50beb5-243b-44f5-b722-729b9acb94fd",
+                                "Inactive"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                "LessEqual",
+                                25.0
+                            ]
+                        },
+                        {
+                            "ProjectStatus": [
+                                "0565fbf7-dbc9-4927-8f0f-7cd6e4ed2634",
+                                "Finished"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        3.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Mountain gorillas raised in captivity have been released into the Virunga forests."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "It took years of careful work, and many didn't make it. But the first wild infant was born this spring."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "People around the world are following the troop's every move."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645828852.647595.png"
+                    },
+                    "attribution": "Charles J. Sharp, CC BY-SA 4.0"
+                }
+            },
+            "notes": "[three-quarters fork] Unlocked by Mountain Gorilla Declared Extinct. Needs low extinction and a captive population: either zoos still exist (Abolish Zoos inactive) or the De-Extinction Program is finished."
+        },
+        {
+            "name": "The Vaquita Swims Again",
+            "locked": true,
+            "occurred": false,
+            "id": "d7a3c1e5-9b28-4f60-b4d2-1e8c7a5f3b90",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                "LessEqual",
+                                25.0
+                            ]
+                        },
+                        {
+                            "ProjectStatus": [
+                                "0565fbf7-dbc9-4927-8f0f-7cd6e4ed2634",
+                                "Finished"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        3.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "The first vaquitas restored from preserved tissue have been released into the Gulf of California."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "With the gillnets gone for good, they might actually make it this time."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "A second chance we almost didn't get."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645828015.008729.png"
+                    },
+                    "attribution": "Paula Olson, NOAA, Public domain"
+                }
+            },
+            "notes": "[three-quarters fork] Unlocked by Vaquita Porpoise Declared Extinct. No vaquitas survived anywhere, so it can only return through the De-Extinction Program."
+        },
+        {
+            "name": "Polar Bears Return to the Ice",
+            "locked": true,
+            "occurred": false,
+            "id": "a4f8e2b6-3d71-4c9a-8f05-7b2e9d1c6a38",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "Temperature",
+                                "LessEqual",
+                                1.5
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                "LessEqual",
+                                40.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        3.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Climatologist",
+                            "text": "Arctic sea ice has been growing back for several winters in a row."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Polar bears from captive breeding programs are being released along the new ice edge."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "The Environmentalist",
+                            "text": "Our old mascot, home again. I didn't think I'd live to see this."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645828671.745603.png"
+                    },
+                    "attribution": "Andreas Weith, CC BY-SA 4.0"
+                }
+            },
+            "notes": "[three-quarters fork] Unlocked by Polar Bear Declared Extinct. Needs the Arctic to cool back down (temperature at or below +1.5C)."
+        },
+        {
+            "name": "Coral Returns to the Great Barrier Reef",
+            "locked": true,
+            "occurred": false,
+            "id": "e9c5b7d3-1a46-4e82-9d0f-3c6a8b2e7f51",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "Temperature",
+                                "LessEqual",
+                                1.2
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                "LessEqual",
+                                40.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        3.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Eden Earth",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Divers are reporting new coral growth across the Great Barrier Reef."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Heat-tolerant corals transplanted from nurseries have taken hold, and the fish are following."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "It's not the reef it once was, but it's alive."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645638669.668734.png"
+                    },
+                    "attribution": "Greg Goebel (CC BY-SA 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] Unlocked by Great Barrier Reef Dead. Needs temperatures back near pre-collapse levels (at or below +1.2C)."
+        },
+        {
             "name": "Endangered Species Recover",
             "locked": false,
             "occurred": false,
@@ -34941,6 +35308,7 @@
                 }
             ],
             "effects": [
+                {"AddEvent": "a4f8e2b6-3d71-4c9a-8f05-7b2e9d1c6a38"},
                 {
                     "WorldVariable": [
                         "ExtinctionRate",
@@ -39407,6 +39775,289 @@
             "notes": "[three-quarters fork] New policy. The drastic early option for improving smallholder (and all pesticide-using) agriculture: halves biodiversity pressure from pesticide-using processes and stops pollinator decline events, at the cost of a 20% yield loss (10% for smallholders, who rely on pesticides less) and contentedness. Opposed by the Fanonist and the Consumerist."
         },
         {
+            "id": "3f9a2c6e-1b7d-4e58-9c0a-6d2e8f41b7a5",
+            "name": "Climate War Footing",
+            "kind": "Policy",
+            "group": "Control",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 25
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "WarFooting"
+                },
+                {
+                    "IncomeOutlookChange": -1.0
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -2.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "b6694f1d-5597-4bb8-a484-254930838982",
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "opposers": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645388311.168973.png"
+                    },
+                    "attribution": ""
+                },
+                "description": "Mobilize the economy the way nations once mobilized for war: factories retooled overnight, labor directed where it is needed, and red tape cut to ribbons. Energy, electrification and building projects finish far faster, but life under mobilization is hard and people chafe at it.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Authoritarian",
+                                "text": "Finally, some discipline. The factories have never run so well."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Utopian",
+                                "text": "We were supposed to build a world without generals, not hand them the economy."
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "Gossy",
+                                "text": "Projects are finishing ahead of schedule, but morale is slipping, especially in the wealthier regions."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
+        },
+        {
+            "id": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
+            "name": "Wartime Rationing",
+            "kind": "Policy",
+            "group": "Limits",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 20
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "Demand": [
+                        "AnimalCalories",
+                        -0.25
+                    ]
+                },
+                {
+                    "Demand": [
+                        "Fuel",
+                        -0.2
+                    ]
+                },
+                {
+                    "IncomeOutlookChange": -1.5
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "b6694f1d-5597-4bb8-a484-254930838982",
+                "04b92453-026e-40a5-9a25-e98244023a69"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651671264.730638.png"
+                    },
+                    "attribution": "Kurt Kaiser (CC0 1.0)"
+                },
+                "description": "Ration meat and fuel per person, as many countries did during the world wars. Demand falls immediately. Those used to having plenty feel the loss most, and the wealthy regions are unlikely to accept it quietly.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Citizen",
+                                "text": "A ration book. My grandmother told me about these."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Consumerist",
+                                "text": "This is austerity with a nicer name! People will not stand for it!"
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "Gossy",
+                                "text": "Demand has dropped sharply. Discontent in the wealthiest regions is rising just as fast."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New emergency policy: -25% animal calorie demand, -20% fuel demand; contentedness falls by 1.5x each region's income level, so high-income regions are hit hardest and low-income regions not at all."
+        },
+        {
+            "id": "c5b27e90-4d1f-4a63-8e2c-9f6a1b3d7e08",
+            "name": "Fossil Fuel Moratorium",
+            "kind": "Policy",
+            "group": "Energy",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 25
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "FossilMoratorium"
+                },
+                {
+                    "IncomeOutlookChange": -0.5
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "b6694f1d-5597-4bb8-a484-254930838982"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646252213.043079.png"
+                    },
+                    "attribution": "Joshua Doubek, CC BY-SA 3.0, via Wikimedia Commons"
+                },
+                "description": "No new coal mines, oil wells or gas fields, anywhere. Existing fossil infrastructure can wind down but never expand again, which locks in the transition but leaves no fallback if clean energy falls short.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Environmentalist",
+                                "text": "Keep it in the ground! This is the moment we've been fighting for."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Consumerist",
+                                "text": "And what happens when the solar panels can't keep up? We'll be sitting in the dark."
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "Gossy",
+                                "text": "Fossil fuel production can only shrink from here. We'd better make sure everything else can grow."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New emergency policy: while active, fossil processes (IsFossil) cannot have their mix share increased (FossilMoratorium flag)."
+        },
+        {
             "id": "2042b2f5-b8a8-4f5d-b483-a22d9a964848",
             "name": "Factory Farming Reform",
             "kind": "Policy",
@@ -40767,7 +41418,7 @@
             "group": "Limits",
             "ongoing": false,
             "gradual": false,
-            "locked": true,
+            "locked": false,
             "cost": 0,
             "base_cost": {
                 "Dynamic": [
@@ -40922,7 +41573,7 @@
                     }
                 ]
             },
-            "notes": "https://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes"
+            "notes": "[three-quarters fork] Unlocked from the start (was unlocked by Energy Conservation Campaign, Battery Storage Network or Continental Smart Grid) so drastic demand cuts are available early.\n\nhttps://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes"
         },
         {
             "id": "b0602718-aed6-4bd1-b358-1a16cd0b5999",

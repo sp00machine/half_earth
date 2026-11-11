@@ -45,6 +45,8 @@ pub enum Flag {
     AlienEncounter,
     BailedOut,
     LifeGoesOn,
+    WarFooting,
+    FossilMoratorium,
 }
 impl std::fmt::Display for Flag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -58,6 +60,8 @@ impl std::fmt::Display for Flag {
             Self::Electrified => "80% of fuel demand becomes electricity demand.",
             Self::Vegan => "90% of animal calorie demand is met with plant calories.",
             Self::BailedOut => "You've been bailed out once",
+            Self::WarFooting => "Energy, electrification and buildings projects take 40% less time to complete.",
+            Self::FossilMoratorium => "Fossil fuel processes can no longer be expanded.",
             Self::FastDevelopment => "Underdeveloped regions develop more quickly.",
             Self::Degrowth => "Wealthy regions income levels and consumption will decline.",
             Self::MetalsShortage => "Infrastructure projects take 20% longer to finish.",
@@ -874,6 +878,67 @@ mod tests {
         for plant_demand in [6.9e15, 1.0e16, 1.35e16] {
             demand.plant_calories = plant_demand;
             assert_eq!(vf.max_share(&demand, &state.feedstocks.available), 1, "at {plant_demand:e}");
+        }
+    }
+
+    #[test]
+    fn test_fossil_moratorium_blocks_growth_not_shrinking() {
+        let mut state = State::default();
+        let coal = state.world.processes.iter().find(|p| p.name == "Coal Power Generation").unwrap().id;
+        let solar = state.world.processes.iter().find(|p| p.name == "Solar PV").unwrap().id;
+        let share = state.world.processes[&coal].mix_share;
+        assert!(state.process_max_share(&coal) > share);
+
+        Effect::AddFlag(Flag::FossilMoratorium).apply(&mut state, None);
+        assert_eq!(state.process_max_share(&coal), share);
+        assert!(state.process_max_share(&solar) > state.world.processes[&solar].mix_share);
+
+        state.change_process_mix_share(&coal, -1);
+        assert_eq!(state.process_max_share(&coal), share - 1);
+
+        Effect::AddFlag(Flag::FossilMoratorium).unapply(&mut state, None);
+        assert!(state.process_max_share(&coal) > share - 1);
+    }
+
+    #[test]
+    fn test_war_footing_speeds_up_energy_projects() {
+        use crate::{Group, ProjectType};
+        let mut state = State::default();
+        let pick = |state: &State, group: Group| {
+            state
+                .world
+                .projects
+                .iter()
+                .find(|p| p.group == group && p.kind != ProjectType::Policy && p.cost > 0)
+                .unwrap()
+                .id
+        };
+        state.step_year(state.world.temperature);
+        let energy = pick(&state, Group::Energy);
+        let food = pick(&state, Group::Food);
+        let (energy_before, food_before) =
+            (state.world.projects[&energy].cost, state.world.projects[&food].cost);
+
+        Effect::AddFlag(Flag::WarFooting).apply(&mut state, None);
+        state.step_year(state.world.temperature);
+        assert!((state.world.projects[&energy].cost as f32) < energy_before as f32 * 0.8);
+        assert!(state.world.projects[&food].cost >= food_before);
+    }
+
+    #[test]
+    fn test_species_recovery_events_unlock() {
+        let mut state = State::default();
+        for (extinct, recovery) in [
+            ("Mountain Gorilla Declared Extinct", "Mountain Gorillas Return"),
+            ("Vaquita Porpoise Declared Extinct", "The Vaquita Swims Again"),
+            ("Polar Bear Declared Extinct", "Polar Bears Return to the Ice"),
+            ("Great Barrier Reef Dead", "Coral Returns to the Great Barrier Reef"),
+        ] {
+            let recovery = state.event_pool.events.iter().find(|e| e.name == recovery).unwrap().id;
+            assert!(state.event_pool.events[&recovery].locked);
+            let effects = state.event_pool.events.iter().find(|e| e.name == extinct).unwrap().effects.clone();
+            state.apply_effects(&effects, None);
+            assert!(!state.event_pool.events[&recovery].locked, "{extinct}");
         }
     }
 
