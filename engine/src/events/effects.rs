@@ -824,6 +824,49 @@ mod tests {
     }
 
     #[test]
+    fn test_smallholder_upgrade_path() {
+        let mut state = State::default();
+        let find_process = |state: &State, name: &str| {
+            state.world.processes.iter().find(|p| p.name == name).unwrap().clone()
+        };
+        let project_effects = |state: &State, name: &str| {
+            state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone()
+        };
+
+        let start = find_process(&state, "Smallholder Farms");
+        assert!(start.adj_byproducts().biodiversity > 0.);
+
+        for name in [
+            "Reconcile Town and Country",
+            "Regenerative Agriculture",
+            "Multistrata Agroforestry",
+            "Compost",
+            "Biochar",
+        ] {
+            let effects = project_effects(&state, name);
+            state.apply_effects(&effects, None);
+        }
+        let end = find_process(&state, "Smallholder Farms");
+        // Biodiversity pressure 0.5 * (1 - 3) = -1, spread over 25% more output.
+        assert!((end.byproducts.biodiversity * (1. + end.byproduct_modifiers.biodiversity) + 1.).abs() < 1e-4);
+        assert!((end.byproduct_modifiers.n2o + 0.75).abs() < 1e-4);
+        assert!(end.adj_resources().land < start.adj_resources().land);
+
+        // The pesticide ban costs industrial ag yield but halves its biodiversity pressure.
+        let industrial = find_process(&state, "Industrial Crop Ag");
+        let effects = project_effects(&state, "Enforce Pesticide Ban");
+        state.apply_effects(&effects, None);
+        let banned = find_process(&state, "Industrial Crop Ag");
+        assert!(banned.adj_resources().land > industrial.adj_resources().land);
+        assert!(
+            (banned.byproducts.biodiversity * (1. + banned.byproduct_modifiers.biodiversity)
+                - industrial.byproducts.biodiversity * 0.5)
+                .abs()
+                < 1e-4
+        );
+    }
+
+    #[test]
     fn test_termination_shock() {
         let mut state = State::default();
         let temp_prev = state.world.temperature;
