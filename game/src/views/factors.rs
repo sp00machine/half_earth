@@ -6,7 +6,7 @@ use crate::{
     consts,
     display::{
         self, HasIcon, Icon,
-        factors::{Factor, Gases},
+        factors::{Factor, Gases, LandSplit},
         icons,
         intensity::intensity_bar,
     },
@@ -23,6 +23,37 @@ pub struct FactorsCard {
     pub current: Option<String>,
     /// For emissions, the total split by gas.
     pub gases: Option<Gases>,
+    /// For land, how it's split between uses.
+    pub land: Option<LandSplit>,
+}
+
+/// A bar showing how land is used: farmed, regrowing, protected, wild.
+fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
+    let parts = [
+        (land.farmed, Color32::from_rgb(0xd9, 0xa4, 0x41), t!("Farmed & built")),
+        (land.regrowing, Color32::from_rgb(0x9c, 0xd3, 0x6a), t!("Regrowing")),
+        (land.protected, Color32::from_rgb(0x4c, 0xc0, 0x7d), t!("Protected")),
+        (land.wild, Color32::from_rgb(0x7f, 0xa8, 0x8e), t!("Wild")),
+    ];
+    let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 8.), egui::Sense::hover());
+    let mut x = rect.left();
+    for (share, color, _) in &parts {
+        let w = rect.width() * share.max(0.);
+        ui.painter().rect_filled(
+            egui::Rect::from_min_size(egui::pos2(x, rect.top()), egui::vec2(w, rect.height())),
+            0.,
+            *color,
+        );
+        x += w;
+    }
+    ui.horizontal_wrapped(|ui| {
+        ui.style_mut().spacing.item_spacing.x = 8.;
+        for (share, color, name) in parts {
+            if share >= 0.005 {
+                ui.label(egui::RichText::new(format!("{name} {:.0}%", share * 100.)).color(color).small());
+            }
+        }
+    });
 }
 
 const CO2_COLOR: Color32 = Color32::from_rgb(0x9a, 0x9a, 0x9a);
@@ -109,6 +140,9 @@ impl FactorsCard {
                                     });
                                 });
                             });
+                            if let Some(land) = &self.land {
+                                land_bar(ui, land);
+                            }
                             if let Some(gases) = &self.gases {
                                 gas_bar(ui, gases, true);
                                 ui.add(
@@ -153,7 +187,10 @@ impl FactorsCard {
                                     if let Factor::Process { gases: Some(gases), .. }
                                     | Factor::Industry { gases: Some(gases), .. } = user
                                     {
-                                        gas_bar(ui, gases, true);
+                                        // Only spell out the gases when it's not almost all CO2.
+                                        let non_co2 = gases.ch4.max(0.) + gases.n2o.max(0.);
+                                        let label = non_co2 > 0.05 * gases.total().abs().max(1e-6);
+                                        gas_bar(ui, gases, label);
                                     }
                                 });
                         }

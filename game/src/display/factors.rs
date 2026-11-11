@@ -265,6 +265,15 @@ impl Gases {
     }
 }
 
+/// How land is used, as fractions of all land.
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub struct LandSplit {
+    pub farmed: f32,
+    pub regrowing: f32,
+    pub protected: f32,
+    pub wild: f32,
+}
+
 fn emission_gases<S: HasImpacts>(source: &S, impact: Impact, state: &State) -> Option<Gases> {
     (impact == Impact::Emissions)
         .then(|| Gases::from_byproducts(&source.byproducts(), source.demand(state)))
@@ -484,8 +493,8 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                 // minus what's protected.
                 rankings.push(Factor::Event {
                     name: t!("Nature Preserves").to_string(),
-                    display: Some("10%".into()),
-                    amount: 0.1 * state.world.starting_resources.land,
+                    display: Some(format!("{:.0}%", state.protected_land * 100.)),
+                    amount: state.protected_land * state.world.starting_resources.land,
                 });
             }
             Var::Biodiversity => {
@@ -556,6 +565,18 @@ pub fn factors_card(current_name: Option<String>, var: Var, state: &State) -> Fa
         icon: var.icon(),
         kind: var,
         current: current_name,
+        land: (var == Var::Land).then(|| {
+            let total = state.world.starting_resources.land;
+            let farmed = (state.resource_demand.of(Resource::Land) / total).clamp(0., 1.);
+            let protected = state.protected_land.clamp(0., 1. - farmed);
+            let regrowing = (state.land_carbon.regrowing_area() / total).clamp(0., 1. - farmed - protected);
+            LandSplit {
+                farmed,
+                regrowing,
+                protected,
+                wild: (1. - farmed - regrowing - protected).max(0.),
+            }
+        }),
         gases: (var == Var::Emissions).then(|| Gases {
             co2: (state.emissions.co2 + state.emissions.land) * 1e-15,
             ch4: state.emissions.ch4 * 36. * 1e-15,
