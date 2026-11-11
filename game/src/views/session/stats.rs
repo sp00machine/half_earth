@@ -39,15 +39,25 @@ impl Var {
     }
 }
 
+#[derive(Clone, Copy, PartialEq)]
+enum HistoryMetric {
+    Temperature,
+    Emissions,
+    Extinction,
+    LandUse,
+}
+
 pub struct Stats {
     breakdown_factor: Var,
     show_breakdown_menu: bool,
+    history_metric: HistoryMetric,
 }
 impl Stats {
     pub fn new() -> Self {
         Self {
             breakdown_factor: Var::Land,
             show_breakdown_menu: false,
+            history_metric: HistoryMetric::Temperature,
         }
     }
 
@@ -296,6 +306,10 @@ impl Stats {
                     });
                 });
             }
+
+            ui.add_space(32.);
+
+            render_history(ui, state, &mut self.history_metric);
 
             ui.add_space(32.);
 
@@ -838,4 +852,152 @@ fn render_stat_text(ui: &mut egui::Ui, text: &str, color: Option<Color32>) {
         text = text.color(color);
     }
     scale_text(ui, egui::vec2(80., 28.), text, 24.);
+}
+
+/// Warming per Gt of CO2, for the simple "if emissions stay at today's
+/// level" forecast (IPCC AR6 best estimate, 0.45C per 1000 GtCO2).
+const TCRE_PER_GT: f32 = 0.45e-3;
+const FORECAST_END: usize = 2100;
+
+/// A line chart of one value over the game's history.
+fn render_history(ui: &mut egui::Ui, state: &State, metric: &mut HistoryMetric) {
+    let history = &state.history;
+    if history.len() < 2 {
+        return;
+    }
+
+    egui::Frame::NONE
+        .fill(Color32::from_white_alpha(200))
+        .corner_radius(6)
+        .inner_margin(10)
+        .show(ui, |ui| {
+            ui.set_width(ui.available_width().min(680.));
+            ui.horizontal_wrapped(|ui| {
+                for (m, label) in [
+                    (HistoryMetric::Temperature, t!("Temperature")),
+                    (HistoryMetric::Emissions, t!("Emissions")),
+                    (HistoryMetric::Extinction, t!("Extinction")),
+                    (HistoryMetric::LandUse, t!("Land Use")),
+                ] {
+                    let text = egui::RichText::new(label).size(14.);
+                    let text = if *metric == m { text.strong().underline() } else { text };
+                    if ui.add(egui::Label::new(text).sense(egui::Sense::click())).clicked() {
+                        *metric = m;
+                    }
+                    ui.add_space(8.);
+                }
+            });
+            ui.add_space(6.);
+
+            let value = |r: &hes_engine::YearRecord| match metric {
+                HistoryMetric::Temperature => r.temperature,
+                HistoryMetric::Emissions => r.emissions,
+                HistoryMetric::Extinction => r.extinction_rate,
+                HistoryMetric::LandUse => r.land_use * 100.,
+            };
+            let points: Vec<(f32, f32)> = history.iter().map(|r| (r.year as f32, value(r))).collect();
+
+            // Temperature: project forward with today's CO2 emissions.
+            let last = history.last().unwrap();
+            let forecast: Vec<(f32, f32)> = if *metric == HistoryMetric::Temperature {
+                let co2 = last.co2 + last.land;
+                (last.year..=FORECAST_END)
+                    .step_by(1)
+                    .map(|y| (y as f32, last.temperature + TCRE_PER_GT * co2 * (y - last.year) as f32))
+                    .collect()
+            } else {
+                vec![]
+            };
+            // Win thresholds.
+            let target = match metric {
+                HistoryMetric::Temperature => Some((1.0, t!("Goal"))),
+                HistoryMetric::Emissions => Some((0.0, t!("Goal"))),
+                HistoryMetric::Extinction => Some((20.0, t!("Goal"))),
+                HistoryMetric::LandUse => None,
+            };
+
+            let all = points.iter().chain(forecast.iter());
+            let (mut y_min, mut y_max) = all.clone().fold((f32::MAX, f32::MIN), |(lo, hi), (_, v)| (lo.min(*v), hi.max(*v)));
+            if let Some((t, _)) = &target {
+                y_min = y_min.min(*t);
+                y_max = y_max.max(*t);
+            }
+            let pad = ((y_max - y_min) * 0.1).max(0.1);
+            let (y_min, y_max) = (y_min - pad, y_max + pad);
+            let x_min = points[0].0;
+            let x_max = forecast.last().map(|p| p.0).unwrap_or(points.last().unwrap().0).max(x_min + 1.);
+
+            let height = 170.;
+            let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), height), egui::Sense::hover());
+            let painter = ui.painter_at(rect);
+            let plot = rect.shrink2(egui::vec2(28., 12.));
+            let to_screen = |x: f32, y: f32| {
+                egui::pos2(
+                    plot.left() + (x - x_min) / (x_max - x_min) * plot.width(),
+                    plot.bottom() - (y - y_min) / (y_max - y_min) * plot.height(),
+                )
+            };
+            let font = egui::FontId::proportional(11.);
+            let axis = Color32::from_gray(90);
+
+            // Axes and labels.
+            painter.line_segment([plot.left_bottom(), plot.right_bottom()], egui::Stroke::new(1., axis));
+            painter.line_segment([plot.left_top(), plot.left_bottom()], egui::Stroke::new(1., axis));
+            let fmt = |v: f32| if (y_max - y_min) < 5. { format!("{v:.1}") } else { format!("{v:.0}") };
+            for v in [y_min + pad, (y_min + y_max) / 2., y_max - pad] {
+                let p = to_screen(x_min, v);
+                painter.text(egui::pos2(rect.left(), p.y), egui::Align2::LEFT_CENTER, fmt(v), font.clone(), axis);
+                painter.line_segment([p, egui::pos2(plot.right(), p.y)], egui::Stroke::new(0.5, Color32::from_gray(200)));
+            }
+            for x in [x_min, points.last().unwrap().0, x_max] {
+                let p = to_screen(x, y_min);
+                painter.text(egui::pos2(p.x, rect.bottom()), egui::Align2::CENTER_BOTTOM, format!("{x:.0}"), font.clone(), axis);
+            }
+
+            // Goal line.
+            if let Some((t, label)) = target {
+                let (a, b) = (to_screen(x_min, t), to_screen(x_max, t));
+                dashed(&painter, a, b, egui::Stroke::new(1., Color32::from_rgb(0x2e, 0x8b, 0x57)));
+                painter.text(egui::pos2(b.x, a.y - 2.), egui::Align2::RIGHT_BOTTOM, label, font.clone(), Color32::from_rgb(0x2e, 0x8b, 0x57));
+            }
+
+            // History and forecast.
+            let line_color = Color32::from_rgb(0xc0, 0x39, 0x2b);
+            let line: Vec<egui::Pos2> = points.iter().map(|(x, y)| to_screen(*x, *y)).collect();
+            painter.add(egui::Shape::line(line, egui::Stroke::new(2., line_color)));
+            if forecast.len() > 1 {
+                for w in forecast.windows(2).step_by(2) {
+                    let (a, b) = (to_screen(w[0].0, w[0].1), to_screen(w[1].0, w[1].1));
+                    painter.line_segment([a, b], egui::Stroke::new(1.5, line_color.gamma_multiply(0.6)));
+                }
+                let end = forecast.last().unwrap();
+                painter.text(
+                    to_screen(end.0, end.1) + egui::vec2(-2., -4.),
+                    egui::Align2::RIGHT_BOTTOM,
+                    format!("{:+.1}°C", end.1),
+                    font.clone(),
+                    line_color,
+                );
+            }
+
+            ui.add_space(4.);
+            let note = match metric {
+                HistoryMetric::Temperature => t!("Dotted: where temperature heads by 2100 if CO₂ emissions stay at this year's level."),
+                HistoryMetric::Emissions => t!("Annual emissions, including land use, in gigatonnes of CO₂ equivalent."),
+                HistoryMetric::Extinction => t!("Biodiversity pressure. Below 20 is a goal."),
+                HistoryMetric::LandUse => t!("Share of all land used for farming and infrastructure."),
+            };
+            ui.add(egui::Label::new(egui::RichText::new(note).size(11.)).wrap());
+        });
+}
+
+fn dashed(painter: &egui::Painter, a: egui::Pos2, b: egui::Pos2, stroke: egui::Stroke) {
+    let len = a.distance(b);
+    let dir = (b - a) / len.max(1.);
+    let mut d = 0.;
+    while d < len {
+        let e = (d + 5.).min(len);
+        painter.line_segment([a + dir * d, a + dir * e], stroke);
+        d += 9.;
+    }
 }

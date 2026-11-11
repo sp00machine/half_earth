@@ -1021,6 +1021,18 @@ mod tests {
     }
 
     #[test]
+    fn test_history_is_recorded_each_year() {
+        let mut state = State::default();
+        let start = state.world.year;
+        for _ in 0..7 {
+            state.step_year(state.world.temperature);
+        }
+        let years: Vec<usize> = state.history.iter().map(|r| r.year).collect();
+        assert_eq!(years, (start..=start + 7).collect::<Vec<_>>());
+        assert!(state.history.iter().all(|r| r.emissions > 0.));
+    }
+
+    #[test]
     fn test_termination_shock() {
         let mut state = State::default();
         let temp_prev = state.world.temperature;

@@ -31,6 +31,22 @@ const WIN_EMISSIONS: f32 = 0.0;
 const WIN_EXTINCTION: f32 = 20.0;
 const WIN_TEMPERATURE: f32 = 1.0;
 
+/// Key values for one year, for history charts.
+/// Emissions are in Gt CO2-equivalent; land use is a fraction of all land.
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Debug, Default)]
+pub struct YearRecord {
+    pub year: usize,
+    pub temperature: f32,
+    pub emissions: f32,
+    pub co2: f32,
+    pub land: f32,
+    pub ch4: f32,
+    pub n2o: f32,
+    pub extinction_rate: f32,
+    pub land_use: f32,
+    pub outlook: f32,
+}
+
 /// Represents the game state.
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct State {
@@ -81,6 +97,10 @@ pub struct State {
     /// Grid storage and lithium.
     #[serde(default)]
     pub storage: Storage,
+
+    /// A snapshot of key values for every year so far, for charts.
+    #[serde(default)]
+    pub history: Vec<YearRecord>,
 
     /// Energy infrastructure built, and the materials it took.
     #[serde(default)]
@@ -150,6 +170,7 @@ impl State {
             yield_years: 0.,
             infrastructure: Infrastructure::default(),
             storage: Storage::default(),
+            history: vec![],
             produced: Production::default(),
             output_demand: OutputDemand::default(),
             resource_demand: ResourceDemand::default(),
@@ -169,6 +190,27 @@ impl State {
         self.step_production();
         self.update_project_costs();
         self.world.update_climate(self.world.temperature);
+        self.record_history();
+    }
+
+    fn record_history(&mut self) {
+        let gt = |g: f32| g * 1e-15;
+        let record = YearRecord {
+            year: self.world.year,
+            temperature: self.world.temperature,
+            emissions: self.emissions.as_gtco2eq(),
+            co2: gt(self.emissions.co2),
+            land: gt(self.emissions.land),
+            ch4: gt(self.emissions.ch4 * 36.),
+            n2o: gt(self.emissions.n2o * 298.),
+            extinction_rate: self.world.extinction_rate,
+            land_use: self.resource_demand.of(Resource::Land) / self.world.starting_resources.land,
+            outlook: self.outlook(),
+        };
+        match self.history.last_mut() {
+            Some(last) if last.year == record.year => *last = record,
+            _ => self.history.push(record),
+        }
     }
 
     /// If we won the game.
@@ -219,6 +261,7 @@ impl State {
 
         updates.extend(self.step_world(tgav));
         self.world.year += 1;
+        self.record_history();
 
         // We actually apply policy changes the year
         // before so that any impacts they have are
