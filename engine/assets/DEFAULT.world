@@ -49632,7 +49632,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 49.9,
+                "co2": 5.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -49662,7 +49662,14 @@
                 },
                 "description": "Photovoltaic (PV) devices generate electricity directly from sunlight via an electronic process using semiconductors."
             },
-            "notes": "Per the book, assume land use of 10W/m2 (per year) so about 0.0114m3/kWh.\n\nThe book assumes 0 emissions for solar but we can use this figure from https://www.nrel.gov/docs/fy13osti/56487.pdf, of ~40g CO2eq/kWh\n\nMekonnen, M. M., Gerbens-Leenes, P. W., & Hoekstra, A. Y. (2015). The consumptive water footprint of electricity and heat: a global assessment. Environmental Science: Water Research & Technology, 1(3), 285-297.\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf\nFor PV has a range of 6.4-303 m3 per TJ of net energy produced, so let's say 154.7 m3/TJ, which is about 0.557L/kWh.\n\nFor energy inputs, https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 6-12 for PV, that range is from 2009 and presumably solar PV production has improved a lot since then, so maybe say the higher end of that range (12). Which means about 0.083kWh/kWh\n\nFor biodiversity pressure, assume it's all through land use.\n\nFor feedstock, we assume that it's all captured through land use (of course would vary according to sun/sky conditions/solar irradiance but I believe that land use number encapsulates an average of those)"
+            "notes": "[three-quarters fork] Building capacity takes 45 t steel, 8 t cement and 2.5 GWh of other manufacturing energy per MW (capacity factor 0.17, 30-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 49.9, a lifecycle figure that included manufacturing; it is now 5.0, operation only, since manufacturing is counted through industry.\n\nPer the book, assume land use of 10W/m2 (per year) so about 0.0114m3/kWh.\n\nThe book assumes 0 emissions for solar but we can use this figure from https://www.nrel.gov/docs/fy13osti/56487.pdf, of ~40g CO2eq/kWh\n\nMekonnen, M. M., Gerbens-Leenes, P. W., & Hoekstra, A. Y. (2015). The consumptive water footprint of electricity and heat: a global assessment. Environmental Science: Water Research & Technology, 1(3), 285-297.\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf\nFor PV has a range of 6.4-303 m3 per TJ of net energy produced, so let's say 154.7 m3/TJ, which is about 0.557L/kWh.\n\nFor energy inputs, https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 6-12 for PV, that range is from 2009 and presumably solar PV production has improved a lot since then, so maybe say the higher end of that range (12). Which means about 0.083kWh/kWh\n\nFor biodiversity pressure, assume it's all through land use.\n\nFor feedstock, we assume that it's all captured through land use (of course would vary according to sun/sky conditions/solar irradiance but I believe that land use number encapsulates an average of those)",
+            "materials": {
+                "capacity_factor": 0.17,
+                "lifetime": 30.0,
+                "steel": 45.0,
+                "cement": 8.0,
+                "other_energy": 2500000.0
+            }
         },
         {
             "id": "c0e2a590-0165-4957-ad7e-eb81749a4223",
@@ -49684,7 +49691,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 12.0,
+                "co2": 6.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 1.0
@@ -49714,7 +49721,14 @@
                 },
                 "description": "Produced by nuclear fission of uranium and plutonium in power plants."
             },
-            "notes": "[three-quarters fork] co2 was 115 (the notes above estimated ~47). Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nPer this article from the Rocky Mountain Institute: https://rmi.org/wp-content/uploads/2017/05/2011-07_RenewableEnergysFootprintMyth.pdf, which cites https://www.sciencedirect.com/science/article/abs/pii/S1364032108001354 (V. Fthenakis & H.C. Kim, Renewable and Sustainable Energy Reviews 13:1465\u20131474 (2009)):\n\n119 m2/GWh for nuclear (in the US) so 0.000119m2/kWh\nI believe this accounts for extraction etc\n\nhttps://css.umich.edu/factsheets/nuclear-energy-factsheet\n> -  A uranium fuel pellet (~1/2 in. height and diameter) contains the energy equivalent of one ton of coal or 149 gallons of oil.10 Typical reactors hold 18 million pellets.6\n> - Each kWh of nuclear electricity requires 0.1-0.3 kWh of life cycle energy inputs.20 [say 0.2 and split 50/50 between electricity and fuel]\n> - The life cycle GHG intensity of nuclear power is estimated to be 34-60 gCO2e/kWh far below baseload sources such as coal (1,001 gCO2e/kWh).21,22 [say 47gCO2e/kWh]\n> - Nuclear power plants consume 270-670 gallons of water/MWh, depending on operating efficiency and site conditions.23 [say 470 gallons/MWh, or 2136.66L/MWh]\n\nFor energy inputs, this also gives a range of 5-15 EROI for nuclear, so 0.2 to 0.06kWh/kWh.\n\nThe CO2e estimate above is close to this:\n\"Emeritus Professor of Physics at Imperial College London Keith Barnham contends, \u201cFar from coming in at six grams of CO2 per unit of electricity for Hinkley C,\u201d the new reactor being built in the UK, \u201cthe true figure is probably well above 50 grams breaching the [Committee on Climate Change\u2019s] recommended limit for new sources of power generation beyond 2030.\u201d\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change\n\nanother source for co2 intensity:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nhttps://whatisnuclear.com/energy-density.html\n> A single fuel pellet may weigh about 10 grams so it contains 40,000 MJ in a typical reactor [LWR] and 800,000 MJ in a breeder reactor.\nSo about 10g/11111.111kWh = 0.0009g/kWh\n\n\"Another limitation of nuclear power is that it is not a long-term solution, in one crucial respect: it depends on fissile materials that are nonrenewable, namely uranium-233, uranium-235, and plutonium. At current rates of consumption, there may be between 130 and 230 years of recoverable uranium available globally. Derek Abbott, Professor of Electrical and Electronic Engineering at the University of Adelaide, has calculated that scaling nuclear production up to meet global demand could leave just five years of uranium supplies.\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change"
+            "notes": "[three-quarters fork] Building capacity takes 50 t steel, 80 t cement and 0.3 GWh of other manufacturing energy per MW (capacity factor 0.9, 60-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 12.0, a lifecycle figure that included manufacturing; it is now 6.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] co2 was 115 (the notes above estimated ~47). Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nPer this article from the Rocky Mountain Institute: https://rmi.org/wp-content/uploads/2017/05/2011-07_RenewableEnergysFootprintMyth.pdf, which cites https://www.sciencedirect.com/science/article/abs/pii/S1364032108001354 (V. Fthenakis & H.C. Kim, Renewable and Sustainable Energy Reviews 13:1465\u20131474 (2009)):\n\n119 m2/GWh for nuclear (in the US) so 0.000119m2/kWh\nI believe this accounts for extraction etc\n\nhttps://css.umich.edu/factsheets/nuclear-energy-factsheet\n> -  A uranium fuel pellet (~1/2 in. height and diameter) contains the energy equivalent of one ton of coal or 149 gallons of oil.10 Typical reactors hold 18 million pellets.6\n> - Each kWh of nuclear electricity requires 0.1-0.3 kWh of life cycle energy inputs.20 [say 0.2 and split 50/50 between electricity and fuel]\n> - The life cycle GHG intensity of nuclear power is estimated to be 34-60 gCO2e/kWh far below baseload sources such as coal (1,001 gCO2e/kWh).21,22 [say 47gCO2e/kWh]\n> - Nuclear power plants consume 270-670 gallons of water/MWh, depending on operating efficiency and site conditions.23 [say 470 gallons/MWh, or 2136.66L/MWh]\n\nFor energy inputs, this also gives a range of 5-15 EROI for nuclear, so 0.2 to 0.06kWh/kWh.\n\nThe CO2e estimate above is close to this:\n\"Emeritus Professor of Physics at Imperial College London Keith Barnham contends, \u201cFar from coming in at six grams of CO2 per unit of electricity for Hinkley C,\u201d the new reactor being built in the UK, \u201cthe true figure is probably well above 50 grams breaching the [Committee on Climate Change\u2019s] recommended limit for new sources of power generation beyond 2030.\u201d\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change\n\nanother source for co2 intensity:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nhttps://whatisnuclear.com/energy-density.html\n> A single fuel pellet may weigh about 10 grams so it contains 40,000 MJ in a typical reactor [LWR] and 800,000 MJ in a breeder reactor.\nSo about 10g/11111.111kWh = 0.0009g/kWh\n\n\"Another limitation of nuclear power is that it is not a long-term solution, in one crucial respect: it depends on fissile materials that are nonrenewable, namely uranium-233, uranium-235, and plutonium. At current rates of consumption, there may be between 130 and 230 years of recoverable uranium available globally. Derek Abbott, Professor of Electrical and Electronic Engineering at the University of Adelaide, has calculated that scaling nuclear production up to meet global demand could leave just five years of uranium supplies.\" https://bostonreview.net/science-nature/samuel-miller-mcdonald-nuclear-power-our-best-bet-against-climate-change",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 60.0,
+                "steel": 50.0,
+                "cement": 80.0,
+                "other_energy": 300000.0
+            }
         },
         {
             "id": "0ed8138c-ff16-4ad9-9f79-b7c32f74110c",
@@ -49736,7 +49750,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 38.0,
+                "co2": 30.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 5.0
@@ -49760,7 +49774,14 @@
                 },
                 "description": "Geothermal energy uses the heat from the Earth's core, which is as hot as the surface of the sun. Currently, power plants can only gather such heat from permeable rock not far from the surface. The number of easy to identify and tap sites is limited. Produces a steady source of power useful to baseload power generation."
             },
-            "notes": "[three-quarters fork] co2 was 83.7. Set to 38 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nTV\n--BECCS already includes geothermal?? Should sort that out.\n---Use for data: https://drawdown.org/solutions/geothermal-power\n--for power density number, I used median figure from 'The spatial extent of renewable and non-renewable power generation: A review and meta-analysis of power densities and their application in the U.S.'\n--apparently lots of potential geothermal is near biodiverse areas: Ng, Cheryl & White, Thomas & Katariya, Vineet & Pollard, Edward. (2021). Geothermal power generation and biodiversity: the business case for managing risk and creating opportunity. \n--installed geothermal is about 16 GW, https://www.geothermal-energy.org/pdf/IGAstandard/WGC/2020/01017.pdf\n--how should I relate this to mix share? I suppose one would round it to zero anyways\n--I made the output limit 200GW (did I do that properly?)\n--We should have a card for 'enhanced geothermal systems', which have to be researched, but have huge potential capacity and would be a great baseload energy source\n--might cause small earthquakes\n--not sure how to fill out 'fuel' and 'electricity'\n--useful essay: https://www.vox.com/energy-and-environment/2020/10/21/21515461/renewable-energy-geothermal-egs-ags-supercritical\n--122g of CO2 per kWh: https://europeangeothermalcongress.eu/wp-content/uploads/2019/07/291.pdf\n--also produces some SO2\n--in terms of water use of L per kWh, I used this: file:///C:/Users/troyv/Downloads/ANL_EVS_R-10_5.pdf\n\nconverting GW to kWh/yr:\nhere gives a 90% capacity factor: https://css.umich.edu/factsheets/geothermal-energy-factsheet\nso 200GW * 24 * 365 * 0.9 = 1576800GWh/yr = 1576800000000 kWh/yr\n\nper Justin, dividing old value by 10 for 20GW limit."
+            "notes": "[three-quarters fork] Building capacity takes 100 t steel, 15 t cement and 0.5 GWh of other manufacturing energy per MW (capacity factor 0.8, 30-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 38.0, a lifecycle figure that included manufacturing; it is now 30.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] co2 was 83.7. Set to 38 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nTV\n--BECCS already includes geothermal?? Should sort that out.\n---Use for data: https://drawdown.org/solutions/geothermal-power\n--for power density number, I used median figure from 'The spatial extent of renewable and non-renewable power generation: A review and meta-analysis of power densities and their application in the U.S.'\n--apparently lots of potential geothermal is near biodiverse areas: Ng, Cheryl & White, Thomas & Katariya, Vineet & Pollard, Edward. (2021). Geothermal power generation and biodiversity: the business case for managing risk and creating opportunity. \n--installed geothermal is about 16 GW, https://www.geothermal-energy.org/pdf/IGAstandard/WGC/2020/01017.pdf\n--how should I relate this to mix share? I suppose one would round it to zero anyways\n--I made the output limit 200GW (did I do that properly?)\n--We should have a card for 'enhanced geothermal systems', which have to be researched, but have huge potential capacity and would be a great baseload energy source\n--might cause small earthquakes\n--not sure how to fill out 'fuel' and 'electricity'\n--useful essay: https://www.vox.com/energy-and-environment/2020/10/21/21515461/renewable-energy-geothermal-egs-ags-supercritical\n--122g of CO2 per kWh: https://europeangeothermalcongress.eu/wp-content/uploads/2019/07/291.pdf\n--also produces some SO2\n--in terms of water use of L per kWh, I used this: file:///C:/Users/troyv/Downloads/ANL_EVS_R-10_5.pdf\n\nconverting GW to kWh/yr:\nhere gives a 90% capacity factor: https://css.umich.edu/factsheets/geothermal-energy-factsheet\nso 200GW * 24 * 365 * 0.9 = 1576800GWh/yr = 1576800000000 kWh/yr\n\nper Justin, dividing old value by 10 for 20GW limit.",
+            "materials": {
+                "capacity_factor": 0.8,
+                "lifetime": 30.0,
+                "steel": 100.0,
+                "cement": 15.0,
+                "other_energy": 500000.0
+            }
         },
         {
             "id": "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
@@ -49861,7 +49882,14 @@
                 },
                 "description": "Grow biofuels, burn them for energy, then capture and store the CO2 emitted."
             },
-            "notes": "[three-quarters fork] ch4 was 9.65 g/kWh, which made BECCS warm the planet on a 20-year horizon. Biomass combustion emits very little methane; set to 0.1.\n\nThe 2.5% figure actually includes geothermal, tidal/wave, as well as biomass...others seem marginal enough that we can just assign it all to biomass.\n\nThe book has 0.3W/m2 for liquid biofuels (ethanol/biodiesel) and 0.9W/m2 for solid biofuels (wood) and gaseous biofuels (phytomass). We'll assume the latter for all biomass electricity, so that's 7.884kWh/m2 or 0.1268m2/kWh\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a water footprint of 48,000-500,000 m3/TJ net energy for firewood; going to be very crude and assume that all BECCS are using wood pellets and that firewood is equivalent to that. So say 274,000 m3/TJ or 986.4L/kWh\n\nthis paper gives different numbers: https://www.pnas.org/doi/10.1073/pnas.0812619106\n> For electricity, sugar beet, maize, and sugar cane are the most favorable crops [50 m3/gigajoule (GJ)]. Rapeseed and jatropha, typical energy crops, are disadvantageous (400 m3/GJ). For ethanol, sugar beet, and potato (60 and 100 m3/GJ) are the most advantageous, followed by sugar cane (110 m3/GJ); sorghum (400 m3/GJ) is the most unfavorable. For biodiesel, soybean and rapeseed show to be the most favorable WF (400 m3/GJ); jatropha has an adverse WF (600 m3/GJ).\nThese are all way, way lower than the firewood estimate. For BECCS we'll use 50m3/GJ (0.18L/kWh); for biofuels we'll use 80m3/GJ (0.29L/kWh).\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives the following EROIs:\n- Ethanol (sugarcane): 0.8 to 10\n- Corn-based ethanol: 0.8 to 1.6\n- Biodiesel: 1.3\nLet's say 5.4, or 0.185kWh/kWh, split between electricity and fuel.\n\nThis plant in the UK is supposed to capture 350tCO2/year while generating 300MWh/year: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/911268/potential-of-bioenergy-with-carbon-capture.pdf (from 1/2020) using 100% wood pellets (other figures I've found were for biomass/coal co-firing plants). This would be about 1166.67g CO2 sequestered/kWh\n\nAs for N2O emissions, assuming the biomass is grown similar to industrial agriculture, we have 0.0001473g N2O for our industrial ag crop process, and with the conversion of 860.421kcals/kWh we get about 0.12674g N2O/kWh from fertilizer application. The problem with this conversion is that with our industrial ag crop process we are only counting human-consumed kcals; in practice inedible parts of the plants are also burned for energy. So this figure is almost certainly an overestimate, maybe just hand wave and cut it into half to 0.06337gN2O/kWh."
+            "notes": "[three-quarters fork] Building capacity takes 70 t steel, 25 t cement and 0.3 GWh of other manufacturing energy per MW (capacity factor 0.6, 35-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\n[three-quarters fork] ch4 was 9.65 g/kWh, which made BECCS warm the planet on a 20-year horizon. Biomass combustion emits very little methane; set to 0.1.\n\nThe 2.5% figure actually includes geothermal, tidal/wave, as well as biomass...others seem marginal enough that we can just assign it all to biomass.\n\nThe book has 0.3W/m2 for liquid biofuels (ethanol/biodiesel) and 0.9W/m2 for solid biofuels (wood) and gaseous biofuels (phytomass). We'll assume the latter for all biomass electricity, so that's 7.884kWh/m2 or 0.1268m2/kWh\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a water footprint of 48,000-500,000 m3/TJ net energy for firewood; going to be very crude and assume that all BECCS are using wood pellets and that firewood is equivalent to that. So say 274,000 m3/TJ or 986.4L/kWh\n\nthis paper gives different numbers: https://www.pnas.org/doi/10.1073/pnas.0812619106\n> For electricity, sugar beet, maize, and sugar cane are the most favorable crops [50 m3/gigajoule (GJ)]. Rapeseed and jatropha, typical energy crops, are disadvantageous (400 m3/GJ). For ethanol, sugar beet, and potato (60 and 100 m3/GJ) are the most advantageous, followed by sugar cane (110 m3/GJ); sorghum (400 m3/GJ) is the most unfavorable. For biodiesel, soybean and rapeseed show to be the most favorable WF (400 m3/GJ); jatropha has an adverse WF (600 m3/GJ).\nThese are all way, way lower than the firewood estimate. For BECCS we'll use 50m3/GJ (0.18L/kWh); for biofuels we'll use 80m3/GJ (0.29L/kWh).\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives the following EROIs:\n- Ethanol (sugarcane): 0.8 to 10\n- Corn-based ethanol: 0.8 to 1.6\n- Biodiesel: 1.3\nLet's say 5.4, or 0.185kWh/kWh, split between electricity and fuel.\n\nThis plant in the UK is supposed to capture 350tCO2/year while generating 300MWh/year: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/911268/potential-of-bioenergy-with-carbon-capture.pdf (from 1/2020) using 100% wood pellets (other figures I've found were for biomass/coal co-firing plants). This would be about 1166.67g CO2 sequestered/kWh\n\nAs for N2O emissions, assuming the biomass is grown similar to industrial agriculture, we have 0.0001473g N2O for our industrial ag crop process, and with the conversion of 860.421kcals/kWh we get about 0.12674g N2O/kWh from fertilizer application. The problem with this conversion is that with our industrial ag crop process we are only counting human-consumed kcals; in practice inedible parts of the plants are also burned for energy. So this figure is almost certainly an overestimate, maybe just hand wave and cut it into half to 0.06337gN2O/kWh.",
+            "materials": {
+                "capacity_factor": 0.6,
+                "lifetime": 35.0,
+                "steel": 70.0,
+                "cement": 25.0,
+                "other_energy": 300000.0
+            }
         },
         {
             "id": "ce753d51-dcb2-4a69-81da-bed7e1e27422",
@@ -49912,7 +49940,14 @@
                 },
                 "description": "Generated from a reactor that uses nuclear waste as fuel. Theoretically uses U-238 as fuel and produces plutonium-239 as waste."
             },
-            "notes": "uranium estimate:\nhttps://people.montefiore.uliege.be/ernst/uploads/sustainable-energy/lesson8.pdf\n\nCO2 estimate:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nland estimate (taken from theoretical efficiency over regular nuclear reactor):\nhttps://www.powermag.com/rapid-advancements-for-fast-reactors/\n\nwater estimate:\nhttp://large.stanford.edu/courses/2016/ph241/dodaro2/"
+            "notes": "[three-quarters fork] Building capacity takes 60 t steel, 90 t cement and 0.4 GWh of other manufacturing energy per MW (capacity factor 0.9, 60-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\nuranium estimate:\nhttps://people.montefiore.uliege.be/ernst/uploads/sustainable-energy/lesson8.pdf\n\nCO2 estimate:\nhttps://www.stormsmith.nl/Media/downloads/storm_van_leeuwen200607energy_from_uranium.pdf\n\nland estimate (taken from theoretical efficiency over regular nuclear reactor):\nhttps://www.powermag.com/rapid-advancements-for-fast-reactors/\n\nwater estimate:\nhttp://large.stanford.edu/courses/2016/ph241/dodaro2/",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 60.0,
+                "steel": 60.0,
+                "cement": 90.0,
+                "other_energy": 400000.0
+            }
         },
         {
             "id": "26713198-bbc6-4ecd-821f-eacfcff7c049",
@@ -50030,7 +50065,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 9.0,
+                "co2": 4.0,
                 "ch4": 0.42,
                 "n2o": 0.0,
                 "biodiversity": 5.0
@@ -50054,7 +50089,14 @@
                 },
                 "description": "Uses the natural flow of moving water to generate electricity."
             },
-            "notes": "[three-quarters fork] ch4 was 0. Added 0.42 g/kWh of reservoir methane (x36 = ~15 gCO2e) so the total is ~24 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of >100, so we'll just say 100 which gives us 0.01kWh/kWh.\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives us a massive range for water usage, 300-850,000m3/TJ net energy...we'll say 425,150m3/TJ or 1530.5L/kWh\n\nhttp://www.ipcc-wg3.de/report/IPCC_SRREN_Ch05.pdf gives a range of 4-14gCO2eq/kWh, so we'll say 9gCO2eq/kWh\n\nFor land use, https://www.researchgate.net/publication/350358598_Land-use_intensity_of_electricity_production_and_tomorrow%27s_energy_landscape gives a median of 650ha/TWh/y or 0.0065m2/kWh\n\nIdeas for tempering hydro:\n\n-Ceiling at ~1.9TW\ngreat resource on this (1.9 taken from the technical limitation assessment range of 1.6-2.3TW)\nhttps://dothemath.ucsd.edu/2011/12/how-much-dam-energy-can-we-get/\n\n-Decrease in generation with climate change\nAlthough big floods can virtually shut down hydro plants, they can also increase generation. The research I'm finding is show a pretty minimal effect, maybe 1%/degree C\nhttps://www.sciencedirect.com/science/article/abs/pii/S0360544214013218\n\nLimit: in kWh, https://www.hydropower.org/status-report\nper Drew's suggestion at a limit of 2000 * 1300 MW plants, or 28470TWh/yr or  2.847e13 kWh\n\nThis paper suggests a limit of 53 PWh/yr https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0171844\n\nIn the end we decided on 16PWh as a limit (1.6e+13 kWh)\nhttp://newmaeweb.ucsd.edu/courses/MAE119/WI_2018/ewExternalFiles/Estimate%20of%20Global%20Hydropower%20Potential%20-%20Zhou%20-RSC%202015.pdf"
+            "notes": "[three-quarters fork] Building capacity takes 50 t steel, 250 t cement and 0.2 GWh of other manufacturing energy per MW (capacity factor 0.4, 80-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 9.0, a lifecycle figure that included manufacturing; it is now 4.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] ch4 was 0. Added 0.42 g/kWh of reservoir methane (x36 = ~15 gCO2e) so the total is ~24 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median.\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of >100, so we'll just say 100 which gives us 0.01kWh/kWh.\n\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives us a massive range for water usage, 300-850,000m3/TJ net energy...we'll say 425,150m3/TJ or 1530.5L/kWh\n\nhttp://www.ipcc-wg3.de/report/IPCC_SRREN_Ch05.pdf gives a range of 4-14gCO2eq/kWh, so we'll say 9gCO2eq/kWh\n\nFor land use, https://www.researchgate.net/publication/350358598_Land-use_intensity_of_electricity_production_and_tomorrow%27s_energy_landscape gives a median of 650ha/TWh/y or 0.0065m2/kWh\n\nIdeas for tempering hydro:\n\n-Ceiling at ~1.9TW\ngreat resource on this (1.9 taken from the technical limitation assessment range of 1.6-2.3TW)\nhttps://dothemath.ucsd.edu/2011/12/how-much-dam-energy-can-we-get/\n\n-Decrease in generation with climate change\nAlthough big floods can virtually shut down hydro plants, they can also increase generation. The research I'm finding is show a pretty minimal effect, maybe 1%/degree C\nhttps://www.sciencedirect.com/science/article/abs/pii/S0360544214013218\n\nLimit: in kWh, https://www.hydropower.org/status-report\nper Drew's suggestion at a limit of 2000 * 1300 MW plants, or 28470TWh/yr or  2.847e13 kWh\n\nThis paper suggests a limit of 53 PWh/yr https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0171844\n\nIn the end we decided on 16PWh as a limit (1.6e+13 kWh)\nhttp://newmaeweb.ucsd.edu/courses/MAE119/WI_2018/ewExternalFiles/Estimate%20of%20Global%20Hydropower%20Potential%20-%20Zhou%20-RSC%202015.pdf",
+            "materials": {
+                "capacity_factor": 0.4,
+                "lifetime": 80.0,
+                "steel": 50.0,
+                "cement": 250.0,
+                "other_energy": 200000.0
+            }
         },
         {
             "id": "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
@@ -50131,7 +50173,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 11.0,
+                "co2": 2.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -50160,7 +50202,14 @@
                 },
                 "description": "Land-based wind energy technologies harness kinetic energy from the wind to generate electricity."
             },
-            "notes": "[three-quarters fork] co2 was 34.1. Set to 11 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for onshore wind.\n\nThis % is all wind power--what % is offshore?\nPer the book, assume 50W/m2 (per year) or 438kWh/m2 or 0.00228m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 18, so 0.0556kWh/kWh\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives 0.2-12m3/TJ net energy, we'll say 6.1m3/TJ, or 0.022L/kWh\n\nhttps://www.nrel.gov/docs/fy13osti/57131.pdf gives ~10gCO2eq/kWh\n\nFor feedstock, like solar we assume that it's all captured through land use (of course would vary according to wind speeds but I believe that land use number encapsulates an average of those)\n\nIf I'm reading these right, wind power limit is very high:\nhttps://esd.copernicus.org/articles/2/1/2011/esd-2-1-2011.pdf - says 18-68TW from land, or 157680TWh - 595680TWh annually\nhttps://www.pnas.org/content/106/27/10933 - says 123PWh annually, including offshore"
+            "notes": "[three-quarters fork] Building capacity takes 130 t steel, 60 t cement and 0.6 GWh of other manufacturing energy per MW (capacity factor 0.33, 25-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 11.0, a lifecycle figure that included manufacturing; it is now 2.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] co2 was 34.1. Set to 11 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for onshore wind.\n\nThis % is all wind power--what % is offshore?\nPer the book, assume 50W/m2 (per year) or 438kWh/m2 or 0.00228m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 18, so 0.0556kWh/kWh\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives 0.2-12m3/TJ net energy, we'll say 6.1m3/TJ, or 0.022L/kWh\n\nhttps://www.nrel.gov/docs/fy13osti/57131.pdf gives ~10gCO2eq/kWh\n\nFor feedstock, like solar we assume that it's all captured through land use (of course would vary according to wind speeds but I believe that land use number encapsulates an average of those)\n\nIf I'm reading these right, wind power limit is very high:\nhttps://esd.copernicus.org/articles/2/1/2011/esd-2-1-2011.pdf - says 18-68TW from land, or 157680TWh - 595680TWh annually\nhttps://www.pnas.org/content/106/27/10933 - says 123PWh annually, including offshore",
+            "materials": {
+                "capacity_factor": 0.33,
+                "lifetime": 25.0,
+                "steel": 130.0,
+                "cement": 60.0,
+                "other_energy": 600000.0
+            }
         },
         {
             "id": "4d3c29cb-4c72-490d-9090-75821a50b43f",
@@ -50182,7 +50231,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 12.0,
+                "co2": 6.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 1.0
@@ -50211,7 +50260,14 @@
                 },
                 "description": "Nuclear fuel made from both uranium and thorium."
             },
-            "notes": "[three-quarters fork] co2 was 115, copied from conventional nuclear. Set to 12 gCO2e/kWh to match it (IPCC AR5 WG3 Annex III lifecycle median for nuclear).\n\nLC: More pros cons in descriptor for projects.\n\nthorium estimate:\nhttp://energyeconomy.net/thorium-energy/\n\nother estimates are rough, borrowed from uranium, while considering 3X abundance of thorium versus uranium:\nhttp://large.stanford.edu/courses/2018/ph241/dai1/"
+            "notes": "[three-quarters fork] Building capacity takes 50 t steel, 80 t cement and 0.3 GWh of other manufacturing energy per MW (capacity factor 0.9, 60-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 12.0, a lifecycle figure that included manufacturing; it is now 6.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] co2 was 115, copied from conventional nuclear. Set to 12 gCO2e/kWh to match it (IPCC AR5 WG3 Annex III lifecycle median for nuclear).\n\nLC: More pros cons in descriptor for projects.\n\nthorium estimate:\nhttp://energyeconomy.net/thorium-energy/\n\nother estimates are rough, borrowed from uranium, while considering 3X abundance of thorium versus uranium:\nhttp://large.stanford.edu/courses/2018/ph241/dai1/",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 60.0,
+                "steel": 50.0,
+                "cement": 80.0,
+                "other_energy": 300000.0
+            }
         },
         {
             "id": "f819f861-af6c-43d0-abc5-8d9d0da4936d",
@@ -50311,7 +50367,14 @@
                 },
                 "description": "Produce electricity by burning coal in a boiler to produce steam. The steam produced, under pressure, flows into a turbine, which spins a generator to create electricity."
             },
-            "notes": "Per Drew's model/the book, which cites Smil, Power Density for these figures:\n1,000 W/m2 per year = 8760kWh/m2 = 0.000114m2/kWh\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nCoal: 1.13 lbs/kWh = 0.000512559 tonnes/kWh = 512.559 g/kWh\n\nFor CO2 emissions, this https://www.nrel.gov/docs/fy13osti/56487.pdf says about 1,000gCO2eq/kWh. The book has 8.5kg CO2/yr/W which is about 970gCO2/kWh\n\nFor CH4 emissions, https://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from says in 2016 1.9% of 49.4GtCO2eq was due to methane leakages from coal mining, which is 0.9386GtCO2eq or 0.026GtCH4 with a GWP of 36. According to IEA's Key World Energy Statistics 2018 (https://enerji.mmo.org.tr/wp-content/uploads/2018/11/Key_World_energy-statistics-2018.pdf) in 2016 coal made up 28.1% of the world's primary energy supply of 13,647Mtoe (1.6e14kWh), so coal was 4.496e13 kWh, so about 0.57829g CH4/kWh\n\nFor EROI https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 27-80 with a mean of 56.4 over the values provided, so about 0.0177kWh/kWh. Again, splitting half/half between fuel/electricity.\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf separates lignite from coal; we'll just use coal here. It gives 79-2100 m3/TJ net energy, we'll say ~1090m3/TJ, or 0.00392m3/kWh"
+            "notes": "[three-quarters fork] Building capacity takes 50 t steel, 20 t cement and 0.2 GWh of other manufacturing energy per MW (capacity factor 0.5, 40-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\nPer Drew's model/the book, which cites Smil, Power Density for these figures:\n1,000 W/m2 per year = 8760kWh/m2 = 0.000114m2/kWh\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nCoal: 1.13 lbs/kWh = 0.000512559 tonnes/kWh = 512.559 g/kWh\n\nFor CO2 emissions, this https://www.nrel.gov/docs/fy13osti/56487.pdf says about 1,000gCO2eq/kWh. The book has 8.5kg CO2/yr/W which is about 970gCO2/kWh\n\nFor CH4 emissions, https://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from says in 2016 1.9% of 49.4GtCO2eq was due to methane leakages from coal mining, which is 0.9386GtCO2eq or 0.026GtCH4 with a GWP of 36. According to IEA's Key World Energy Statistics 2018 (https://enerji.mmo.org.tr/wp-content/uploads/2018/11/Key_World_energy-statistics-2018.pdf) in 2016 coal made up 28.1% of the world's primary energy supply of 13,647Mtoe (1.6e14kWh), so coal was 4.496e13 kWh, so about 0.57829g CH4/kWh\n\nFor EROI https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 27-80 with a mean of 56.4 over the values provided, so about 0.0177kWh/kWh. Again, splitting half/half between fuel/electricity.\n\nFor water, https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf separates lignite from coal; we'll just use coal here. It gives 79-2100 m3/TJ net energy, we'll say ~1090m3/TJ, or 0.00392m3/kWh",
+            "materials": {
+                "capacity_factor": 0.5,
+                "lifetime": 40.0,
+                "steel": 50.0,
+                "cement": 20.0,
+                "other_energy": 200000.0
+            }
         },
         {
             "id": "f541b7c2-1914-407e-841b-a6e6fc2f322b",
@@ -50465,7 +50528,14 @@
                 },
                 "description": "Generate electricity by burning natural gas as fuel."
             },
-            "notes": "Per Drew's model/the book, which cites Smil, Power Density for these figures:\n4500 W/m2 per year = 39420 kWh/m2\nAnd for emissions: 3.6 kg CO2/W/yr 3.6kg CO2/8.76kWh = 410.9589g CO2/kWh\nWhich is roughly the figure here: https://www.eia.gov/tools/faqs/faq.php?id=74&t=11 (412.7691g CO2/kWh)\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nNatural gas: 7.43 ft3/kWh = 210.3942 litres/kWh\n\nFor CH4 emissions: https://www.epa.gov/natural-gas-star-program/estimates-methane-emissions-segment-united-states\nWhich gives (for 2019):\n- 12MMTCO2eq to gas processing\n- 37MMTCO2eq to gas transmission and storage\n- 14MMTCO2eq to gas distribution\n- 94.56MMTCO2eq to gas production\nFor a total of: 157.56MMTCO2eq = 4.377e12 gCH4 using CH4 GWP of 36\nFor 2020, US natural gas energy production was 1,617 billion kWh (https://www.eia.gov/tools/faqs/faq.php?id=427&t=3) which gives 2.7g CH4/kWh\n\nhttps://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from\nThis also attributes 3.9% of 2016 emissions (49.4GtCO2eq) to fugitive methane emissions from gas and oil production.\n\nFor EROI this https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 20-67, with a mean of 37.75 over the values provided. That's about 0.0265kWh/kWh, which I'll just split evenly b/w fuel and electricity.\n\nFor water use this https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a range of 76-1240m3/TJ net energy. That's a huge range but we'll just say 658m3/TJ or 2.3688L/kWh"
+            "notes": "[three-quarters fork] Building capacity takes 25 t steel, 10 t cement and 0.1 GWh of other manufacturing energy per MW (capacity factor 0.5, 35-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\nPer Drew's model/the book, which cites Smil, Power Density for these figures:\n4500 W/m2 per year = 39420 kWh/m2\nAnd for emissions: 3.6 kg CO2/W/yr 3.6kg CO2/8.76kWh = 410.9589g CO2/kWh\nWhich is roughly the figure here: https://www.eia.gov/tools/faqs/faq.php?id=74&t=11 (412.7691g CO2/kWh)\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nNatural gas: 7.43 ft3/kWh = 210.3942 litres/kWh\n\nFor CH4 emissions: https://www.epa.gov/natural-gas-star-program/estimates-methane-emissions-segment-united-states\nWhich gives (for 2019):\n- 12MMTCO2eq to gas processing\n- 37MMTCO2eq to gas transmission and storage\n- 14MMTCO2eq to gas distribution\n- 94.56MMTCO2eq to gas production\nFor a total of: 157.56MMTCO2eq = 4.377e12 gCH4 using CH4 GWP of 36\nFor 2020, US natural gas energy production was 1,617 billion kWh (https://www.eia.gov/tools/faqs/faq.php?id=427&t=3) which gives 2.7g CH4/kWh\n\nhttps://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from\nThis also attributes 3.9% of 2016 emissions (49.4GtCO2eq) to fugitive methane emissions from gas and oil production.\n\nFor EROI this https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 20-67, with a mean of 37.75 over the values provided. That's about 0.0265kWh/kWh, which I'll just split evenly b/w fuel and electricity.\n\nFor water use this https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf gives a range of 76-1240m3/TJ net energy. That's a huge range but we'll just say 658m3/TJ or 2.3688L/kWh",
+            "materials": {
+                "capacity_factor": 0.5,
+                "lifetime": 35.0,
+                "steel": 25.0,
+                "cement": 10.0,
+                "other_energy": 100000.0
+            }
         },
         {
             "id": "c0045e2a-e1d7-4cb7-9d36-870525b46c54",
@@ -50571,7 +50641,14 @@
                 },
                 "description": "Harness the power of suns, and build utopia with it."
             },
-            "notes": "Per: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3263804/\n- A fusion power plant would occupy roughly the same land as a fission plant\n- No CO2 or other pollution \n- Interestingly, it uses lithium as its main feedstock: \"One kilogram of natural lithium yields about 3\u00d710^13\u2009J or equivalent to 9\u00d710^5\u2009l of petrol.\" So about 8333330 kWh/kg or 0.00012g/kWh\n\nPer land use, we have 0.000119m3/kWh for nuclear fission, so just assume the same esp. if that figure is mostly for feedstock extraction (uranium/lithium)\n\nJiang, Songyan; Zhang, Ling; Li, Fengying; Hua, Hui; Liu, Xin; Yuan, Zengwei; Wu, Huijun (2020). Environmental impacts of lithium production showing the importance of primary data of upstream process in life-cycle assessment. Journal of Environmental Management, 262(), 110253\u2013. doi:10.1016/j.jenvman.2020.110253  \nhttps://www.sciencedirect.com/science/article/pii/S0301479720301882\nLCA of lithium carbonate production (lithium makes up ~18.8% of lithium carbonate by mass), comparing rock-based extraction vs brine-based extraction. Brine-based is way less intense, assuming we use that.\nPer 1 kg of lithium carbonate:\n- water use: 7.73e2 kg = 7.73e2 L = about 0.0000928L/kWh\n- global warming potential: 0.329 kg CO2eq = about 0.0000395 g CO2eq/kWh\n\nFor energy use they only have numbers for rock-based lithium:\n- Electricity: 3.38kWh/kg = about 0.00000046 kWh/kWh\nNatural gas is also used (1.36m3/kg)\n\nTV--I say you have 1-10% chance of it working\n--still will be dangerous and produce radioactive waste: https://thebulletin.org/2017/04/fusion-reactors-not-what-theyre-cracked-up-to-be/\n\n"
+            "notes": "[three-quarters fork] Building capacity takes 100 t steel, 80 t cement and 1.0 GWh of other manufacturing energy per MW (capacity factor 0.85, 50-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\nPer: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3263804/\n- A fusion power plant would occupy roughly the same land as a fission plant\n- No CO2 or other pollution \n- Interestingly, it uses lithium as its main feedstock: \"One kilogram of natural lithium yields about 3\u00d710^13\u2009J or equivalent to 9\u00d710^5\u2009l of petrol.\" So about 8333330 kWh/kg or 0.00012g/kWh\n\nPer land use, we have 0.000119m3/kWh for nuclear fission, so just assume the same esp. if that figure is mostly for feedstock extraction (uranium/lithium)\n\nJiang, Songyan; Zhang, Ling; Li, Fengying; Hua, Hui; Liu, Xin; Yuan, Zengwei; Wu, Huijun (2020). Environmental impacts of lithium production showing the importance of primary data of upstream process in life-cycle assessment. Journal of Environmental Management, 262(), 110253\u2013. doi:10.1016/j.jenvman.2020.110253  \nhttps://www.sciencedirect.com/science/article/pii/S0301479720301882\nLCA of lithium carbonate production (lithium makes up ~18.8% of lithium carbonate by mass), comparing rock-based extraction vs brine-based extraction. Brine-based is way less intense, assuming we use that.\nPer 1 kg of lithium carbonate:\n- water use: 7.73e2 kg = 7.73e2 L = about 0.0000928L/kWh\n- global warming potential: 0.329 kg CO2eq = about 0.0000395 g CO2eq/kWh\n\nFor energy use they only have numbers for rock-based lithium:\n- Electricity: 3.38kWh/kg = about 0.00000046 kWh/kWh\nNatural gas is also used (1.36m3/kg)\n\nTV--I say you have 1-10% chance of it working\n--still will be dangerous and produce radioactive waste: https://thebulletin.org/2017/04/fusion-reactors-not-what-theyre-cracked-up-to-be/\n\n",
+            "materials": {
+                "capacity_factor": 0.85,
+                "lifetime": 50.0,
+                "steel": 100.0,
+                "cement": 80.0,
+                "other_energy": 1000000.0
+            }
         },
         {
             "id": "431797db-ba78-425c-bc7d-516a855a4b3e",
@@ -50593,7 +50670,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 12.0,
+                "co2": 3.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -50619,7 +50696,14 @@
                 },
                 "description": "Offshore wind turbines mounted on a floating structure that allowing the turbine to generate electricity on water where terrestrial is not possible."
             },
-            "notes": "[three-quarters fork] co2 was 34.1. Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for offshore wind.\n\nThe resources/byproducts are just copied over from terrestrial wind power"
+            "notes": "[three-quarters fork] Building capacity takes 400 t steel, 10 t cement and 0.8 GWh of other manufacturing energy per MW (capacity factor 0.45, 25-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 12.0, a lifecycle figure that included manufacturing; it is now 3.0, operation only, since manufacturing is counted through industry.\n\n[three-quarters fork] co2 was 34.1. Set to 12 gCO2e/kWh, the IPCC AR5 WG3 Annex III lifecycle median for offshore wind.\n\nThe resources/byproducts are just copied over from terrestrial wind power",
+            "materials": {
+                "capacity_factor": 0.45,
+                "lifetime": 25.0,
+                "steel": 400.0,
+                "cement": 10.0,
+                "other_energy": 800000.0
+            }
         },
         {
             "id": "d33b57e4-ad34-46fe-8330-acbbd12803df",
@@ -50720,7 +50804,14 @@
                 },
                 "description": "Burn oil to create heat which is in turn used to generate steam to drive turbines which generate electricity."
             },
-            "notes": "Per Drew's model/the book, which cites Smil, Power Density for these figures:\n650 W/m2 per year = 5694kWh/m2 = 0.0001756m2/kWh\n\nFor CO2 emissions, the book has 8.8kg CO2/yr/W which is about 1005gCO2/kWh\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nPetroleum liquids: 0.08 gal/kWh = 0.3636872 litres/kWh\n\nThis gives a slightly different value: 0.275L/kWh\nhttps://www.statista.com/statistics/216613/electricity-generated-per-unit-of-fuel-used/\n\nFrom https://www.sciencedirect.com/science/article/pii/S0301421513003856 we get a mean of about 30EROI for oil, or about 0.03333kWh/kWh, which we'll split between electricity and fuel 50/50.\n\nFrom https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf we have the following water footprints:\n- Conventional oil: 214-1190m3/TJ net energy\n- Unconventional oil (oil sand): 419-1340m3/TJ net energy\n- Unconventional oil (oil shale): 316-1830m3/TJ net energy\n\nThese are all roughly in similar ranges, so we'll do 1022m3/TJ overall, or about 3.68L/kWh\n\nhttps://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from\nThis also attributes 3.9% of 2016 emissions (49.4GtCO2eq) to fugitive methane emissions from gas and oil production, so about 1.93GtCO2eq or about 0.0535Gt CH4 using CH4 GWP of 36.\n\nPer https://enerji.mmo.org.tr/wp-content/uploads/2018/11/Key_World_energy-statistics-2018.pdf oil made up 31.9% of total global energy (total is 13,761Mtoe, or 1.6e14kWh), so oil made up 5.104e13 kWh. Natural gas made up 22.1% of energy, so about 3.536e13 kWh. Assuming that these each leak the same amount of CH4, we can assign about 59.07% of these emissions to oil production, giving us 0.0316Gt CH4 or about 0.6191g CH4/kWh."
+            "notes": "[three-quarters fork] Building capacity takes 25 t steel, 10 t cement and 0.1 GWh of other manufacturing energy per MW (capacity factor 0.4, 35-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs).\n\nPer Drew's model/the book, which cites Smil, Power Density for these figures:\n650 W/m2 per year = 5694kWh/m2 = 0.0001756m2/kWh\n\nFor CO2 emissions, the book has 8.8kg CO2/yr/W which is about 1005gCO2/kWh\n\nFigures for US electric power sector in 2020\nhttps://www.eia.gov/tools/faqs/faq.php?id=667&t=6\nPetroleum liquids: 0.08 gal/kWh = 0.3636872 litres/kWh\n\nThis gives a slightly different value: 0.275L/kWh\nhttps://www.statista.com/statistics/216613/electricity-generated-per-unit-of-fuel-used/\n\nFrom https://www.sciencedirect.com/science/article/pii/S0301421513003856 we get a mean of about 30EROI for oil, or about 0.03333kWh/kWh, which we'll split between electricity and fuel 50/50.\n\nFrom https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf we have the following water footprints:\n- Conventional oil: 214-1190m3/TJ net energy\n- Unconventional oil (oil sand): 419-1340m3/TJ net energy\n- Unconventional oil (oil shale): 316-1830m3/TJ net energy\n\nThese are all roughly in similar ranges, so we'll do 1022m3/TJ overall, or about 3.68L/kWh\n\nhttps://ourworldindata.org/emissions-by-sector#sector-by-sector-where-do-global-greenhouse-gas-emissions-come-from\nThis also attributes 3.9% of 2016 emissions (49.4GtCO2eq) to fugitive methane emissions from gas and oil production, so about 1.93GtCO2eq or about 0.0535Gt CH4 using CH4 GWP of 36.\n\nPer https://enerji.mmo.org.tr/wp-content/uploads/2018/11/Key_World_energy-statistics-2018.pdf oil made up 31.9% of total global energy (total is 13,761Mtoe, or 1.6e14kWh), so oil made up 5.104e13 kWh. Natural gas made up 22.1% of energy, so about 3.536e13 kWh. Assuming that these each leak the same amount of CH4, we can assign about 59.07% of these emissions to oil production, giving us 0.0316Gt CH4 or about 0.6191g CH4/kWh.",
+            "materials": {
+                "capacity_factor": 0.4,
+                "lifetime": 35.0,
+                "steel": 25.0,
+                "cement": 10.0,
+                "other_energy": 100000.0
+            }
         },
         {
             "id": "ebb5832e-e3ea-4422-9f9b-115aaa994d85",
@@ -50893,7 +50984,7 @@
                 "fuel": 0.0
             },
             "byproducts": {
-                "co2": 22.5,
+                "co2": 5.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -50918,7 +51009,14 @@
                 },
                 "description": "Uses mirrors to concentrate the sun's energy to drive traditional steam turbines or engines that create electricity."
             },
-            "notes": "https://www.mdpi.com/2071-1050/13/7/3672/htm gives 0.0312kgCO2eq/kWh net electricity, 31.2g CO2eq/kWh.\n\nThe book gives 20W/m2 (per year), or 175.2kWh/m2, or 0.0057m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 1.6 but this figure is from 1984, but this more recent study also gives an EROI of 1.3-2.4: https://medeas.eu/sites/default/files/Castro_et_al-2018-BioPhysical_Economics_and_Resource_Quality.pdf\nUsing an EROI of 1.6 this is about 0.625kWh/kWh\n\nFor water, this gives https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf 118-2180m3/TJ net energy, let's say 1149m3/TJ or 0.00414m3/kWh\n\nAccording to https://www.iea.org/reports/concentrating-solar-power-csp CSP generated 15.6TWh in 2019 and according to https://www.iea.org/reports/solar-pv solar PV generated 720TWh. Originally I had 2.7% of the starting mix share for solar PV but to take this into account that will be reducd to 2.65% and CSP will be set to 0.05%.\n\nIEA puts a CSP target for 2030 at 204TWh: https://www.iea.org/reports/concentrated-solar-power-csp\nMaybe just say 1000TWh as overall the limit, i.e. 1e12kWh"
+            "notes": "[three-quarters fork] Building capacity takes 150 t steel, 60 t cement and 1.5 GWh of other manufacturing energy per MW (capacity factor 0.35, 30-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 22.5, a lifecycle figure that included manufacturing; it is now 5.0, operation only, since manufacturing is counted through industry.\n\nhttps://www.mdpi.com/2071-1050/13/7/3672/htm gives 0.0312kgCO2eq/kWh net electricity, 31.2g CO2eq/kWh.\n\nThe book gives 20W/m2 (per year), or 175.2kWh/m2, or 0.0057m2/kWh\n\nhttps://www.sciencedirect.com/science/article/pii/S0301421513003856 gives an EROI of 1.6 but this figure is from 1984, but this more recent study also gives an EROI of 1.3-2.4: https://medeas.eu/sites/default/files/Castro_et_al-2018-BioPhysical_Economics_and_Resource_Quality.pdf\nUsing an EROI of 1.6 this is about 0.625kWh/kWh\n\nFor water, this gives https://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf 118-2180m3/TJ net energy, let's say 1149m3/TJ or 0.00414m3/kWh\n\nAccording to https://www.iea.org/reports/concentrating-solar-power-csp CSP generated 15.6TWh in 2019 and according to https://www.iea.org/reports/solar-pv solar PV generated 720TWh. Originally I had 2.7% of the starting mix share for solar PV but to take this into account that will be reducd to 2.65% and CSP will be set to 0.05%.\n\nIEA puts a CSP target for 2030 at 204TWh: https://www.iea.org/reports/concentrated-solar-power-csp\nMaybe just say 1000TWh as overall the limit, i.e. 1e12kWh",
+            "materials": {
+                "capacity_factor": 0.35,
+                "lifetime": 30.0,
+                "steel": 150.0,
+                "cement": 60.0,
+                "other_energy": 1500000.0
+            }
         },
         {
             "id": "a6321414-cfff-4f90-b11a-676edf0f9389",

@@ -48,6 +48,10 @@ pub struct Process {
     #[serde(default)]
     pub frozen_limit: Option<f32>,
 
+    /// What it takes to build this process's capacity, if tracked.
+    #[serde(default)]
+    pub materials: Option<crate::materials::ProcessMaterials>,
+
     pub output: Output,
 
     pub output_modifier: f32,

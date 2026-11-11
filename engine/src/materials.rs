@@ -1,0 +1,225 @@
+//! Materials for building energy infrastructure.
+//!
+//! Building power plants takes steel, cement and manufacturing energy
+//! (silicon, glass, aluminum, electronics). Rather than folding that into
+//! each process's per-kWh emissions as a fixed lifecycle number, we work
+//! out how much capacity is built each year and add the materials to the
+//! existing Iron and Steel, Concrete and Other Industry sectors. Their
+//! emissions then follow the economy: build fast with dirty factories and
+//! emissions spike; decarbonize industry (Electric-Arc Furnaces,
+//! Carbon-Negative Concrete, clean electricity) and building gets cleaner.
+//!
+//! Only capacity beyond what existed at the start of the game is counted:
+//! the materials for maintaining the starting fleet are already part of
+//! the industries' baseline demand.
+
+use std::collections::BTreeMap;
+
+use serde::{Deserialize, Serialize};
+
+use crate::{Collection, Id, industries::Industry, production::Process};
+
+/// What it takes to build one megawatt of a process's capacity.
+#[derive(Debug, Default, Clone, Copy, Serialize, Deserialize, PartialEq)]
+pub struct ProcessMaterials {
+    /// Average output as a fraction of nameplate capacity.
+    pub capacity_factor: f32,
+    /// Years before a plant needs replacing.
+    pub lifetime: f32,
+    /// Tonnes of steel per MW.
+    pub steel: f32,
+    /// Tonnes of cement per MW (concrete is roughly 1/8 cement).
+    pub cement: f32,
+    /// Other manufacturing energy per MW, in kWh
+    /// (panels, blades, electronics, glass, aluminum).
+    pub other_energy: f32,
+}
+
+impl ProcessMaterials {
+    /// Output per MW of capacity per year, in kWh.
+    fn output_per_mw(&self) -> f32 {
+        self.capacity_factor * 8760. * 1000.
+    }
+}
+
+/// New capacity is built over this many years (a planning cycle), so a
+/// big change to the production mix doesn't need all its materials at once.
+const CONSTRUCTION_YEARS: usize = 5;
+
+/// Global production at the start of the game, used to convert tonnes
+/// into each industry's demand units.
+const STARTING_STEEL_TONNES: f32 = 1.9e9;
+const STARTING_CEMENT_TONNES: f32 = 4.1e9;
+
+pub const STEEL_INDUSTRY: &str = "Iron and Steel";
+pub const CEMENT_INDUSTRY: &str = "Concrete";
+pub const OTHER_INDUSTRY: &str = "Other Industry";
+
+/// Materials used for building energy infrastructure this year.
+#[derive(Debug, Default, Clone, Copy, Serialize, Deserialize, PartialEq)]
+pub struct BuildOut {
+    /// Capacity built this year (MW), new and replacement.
+    pub capacity: f32,
+    /// Tonnes.
+    pub steel: f32,
+    /// Tonnes.
+    pub cement: f32,
+    /// kWh.
+    pub other_energy: f32,
+}
+
+impl BuildOut {
+    fn add(&mut self, capacity: f32, materials: &ProcessMaterials) {
+        self.capacity += capacity;
+        self.steel += capacity * materials.steel;
+        self.cement += capacity * materials.cement;
+        self.other_energy += capacity * materials.other_energy;
+    }
+
+    fn combine(&mut self, other: &BuildOut, share: f32) {
+        self.capacity += other.capacity * share;
+        self.steel += other.steel * share;
+        self.cement += other.cement * share;
+        self.other_energy += other.other_energy * share;
+    }
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize, PartialEq)]
+pub struct Infrastructure {
+    /// Output of each process at the start of the game.
+    pub starting_output: BTreeMap<Id, f32>,
+    /// Output of each process last year.
+    pub prev_output: BTreeMap<Id, f32>,
+    /// Industry demand units per tonne (steel, cement), fixed at the start.
+    pub units_per_tonne: Option<(f32, f32)>,
+    /// New construction still under way, one entry per coming year.
+    #[serde(default)]
+    pub pipeline: Vec<BuildOut>,
+    /// The most recent year's build-out.
+    pub last: BuildOut,
+}
+
+impl Infrastructure {
+    /// Work out this year's build-out from production, and set the extra
+    /// demand on the industries that supply it.
+    pub fn step(
+        &mut self,
+        processes: &Collection<Process>,
+        produced: &BTreeMap<Id, f32>,
+        industries: &mut Collection<Industry>,
+        lic_pop: f32,
+    ) -> BuildOut {
+        let first_year = self.starting_output.is_empty();
+        if first_year {
+            self.starting_output = produced.clone();
+            let base = |name: &str| {
+                industries
+                    .iter()
+                    .find(|i| i.name == name)
+                    .map(|i| i.base_demand(lic_pop))
+                    .unwrap_or(0.)
+            };
+            self.units_per_tonne = Some((
+                base(STEEL_INDUSTRY) / STARTING_STEEL_TONNES,
+                base(CEMENT_INDUSTRY) / STARTING_CEMENT_TONNES,
+            ));
+        }
+
+        let mut out = BuildOut::default();
+        let mut started = BuildOut::default();
+        for process in processes.iter() {
+            let Some(materials) = process.materials else {
+                continue;
+            };
+            let per_mw = materials.output_per_mw();
+            if per_mw <= 0. {
+                continue;
+            }
+            let output = produced.get(&process.id).copied().unwrap_or(0.);
+            let start = self.starting_output.get(&process.id).copied().unwrap_or(0.);
+            let prev = self.prev_output.get(&process.id).copied().unwrap_or(start);
+
+            let new_capacity = (output - prev).max(0.) / per_mw;
+            let replaced = if materials.lifetime > 0. {
+                (output - start).max(0.) / per_mw / materials.lifetime
+            } else {
+                0.
+            };
+            started.add(new_capacity, &materials);
+            out.add(replaced, &materials);
+        }
+        self.prev_output = produced.clone();
+
+        // Spread new construction over the coming years.
+        self.pipeline.resize(CONSTRUCTION_YEARS, BuildOut::default());
+        for year in self.pipeline.iter_mut() {
+            year.combine(&started, 1. / CONSTRUCTION_YEARS as f32);
+        }
+        let this_year = self.pipeline.remove(0);
+        out.combine(&this_year, 1.);
+
+        let (steel_units, cement_units) = self.units_per_tonne.unwrap_or_default();
+        for industry in industries.iter_mut() {
+            industry.extra_demand = match industry.name.as_str() {
+                STEEL_INDUSTRY => out.steel * steel_units,
+                CEMENT_INDUSTRY => out.cement * cement_units,
+                OTHER_INDUSTRY => {
+                    let energy_per_unit = {
+                        let r = industry.adj_resources();
+                        r.fuel + r.electricity
+                    };
+                    if energy_per_unit > 0. {
+                        out.other_energy / energy_per_unit
+                    } else {
+                        0.
+                    }
+                }
+                _ => industry.extra_demand,
+            };
+        }
+
+        self.last = out;
+        out
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{State, World};
+
+    fn solar_id(state: &State) -> crate::Id {
+        state.world.processes.iter().find(|p| p.name == "Solar PV").unwrap().id
+    }
+
+    #[test]
+    fn building_solar_adds_steel_demand() {
+        let mut state = State::new(World::default());
+        state.step_year(state.world.temperature);
+        let steel = |s: &State| {
+            let lic_pop = s.world.lic_population();
+            s.world.industries.iter().find(|i| i.name == super::STEEL_INDUSTRY).unwrap().demand(lic_pop)
+        };
+        let before = steel(&state);
+
+        // Triple solar's share of electricity in one go.
+        let solar = solar_id(&state);
+        state.change_process_mix_share(&solar, 4);
+        state.step_year(state.world.temperature);
+        let built = state.infrastructure.last;
+        assert!(built.capacity > 1e5, "built {} MW", built.capacity);
+        assert!(built.steel > 0.);
+        state.step_year(state.world.temperature);
+        assert!(steel(&state) > before);
+    }
+
+    #[test]
+    fn nothing_built_without_growth() {
+        let mut state = State::new(World::default());
+        for _ in 0..3 {
+            state.step_year(state.world.temperature);
+        }
+        // Demand growth builds a few hundred GW a year, nothing like a
+        // deliberate build-out.
+        assert!(state.infrastructure.last.capacity < 1e6);
+    }
+}

@@ -16,6 +16,12 @@ pub struct Industry {
     pub resource_modifiers: ResourceMap,
     pub byproduct_modifiers: ByproductMap,
     pub demand_modifier: f32,
+
+    /// Extra demand on top of per-capita demand, e.g. materials for
+    /// building energy infrastructure (see `materials`).
+    #[serde(default)]
+    pub extra_demand: f32,
+
     pub flavor: IndustryFlavor,
     pub notes: String,
 }
@@ -41,8 +47,13 @@ impl Industry {
         }
     }
 
-    pub fn demand(&self, lic_pop: f32) -> f32 {
+    /// Per-capita demand only.
+    pub fn base_demand(&self, lic_pop: f32) -> f32 {
         self.demand_modifier.max(0.) * lic_pop
+    }
+
+    pub fn demand(&self, lic_pop: f32) -> f32 {
+        self.base_demand(lic_pop) + self.extra_demand.max(0.)
     }
 
     pub fn total_demand_for_resource(&self, lic_pop: f32, resource: Resource) -> f32 {

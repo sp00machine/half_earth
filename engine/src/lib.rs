@@ -4,6 +4,7 @@ pub mod flavor;
 mod industries;
 mod kinds;
 pub mod land;
+pub mod materials;
 mod npcs;
 mod production;
 mod projects;

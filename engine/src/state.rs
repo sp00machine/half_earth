@@ -5,6 +5,7 @@ use crate::{
     events::{Condition, Effect, Event, EventPool, Flag, Phase, Request},
     kinds::*,
     land::LandCarbon,
+    materials::Infrastructure,
     npcs::NPC,
     outputs,
     production::{ProcessChanges, ProcessFeature, calculate_required, produce},
@@ -76,6 +77,10 @@ pub struct State {
     #[serde(default)]
     pub land_carbon: LandCarbon,
 
+    /// Energy infrastructure built, and the materials it took.
+    #[serde(default)]
+    pub infrastructure: Infrastructure,
+
     /// Years of background farm yield growth applied so far.
     #[serde(default)]
     pub yield_years: f32,
@@ -138,6 +143,7 @@ impl State {
             emissions: Emissions::default(),
             land_carbon: LandCarbon::default(),
             yield_years: 0.,
+            infrastructure: Infrastructure::default(),
             produced: Production::default(),
             output_demand: OutputDemand::default(),
             resource_demand: ResourceDemand::default(),
@@ -424,6 +430,16 @@ impl State {
             self.protected_land,
         );
         self.emissions.land = land_emissions.total();
+
+        // Materials for energy infrastructure built this year; these feed
+        // into industry demand next year.
+        let lic_pop = self.world.lic_population();
+        self.infrastructure.step(
+            &self.world.processes,
+            &self.produced.by_process,
+            &mut self.world.industries,
+            lic_pop,
+        );
     }
 
     fn step_world(&mut self, tgav: f32) -> Vec<Update> {
