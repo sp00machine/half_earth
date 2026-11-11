@@ -31,9 +31,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install JS dependencies
+      - name: Build JS (Hector climate model bundle)
         working-directory: game/assets/js
-        run: npm install -d
+        # trunk checks for dist/hector.wasm before cargo's build script
+        # would generate it, so build the bundle up front.
+        run: |
+          npm install -d
+          bash build.sh
 
       - name: Install trunk
         uses: jetli/trunk-action@v0.5.0
