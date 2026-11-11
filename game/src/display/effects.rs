@@ -537,6 +537,37 @@ impl DisplayEffect {
                         ),
                     ),
                 ),
+                WorldVariable::Deforestation => (
+                    tip(
+                        icons::LAND,
+                        t!(
+                            "Land is cleared every year even when farmland isn't growing, from logging, degradation and shifting farms. This releases about %{amount}Gt of CO2 each year.",
+                            amount = format!("{:.1}", (state.land_carbon.last.deforestation + state.land_carbon.last.soil) * 1e-15)
+                        ),
+                    ),
+                    icon_text(
+                        "land",
+                        &t!(
+                            "%{changeDir} background deforestation by %{amount}%.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount * 100.)
+                        ),
+                    ),
+                ),
+                WorldVariable::Regrowth => (
+                    tip(
+                        icons::LAND,
+                        t!("Farmland that is no longer used slowly grows back into wild land, pulling carbon out of the air as it does."),
+                    ),
+                    icon_text(
+                        "land",
+                        &t!(
+                            "%{changeDir} how fast freed land regrows by %{amount}%.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount * 100.)
+                        ),
+                    ),
+                ),
                 WorldVariable::Year => return Err(()),
             },
             Effect::PlayerVariable(var, amount) => match var {

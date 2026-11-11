@@ -24,6 +24,12 @@ pub enum WorldVariable {
     SeaLevelRiseRate,
     Precipitation,
     PopulationGrowth,
+
+    /// Fractional change to background deforestation (-0.3 is 30% less).
+    Deforestation,
+
+    /// Fractional change to how fast freed land regrows (0.2 is 20% faster).
+    Regrowth,
 }
 
 #[derive(

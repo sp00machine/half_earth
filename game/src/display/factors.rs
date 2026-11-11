@@ -410,6 +410,25 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                     })
                 }
             }
+            Var::Emissions => {
+                // Land-use change, broken out by source.
+                let land = state.land_carbon.last;
+                for (name, amount) in [
+                    (t!("Land Clearing"), land.clearing),
+                    (t!("Soil Carbon from Past Clearing"), land.soil),
+                    (t!("Background Deforestation"), land.deforestation),
+                    (t!("Regrowing Land"), land.regrowth),
+                ] {
+                    let amount = amount * 1e-15;
+                    if amount.abs() >= 0.05 {
+                        rankings.push(Factor::Event {
+                            name: name.to_string(),
+                            amount,
+                            display: Some(format!("{amount:+.1}Gt")),
+                        });
+                    }
+                }
+            }
             Var::Land => {
                 // Note that for factors we compare against
                 // *starting* land and not *available* land,

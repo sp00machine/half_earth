@@ -38718,7 +38718,7 @@
                 {
                     "WorldVariable": [
                         "Emissions",
-                        -3.0
+                        -1.0
                     ]
                 }
             ],
@@ -38777,7 +38777,7 @@
                     }
                 ]
             },
-            "notes": "https://drawdown.org/solutions/reduced-food-waste\n\nThat gives 90.7\u2013101.71 Gt over 30 years (3.02-3.39Gt/yr). We represent some of that impact as an overall efficiency improvement in plant calorie production, so let's take the lower end of that"
+            "notes": "[three-quarters fork] Emissions cut was -3 Gt. The land saved by needing less food (the +5% plant calories) now counts through the land system, so the flat cut is reduced to -1 Gt for landfill methane.\n\nhttps://drawdown.org/solutions/reduced-food-waste\n\nThat gives 90.7\u2013101.71 Gt over 30 years (3.02-3.39Gt/yr). We represent some of that impact as an overall efficiency improvement in plant calorie production, so let's take the lower end of that"
         },
         {
             "id": "6847a9ce-b48e-4a81-8847-67da3270a779",
@@ -39390,12 +39390,6 @@
                 },
                 {
                     "WorldVariable": [
-                        "Emissions",
-                        1.0
-                    ]
-                },
-                {
-                    "WorldVariable": [
                         "Outlook",
                         5.0
                     ]
@@ -39407,6 +39401,12 @@
                     "NPCRelationship": [
                         "5cd771c9-2622-4bd9-8478-c2cbf2294080",
                         2.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Regrowth",
+                        -0.15
                     ]
                 }
             ],
@@ -39457,7 +39457,7 @@
                     }
                 ]
             },
-            "notes": "TV. A ref that mentions the tech is: David Pearce, 'Reprogramming Predators', 2009\nShould we assume this will harm biodiversity and carbon sequestration of ecosystems?"
+            "notes": "[three-quarters fork] Was a flat +1 Gt/yr. Without predators, overgrazing slows regrowth, so freed land now regrows 15% slower.\n\nTV. A ref that mentions the tech is: David Pearce, 'Reprogramming Predators', 2009\nShould we assume this will harm biodiversity and carbon sequestration of ecosystems?"
         },
         {
             "id": "6084cbc2-7dbc-4b75-8a0d-6df5fc0be59f",
@@ -41290,6 +41290,12 @@
                 },
                 {
                     "LocksProject": "d33f1063-298a-487a-bfde-1e2a0817bcd4"
+                },
+                {
+                    "WorldVariable": [
+                        "Deforestation",
+                        -0.3
+                    ]
                 }
             ],
             "outcomes": [
@@ -41342,7 +41348,7 @@
                     }
                 ]
             },
-            "notes": "Couldn't find a good photo in CC, got it from here: https://www.scmp.com/magazines/post-magazine/article/1780047/last-rhino-future-bleak-sole-male-northern-white\n\ntrigger attack or formation?\n\nQuote from Harry Wels, Securing Wilderness Landscapes in South Africa, p. 76"
+            "notes": "[three-quarters fork] Also cuts background deforestation by 30%, the same as Indigenous Sovereignty (which it locks out), but by force.\n\nCouldn't find a good photo in CC, got it from here: https://www.scmp.com/magazines/post-magazine/article/1780047/last-rhino-future-bleak-sole-male-northern-white\n\ntrigger attack or formation?\n\nQuote from Harry Wels, Securing Wilderness Landscapes in South Africa, p. 76"
         },
         {
             "id": "dc3a1b4f-a4cd-4618-a45b-78773930a134",
@@ -42413,12 +42419,6 @@
             "effects": [
                 {
                     "WorldVariable": [
-                        "Emissions",
-                        -2.0
-                    ]
-                },
-                {
-                    "WorldVariable": [
                         "ExtinctionRate",
                         -4.0
                     ]
@@ -42430,6 +42430,12 @@
                     "TriggerEvent": [
                         "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
                         5
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Regrowth",
+                        0.15
                     ]
                 }
             ],
@@ -42486,7 +42492,7 @@
                     }
                 ]
             },
-            "notes": "A few things. Schmitz wrote 'animating the carbon cycle' which talk about carbon sequestration in Canada if wolf populations recover in the boreal forest--but is there a global study on predators? My guess is around a gigatonne C.\n\nAlso, how does the trigger event work? What if the player has already abolished animal husbandry or if the Leather Underground already exist--what should the event be?"
+            "notes": "[three-quarters fork] Was a flat -2 Gt/yr. Predators restore ecosystems that store more carbon, so this now makes freed land regrow 15% faster.\n\nA few things. Schmitz wrote 'animating the carbon cycle' which talk about carbon sequestration in Canada if wolf populations recover in the boreal forest--but is there a global study on predators? My guess is around a gigatonne C.\n\nAlso, how does the trigger event work? What if the player has already abolished animal husbandry or if the Leather Underground already exist--what should the event be?"
         },
         {
             "id": "8f48b34d-2c20-48d2-aa81-41bb81e46f3b",
@@ -44713,18 +44719,17 @@
                 },
                 {
                     "LocksProject": "c9c74d65-7da5-4d89-8442-d0f8fe529773"
+                },
+                {
+                    "WorldVariable": [
+                        "Deforestation",
+                        -0.3
+                    ]
                 }
             ],
             "outcomes": [
                 {
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -0.35
-                            ]
-                        }
-                    ],
+                    "effects": [],
                     "probability": {
                         "likelihood": "Guaranteed",
                         "conditions": []
@@ -44772,7 +44777,7 @@
                     }
                 ]
             },
-            "notes": "https://drawdown.org/solutions/indigenous-peoples-forest-tenure#:~:text=Impact%3A,of%20carbon%20dioxide%20emissions%20avoided.\n\n\"Impact: Indigenous peoples have secure land tenure on 497 million hectares globally, though they live on and manage much more. If forestland under secure tenure grows by 995\u20131141million hectares by 2050, reduced deforestation could result in 8.7\u201312.9 gigatons of carbon dioxide emissions avoided. This solution could bring the total forest area under indigenous management to 1.14 billion hectares, securing an estimated protected stock of 187\u2013215 gigatons of carbon, roughly equivalent to over 687\u2013786 gigatons of carbon dioxide if released into the atmosphere.\"\n\nThis is 12.9 Gt from 2020-2050, so 0.43Gt/yr."
+            "notes": "[three-quarters fork] Was a flat -0.35 Gt/yr. Indigenous-managed land sees far less deforestation, so this now cuts background deforestation by 30% instead.\n\nhttps://drawdown.org/solutions/indigenous-peoples-forest-tenure#:~:text=Impact%3A,of%20carbon%20dioxide%20emissions%20avoided.\n\n\"Impact: Indigenous peoples have secure land tenure on 497 million hectares globally, though they live on and manage much more. If forestland under secure tenure grows by 995\u20131141million hectares by 2050, reduced deforestation could result in 8.7\u201312.9 gigatons of carbon dioxide emissions avoided. This solution could bring the total forest area under indigenous management to 1.14 billion hectares, securing an estimated protected stock of 187\u2013215 gigatons of carbon, roughly equivalent to over 687\u2013786 gigatons of carbon dioxide if released into the atmosphere.\"\n\nThis is 12.9 Gt from 2020-2050, so 0.43Gt/yr."
         },
         {
             "id": "171b3433-9eb3-4d04-aef2-27659e1101c1",
@@ -48415,11 +48420,17 @@
                 {
                     "WorldVariable": [
                         "Emissions",
-                        -2.0
+                        -0.5
                     ]
                 },
                 {
                     "ProtectLand": 0.1
+                },
+                {
+                    "WorldVariable": [
+                        "Regrowth",
+                        0.25
+                    ]
                 }
             ],
             "outcomes": [
@@ -48444,11 +48455,17 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -3.0
+                                -1.0
                             ]
                         },
                         {
                             "ProtectLand": 0.15
+                        },
+                        {
+                            "WorldVariable": [
+                                "Regrowth",
+                                0.5
+                            ]
                         }
                     ],
                     "active": false
@@ -48465,11 +48482,17 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -4.0
+                                -1.5
                             ]
                         },
                         {
                             "ProtectLand": 0.2
+                        },
+                        {
+                            "WorldVariable": [
+                                "Regrowth",
+                                0.75
+                            ]
                         }
                     ],
                     "active": false
@@ -48489,7 +48512,13 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -5.0
+                                -2.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Regrowth",
+                                1.0
                             ]
                         }
                     ],
@@ -48532,7 +48561,7 @@
                     }
                 ]
             },
-            "notes": "Carbon drawdown numbers from: https://www.carbonbrief.org/qa-can-nature-based-solutions-help-address-climate-change\n* need to create more events to link to effect of positive outcomes. (positive events- x flora and fauna have returned)"
+            "notes": "[three-quarters fork] Most of this project's carbon removal now comes from the land system: each level speeds up regrowth on freed farmland (+25/50/75/100%). The flat removal (was -2/-3/-4/-5 Gt) now only covers restoring degraded land outside farmland: -0.5/-1/-1.5/-2 Gt.\n\nCarbon drawdown numbers from: https://www.carbonbrief.org/qa-can-nature-based-solutions-help-address-climate-change\n* need to create more events to link to effect of positive outcomes. (positive events- x flora and fauna have returned)"
         },
         {
             "id": "dce7b786-b06f-4f4a-b98d-dc941076ceb0",

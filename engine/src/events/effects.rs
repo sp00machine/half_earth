@@ -333,6 +333,10 @@ impl Effect {
                     }
                     WorldVariable::Temperature => state.world.temperature_modifier += *change,
                     WorldVariable::SeaLevelRise => state.world.sea_level_rise += *change,
+                    WorldVariable::Deforestation => {
+                        state.land_carbon.deforestation_modifier += *change
+                    }
+                    WorldVariable::Regrowth => state.land_carbon.regrowth_modifier += *change,
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier += *change
                     }
@@ -573,6 +577,10 @@ impl Effect {
                     WorldVariable::Outlook => state.world.base_outlook -= *change,
                     WorldVariable::Temperature => state.world.temperature_modifier -= *change,
                     WorldVariable::SeaLevelRise => state.world.sea_level_rise -= *change,
+                    WorldVariable::Deforestation => {
+                        state.land_carbon.deforestation_modifier -= *change
+                    }
+                    WorldVariable::Regrowth => state.land_carbon.regrowth_modifier -= *change,
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier -= *change
                     }
@@ -940,6 +948,21 @@ mod tests {
             state.apply_effects(&effects, None);
             assert!(!state.event_pool.events[&recovery].locked, "{extinct}");
         }
+    }
+
+    #[test]
+    fn test_land_effects_apply_and_unapply() {
+        let mut state = State::default();
+        let defor = Effect::WorldVariable(WorldVariable::Deforestation, -0.3);
+        let regrow = Effect::WorldVariable(WorldVariable::Regrowth, 0.5);
+        defor.apply(&mut state, None);
+        regrow.apply(&mut state, None);
+        assert!((state.land_carbon.deforestation_modifier + 0.3).abs() < 1e-6);
+        assert!((state.land_carbon.regrowth_modifier - 0.5).abs() < 1e-6);
+        defor.unapply(&mut state, None);
+        regrow.unapply(&mut state, None);
+        assert_eq!(state.land_carbon.deforestation_modifier, 0.);
+        assert_eq!(state.land_carbon.regrowth_modifier, 0.);
     }
 
     #[test]

@@ -136,6 +136,8 @@ impl Condition {
                     WorldVariable::SeaLevelRise => state.world.sea_level_rise,
                     WorldVariable::SeaLevelRiseRate => state.world.sea_level_rise_rate(),
                     WorldVariable::Precipitation => state.world.precipitation,
+                    WorldVariable::Deforestation => state.land_carbon.deforestation_modifier,
+                    WorldVariable::Regrowth => state.land_carbon.regrowth_modifier,
                 };
                 comp.eval(val, *other_val)
             }

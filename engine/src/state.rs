@@ -17,6 +17,13 @@ use serde::{Deserialize, Serialize};
 const LIFESPAN: usize = 60;
 const PRODUCTION_SHORTAGE_PENALTY: f32 = 60.;
 
+/// Background farm yield growth, approaching a maximum with a time
+/// constant in years. Crops: up to +60% (~1%/yr at first). Livestock
+/// output per hectare has historically grown faster through feed
+/// efficiency and intensification: up to +100% (~1.8%/yr at first).
+const CROP_YIELD_GROWTH: (f32, f32) = (0.6, 60.);
+const LIVESTOCK_YIELD_GROWTH: (f32, f32) = (1.0, 55.);
+
 /// Have to all be below these values to win
 const WIN_EMISSIONS: f32 = 0.0;
 const WIN_EXTINCTION: f32 = 20.0;
@@ -68,6 +75,10 @@ pub struct State {
     /// Carbon from clearing and regrowing land.
     #[serde(default)]
     pub land_carbon: LandCarbon,
+
+    /// Years of background farm yield growth applied so far.
+    #[serde(default)]
+    pub yield_years: f32,
 
     pub events: Vec<Event>,
 
@@ -124,6 +135,7 @@ impl State {
             shortages_outlook: 0.,
             emissions: Emissions::default(),
             land_carbon: LandCarbon::default(),
+            yield_years: 0.,
             produced: Production::default(),
             output_demand: OutputDemand::default(),
             resource_demand: ResourceDemand::default(),
@@ -187,6 +199,7 @@ impl State {
             self.apply_changes(changes);
         }
 
+        self.step_yields();
         self.update_demand();
         self.step_production();
 
@@ -203,6 +216,29 @@ impl State {
         }
 
         updates
+    }
+
+    /// Background improvement in farm yields from better seeds, feed,
+    /// practices and so on, tapering off over time. Without it, growing
+    /// food demand would need far more new farmland each year than the
+    /// world has actually been clearing.
+    fn step_yields(&mut self) {
+        let growth = |(max, time): (f32, f32)| {
+            let at = |years: f32| max * (1. - (-years / time).exp());
+            at(self.yield_years + 1.) - at(self.yield_years)
+        };
+        let (crops, livestock) = (growth(CROP_YIELD_GROWTH), growth(LIVESTOCK_YIELD_GROWTH));
+        self.yield_years += 1.;
+        for process in self.world.processes.iter_mut() {
+            if process.feedstock.0 != Feedstock::Soil {
+                continue;
+            }
+            match process.output {
+                Output::PlantCalories => process.output_modifier += crops,
+                Output::AnimalCalories => process.output_modifier += livestock,
+                _ => {}
+            }
+        }
     }
 
     pub fn is_planning_year(&self) -> bool {
@@ -754,8 +790,8 @@ impl Emissions {
     /// - CH4: Tg/y
     /// - N2O: Tg/y
     ///
-    /// Note that Hector separates out FFI and LUC emissions
-    /// but we lump them together.
+    /// Land-use change emissions are passed to Hector separately
+    /// (see `land_for_hector`).
     ///
     /// Units: <https://github.com/JGCRI/hector/wiki/Hector-Units>
     pub fn for_hector(&self) -> (f32, f32, f32) {
