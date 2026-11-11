@@ -37083,6 +37083,106 @@
             "notes": "https://ntrs.nasa.gov/citations/20030063128"
         },
         {
+            "id": "e7c3a9f2-5b14-4d86-9a0e-1f6b8d4c2e73",
+            "name": "Ban Superyachts and Private Jets",
+            "kind": "Policy",
+            "group": "Limits",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyIndustryResources": [
+                        "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
+                        "Fuel",
+                        -0.02
+                    ]
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "3e171a02-8708-47ea-a10c-66e9c199f383",
+                        "Fuel",
+                        -0.005
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651671264.730638.png"
+                    },
+                    "attribution": "Kurt Kaiser (CC0 1.0)"
+                },
+                "description": "Ground the private jets and dock the superyachts for good. A few thousand people produce a startling share of the world's emissions just getting around, and everyone else has to watch them do it.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Fanonist",
+                                "text": "The yachts are being refitted as ferries and hospital ships. A fitting end."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Consumerist",
+                                "text": "It's a symbolic gesture. It barely changes emissions at all!"
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "The Fanonist",
+                                "text": "Symbols matter. People are more willing to sacrifice when they know the rich are sacrificing too."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New policy. Private jets burn ~2% of aviation fuel and superyachts a sliver of shipping's, so the emissions cut is tiny, but it's popular and wins over the Fanonist: the Fanonist counterpart to Crack Down on Crypto-Mining."
+        },
+        {
             "id": "78a8182d-fa20-4356-9766-f5c7e9fd065b",
             "name": "Crack Down on Crypto-Mining",
             "kind": "Policy",
