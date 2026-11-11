@@ -39677,42 +39677,15 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {
-                    "OutputForFeature": [
-                        "UsesPesticides",
-                        -0.2
-                    ]
-                },
-                {
-                    "OutputForProcess": [
-                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
-                        0.1
-                    ]
-                },
-                {
-                    "BiodiversityPressureForFeature": [
-                        "UsesPesticides",
-                        -0.5
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "6880f9ee-5dc0-49ec-8563-1ea9c6289b97",
-                        -1.0
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "56343ea3-1762-4b32-819a-dbf481721c5e",
-                        -1.0
-                    ]
-                },
-                {
-                    "WorldVariable": [
-                        "Outlook",
-                        -3.0
-                    ]
-                }
+                {"OutputForProcess": ["f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc", -0.2]},
+                {"OutputForProcess": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", -0.1]},
+                {"OutputForProcess": ["ebb5832e-e3ea-4422-9f9b-115aaa994d85", -0.2]},
+                {"OutputForProcess": ["b5cb5cd5-f339-4918-b8a6-0488b89e5679", -0.2]},
+                {"OutputForProcess": ["c0045e2a-e1d7-4cb7-9d36-870525b46c54", -0.05]},
+                {"BiodiversityPressureForFeature": ["UsesPesticides", -0.5]},
+                {"ModifyEventProbability": ["6880f9ee-5dc0-49ec-8563-1ea9c6289b97", -1.0]},
+                {"ModifyEventProbability": ["56343ea3-1762-4b32-819a-dbf481721c5e", -1.0]},
+                {"WorldVariable": ["Outlook", -3.0]}
             ],
             "outcomes": [
                 {
@@ -39772,7 +39745,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New policy. The drastic early option for improving smallholder (and all pesticide-using) agriculture: halves biodiversity pressure from pesticide-using processes and stops pollinator decline events, at the cost of a 20% yield loss (10% for smallholders, who rely on pesticides less) and contentedness. Opposed by the Fanonist and the Consumerist."
+            "notes": "[three-quarters fork] New policy. The drastic early option for improving smallholder (and all pesticide-using) agriculture: halves biodiversity pressure from pesticide-using processes and stops pollinator decline events, at the cost of a 20% yield loss for crops (10% for smallholders, who rely on pesticides less; 5% for livestock, whose feed crops are affected but whose pasture is not) and contentedness. Opposed by the Fanonist and the Consumerist."
         },
         {
             "id": "3f9a2c6e-1b7d-4e58-9c0a-6d2e8f41b7a5",
@@ -39784,7 +39757,7 @@
             "locked": false,
             "cost": 0,
             "base_cost": {
-                "Fixed": 25
+                "Fixed": 10
             },
             "cost_modifier": 1.0,
             "progress": 0.0,
@@ -39795,6 +39768,7 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
+                {"PlayerVariable": ["PoliticalCapital", 15.0]},
                 {
                     "AddFlag": "WarFooting"
                 },
@@ -39865,7 +39839,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
+            "notes": "[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
         },
         {
             "id": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
@@ -39877,7 +39851,7 @@
             "locked": false,
             "cost": 0,
             "base_cost": {
-                "Fixed": 20
+                "Fixed": 10
             },
             "cost_modifier": 1.0,
             "progress": 0.0,
@@ -39973,7 +39947,7 @@
             "locked": false,
             "cost": 0,
             "base_cost": {
-                "Fixed": 25
+                "Fixed": 15
             },
             "cost_modifier": 1.0,
             "progress": 0.0,

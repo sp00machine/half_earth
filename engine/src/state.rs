@@ -117,7 +117,9 @@ impl State {
         let mut state = State {
             npcs,
             world,
-            political_capital: 100,
+            // Upstream starts at 100; this fork's early game is harder
+            // (land-use emissions, effects that now apply), so start higher.
+            political_capital: 150,
             research_points: 0,
             death_year,
             resources,

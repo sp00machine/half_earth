@@ -262,9 +262,11 @@ pub fn calculate_required(orders: &[ProductionOrder]) -> (ResourceMap, Feedstock
     let mut resources = resources!();
     let mut feedstocks = feedstocks!();
     for order in orders {
-        let (feedstock, amount) = order.process.feedstock;
-        feedstocks[feedstock] += amount * order.amount;
-        resources += order.process.resources * order.amount;
+        // Use the adjusted values, as production does, so that output
+        // modifiers (e.g. yield changes) are reflected in requirements.
+        let feedstock = order.process.feedstock.0;
+        feedstocks[feedstock] += order.process.adj_feedstock_amount() * order.amount;
+        resources += order.process.adj_resources() * order.amount;
         // println!("{:?}", order.process.name);
         // println!("  Electricity: {:?}TWh", order.process.resources.electricity * order.amount * 1e-9);
         // println!("  Fuel: {:?}TWh", order.process.resources.fuel * order.amount * 1e-9);
