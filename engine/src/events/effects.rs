@@ -817,8 +817,11 @@ impl Mul<f32> for Effect {
             Effect::ModifyIndustryResources(id, resource, val) => {
                 Effect::ModifyIndustryResources(id, resource, val * rhs)
             }
+            // Upstream bug: this became a ModifyIndustryResources (a
+            // multiplier), so gradual projects multiplied resource use
+            // instead of adding to it while they were being built.
             Effect::ModifyIndustryResourcesAmount(id, resource, val) => {
-                Effect::ModifyIndustryResources(id, resource, val * rhs)
+                Effect::ModifyIndustryResourcesAmount(id, resource, val * rhs)
             }
             Effect::ModifyIndustryDemand(id, val) => Effect::ModifyIndustryDemand(id, val * rhs),
             Effect::ModifyEventProbability(id, val) => {
@@ -1158,5 +1161,12 @@ mod tests {
         let effect = Effect::DemandAmount(Output::PlantCalories, 1.);
         state.apply_effects(&[effect], None);
         assert_eq!(state.output_demand.of(Output::PlantCalories), 6.);
+    }
+
+    #[test]
+    fn test_scaled_resource_amount_stays_an_amount() {
+        let id = Id::new_v4();
+        let effect = Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 10.) * 0.5;
+        assert_eq!(effect, Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 5.));
     }
 }
