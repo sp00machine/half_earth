@@ -21,10 +21,6 @@ Done work lives in the git history; each change's reasoning is in the
 
   Needs recording more history each year (per industry, per process, per
   region) and a consistent chart style. To do on a PC, with care.
-- **Planner warnings for fuels running out** (uranium, oil, gas, lithium):
-  "runs out in ~6 years at this mix", before it happens.
-- **Phase in contentedness hits** over a few years instead of all at once,
-  so falling contentedness is visible before riots start (open question).
 
 ## Model
 

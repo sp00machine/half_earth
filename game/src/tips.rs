@@ -323,6 +323,7 @@ fn outlook_source_name(source: &hes_engine::OutlookSource) -> String {
         OutlookSource::Project(name) => t!(name.as_str()).to_string(),
         OutlookSource::Fatigue(name) => format!("{} ({})", t!(name.as_str()), t!("fatigue")),
         OutlookSource::Event(name) => t!(name.as_str()).to_string(),
+        OutlookSource::NotYetFelt => t!("Not felt yet").to_string(),
         OutlookSource::Recovery => t!("Recovery over time & other").to_string(),
     }
 }
@@ -398,6 +399,16 @@ fn render_contentedness_card(
                 row(ui, t!("Status").to_string(), status);
                 if !next.is_empty() {
                     small(ui, next);
+                }
+                if region.outlook_pending.abs() >= 0.1 {
+                    small(
+                        ui,
+                        t!(
+                            "Policies take a few years to be fully felt: %{amount} more is still to come, about 40% of what's left each year.",
+                            amount = format!("{:+.1}", region.outlook_pending)
+                        )
+                        .to_string(),
+                    );
                 }
                 ui.separator();
                 for (source, amount) in state.region_outlook_breakdown(&id) {

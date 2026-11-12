@@ -24,6 +24,11 @@ pub struct Region {
     /// How hopeful are people in the region about the future?
     pub outlook: f32,
 
+    /// Contentedness changes from policies that haven't been fully felt
+    /// yet: people react as a policy starts to bite, over a few years.
+    #[serde(default)]
+    pub outlook_pending: f32,
+
     /// Base habitability encapsulates
     /// other factors that influence habitability.
     /// E.g. negative events such as hurricanes should subtract
@@ -110,6 +115,16 @@ impl Region {
 
     // Outlook slowly rebounds over time
     pub fn update_outlook(&mut self, wretched_ally: bool, consumerist_ally: bool) {
+        // Policy changes are felt over a few years: 40% of what's left each
+        // year (about 80% within three years).
+        let felt = if self.outlook_pending.abs() < 0.05 {
+            self.outlook_pending
+        } else {
+            self.outlook_pending * 0.4
+        };
+        self.outlook += felt;
+        self.outlook_pending -= felt;
+
         let buffed = match self.income {
             Income::Low => wretched_ally,
             Income::LowerMiddle => wretched_ally,

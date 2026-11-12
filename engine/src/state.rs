@@ -74,6 +74,8 @@ pub enum OutlookSource {
     Fatigue(String),
     /// A past event's effect.
     Event(String),
+    /// The part of the above that people haven't felt yet.
+    NotYetFelt,
     /// Slow recovery over time, and anything not accounted for above.
     Recovery,
 }
@@ -753,6 +755,10 @@ impl State {
             if amount != 0. && seen.insert(event.id) {
                 parts.push((OutlookSource::Event(event.name.clone()), amount));
             }
+        }
+        // Policy effects still to be felt.
+        if region.outlook_pending.abs() > 0.05 {
+            parts.push((OutlookSource::NotYetFelt, -region.outlook_pending));
         }
         let accounted: f32 = parts.iter().map(|(_, v)| v).sum();
         let rest = region.outlook - accounted;

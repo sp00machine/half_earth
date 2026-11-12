@@ -549,19 +549,19 @@ impl Effect {
             }
             Effect::DemandOutlookChange(output, mult) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook += (mult
+                    region.outlook_pending += (mult
                         * region.demand_level(output, &state.world.per_capita_demand) as f32)
                         .round();
                 }
             }
             Effect::IncomeOutlookChange(mult) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook += (mult * region.income.level() as f32).round();
+                    region.outlook_pending += (mult * region.income.level() as f32).round();
                 }
             }
             Effect::OutlookByIncome(amounts) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook += amounts[region.income.level()];
+                    region.outlook_pending += amounts[region.income.level()];
                 }
             }
             Effect::ProjectCostModifier(id, change) => {
@@ -744,7 +744,7 @@ impl Effect {
             }
             Effect::DemandOutlookChange(output, mult) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook -= (mult
+                    region.outlook_pending -= (mult
                         * region.demand_level(output, &state.world.per_capita_demand) as f32)
                         .floor();
                 }
@@ -753,12 +753,12 @@ impl Effect {
             // which didn't match apply's rounding for positive changes).
             Effect::IncomeOutlookChange(mult) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook -= (mult * region.income.level() as f32).round();
+                    region.outlook_pending -= (mult * region.income.level() as f32).round();
                 }
             }
             Effect::OutlookByIncome(amounts) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook -= amounts[region.income.level()];
+                    region.outlook_pending -= amounts[region.income.level()];
                 }
             }
             Effect::ProjectCostModifier(id, change) => {
@@ -1240,11 +1240,11 @@ mod tests {
         effect.apply(&mut state, None);
         for (region, b) in state.world.regions.iter().zip(&before) {
             let expected = [-2., -1.5, -0.5, 0.5][region.income.level()];
-            assert_eq!(region.outlook - b, expected);
+            assert_eq!(region.outlook + region.outlook_pending - b, expected);
         }
         effect.unapply(&mut state, None);
         for (region, b) in state.world.regions.iter().zip(&before) {
-            assert_eq!(region.outlook, *b);
+            assert_eq!(region.outlook + region.outlook_pending, *b);
         }
     }
 
@@ -1295,5 +1295,23 @@ mod tests {
             state.apply_effects(&effects, None);
         }
         assert!((methane(&state) / before - 0.5).abs() < 0.01);
+    }
+
+    #[test]
+    fn test_policy_contentedness_is_felt_over_a_few_years() {
+        let mut state = State::default();
+        let rich = state.world.regions.iter().find(|r| r.income.level() == 3).unwrap().id;
+        let start = state.world.regions[&rich].outlook;
+        Effect::OutlookByIncome([0., 0., 0., -5.]).apply(&mut state, None);
+        // Not felt at once...
+        assert_eq!(state.world.regions[&rich].outlook, start);
+        state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+        let one_year = start - state.world.regions[&rich].outlook;
+        assert!((one_year - 2.).abs() < 0.2, "{one_year}");
+        // ...but almost all of it within five years.
+        for _ in 0..4 {
+            state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+        }
+        assert!(state.world.regions[&rich].outlook_pending.abs() < 0.5);
     }
 }
