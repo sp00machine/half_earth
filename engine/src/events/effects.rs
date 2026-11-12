@@ -1278,4 +1278,22 @@ mod tests {
         state.step_year(state.world.temperature);
         assert_eq!(state.emissions.fgas, 0.);
     }
+
+    #[test]
+    fn test_food_waste_and_compost_cut_landfill_methane() {
+        let mut state = State::default();
+        state.step_year(state.world.temperature);
+        let lic = state.world.lic_population();
+        let methane = |s: &State| {
+            s.world.industries.iter().find(|i| i.name == "Waste").unwrap()
+                .total_for_byproduct(lic, crate::Byproduct::Ch4)
+        };
+        let before = methane(&state);
+        assert!(before * 36. > 1e15, "landfills start near 1.4 Gt CO2e");
+        for name in ["Food Waste Campaign", "Compost"] {
+            let effects = state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone();
+            state.apply_effects(&effects, None);
+        }
+        assert!((methane(&state) / before - 0.5).abs() < 0.01);
+    }
 }

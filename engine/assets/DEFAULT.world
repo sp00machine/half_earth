@@ -40168,9 +40168,10 @@
                     ]
                 },
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -1.0
+                    "ModifyIndustryByproducts": [
+                        "7c1e5a93-2d84-4f6b-9a0e-58b3d1c4e7a2",
+                        "Ch4",
+                        -0.3
                     ]
                 }
             ],
@@ -40229,7 +40230,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Emissions cut was -3 Gt. The land saved by needing less food (the +5% plant calories) now counts through the land system, so the flat cut is reduced to -1 Gt for landfill methane.\n\nhttps://drawdown.org/solutions/reduced-food-waste\n\nThat gives 90.7\u2013101.71 Gt over 30 years (3.02-3.39Gt/yr). We represent some of that impact as an overall efficiency improvement in plant calorie production, so let's take the lower end of that"
+            "notes": "[three-quarters fork] The flat -1 Gt is now a 30% cut to landfill methane (the new Waste industry): less food thrown away means less rotting in dumps. Growing less food that would have been wasted still counts through the +5% plant calories (less farmland).\n\n[three-quarters fork] Emissions cut was -3 Gt. The land saved by needing less food (the +5% plant calories) now counts through the land system, so the flat cut is reduced to -1 Gt for landfill methane.\n\nhttps://drawdown.org/solutions/reduced-food-waste\n\nThat gives 90.7\u2013101.71 Gt over 30 years (3.02-3.39Gt/yr). We represent some of that impact as an overall efficiency improvement in plant calorie production, so let's take the lower end of that"
         },
         {
             "id": "6847a9ce-b48e-4a81-8847-67da3270a779",
@@ -42597,7 +42598,13 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.75]},
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Biodiversity",
+                        -0.75
+                    ]
+                },
                 {
                     "WorldVariable": [
                         "ExtinctionRate",
@@ -42656,7 +42663,7 @@
                     },
                     "attribution": "NatureDan, CC BY-SA 3.0"
                 },
-                "description": "A perennial cropping system featuring multiple layers of trees and other perennial crops, with high biosequestration impacts and food production.",
+                "description": "A perennial cropping system featuring multiple layers of trees and other perennial crops, with high biosequestration impacts and food production. Trees growing among the crops store about 0.5 Gt of CO2 a year.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -43677,18 +43684,19 @@
             "effects": [
                 {
                     "WorldVariable": [
-                        "Emissions",
-                        -0.0179
-                    ]
-                },
-                {
-                    "WorldVariable": [
                         "ExtinctionRate",
                         -3.0
                     ]
                 },
                 {
                     "UnlocksProject": "908b6e33-3065-465e-88bb-f695d4bbc09b"
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "3e171a02-8708-47ea-a10c-66e9c199f383",
+                        "Fuel",
+                        -0.016
+                    ]
                 }
             ],
             "outcomes": [
@@ -43754,7 +43762,7 @@
                     }
                 ]
             },
-            "notes": "Emissions estimate based on 10% (generous) of total fishing emissions from fossil fuel and trawling combined:\nhttps://www.nature.com/articles/s41558-018-0117-x/\nhttps://www.nature.com/articles/s41586-021-03371-z\n\nhttps://e360.yale.edu/features/a-global-ban-on-fishing-on-the-high-seas-the-time-is-now"
+            "notes": "[three-quarters fork] The flat emissions cut is now 1.6% less shipping fuel: fishing boats burn about 15% of all ship fuel (~0.15-0.2 Gt CO2 a year), and this stops the distant-water fleets. All three fishing projects together remove the whole fleet's fuel.\n\nEmissions estimate based on 10% (generous) of total fishing emissions from fossil fuel and trawling combined:\nhttps://www.nature.com/articles/s41558-018-0117-x/\nhttps://www.nature.com/articles/s41586-021-03371-z\n\nhttps://e360.yale.edu/features/a-global-ban-on-fishing-on-the-high-seas-the-time-is-now"
         },
         {
             "id": "82d30373-d505-46af-af68-8c9c0b5ef029",
@@ -43890,15 +43898,16 @@
                     ]
                 },
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -0.15
-                    ]
-                },
-                {
                     "Demand": [
                         "AnimalCalories",
                         -0.1
+                    ]
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "3e171a02-8708-47ea-a10c-66e9c199f383",
+                        "Fuel",
+                        -0.074
                     ]
                 }
             ],
@@ -44050,7 +44059,7 @@
                     }
                 ]
             },
-            "notes": "~13% of threatened species are threatened by fishing:\nhttps://www.nature.com/articles/536143a\n\n.179 GtC/yr from fishing fleets:\nhttps://www.nature.com/articles/s41558-018-0117-x/\n\n3.9Gtbiomass~1.45GtC/yr lost from fish carbon:\nhttps://www.science.org/doi/10.1126/sciadv.abd7554\n\n1.5Gt/yr from trawling:\nhttps://www.nature.com/articles/s41586-021-03371-z"
+            "notes": "[three-quarters fork] The flat emissions cut is now 7.4% less shipping fuel: fishing boats burn about 15% of all ship fuel (~0.15-0.2 Gt CO2 a year), and this stops the rest of the fleet. All three fishing projects together remove the whole fleet's fuel.\n\n~13% of threatened species are threatened by fishing:\nhttps://www.nature.com/articles/536143a\n\n.179 GtC/yr from fishing fleets:\nhttps://www.nature.com/articles/s41558-018-0117-x/\n\n3.9Gtbiomass~1.45GtC/yr lost from fish carbon:\nhttps://www.science.org/doi/10.1126/sciadv.abd7554\n\n1.5Gt/yr from trawling:\nhttps://www.nature.com/articles/s41586-021-03371-z"
         },
         {
             "id": "80f7d661-cba5-49ce-98c2-b479978f69b6",
@@ -45023,7 +45032,7 @@
                     },
                     "attribution": "Michal Klajban, CC BY-SA 4.0"
                 },
-                "description": "Coastal wetlands across the globe are given protected status, and historic wetlands are restored.",
+                "description": "Coastal wetlands across the globe are given protected status, and historic wetlands are restored. Mangroves, salt marshes and seagrass bury about 0.05 Gt of CO2 a year in their mud.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -45455,9 +45464,10 @@
             "required_majority": 0.0,
             "effects": [
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -0.03
+                    "ModifyIndustryResources": [
+                        "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
+                        "Electricity",
+                        -0.005
                     ]
                 }
             ],
@@ -45537,7 +45547,7 @@
                     }
                 ]
             },
-            "notes": "TV: Fill in using this: https://drawdown.org/solutions/green-and-cool-roofs\n\n0.6\u20131.1\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nso that's 0.2-0.037 Gt/year"
+            "notes": "[three-quarters fork] The flat -0.03 Gt is now 0.5% less electricity for buildings: green and cool roofs mostly save air conditioning on top floors (Project Drawdown: 0.02-0.04 Gt a year).\n\nTV: Fill in using this: https://drawdown.org/solutions/green-and-cool-roofs\n\n0.6\u20131.1\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nso that's 0.2-0.037 Gt/year"
         },
         {
             "id": "38517363-96a4-4167-bf9d-62d2303318d9",
@@ -45560,8 +45570,20 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.375]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.15]},
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Biodiversity",
+                        -0.375
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "N2o",
+                        -0.15
+                    ]
+                },
                 {
                     "WorldVariable": [
                         "Emissions",
@@ -45604,7 +45626,7 @@
                     },
                     "attribution": "GIZ/Tim Brunauer, CC BY-SA 4.0, via Wikimedia Commons"
                 },
-                "description": "Mandate the use of biochar (basically a baked biomass) in agriculture to improve soil health and sequester more carbon.",
+                "description": "Mandate the use of biochar (basically a baked biomass) in agriculture to improve soil health and sequester more carbon. Burying the char locks away about 0.15 Gt of CO2 a year in soils.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -46019,7 +46041,7 @@
                     },
                     "attribution": "Public Domain, https://pxhere.com/en/photo/126215?utm_content=shareClip&utm_medium=referral&utm_source=pxhere"
                 },
-                "description": "Implement an initiative to store carbon captured by trees in human structures.",
+                "description": "Implement an initiative to store carbon captured by trees in human structures. The wood in the buildings stores about 0.37 Gt of CO2 a year that the trees took from the air.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -49754,12 +49776,18 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -0.375]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.15]},
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -0.042
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Biodiversity",
+                        -0.375
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "N2o",
+                        -0.15
                     ]
                 },
                 {
@@ -49773,6 +49801,13 @@
                 },
                 {
                     "UnlocksProject": "b3a75f9b-7d54-4df7-96b8-9c84e9ad2749"
+                },
+                {
+                    "ModifyIndustryByproducts": [
+                        "7c1e5a93-2d84-4f6b-9a0e-58b3d1c4e7a2",
+                        "Ch4",
+                        -0.2
+                    ]
                 }
             ],
             "outcomes": [
@@ -49815,7 +49850,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nhttps://drawdown.org/solutions/composting\n\nTV I put this in because Haraway loves compost...\n\ngives 2.14-3.13 Gt over 30 years from the drawdown project, so let's say 0.08Gt/yr"
+            "notes": "[three-quarters fork] The flat -0.04 Gt is now a 20% cut to landfill methane: organic waste composted with air doesn't make methane the way it does buried in a landfill.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nhttps://drawdown.org/solutions/composting\n\nTV I put this in because Haraway loves compost...\n\ngives 2.14-3.13 Gt over 30 years from the drawdown project, so let's say 0.08Gt/yr"
         },
         {
             "id": "f6f0645c-982e-40a2-921e-3e418799c26c",
@@ -50108,12 +50143,6 @@
                     ]
                 },
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -0.1
-                    ]
-                },
-                {
                     "Demand": [
                         "AnimalCalories",
                         -0.033
@@ -50121,6 +50150,13 @@
                 },
                 {
                     "UnlocksProject": "6a8ba52e-d1a8-41f6-a40a-e6cafeb39966"
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "3e171a02-8708-47ea-a10c-66e9c199f383",
+                        "Fuel",
+                        -0.045
+                    ]
                 }
             ],
             "outcomes": [
@@ -50165,7 +50201,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Emissions -1.2 -> -0.1 Gt. It's meant to be a third of a full fishing phase-out, which is -0.15 Gt; -1.2 came from the estimate that bottom trawling releases ~1 Gt of seabed carbon a year (Sala et al. 2021), which later work found far too high.\n\nValues based on roughly 1/3 (30X30 goal) of total benefit of full phase-out (above)"
+            "notes": "[three-quarters fork] The flat emissions cut is now 4.5% less shipping fuel: fishing boats burn about 15% of all ship fuel (~0.15-0.2 Gt CO2 a year), and this stops a third of what a full phase-out saves. All three fishing projects together remove the whole fleet's fuel.\n\n[three-quarters fork] Emissions -1.2 -> -0.1 Gt. It's meant to be a third of a full fishing phase-out, which is -0.15 Gt; -1.2 came from the estimate that bottom trawling releases ~1 Gt of seabed carbon a year (Sala et al. 2021), which later work found far too high.\n\nValues based on roughly 1/3 (30X30 goal) of total benefit of full phase-out (above)"
         },
         {
             "id": "e34f1a39-ebe7-48d4-b5ad-1193bf14d97f",
@@ -50192,9 +50228,17 @@
                     "UnlocksProject": "aa9ba3d6-243d-4d12-841c-4a000c3c6837"
                 },
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -0.23
+                    "ModifyIndustryResources": [
+                        "6d5d8b53-9fbc-4721-91d6-c021e41ee519",
+                        "Fuel",
+                        -0.03
+                    ]
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "6d5d8b53-9fbc-4721-91d6-c021e41ee519",
+                        "Electricity",
+                        -0.03
                     ]
                 }
             ],
@@ -50263,7 +50307,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Construction: building this takes bike lanes, wider sidewalks and new intersections: about 5 Mt of steel and 50 Mt of cement, made by industry as it's built.\n\nFill in using this: https://drawdown.org/solutions/walkable-cities\n1.44\u20135.45\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nTV, use this for numbers: drawdown.org/solutions/bicycle-infrastructure\n2.56\u20136.65\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nsay roughly 5 each, so 10Gt total over 30 years, so let's say 0.35 Gt/yr",
+            "notes": "[three-quarters fork] The flat -0.23 Gt is now 3% less driving (road transport fuel and electricity): trips that become walks and bike rides. So it shrinks as cars electrify and the grid gets cleaner.\n\n[three-quarters fork] Construction: building this takes bike lanes, wider sidewalks and new intersections: about 5 Mt of steel and 50 Mt of cement, made by industry as it's built.\n\nFill in using this: https://drawdown.org/solutions/walkable-cities\n1.44\u20135.45\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nTV, use this for numbers: drawdown.org/solutions/bicycle-infrastructure\n2.56\u20136.65\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nsay roughly 5 each, so 10Gt total over 30 years, so let's say 0.35 Gt/yr",
             "construction": {
                 "steel": 5000000.0,
                 "cement": 50000000.0,
@@ -50829,7 +50873,7 @@
                     },
                     "attribution": "NASA Goddard Space Flight Center - Lake Powell Half Empty - (CC BY 2.0)"
                 },
-                "description": "Restore, remediate, and/or reforest any land that has been degraded or otherwise affected by human activity, including peatlands, coastal ecosystems, forests, and more.",
+                "description": "Restore, remediate, and/or reforest any land that has been degraded or otherwise affected by human activity, including peatlands, coastal ecosystems, forests, and more. Restored peatlands, forests and grasslands take CO2 back out of the air as they recover.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -51841,6 +51885,46 @@
                 "description": "The industry that produces, processes, and transports this ubiquitous and fundamental material."
             },
             "notes": "[three-quarters fork] co2 was 39.72, which totals only ~1.6 Mt; it looks like it was entered in kg rather than g. Now 39720.0 (~0.0 Gt), in line with real-world process emissions (cement calcination is ~1.6 Gt CO2).\n\nReally, \"Non-metallic Minerals\" which also includes things like glass, aside from some process-specific emissions, all others assumed to come from fuel use."
+        },
+        {
+            "id": "7c1e5a93-2d84-4f6b-9a0e-58b3d1c4e7a2",
+            "name": "Waste",
+            "resources": {
+                "land": 0.0,
+                "water": 0.0,
+                "electricity": 0.0,
+                "fuel": 0.0
+            },
+            "byproducts": {
+                "co2": 0.0,
+                "ch4": 937.0,
+                "n2o": 0.0,
+                "biodiversity": 0.0,
+                "fgas": 0.0
+            },
+            "resource_modifiers": {
+                "land": 0.0,
+                "water": 0.0,
+                "electricity": 0.0,
+                "fuel": 0.0
+            },
+            "byproduct_modifiers": {
+                "co2": 0.0,
+                "ch4": 0.0,
+                "n2o": 0.0,
+                "biodiversity": 0.0
+            },
+            "demand_modifier": 1.0,
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646609177.501258.png"
+                    },
+                    "attribution": "Ingimar Erl, CC BY-SA 4.0"
+                },
+                "description": "Rubbish dumps and landfills, where food scraps and other organic waste rot without air and give off methane."
+            },
+            "notes": "[three-quarters fork] New industry for landfill methane: about 40 Mt of CH4 a year at the start (~1.4 Gt CO2e), mostly from rotting food and other organic waste. Grows with demand like other industries. Cut by the Food Waste Campaign (less food thrown away) and Compost (organic waste composted instead of buried)."
         },
         {
             "id": "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
