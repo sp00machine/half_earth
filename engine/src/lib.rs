@@ -35,6 +35,7 @@ pub use events::{
     WorldVariable,
     mean_demand_outlook_change,
     mean_income_outlook_change,
+    mean_outlook_by_income,
 };
 pub use industries::Industry;
 pub use kinds::*;

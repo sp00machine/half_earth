@@ -160,6 +160,9 @@ pub enum Effect {
     ModifyIndustryDemand(Id, f32),
     DemandOutlookChange(Output, f32),
     IncomeOutlookChange(f32),
+    /// A change in contentedness for regions at each income level
+    /// (low, lower-middle, upper-middle, high).
+    OutlookByIncome([f32; 4]),
     ProjectCostModifier(Id, f32),
 
     ProtectLand(f32),
@@ -238,6 +241,7 @@ impl Effect {
             EffectKind::ModifyIndustryDemand => Effect::ModifyIndustryDemand(default_industry, 0.),
             EffectKind::DemandOutlookChange => Effect::DemandOutlookChange(Output::Fuel, 0.),
             EffectKind::IncomeOutlookChange => Effect::IncomeOutlookChange(0.),
+            EffectKind::OutlookByIncome => Effect::OutlookByIncome([0.; 4]),
             EffectKind::ProjectCostModifier => Effect::ProjectCostModifier(default_project, 0.),
             EffectKind::ProtectLand => Effect::ProtectLand(0.1),
             EffectKind::BailOut => Effect::BailOut(20),
@@ -555,6 +559,11 @@ impl Effect {
                     region.outlook += (mult * region.income.level() as f32).round();
                 }
             }
+            Effect::OutlookByIncome(amounts) => {
+                for region in state.world.regions.iter_mut() {
+                    region.outlook += amounts[region.income.level()];
+                }
+            }
             Effect::ProjectCostModifier(id, change) => {
                 state.world.projects[id].cost_modifier += change;
             }
@@ -740,9 +749,16 @@ impl Effect {
                         .floor();
                 }
             }
+            // Undo exactly what `apply` added (upstream used floor here,
+            // which didn't match apply's rounding for positive changes).
             Effect::IncomeOutlookChange(mult) => {
                 for region in state.world.regions.iter_mut() {
-                    region.outlook -= (mult * region.income.level() as f32).floor();
+                    region.outlook -= (mult * region.income.level() as f32).round();
+                }
+            }
+            Effect::OutlookByIncome(amounts) => {
+                for region in state.world.regions.iter_mut() {
+                    region.outlook -= amounts[region.income.level()];
                 }
             }
             Effect::ProjectCostModifier(id, change) => {
@@ -833,11 +849,22 @@ impl Mul<f32> for Effect {
                 Effect::DemandOutlookChange(output, val * rhs)
             }
             Effect::IncomeOutlookChange(val) => Effect::IncomeOutlookChange(val * rhs),
+            Effect::OutlookByIncome(vals) => Effect::OutlookByIncome(vals.map(|v| v * rhs)),
             Effect::ProjectCostModifier(id, val) => Effect::ProjectCostModifier(id, val * rhs),
             Effect::ProtectLand(val) => Effect::ProtectLand(val * rhs),
             _ => self,
         }
     }
+}
+
+pub fn mean_outlook_by_income(amounts: &[f32; 4], state: &State) -> f32 {
+    state
+        .world
+        .regions
+        .iter()
+        .map(|region| amounts[region.income.level()])
+        .sum::<f32>()
+        / state.world.regions.len() as f32
 }
 
 pub fn mean_income_outlook_change(mult: f32, state: &State) -> f32 {
@@ -1203,5 +1230,33 @@ mod tests {
             let limit = state.world.processes[&id].effective_limit().unwrap();
             assert!((limit / before - 0.8).abs() < 0.01, "{freeze_first}: {}", limit / before);
         }
+    }
+
+    #[test]
+    fn test_outlook_by_income_round_trips() {
+        let mut state = State::default();
+        let before: Vec<f32> = state.world.regions.iter().map(|r| r.outlook).collect();
+        let effect = Effect::OutlookByIncome([-2., -1.5, -0.5, 0.5]);
+        effect.apply(&mut state, None);
+        for (region, b) in state.world.regions.iter().zip(&before) {
+            let expected = [-2., -1.5, -0.5, 0.5][region.income.level()];
+            assert_eq!(region.outlook - b, expected);
+        }
+        effect.unapply(&mut state, None);
+        for (region, b) in state.world.regions.iter().zip(&before) {
+            assert_eq!(region.outlook, *b);
+        }
+    }
+
+    #[test]
+    fn test_war_footing_fatigue_felt_everywhere() {
+        let mut state = State::default();
+        let id = state.world.projects.iter().find(|p| p.name == "Climate War Footing").unwrap().id;
+        state.world.projects[&id].status = Status::Active;
+        for _ in 0..10 {
+            state.step_year(state.world.temperature);
+        }
+        let poor = state.world.regions.iter().find(|r| r.income.level() == 0).unwrap().id;
+        assert!(state.fatigue_applied[&poor] > 0.5);
     }
 }

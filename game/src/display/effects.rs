@@ -1553,6 +1553,30 @@ impl DisplayEffect {
                     ),
                 )
             }
+            Effect::OutlookByIncome(amounts) => {
+                let fmt = |v: f32| format!("{}", display::rounded(v));
+                let fmt_signed = |v: f32| if v > 0. { format!("+{}", fmt(v)) } else { fmt(v) };
+                let parts = format!(
+                    "{} {}, {} {}, {} {}, {} {}",
+                    t!("low"), fmt_signed(amounts[0]),
+                    t!("lower-middle"), fmt_signed(amounts[1]),
+                    t!("upper-middle"), fmt_signed(amounts[2]),
+                    t!("high"), fmt_signed(amounts[3]),
+                );
+                (
+                    tip(
+                        icons::CONTENTEDNESS,
+                        t!(
+                            "This changes contentedness in each region depending on its income level. Tap for contentedness by income level."
+                        ),
+                    )
+                    .card(crate::tips::TipCard::Contentedness(None)),
+                    icon_text(
+                        "contentedness",
+                        &t!("Contentedness by income: %{parts}.", parts = parts),
+                    ),
+                )
+            }
             Effect::ModifyEventProbability(id, amount) => {
                 let event = &state.event_pool.events[id];
                 let amount_label = if self.is_unknown {

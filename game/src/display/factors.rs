@@ -71,6 +71,9 @@ fn effects_factor<E: AsRef<Effect>>(var: Var, effects: &[E], state: &State) -> f
                     let change = mean_income_outlook_change(*val, state);
                     Some(change)
                 }
+                Effect::OutlookByIncome(amounts) => {
+                    Some(hes_engine::mean_outlook_by_income(amounts, state))
+                }
                 Effect::DemandOutlookChange(output, val) => {
                     let change = mean_demand_outlook_change(*val, output, state);
                     Some(change)

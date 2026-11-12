@@ -15,6 +15,7 @@ pub use self::{
         Request,
         mean_demand_outlook_change,
         mean_income_outlook_change,
+        mean_outlook_by_income,
     },
     events::{Event, EventPool, Phase},
     icons::{ICON_EVENTS, IconEvent},

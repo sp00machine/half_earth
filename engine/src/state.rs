@@ -673,6 +673,7 @@ impl State {
         let effect_amount = |effect: &Effect| -> f32 {
             match effect {
                 Effect::IncomeOutlookChange(mult) => (mult * level).round(),
+                Effect::OutlookByIncome(amounts) => amounts[region.income.level()],
                 Effect::DemandOutlookChange(output, mult) => (mult
                     * region.demand_level(output, &self.world.per_capita_demand) as f32)
                     .round(),
@@ -697,7 +698,7 @@ impl State {
             if let (Some(fatigue), Some(years)) =
                 (project.fatigue, self.policy_years.get(&project.id))
             {
-                let amount = -fatigue.level(*years) * level;
+                let amount = -fatigue.level(*years) * fatigue.weight(region.income.level());
                 if amount.abs() > 0.05 {
                     parts.push((OutlookSource::Fatigue(project.name.clone()), amount));
                 }
@@ -734,11 +735,13 @@ impl State {
     fn update_policy_fatigue(&mut self) {
         let mut total = 0.;
         let mut active = BTreeMap::new();
+        let mut levels = vec![];
         for project in self.world.projects.iter() {
             if let Some(fatigue) = project.fatigue {
                 if project.status == Status::Active {
                     let years = self.policy_years.get(&project.id).copied().unwrap_or(0.) + 1.;
                     total += fatigue.level(years);
+                    levels.push((fatigue, fatigue.level(years)));
                     active.insert(project.id, years);
                 }
             }
@@ -746,7 +749,8 @@ impl State {
         self.policy_years = active;
         self.policy_fatigue = total;
         for region in self.world.regions.iter_mut() {
-            let target = total * region.income.level() as f32;
+            let income = region.income.level();
+            let target: f32 = levels.iter().map(|(f, level)| level * f.weight(income)).sum();
             let applied = self.fatigue_applied.get(&region.id).copied().unwrap_or(0.);
             region.outlook -= target - applied;
             self.fatigue_applied.insert(region.id, target);

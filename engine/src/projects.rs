@@ -148,8 +148,17 @@ pub struct Fatigue {
     pub rate: f32,
     /// Years to reach full strength (grinding) or to fade out (adapting).
     pub years: f32,
+    /// Felt the same in every region (as if middle income) rather than
+    /// more by wealthier ones.
+    #[serde(default)]
+    pub everywhere: bool,
 }
 impl Fatigue {
+    /// How much a region at this income level feels it, relative to `level`.
+    pub fn weight(&self, income_level: usize) -> f32 {
+        if self.everywhere { 1.5 } else { income_level as f32 }
+    }
+
     pub fn level(&self, years_active: f32) -> f32 {
         let t = (years_active / self.years.max(1.)).clamp(0., 1.);
         self.rate * if self.adapting { 1. - t } else { t }

@@ -35474,7 +35474,12 @@
             ],
             "effects": [
                 {
-                    "IncomeOutlookChange": -1.0
+                    "OutlookByIncome": [
+                        -1.5,
+                        -1.5,
+                        -1.5,
+                        -1.5
+                    ]
                 },
                 {
                     "WorldVariable": [
@@ -35521,7 +35526,7 @@
                     "attribution": ""
                 }
             },
-            "notes": "[three-quarters fork] New event. Can happen when Climate War Footing is still active from 2035 on."
+            "notes": "[three-quarters fork] Felt everywhere: -1.5 contentedness in every region (was by income, so poorer regions felt nothing).\n\n[three-quarters fork] New event. Can happen when Climate War Footing is still active from 2035 on."
         },
         {
             "name": "Victory Gardens",
@@ -41111,7 +41116,12 @@
                     "AddFlag": "WarFooting"
                 },
                 {
-                    "IncomeOutlookChange": -1.0
+                    "OutlookByIncome": [
+                        -2.0,
+                        -2.0,
+                        -2.0,
+                        -2.0
+                    ]
                 },
                 {
                     "WorldVariable": [
@@ -41180,11 +41190,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Mobilization loses legitimacy the longer the emergency lasts.\n\n[three-quarters fork] Also allows 6 process mix changes per sector per cycle instead of 5 (30% instead of 25%). Enables the Lax Oversight, Rushed Construction and Mobilization Fatigue events, and Swords into Turbines after Global Demilitarization.\n\n[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions.",
+            "notes": "[three-quarters fork] Unpopular everywhere, not just in rich regions: -2 contentedness in every region, and its fatigue is felt the same everywhere.\n\n[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Mobilization loses legitimacy the longer the emergency lasts.\n\n[three-quarters fork] Also allows 6 process mix changes per sector per cycle instead of 5 (30% instead of 25%). Enables the Lax Oversight, Rushed Construction and Mobilization Fatigue events, and Swords into Turbines after Global Demilitarization.\n\n[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions.",
             "fatigue": {
                 "adapting": false,
                 "rate": 0.7,
-                "years": 10.0
+                "years": 10.0,
+                "everywhere": true
             }
         },
         {
@@ -41313,7 +41324,12 @@
                     "AddFlag": "FossilMoratorium"
                 },
                 {
-                    "IncomeOutlookChange": -0.5
+                    "OutlookByIncome": [
+                        -2.0,
+                        -1.5,
+                        -0.5,
+                        0.5
+                    ]
                 },
                 {
                     "WorldVariable": [
@@ -41380,7 +41396,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New emergency policy: while active, fossil processes (IsFossil) cannot have their mix share increased (FossilMoratorium flag)."
+            "notes": "[three-quarters fork] Contentedness by income level instead of hitting rich regions hardest: in wealthy countries, phasing out fossil fuels is broadly popular as long as the lights stay on; in developing ones, many see it as rich countries pulling up the ladder after getting rich on fossil fuels themselves (e.g. the fight over 'phase down' vs 'phase out' at COP26). Low -2, lower-middle -1.5, upper-middle -0.5, high +0.5.\n\n[three-quarters fork] New emergency policy: while active, fossil processes (IsFossil) cannot have their mix share increased (FossilMoratorium flag)."
         },
         {
             "id": "2042b2f5-b8a8-4f5d-b483-a22d9a964848",

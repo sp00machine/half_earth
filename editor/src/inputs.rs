@@ -2205,6 +2205,15 @@ el ranges from [1, 5], where 1 is the lowest demand level and 5 is the highest. 
                         .inline(),
                 );
             }
+            Effect::OutlookByIncome(amounts) => {
+                ui.add(parts::help("A change in contentedness for regions at each income level."));
+                for (label, amount) in ["Low", "Lower-middle", "Upper-middle", "High"]
+                    .into_iter()
+                    .zip(amounts.iter_mut())
+                {
+                    ui.add(edit(amount).label(label).inline());
+                }
+            }
             Effect::ProjectCostModifier(id, change) => {
                 ui.add(parts::help("Modifies the cost a project by a percentage."));
                 parts::two_columns(
