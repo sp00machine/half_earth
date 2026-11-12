@@ -496,7 +496,7 @@ impl AsCard for Process {
                         let tip = tip(
                             icons::LITHIUM,
                             t!(
-                                "Once wind and solar pass about 30% of electricity, the grid needs storage, and most batteries need lithium. %{built}% of the storage the grid needs is built. %{mined}kt of lithium was mined this year, and reserves would last %{years} years at this rate.",
+                                "Once wind and solar pass about 20% of electricity, the grid needs storage, and most batteries need lithium. %{built}% of the storage the grid needs is built. %{mined}kt of lithium was mined this year, and reserves would last %{years} years at this rate.",
                                 built = format!("{:.0}", (1. - storage.last.shortfall) * 100.),
                                 mined = format!("{:.0}", storage.last.lithium_mined * 1e-9),
                                 years = if years.is_finite() { format!("{years:.0}") } else { "∞".to_string() }

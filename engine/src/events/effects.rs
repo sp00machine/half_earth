@@ -1099,7 +1099,7 @@ mod tests {
         let supported = state.supported_intermittent_share();
         assert!(supported > state.intermittent_share() + 0.2, "{supported}");
         let open_max = state.process_max_share(&solar);
-        assert!(open_max >= 8, "{open_max}");
+        assert!(open_max >= 6, "{open_max}");
 
         // With no batteries and no mining, wind and solar can't grow past
         // what needs no storage.
@@ -1107,7 +1107,7 @@ mod tests {
         state.storage.mining_capacity = 0.;
         let capped = state.process_max_share(&solar);
         assert!(capped < open_max, "{capped} vs {open_max}");
-        assert!(capped as f32 / 20. <= 0.3 + 0.05);
+        assert!(capped as f32 / 20. <= 0.2 + 0.05);
     }
 
     #[test]

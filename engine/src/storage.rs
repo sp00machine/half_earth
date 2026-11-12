@@ -1,7 +1,7 @@
 //! Energy storage and lithium.
 //!
 //! A grid with a lot of wind and solar has to shift energy from when it's
-//! generated to when it's needed. Below ~30% wind and solar this barely
+//! generated to when it's needed. Below ~20% wind and solar this barely
 //! matters; above it the need climbs steeply. Storage loses some energy on
 //! every round trip, which shows up as extra electricity demand.
 //!
@@ -15,15 +15,23 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Wind and solar share of electricity below which storage is negligible.
-const STORAGE_THRESHOLD: f32 = 0.3;
+/// Wind and solar share of electricity below which storage is negligible:
+/// existing flexibility (hydro, gas peakers, interconnectors, demand
+/// response) absorbs the variation.
+const STORAGE_THRESHOLD: f32 = 0.2;
+
+/// How steeply the need for storage climbs past the threshold.
+const STORAGE_EXPONENT: f32 = 1.2;
 
 /// Share of wind and solar output that passes through storage at 100%
 /// wind and solar.
 const MAX_STORED_SHARE: f32 = 0.45;
 
-/// Full charge/discharge cycles per year for grid storage.
-const CYCLES_PER_YEAR: f32 = 365.;
+/// Effective full cycles per year for grid storage. Batteries cycle about
+/// daily, but have to be sized for bad days (cloudy, still weather) rather
+/// than the average one, so each kWh of capacity moves less than 365 kWh
+/// a year.
+const CYCLES_PER_YEAR: f32 = 200.;
 
 /// Lithium per kWh of battery capacity (~0.1 kg).
 const LITHIUM_PER_KWH: f32 = 100.;
@@ -99,7 +107,7 @@ impl StorageMix {
 /// Share of wind and solar output that has to go through storage.
 pub fn stored_share(intermittent_share: f32) -> f32 {
     let over = ((intermittent_share - STORAGE_THRESHOLD) / (1. - STORAGE_THRESHOLD)).clamp(0., 1.);
-    MAX_STORED_SHARE * over.powf(1.5)
+    MAX_STORED_SHARE * over.powf(STORAGE_EXPONENT)
 }
 
 /// This year's storage and lithium.
@@ -269,7 +277,7 @@ mod tests {
     #[test]
     fn little_storage_below_threshold() {
         assert_eq!(stored_share(0.2), 0.);
-        assert!(stored_share(0.5) < 0.1);
+        assert!(stored_share(0.5) < 0.15);
         assert!(stored_share(0.9) > 0.3);
     }
 
