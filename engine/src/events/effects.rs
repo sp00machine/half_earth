@@ -350,8 +350,15 @@ impl Effect {
                     WorldVariable::ExtinctionRate => {
                         state.world.extinction_rate_modifier += *change
                     }
+                    // A quarter is felt in every region (popular or unpopular
+                    // things a government does color how people see it
+                    // everywhere), the rest stays world-level, so world
+                    // contentedness changes by the full amount.
                     WorldVariable::Outlook => {
-                        state.world.base_outlook += *change;
+                        state.world.base_outlook += *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
+                        for region in state.world.regions.iter_mut() {
+                            region.outlook += *change * REGIONAL_SHARE_OF_WORLD_OUTLOOK;
+                        }
                     }
                     WorldVariable::Temperature => state.world.temperature_modifier += *change,
                     WorldVariable::SeaLevelRise => state.world.sea_level_rise += *change,
@@ -616,7 +623,12 @@ impl Effect {
                     WorldVariable::ExtinctionRate => {
                         state.world.extinction_rate_modifier -= *change
                     }
-                    WorldVariable::Outlook => state.world.base_outlook -= *change,
+                    WorldVariable::Outlook => {
+                        state.world.base_outlook -= *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
+                        for region in state.world.regions.iter_mut() {
+                            region.outlook -= *change * REGIONAL_SHARE_OF_WORLD_OUTLOOK;
+                        }
+                    }
                     WorldVariable::Temperature => state.world.temperature_modifier -= *change,
                     WorldVariable::SeaLevelRise => state.world.sea_level_rise -= *change,
                     WorldVariable::Deforestation => {
@@ -856,6 +868,9 @@ impl Mul<f32> for Effect {
         }
     }
 }
+
+/// Share of a world contentedness change that's felt in every region.
+pub const REGIONAL_SHARE_OF_WORLD_OUTLOOK: f32 = 0.25;
 
 pub fn mean_outlook_by_income(amounts: &[f32; 4], state: &State) -> f32 {
     state
@@ -1313,5 +1328,21 @@ mod tests {
             state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
         }
         assert!(state.world.regions[&rich].outlook_pending.abs() < 0.5);
+    }
+
+    #[test]
+    fn test_world_contentedness_nudges_regions() {
+        let mut state = State::default();
+        for region in state.world.regions.iter_mut() {
+            region.outlook = 5.;
+        }
+        let world = state.outlook();
+        let effect = Effect::WorldVariable(WorldVariable::Outlook, 4.);
+        effect.apply(&mut state, None);
+        assert!((state.outlook() - world - 4.).abs() < 1e-3, "world changes by the full amount");
+        assert!(state.world.regions.iter().all(|r| (r.outlook - 6.).abs() < 1e-3));
+        effect.unapply(&mut state, None);
+        assert!((state.outlook() - world).abs() < 1e-3);
+        assert!(state.world.regions.iter().all(|r| (r.outlook - 5.).abs() < 1e-3));
     }
 }

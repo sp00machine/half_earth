@@ -16,6 +16,7 @@ pub use self::{
         mean_demand_outlook_change,
         mean_income_outlook_change,
         mean_outlook_by_income,
+        REGIONAL_SHARE_OF_WORLD_OUTLOOK,
     },
     events::{Event, EventPool, Phase},
     icons::{ICON_EVENTS, IconEvent},

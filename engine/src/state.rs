@@ -717,6 +717,9 @@ impl State {
             match effect {
                 Effect::IncomeOutlookChange(mult) => (mult * level).round(),
                 Effect::OutlookByIncome(amounts) => amounts[region.income.level()],
+                Effect::WorldVariable(crate::events::WorldVariable::Outlook, change) => {
+                    change * crate::events::REGIONAL_SHARE_OF_WORLD_OUTLOOK
+                }
                 Effect::DemandOutlookChange(output, mult) => (mult
                     * region.demand_level(output, &self.world.per_capita_demand) as f32)
                     .round(),

@@ -468,9 +468,10 @@ impl DisplayEffect {
                     icon_text(
                         "contentedness",
                         &t!(
-                            "%{changeDir} world contentedness by %{amount}.",
+                            "%{changeDir} world contentedness by %{amount} (%{regional} of it in every region).",
                             changeDir = self.change_dir(*amount),
                             amount = self.fmt_param(*amount),
+                            regional = self.fmt_param(amount * 0.25),
                         ),
                     ),
                 ),
