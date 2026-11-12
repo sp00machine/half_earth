@@ -1366,4 +1366,15 @@ mod tests {
             assert!((region.outlook - s).abs() < 1e-3, "{} vs {s}", region.outlook);
         }
     }
+
+    #[test]
+    fn test_curricula_unlock_their_fantasy_cards() {
+        let mut state = State::default();
+        let find = |s: &State, n: &str| s.world.projects.iter().find(|p| p.name == n).unwrap().id;
+        let decimal = find(&state, "Decimal Time");
+        assert!(state.world.projects[&decimal].locked);
+        let effects = state.world.projects[&find(&state, "Utopian Curriculum")].effects.clone();
+        state.apply_effects(&effects, None);
+        assert!(!state.world.projects[&decimal].locked);
+    }
 }

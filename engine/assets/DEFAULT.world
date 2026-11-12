@@ -33145,6 +33145,12 @@
             "effects": [
                 {
                     "UnlocksProject": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9"
+                },
+                {
+                    "UnlocksProject": "0760aa89-7b64-4452-a012-35432a91bd5b"
+                },
+                {
+                    "UnlocksProject": "19194047-896e-4a0d-88fb-11f8a62619ee"
                 }
             ],
             "prob_modifier": 1.0,
@@ -38113,6 +38119,9 @@
                 },
                 {
                     "UnlocksProject": "4c2d5d53-6bc8-4326-a568-2265ccd3d7d6"
+                },
+                {
+                    "UnlocksProject": "d6828a28-3204-4522-b9c2-b786f523a760"
                 }
             ],
             "outcomes": [
@@ -38189,6 +38198,12 @@
                 },
                 {
                     "UnlocksProject": "db3c6b92-6c91-4a11-9d1a-1e848b29ad9b"
+                },
+                {
+                    "UnlocksProject": "84834f31-572e-42af-b82e-d4d3d1792326"
+                },
+                {
+                    "UnlocksProject": "86d94060-3199-4067-91d7-9c1a013a4cf1"
                 }
             ],
             "outcomes": [
@@ -38274,6 +38289,9 @@
                         "Electricity",
                         0.002
                     ]
+                },
+                {
+                    "UnlocksProject": "b312d786-8b91-4875-9a1f-af81e10918fc"
                 }
             ],
             "outcomes": [
@@ -38553,6 +38571,9 @@
                 },
                 {
                     "UnlocksProject": "6084cbc2-7dbc-4b75-8a0d-6df5fc0be59f"
+                },
+                {
+                    "UnlocksProject": "5599c554-812d-477a-a519-3359b9f97fc1"
                 }
             ],
             "outcomes": [
@@ -40273,6 +40294,9 @@
                 },
                 {
                     "UnlocksProject": "08471304-5e93-49f7-b194-33c9fedaa752"
+                },
+                {
+                    "UnlocksProject": "d04eb59d-f423-4c71-8291-c694cb5248a4"
                 }
             ],
             "outcomes": [
@@ -42294,7 +42318,7 @@
             "group": "Behavior",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -42385,7 +42409,7 @@
             "group": "Behavior",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -42462,7 +42486,7 @@
             "group": "Behavior",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -42547,7 +42571,7 @@
             "group": "Behavior",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -42629,7 +42653,7 @@
             "group": "Control",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -42713,7 +42737,7 @@
             "group": "Cities",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 25
@@ -42804,7 +42828,7 @@
             "group": "Control",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 20
@@ -42899,7 +42923,7 @@
             "group": "Cities",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 15
@@ -42994,7 +43018,7 @@
             "group": "Behavior",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 15
@@ -43087,7 +43111,7 @@
             "group": "Other",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 10
@@ -43209,7 +43233,7 @@
             "group": "Food",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 10
@@ -51456,6 +51480,12 @@
                 },
                 {
                     "UnlocksProject": "4ea6e38c-a119-4942-a170-97f073cc3b43"
+                },
+                {
+                    "UnlocksProject": "79fdfae3-4686-4d28-ac0d-33534e9a55e4"
+                },
+                {
+                    "UnlocksProject": "d49bc001-2cc7-4f69-82d8-c806c968a843"
                 }
             ],
             "outcomes": [
@@ -51531,6 +51561,9 @@
                 },
                 {
                     "UnlocksProject": "4ea6e38c-a119-4942-a170-97f073cc3b43"
+                },
+                {
+                    "UnlocksProject": "2a88ea25-f308-4f05-8729-12e10435552e"
                 }
             ],
             "outcomes": [
