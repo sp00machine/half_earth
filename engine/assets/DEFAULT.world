@@ -25468,7 +25468,7 @@
                 {
                     "WorldVariable": [
                         "Emissions",
-                        -0.8
+                        -0.2
                     ]
                 },
                 {
@@ -25528,7 +25528,7 @@
                     "attribution": "NASA Astronaut photograph ISS022-E-19513., Public domain"
                 }
             },
-            "notes": ".8 gigatons annual CO2eq. emissions from hydroelectric reservoirs:\n\nhttps://academic.oup.com/bioscience/article/66/11/949/2754271"
+            "notes": "[three-quarters fork] Emissions effect was -0.8 Gt; now -0.2. River and floodplain restoration stores carbon, but much less than 0.8 Gt/yr globally.\n\n.8 gigatons annual CO2eq. emissions from hydroelectric reservoirs:\n\nhttps://academic.oup.com/bioscience/article/66/11/949/2754271"
         },
         {
             "name": "The Wretched Attack",
@@ -30326,7 +30326,14 @@
                     ]
                 }
             ],
-            "effects": [],
+            "effects": [
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        -5.0
+                    ]
+                }
+            ],
             "prob_modifier": 1.0,
             "intensity": 3,
             "flavor": {
@@ -30344,7 +30351,7 @@
                 },
                 "image": null
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Each year a region is in revolts now costs 5 political capital: unrest is a steady drain, not just an icon.\n\n"
         },
         {
             "name": "Wet-Bulb Event",
@@ -32079,7 +32086,7 @@
                 {
                     "WorldVariable": [
                         "Emissions",
-                        -0.5
+                        -0.1
                     ]
                 },
                 {
@@ -32127,7 +32134,7 @@
                     "attribution": "Lascaux, Public domain, via Wikimedia Commons"
                 }
             },
-            "notes": "https://rewildingeurope.com/rewilding-in-action/wildlife-comeback/tauros/"
+            "notes": "[three-quarters fork] Emissions effect was -0.5 Gt; now -0.1. Rewilding grazers helps ecosystems store carbon, but 0.5 Gt/yr was far more than the land they'd affect could absorb.\n\nhttps://rewildingeurope.com/rewilding-in-action/wildlife-comeback/tauros/"
         },
         {
             "name": "Heatwaves",
@@ -34186,7 +34193,14 @@
                     ]
                 }
             ],
-            "effects": [],
+            "effects": [
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        -2.0
+                    ]
+                }
+            ],
             "prob_modifier": 1.0,
             "intensity": 2,
             "flavor": {
@@ -34204,7 +34218,7 @@
                 },
                 "image": null
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Each year a region is in riots now costs 2 political capital: unrest is a steady drain, not just an icon.\n\n"
         },
         {
             "name": "Ocean Plastic Weighs More than World's Fish",
@@ -35732,6 +35746,255 @@
                 }
             },
             "notes": "[three-quarters fork] New event. Happens when Climate War Footing is active after Global Demilitarization."
+        },
+        {
+            "name": "The Authoritarian's Offer",
+            "locked": false,
+            "occurred": false,
+            "id": "1c8e4a7f-2d53-4b96-a0f1-7e3c9b5d2a48",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Impossible",
+                    "conditions": [
+                        {
+                            "NPCRelationship": [
+                                "b6694f1d-5597-4bb8-a484-254930838982",
+                                "Nemesis"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Impossible",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "2e463e40-efc0-4861-908a-c1cb0f392cc0",
+                                "Finished"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Likely",
+                    "conditions": [
+                        {
+                            "RegionFlag": "Riots"
+                        },
+                        {
+                            "LocalVariable": [
+                                "Outlook",
+                                "LessEqual",
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "UnlocksProject": "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96"
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "Planner, the situation in the provinces is getting out of hand."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "Give me the authority and I'll have order restored within the month. Temporarily, of course."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Emergency Powers are now available. The Authoritarian seems very eager to help..."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1651672677.256115.png"
+                    },
+                    "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New event. When a region is rioting and its contentedness is at rock bottom, the Authoritarian offers Emergency Powers (unless they're a nemesis or the military has been disbanded)."
+        },
+        {
+            "name": "Crackdown",
+            "locked": true,
+            "occurred": false,
+            "id": "4e2a9c6b-8d31-4f75-b0e2-1a6c8f3d5b97",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Random",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96",
+                                "Active"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -2.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "655dd0c3-3542-4524-98bb-97d61a318669",
+                        -1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "5a59715a-3deb-4288-9aa6-14859ad54d5a",
+                        -1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Citizen",
+                            "text": "They came at night and took my neighbor. Nobody will say where."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Citizen",
+                            "text": "He organized the protests last spring. That's all he did."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "The Fanonist",
+                            "text": "This is what 'order' always looks like, Planner."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1651672677.256115.png"
+                    },
+                    "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New event, unlocked by Emergency Powers; can happen while it's active."
+        },
+        {
+            "name": "The Emergency Never Ends",
+            "locked": true,
+            "occurred": false,
+            "id": "7b5d1f3a-9c42-4e68-a2b7-3f9e6c1d8a54",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Unlikely",
+                    "conditions": [
+                        {
+                            "ProjectStatus": [
+                                "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96",
+                                "Active"
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2025.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        -10.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "b6694f1d-5597-4bb8-a484-254930838982",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "Desperate Times",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "The emergency powers have worked so well, Planner. Why go back?"
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "I've drafted a proposal to make them permanent. Parliament is... supportive."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Our own support is slipping. People are starting to ask who really runs things."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1651672677.256115.png"
+                    },
+                    "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] New event, unlocked by Emergency Powers; can happen while it's active. Costs political capital as the Authoritarian's power grows."
         },
         {
             "name": "Endangered Species Recover",
@@ -38488,6 +38751,129 @@
                 ]
             },
             "notes": "Luong, Tiffany, Ann-Charlott Salabarria, and Dwayne R. Roach. \"Phage therapy in the resistance era: where do we stand and where are we going?.\" Clinical Therapeutics 42, no. 9 (2020): 1659-1680."
+        },
+        {
+            "id": "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96",
+            "name": "Emergency Powers",
+            "kind": "Policy",
+            "group": "Control",
+            "ongoing": false,
+            "gradual": false,
+            "locked": true,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyEventProbability": [
+                        "ee5d4582-8d36-47f7-bae5-17ebe314f11a",
+                        -0.75
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "c398c26c-e6ba-49ac-8f6e-f992ca4ccada",
+                        -0.75
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "2ff77278-608a-43d9-9837-5585bac74779",
+                        -1.0
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "256ec719-4119-4752-ae0e-6a44b0b5d6bc",
+                        -1.0
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "ac8c33f3-83a2-4dbc-aeeb-cebb649f82f5",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                },
+                {
+                    "AddEvent": "4e2a9c6b-8d31-4f75-b0e2-1a6c8f3d5b97"
+                },
+                {
+                    "AddEvent": "7b5d1f3a-9c42-4e68-a2b7-3f9e6c1d8a54"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "b6694f1d-5597-4bb8-a484-254930838982"
+            ],
+            "opposers": [
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651672677.256115.png"
+                    },
+                    "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
+                },
+                "description": "Curfews, a ban on unpermitted gatherings, and broad powers for security forces to restore order in regions in revolt. Unrest will mostly stop. Whether it ends is another matter.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Authoritarian",
+                                "text": "Order has been restored. You'll find the streets very quiet now."
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Utopian",
+                                "text": "Quiet isn't the same as peace."
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "Gossy",
+                                "text": "Riots have stopped in the affected regions. Let's hope we can put these powers down again."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] New policy, unlocked by The Authoritarian's Offer. Mostly suppresses riots and revolts and blocks escalation and secession; enables Crackdown and The Emergency Never Ends. Not available after Global Demilitarization."
         },
         {
             "id": "9d8775b5-4396-4ff3-be3a-1a1ec92351ca",
@@ -41605,6 +41991,51 @@
                         "4b8e2d61-7a35-4c90-9f1e-6d3a8c5b2e07",
                         -1.0
                     ]
+                },
+                {
+                    "LocksProject": "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96"
+                },
+                {
+                    "ModifyEventProbability": [
+                        "ee5d4582-8d36-47f7-bae5-17ebe314f11a",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "c398c26c-e6ba-49ac-8f6e-f992ca4ccada",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "2ff77278-608a-43d9-9837-5585bac74779",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "256ec719-4119-4752-ae0e-6a44b0b5d6bc",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "7deb850f-9c61-4773-a45d-ec00a3d60f20",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "04ec7325-a720-4187-98ea-e8e730e7baf3",
+                        0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "64c73fcd-f432-4e1f-8969-dba5269093db",
+                        0.5
+                    ]
                 }
             ],
             "outcomes": [
@@ -41669,7 +42100,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
+            "notes": "[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots, revolts and militant attacks are 50% more likely.\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
         },
         {
             "id": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9",

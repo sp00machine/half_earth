@@ -557,6 +557,7 @@ impl State {
             self.resources.consumed.land - shock_land.max(0.),
             self.world.starting_resources.land,
             self.protected_land,
+            self.world.temperature,
         );
         self.emissions.land = land_emissions.total();
 

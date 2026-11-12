@@ -31,6 +31,8 @@ pub struct Report {
     disasters: Vec<(String, Vec<IconEvent>)>,
     region_incomes: Vec<(String, Income)>,
     honeymoon_pc: isize,
+    /// How much of this cycle's gain was trimmed by diminishing returns (<= 0).
+    diminishing_pc: isize,
     pc_change: isize,
 }
 impl Report {
@@ -48,11 +50,13 @@ impl Report {
 
         let requests = requests_rows(state);
         let honeymoon_pc = honeymoon_pc(state);
-        let pc_change = changes.iter().map(|row| row.pc_change).sum::<isize>()
+        let raw_pc_change = changes.iter().map(|row| row.pc_change).sum::<isize>()
             + requests.iter().map(|(_, bounty)| bounty).sum::<isize>()
             + (state.ui.cycle_start_state.completed_projects.len()
                 * consts::PC_PER_COMPLETED_PROJECT) as isize
             + honeymoon_pc;
+        let pc_change = consts::soft_cap_pc_gain(raw_pc_change);
+        let diminishing_pc = pc_change - raw_pc_change;
 
         Self {
             events: Events::new(events, state),
@@ -64,6 +68,7 @@ impl Report {
             disasters: disaster_rows(state),
             region_incomes: region_rows(state),
             honeymoon_pc,
+            diminishing_pc,
             pc_change,
         }
     }
@@ -282,6 +287,16 @@ impl Report {
                         row.col(|ui| {
                             let pc_change = format!("{:+}", self.honeymoon_pc);
                             ui.label(pc_change);
+                        });
+                    });
+                }
+                if self.diminishing_pc < 0 {
+                    body.row(ROW_HEIGHT, |mut row| {
+                        row.col(|ui| {
+                            ui.label(t!("Diminishing Returns"));
+                        });
+                        row.col(|ui| {
+                            ui.label(format!("{:+}", self.diminishing_pc));
                         });
                     });
                 }

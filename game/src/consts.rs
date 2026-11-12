@@ -10,6 +10,22 @@ pub const PC_PER_COMPLETED_PROJECT: usize = 5;
 
 pub const PROCESS_POINTS_PER_CYCLE: usize = 5;
 
+/// Political capital gains per cycle are soft-capped so that one big
+/// cycle of progress doesn't fund the rest of the game: gains count in
+/// full up to `PC_SOFT_CAP`, then with diminishing returns, approaching
+/// but never exceeding `PC_HARD_CAP`. Losses are never capped.
+pub const PC_SOFT_CAP: isize = 50;
+pub const PC_HARD_CAP: isize = 100;
+
+pub fn soft_cap_pc_gain(gain: isize) -> isize {
+    if gain <= PC_SOFT_CAP {
+        return gain;
+    }
+    let room = (PC_HARD_CAP - PC_SOFT_CAP) as f32;
+    let over = (gain - PC_SOFT_CAP) as f32;
+    PC_SOFT_CAP + (room * (1. - (-over / room).exp())).round() as isize
+}
+
 /// Process mix points per cycle, given the current flags
 /// (Climate War Footing cuts the red tape and allows more change).
 pub fn process_points_per_cycle(state: &hes_engine::State) -> usize {

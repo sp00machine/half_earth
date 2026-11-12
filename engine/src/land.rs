@@ -57,20 +57,21 @@ const START_PROTECTION: f32 = 0.1;
 pub struct Cohort {
     /// m²
     pub area: f32,
-    /// Years since this land stopped being farmed.
+    /// How far this land has regrown, in years at normal speed. It advances
+    /// faster or slower than real time depending on regrowth conditions.
     pub age: f32,
     /// Carbon stock this land recovers to when fully regrown (gC/m²).
     pub full_stock: f32,
 }
 impl Cohort {
-    /// Carbon stock per m² at a given age.
-    fn stock_at(&self, age: f32, speed: f32) -> f32 {
-        self.full_stock * (1. - (-age * speed / REGROWTH_TIME_CONSTANT).exp())
+    /// Carbon stock per m² at a given (regrowth) age.
+    fn stock_at(&self, age: f32) -> f32 {
+        self.full_stock * (1. - (-age / REGROWTH_TIME_CONSTANT).exp())
     }
 
     /// Carbon currently stored (gC).
-    fn stored(&self, speed: f32) -> f32 {
-        self.area * self.stock_at(self.age, speed)
+    fn stored(&self) -> f32 {
+        self.area * self.stock_at(self.age)
     }
 }
 
@@ -121,7 +122,7 @@ pub struct LandCarbon {
 }
 
 impl LandCarbon {
-    fn regrowth_speed(&self) -> f32 {
+    pub fn regrowth_speed(&self) -> f32 {
         (1. + self.regrowth_modifier).max(0.)
     }
 
@@ -147,14 +148,13 @@ impl LandCarbon {
     /// regrowing land is cleared first, then wild land at the frontier.
     pub fn estimate_clearing(&self, from: f32, to: f32, total: f32) -> f32 {
         let mut to_clear = (to - from).max(0.);
-        let speed = self.regrowth_speed();
         let mut released = 0.;
         for cohort in self.cohorts.iter().rev() {
             if to_clear <= 0. {
                 break;
             }
             let take = cohort.area.min(to_clear);
-            released += take * cohort.stock_at(cohort.age, speed);
+            released += take * cohort.stock_at(cohort.age);
             to_clear -= take;
         }
         if to_clear > 0. {
@@ -176,8 +176,11 @@ impl LandCarbon {
 
     /// Advance one year. `used` is land in use this year and `total`
     /// is all land (m²). Returns this year's emissions.
-    pub fn step(&mut self, demand: f32, total: f32, protected_land: f32) -> LandEmissions {
-        let speed = self.regrowth_speed();
+    pub fn step(&mut self, demand: f32, total: f32, protected_land: f32, temperature: f32) -> LandEmissions {
+        // Heat, drought and fire slow regrowth as the world warms:
+        // full speed at +1C, three quarters at +2C, half at +3C and above.
+        let warming = (1. - 0.25 * (temperature - 1.)).clamp(0.5, 1.);
+        let speed = self.regrowth_speed() * warming;
         let mut out = LandEmissions::default();
 
         // Land in use follows demand with a lag.
@@ -212,7 +215,7 @@ impl LandCarbon {
                     break;
                 };
                 let take = cohort.area.min(to_clear);
-                released += take * cohort.stock_at(cohort.age, speed);
+                released += take * cohort.stock_at(cohort.age);
                 cohort.area -= take;
                 to_clear -= take;
                 if cohort.area <= 0. {
@@ -244,9 +247,9 @@ impl LandCarbon {
         // Regrowth uptake this year.
         let mut uptake = 0.;
         for cohort in self.cohorts.iter_mut() {
-            let before = cohort.stored(speed);
-            cohort.age += 1.;
-            uptake += cohort.stored(speed) - before;
+            let before = cohort.stored();
+            cohort.age += speed;
+            uptake += cohort.stored() - before;
         }
         out.regrowth = -uptake * CO2_PER_C;
 
@@ -282,8 +285,8 @@ mod tests {
         // Global net land-use change emissions are ~4 Gt CO2/yr
         // (Global Carbon Budget).
         let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
-        let first = land.step(START_USED, TOTAL, START_PROTECTION);
-        let second = land.step(START_USED, TOTAL, START_PROTECTION);
+        let first = land.step(START_USED, TOTAL, START_PROTECTION, 1.);
+        let second = land.step(START_USED, TOTAL, START_PROTECTION, 1.);
         for year in [first, second] {
             assert!((3.0..5.0).contains(&gt(year.total())), "{}", gt(year.total()));
             assert_eq!(year.clearing, 0.);
@@ -294,13 +297,13 @@ mod tests {
     #[test]
     fn clearing_is_fast_and_regrowth_slow() {
         let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
-        land.step(START_USED, TOTAL, START_PROTECTION);
-        let baseline = land.step(START_USED, TOTAL, START_PROTECTION).total();
+        land.step(START_USED, TOTAL, START_PROTECTION, 1.);
+        let baseline = land.step(START_USED, TOTAL, START_PROTECTION, 1.).total();
 
         // Clear 5 Mkm² in one year, then give it back the next.
-        let cleared = land.step(START_USED + 5e12, TOTAL, START_PROTECTION);
+        let cleared = land.step(START_USED + 5e12, TOTAL, START_PROTECTION, 1.);
         assert!(gt(cleared.clearing) > 10.);
-        land.step(START_USED, TOTAL, START_PROTECTION);
+        land.step(START_USED, TOTAL, START_PROTECTION, 1.);
 
         // Cumulative emissions relative to the baseline over the following
         // decades: the round trip is carbon neutral in the long run, but
@@ -309,7 +312,7 @@ mod tests {
         let mut cumulative = released;
         let mut years_to_recover = None;
         for year in 1..300 {
-            cumulative += land.step(START_USED, TOTAL, START_PROTECTION).total() - baseline;
+            cumulative += land.step(START_USED, TOTAL, START_PROTECTION, 1.).total() - baseline;
             if cumulative <= released * 0.25 && years_to_recover.is_none() {
                 years_to_recover = Some(year);
             }
@@ -322,16 +325,16 @@ mod tests {
     #[test]
     fn regrowing_land_cleared_again_releases_only_what_it_regrew() {
         let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
-        land.step(START_USED, TOTAL, START_PROTECTION);
-        land.step(START_USED - 5e12, TOTAL, START_PROTECTION);
+        land.step(START_USED, TOTAL, START_PROTECTION, 1.);
+        land.step(START_USED - 5e12, TOTAL, START_PROTECTION, 1.);
         for _ in 0..5 {
-            land.step(START_USED - 5e12, TOTAL, START_PROTECTION);
+            land.step(START_USED - 5e12, TOTAL, START_PROTECTION, 1.);
         }
-        let reclear = land.step(START_USED, TOTAL, START_PROTECTION);
+        let reclear = land.step(START_USED, TOTAL, START_PROTECTION, 1.);
 
         let mut fresh = LandCarbon { response_years: Some(1.), ..Default::default() };
-        fresh.step(START_USED, TOTAL, START_PROTECTION);
-        let wild = fresh.step(START_USED + 5e12, TOTAL, START_PROTECTION);
+        fresh.step(START_USED, TOTAL, START_PROTECTION, 1.);
+        let wild = fresh.step(START_USED + 5e12, TOTAL, START_PROTECTION, 1.);
         assert!(reclear.clearing < wild.clearing * 0.3);
         assert!(land.cohorts.is_empty());
     }
@@ -339,10 +342,10 @@ mod tests {
     #[test]
     fn clearing_estimate_matches_what_happens() {
         let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
-        land.step(START_USED, TOTAL, START_PROTECTION);
+        land.step(START_USED, TOTAL, START_PROTECTION, 1.);
         let estimate = land.estimate_clearing(START_USED, START_USED + 3e12, TOTAL);
         let debt_before = land.soil_debt;
-        let year = land.step(START_USED + 3e12, TOTAL, START_PROTECTION);
+        let year = land.step(START_USED + 3e12, TOTAL, START_PROTECTION, 1.);
         // Immediate release plus the soil carbon that leaks out later.
         let deforestation_soil = year.deforestation / CO2_PER_C / IMMEDIATE_SHARE * (1. - IMMEDIATE_SHARE);
         let soil_added = land.soil_debt - debt_before - deforestation_soil + year.soil / CO2_PER_C;
@@ -355,15 +358,30 @@ mod tests {
         // A one-year spike in land demand clears far less than a lasting one.
         let run = |years: usize| {
             let mut land = LandCarbon::default();
-            land.step(START_USED, TOTAL, START_PROTECTION);
+            land.step(START_USED, TOTAL, START_PROTECTION, 1.);
             let mut cleared = 0.;
             for year in 0..20 {
                 let demand = if year < years { START_USED + 5e12 } else { START_USED };
-                cleared += land.step(demand, TOTAL, START_PROTECTION).clearing;
+                cleared += land.step(demand, TOTAL, START_PROTECTION, 1.).clearing;
             }
             cleared
         };
         assert!(run(1) < run(20) * 0.3);
+    }
+
+    #[test]
+    fn warming_slows_regrowth() {
+        let regrown = |temperature: f32| {
+            let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
+            land.step(START_USED, TOTAL, START_PROTECTION, temperature);
+            let mut total = 0.;
+            for _ in 0..20 {
+                total -= land.step(START_USED - 5e12, TOTAL, START_PROTECTION, temperature).regrowth;
+            }
+            total
+        };
+        assert!(regrown(3.) < regrown(1.) * 0.6);
+        assert!(regrown(2.) < regrown(1.));
     }
 
     #[test]
@@ -384,11 +402,11 @@ mod tests {
         // ending most animal agriculture and letting the land regrow would
         // remove several hundred Gt CO2 this century.
         let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
-        land.step(START_USED, TOTAL, START_PROTECTION);
+        land.step(START_USED, TOTAL, START_PROTECTION, 1.);
         let freed_used = START_USED - 2e13;
         let mut removed = 0.;
         for _ in 0..80 {
-            removed -= land.step(freed_used, TOTAL, START_PROTECTION).regrowth;
+            removed -= land.step(freed_used, TOTAL, START_PROTECTION, 1.).regrowth;
         }
         let removed = gt(removed);
         assert!((200.0..700.0).contains(&removed), "{removed} Gt");
