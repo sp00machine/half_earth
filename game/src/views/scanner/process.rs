@@ -66,6 +66,48 @@ pub fn planned_electricity(
     (demand[Output::Electricity] + change).max(0.)
 }
 
+/// Fuels (uranium, oil, gas, coal, lithium...) that would run out within
+/// three planning cycles at the planned mix: each with the years left and
+/// the planned processes that need it.
+pub fn planned_feedstock_warnings(
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> Vec<(hes_engine::Feedstock, f32, Vec<String>)> {
+    use hes_engine::Feedstock;
+    const WARN_YEARS: f32 = 15.;
+    let demand = state.output_demand.total();
+    let mut rates: BTreeMap<String, (Feedstock, f32, Vec<String>)> = BTreeMap::new();
+    for p in state.world.processes.iter() {
+        let feedstock = p.feedstock.0;
+        if matches!(feedstock, Feedstock::Soil | Feedstock::Other) {
+            continue;
+        }
+        let share = p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0);
+        if share <= 0 {
+            continue;
+        }
+        let output = share as f32 / 20. * demand[p.output];
+        let entry = rates
+            .entry(format!("{feedstock:?}"))
+            .or_insert((feedstock, 0., vec![]));
+        entry.1 += output * p.adj_feedstock_amount();
+        entry.2.push(p.name.clone());
+    }
+    // Batteries draw on lithium too.
+    if let Some(entry) = rates.get_mut("Lithium") {
+        entry.1 += state.storage.last.lithium_mined;
+    }
+    let mut warnings: Vec<_> = rates
+        .into_values()
+        .filter_map(|(feedstock, rate, names)| {
+            let years = if rate > 0. { state.feedstocks.available[feedstock] / rate } else { f32::INFINITY };
+            (years < WARN_YEARS).then_some((feedstock, years, names))
+        })
+        .collect();
+    warnings.sort_by(|a, b| a.1.total_cmp(&b.1));
+    warnings
+}
+
 /// The process's maximum share, counting planned changes to wind and solar
 /// and to electricity demand.
 pub fn planned_max_share(

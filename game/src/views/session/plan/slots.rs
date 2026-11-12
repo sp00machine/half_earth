@@ -172,6 +172,35 @@ pub fn processes_preview(
     )
     .card(crate::tips::TipCard::Storage);
 
+    // Fuels that would run out soon at the planned mix.
+    let feedstock_warnings =
+        crate::views::scanner::process::planned_feedstock_warnings(state, mix_changes);
+    let feedstock_tip = (!feedstock_warnings.is_empty()).then(|| {
+        let lines: Vec<String> = feedstock_warnings
+            .iter()
+            .map(|(feedstock, years, names)| {
+                let names: Vec<String> = names.iter().map(|n| t!(n.as_str()).to_string()).collect();
+                t!(
+                    "%{feedstock} runs out in about %{years} years at the planned mix. Then %{processes} will stop producing.",
+                    feedstock = t!(feedstock.title()),
+                    years = format!("{:.0}", years.max(0.)),
+                    processes = names.join(", "),
+                )
+                .to_string()
+            })
+            .collect();
+        tip(icons::ALERT, lines.join(" "))
+    });
+    let runs_out = |output: Output| {
+        feedstock_warnings.iter().any(|(_, _, names)| {
+            state
+                .world
+                .processes
+                .iter()
+                .any(|p| p.output == output && names.contains(&p.name))
+        })
+    };
+
     h_center(ui, "plan-processes", |tui| {
         tui.ui(|ui| {
                 let resp = inset_frame().show(ui, |ui| {
@@ -197,7 +226,8 @@ pub fn processes_preview(
                                 let storage_problem =
                                     storage_warning && process.output == Output::Electricity;
 
-                                let image = if has_shortage || storage_problem {
+                                let fuel_problem = runs_out(process.output);
+                                let image = if has_shortage || storage_problem || fuel_problem {
                                     icons::ALERT.size(sizing.normal)
                                 } else {
                                     icons::CHECK
@@ -213,6 +243,8 @@ pub fn processes_preview(
 
                                 if storage_problem {
                                     add_tip(storage_tip.clone(), resp);
+                                } else if fuel_problem && let Some(tip) = &feedstock_tip {
+                                    add_tip(tip.clone(), resp);
                                 } else if has_shortage {
                                     add_tip(shortages_tip.clone(), resp);
                                 }
