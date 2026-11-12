@@ -363,7 +363,11 @@ impl Storage {
         let new = new_grid + new_ev;
 
         // Mines produce what's needed plus enough to fill the stockpile.
-        let target = new - recovered - self.stockpile + STOCKPILE_YEARS * self.mining_capacity;
+        // Pushing mining builds a bigger stockpile; restricting it means
+        // mining only what's needed.
+        let modifier = (1. + self.mining_modifier).max(0.);
+        let stockpile_target = STOCKPILE_YEARS * modifier * self.mining_capacity;
+        let target = new - recovered - self.stockpile + stockpile_target;
         let mined = target
             .clamp(0., self.mining_capacity)
             .min(lithium_available.max(0.));
@@ -391,7 +395,6 @@ impl Storage {
 
         // New mines open over time: steadily while mines run near capacity,
         // faster when demand outpaces mining.
-        let modifier = (1. + self.mining_modifier).max(0.);
         let growth = if new > recovered + self.mining_capacity * 0.8 {
             MINING_GROWTH * modifier
         } else if mined > 0.8 * self.mining_capacity {
@@ -520,5 +523,24 @@ mod tests {
         assert!(outlook.ev_coverage < 0.5);
         let without = storage.outlook(ELEC, 0.5, 0., tech, 5.);
         assert_eq!(outlook.supported_share, without.supported_share);
+    }
+
+    #[test]
+    fn mining_policy_controls_stockpile_and_growth() {
+        let run = |mining_modifier: f32| {
+            let mut storage = Storage { mining_modifier, ..Default::default() };
+            storage.step(ELEC, 0.1, 5e11, StorageTech::default(), 1e14);
+            for _ in 0..10 {
+                storage.step(ELEC, 0.25, 5e11, StorageTech::default(), 1e14);
+            }
+            storage
+        };
+        let restricted = run(-1.);
+        assert_eq!(restricted.stockpile, 0.);
+        assert_eq!(restricted.mining_capacity, STARTING_MINING);
+        let normal = run(0.);
+        let pushed = run(2.);
+        assert!(pushed.stockpile > normal.stockpile * 1.5);
+        assert!(pushed.mining_capacity > normal.mining_capacity);
     }
 }

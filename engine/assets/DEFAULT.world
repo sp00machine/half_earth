@@ -44406,9 +44406,103 @@
             "notes": "[three-quarters fork] New project. Long-duration storage takes over 30% of grid storage (no lithium, 45% round-trip efficiency)."
         },
         {
+            "id": "9c4e7b21-3f58-4a6d-b2e9-71d0c5a8f364",
+            "name": "Restrict Lithium Mining",
+            "kind": "Policy",
+            "group": "Materials",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "LithiumMining",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        0.5
+                    ]
+                },
+                {
+                    "LocksProject": "b7f2c9a4-1e63-4d58-8a0f-5c3d9e2b7146"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "opposers": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868",
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651671398.928571.png"
+                    },
+                    "attribution": "NOAA Office of Ocean Exploration and Research (Public Domain)"
+                },
+                "description": "Stop opening new lithium mines and only mine what batteries need right now. Salt flats and the communities around them recover, but lithium for grid storage and vehicles stays scarce.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Fanonist",
+                                "text": "The salt flats were never ours to drain."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "Then the batteries will have to wait."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Mining stops expanding and doesn't stockpile: mines only produce what's needed this year. -1 extinction, +0.5 contentedness. Can't be in force with Expand Lithium Mining."
+        },
+        {
             "id": "b7f2c9a4-1e63-4d58-8a0f-5c3d9e2b7146",
             "name": "Expand Lithium Mining",
-            "kind": "Initiative",
+            "kind": "Policy",
             "group": "Materials",
             "ongoing": false,
             "gradual": false,
@@ -44429,17 +44523,26 @@
                 {
                     "WorldVariable": [
                         "LithiumMining",
+                        0.5
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
                         1.0
                     ]
                 },
                 {
                     "WorldVariable": [
                         "Outlook",
-                        -1.0
+                        -0.5
                     ]
                 },
                 {
                     "AddEvent": "f3a8d1c6-5b27-4e94-9c0a-7e2b4d6f8a13"
+                },
+                {
+                    "LocksProject": "9c4e7b21-3f58-4a6d-b2e9-71d0c5a8f364"
                 }
             ],
             "outcomes": [
@@ -44451,7 +44554,56 @@
                     }
                 }
             ],
-            "upgrades": [],
+            "upgrades": [
+                {
+                    "cost": 5,
+                    "effects": [
+                        {
+                            "WorldVariable": [
+                                "LithiumMining",
+                                1.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                2.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Outlook",
+                                -1.0
+                            ]
+                        }
+                    ],
+                    "active": false
+                },
+                {
+                    "cost": 5,
+                    "effects": [
+                        {
+                            "WorldVariable": [
+                                "LithiumMining",
+                                2.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "ExtinctionRate",
+                                4.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Outlook",
+                                -2.0
+                            ]
+                        }
+                    ],
+                    "active": false
+                }
+            ],
             "active_outcome": null,
             "supporters": [
                 "eb491cfc-01fa-4af4-a560-49ad55975868",
@@ -44468,7 +44620,7 @@
                     },
                     "attribution": "NOAA Office of Ocean Exploration and Research (Public Domain)"
                 },
-                "description": "Fast-track new lithium mines and brine fields to keep up with demand for batteries. Much of the world's lithium lies under salt flats and Indigenous land.",
+                "description": "Push lithium mining: open mines and brine fields faster and keep them running to build up a stockpile. Each level pushes harder, and does more damage. Much of the world's lithium lies under salt flats and Indigenous land. Scale it back down when the stockpile is big enough.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -44491,7 +44643,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New project. New lithium mines open twice as fast. Unlocks the lithium injustice event if Indigenous Sovereignty isn't in place."
+            "notes": "[three-quarters fork] Now a policy with levels you can raise and lower. Level 1: mines expand 50% faster and build a 50% bigger stockpile; +1 extinction, -0.5 contentedness. Level 2: twice as fast, +2 extinction, -1. Level 3: three times as fast, +4 extinction, -2. Brine extraction drains salt flats (e.g. the Atacama) and open-pit mines clear land.\n\n[three-quarters fork] New project. New lithium mines open twice as fast. Unlocks the lithium injustice event if Indigenous Sovereignty isn't in place."
         },
         {
             "id": "bd0558a1-7188-42c1-8a12-c0ffaad552ae",

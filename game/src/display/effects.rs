@@ -613,7 +613,7 @@ impl DisplayEffect {
                     icon_text(
                         "electricity",
                         &t!(
-                            "%{changeDir} how fast lithium mining can expand by %{amount}%.",
+                            "%{changeDir} how fast lithium mining expands, and how big a stockpile mines build up, by %{amount}%.",
                             changeDir = self.change_dir(*amount),
                             amount = self.fmt_param(amount * 100.)
                         ),
