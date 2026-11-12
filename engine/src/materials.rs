@@ -47,14 +47,14 @@ pub struct ProcessMaterials {
 impl ProcessMaterials {
     /// Output per MW (or unit) of capacity per year, in the process's
     /// output units.
-    fn output_per_mw(&self) -> f32 {
+    pub fn output_per_mw(&self) -> f32 {
         self.annual_output.unwrap_or(self.capacity_factor * 8760. * 1000.)
     }
 }
 
 /// New capacity is built over this many years (a planning cycle), so a
 /// big change to the production mix doesn't need all its materials at once.
-const CONSTRUCTION_YEARS: usize = 5;
+pub const CONSTRUCTION_YEARS: usize = 5;
 
 /// Global production at the start of the game, used to convert tonnes
 /// into each industry's demand units.
@@ -79,6 +79,29 @@ pub struct BuildOut {
 }
 
 impl BuildOut {
+    /// Materials for building enough of `process` to make `output` more a
+    /// year (in its output units), and for replacing that capacity as it
+    /// wears out (per year, once built).
+    pub fn for_output(process: &Process, output: f32) -> Option<(BuildOut, BuildOut)> {
+        let materials = process.materials?;
+        let per_mw = materials.output_per_mw() * (1. + process.output_modifier).max(0.01);
+        if per_mw <= 0. || output <= 0. {
+            return None;
+        }
+        let capacity = output / per_mw;
+        let mut build = BuildOut::default();
+        build.add(capacity, &materials);
+        let mut upkeep = BuildOut::default();
+        if materials.lifetime > 0. {
+            upkeep.add(capacity / materials.lifetime, &materials);
+        }
+        Some((build, upkeep))
+    }
+
+    pub fn combine_with(&mut self, other: &BuildOut) {
+        self.combine(other, 1.);
+    }
+
     fn add(&mut self, capacity: f32, materials: &ProcessMaterials) {
         self.capacity += capacity;
         self.steel += capacity * materials.steel;

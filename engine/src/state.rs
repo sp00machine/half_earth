@@ -668,6 +668,41 @@ impl State {
         );
     }
 
+    /// Emissions (g CO2e) and energy (kWh) from making these construction
+    /// materials, with today's industries and today's fuel and electricity
+    /// mix.
+    pub fn materials_impact(&self, build: &crate::materials::BuildOut) -> (f32, f32) {
+        use crate::materials::{CEMENT_INDUSTRY, OTHER_INDUSTRY, STEEL_INDUSTRY};
+        let intensity = |output: Output| {
+            let (mut emissions, mut amount) = (0., 0.);
+            for p in self.world.processes.iter().filter(|p| p.output == output) {
+                let made = self.produced.by_process.get(&p.id).copied().unwrap_or(0.);
+                emissions += made * p.adj_byproducts().co2eq();
+                amount += made;
+            }
+            if amount > 0. { emissions / amount } else { 0. }
+        };
+        let (fuel_ei, elec_ei) = (intensity(Output::Fuel), intensity(Output::Electricity));
+        let (steel_units, cement_units) = self.infrastructure.units_per_tonne.unwrap_or_default();
+        let mut emissions = 0.;
+        let mut energy = 0.;
+        for industry in self.world.industries.iter() {
+            let r = industry.adj_resources();
+            let units = match industry.name.as_str() {
+                STEEL_INDUSTRY => build.steel * steel_units,
+                CEMENT_INDUSTRY => build.cement * cement_units,
+                OTHER_INDUSTRY if r.fuel + r.electricity > 0. => {
+                    build.other_energy / (r.fuel + r.electricity)
+                }
+                _ => continue,
+            };
+            emissions += units
+                * (industry.adj_byproducts().co2eq() + r.fuel * fuel_ei + r.electricity * elec_ei);
+            energy += units * (r.fuel + r.electricity);
+        }
+        (emissions, energy)
+    }
+
     /// What's behind a region's contentedness: (source, amount) pairs that
     /// add up to its current value. Policy effects are worked out from the
     /// region as it is now; anything left over (mostly the slow recovery

@@ -362,13 +362,48 @@ mod changes {
             changed.extinction_rate += process.extinction_rate(available_land) * total;
         }
 
+        // Second-order effects: steel, cement and manufacturing to build
+        // new capacity (while it's built), and to replace it as it wears
+        // out (once built), made by industry with today's energy mix.
+        let mut build = hes_engine::materials::BuildOut::default();
+        let mut upkeep_added = hes_engine::materials::BuildOut::default();
+        let mut upkeep_removed = hes_engine::materials::BuildOut::default();
+        for process in processes {
+            let change = *mix_changes[process.output].get(&process.id).unwrap_or(&0);
+            if change == 0 {
+                continue;
+            }
+            let output = change.unsigned_abs() as f32 / 20. * state.output_demand.of(process.output);
+            if let Some((b, u)) = hes_engine::materials::BuildOut::for_output(process, output) {
+                if change > 0 {
+                    build.combine_with(&b);
+                    upkeep_added.combine_with(&u);
+                } else {
+                    upkeep_removed.combine_with(&u);
+                }
+            }
+        }
+        let years = hes_engine::materials::CONSTRUCTION_YEARS as f32;
+        let (build_emissions, build_energy) = state.materials_impact(&build);
+        let (up_add_e, up_add_en) = state.materials_impact(&upkeep_added);
+        let (up_rem_e, up_rem_en) = state.materials_impact(&upkeep_removed);
+        let upkeep_emissions = (up_add_e - up_rem_e) * 1e-15;
+        let upkeep_energy = up_add_en - up_rem_en;
+        let construction = Construction {
+            emissions: build_emissions / years * 1e-15,
+            energy: build_energy / years,
+            steel: build.steel,
+            cement: build.cement,
+        };
+
         // Changed overall/total/global demand for each of these
         // Subtract out previous process demand, then add in changed process demand
+        // (and the upkeep of what's built).
         let after = Usage {
             land_use: before.land_use - current.land_use + changed.land_use,
             water_use: before.water_use - current.water_use + changed.water_use,
-            energy_use: before.energy_use - current.energy_use + changed.energy_use,
-            emissions: before.emissions - current.emissions + changed.emissions,
+            energy_use: before.energy_use - current.energy_use + changed.energy_use + upkeep_energy,
+            emissions: before.emissions - current.emissions + changed.emissions + upkeep_emissions,
             extinction_rate: before.extinction_rate - current.extinction_rate
                 + changed.extinction_rate,
         };
@@ -382,7 +417,20 @@ mod changes {
             before,
             after,
             clearing,
+            construction,
         }
+    }
+
+    /// Extra yearly impacts while new capacity is being built.
+    #[derive(Default, Clone)]
+    struct Construction {
+        /// Gt CO2e a year.
+        emissions: f32,
+        /// kWh a year.
+        energy: f32,
+        /// Tonnes in all.
+        steel: f32,
+        cement: f32,
     }
 
     #[derive(Clone)]
@@ -391,8 +439,29 @@ mod changes {
         after: Usage,
         /// Estimated CO2 from clearing land for these changes (g).
         clearing: f32,
+        construction: Construction,
     }
     impl Changes {
+        /// What building the new capacity takes, while it's being built.
+        fn construction_note(&self, ui: &mut egui::Ui) {
+            let c = &self.construction;
+            if c.emissions < 0.01 && c.steel < 1e6 {
+                return;
+            }
+            let text = t!(
+                "While it's being built (about %{years} years), the %{steel}Mt of steel, %{cement}Mt of cement and equipment it takes add about %{emissions}Gt of emissions and %{energy} of energy use a year. Once built, only replacing worn-out plants continues; that's included above.",
+                years = hes_engine::materials::CONSTRUCTION_YEARS,
+                steel = format!("{:.0}", c.steel * 1e-6),
+                cement = format!("{:.0}", c.cement * 1e-6),
+                emissions = format!("{:.1}", c.emissions),
+                energy = crate::display::format_power(c.energy),
+            );
+            ui.add(
+                egui::Label::new(egui::RichText::new(text).color(Color32::from_rgb(0xF2, 0xA9, 0x3B)))
+                    .wrap(),
+            );
+        }
+
         /// A warning (or good news) about land being cleared or freed.
         fn land_note(&self, ui: &mut egui::Ui) {
             let change = (self.after.land_use - self.before.land_use) * 1e-12;
@@ -467,6 +536,15 @@ mod changes {
                     ui.add(desc);
                 }
             }
+            if self.construction.emissions >= 0.05 {
+                ui.label(
+                    egui::RichText::new(t!(
+                        "+%{emissions}Gt/yr while building",
+                        emissions = format!("{:.1}", self.construction.emissions)
+                    ))
+                    .color(Color32::from_rgb(0xF2, 0xA9, 0x3B)),
+                );
+            }
         }
     }
     impl egui::Widget for &Changes {
@@ -512,16 +590,17 @@ mod changes {
             .flatten()
             .collect::<Vec<_>>();
 
-            if descs.is_empty() {
+            if descs.is_empty() && self.construction.emissions < 0.01 {
                 ui.label(t!("They won't have much effect."))
             } else {
                 ui.vertical(|ui| {
                     ui.set_width(320.);
-                    ui.label(t!("This output's production will"));
+                    ui.label(t!("Once the changes are built, this output's production will"));
                     for desc in descs {
                         ui.add(desc);
                     }
                     self.land_note(ui);
+                    self.construction_note(ui);
                 })
                 .response
             }
