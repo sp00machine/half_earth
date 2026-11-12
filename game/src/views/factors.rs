@@ -210,11 +210,9 @@ impl FactorsCard {
             Var::Water => {
                 format!("{}%", display::percent(self.total / 100., true))
             }
-            Var::Energy => format!("{}", self.total.round()),
-            Var::Electricity => {
-                format!("{}", self.total.round())
+            Var::Energy | Var::Electricity | Var::Fuel => {
+                format!("{}TW", display::round_energy(self.total))
             }
-            Var::Fuel => format!("{}", self.total.round()),
             Var::PlantCalories => {
                 format!("{}", self.total.round())
             }

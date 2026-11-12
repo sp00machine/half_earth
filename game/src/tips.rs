@@ -339,13 +339,14 @@ fn render_storage_card(ui: &mut egui::Ui, state: &GameState) -> egui::Response {
                 });
             };
             row(ui, t!("Wind & solar share of electricity").to_string(), format!("{:.0}%", state.intermittent_share() * 100.));
-            row(ui, t!("Energy passed through storage").to_string(), format!("{:.1} PWh", report.stored * 1e-12));
+            row(ui, t!("Energy passed through storage").to_string(), crate::display::format_power(report.stored));
             row(ui, t!("Storage the grid needs that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
             row(ui, t!("Wind & solar storage can support this cycle").to_string(), format!("{:.0}%", state.supported_intermittent_share() * 100.));
-            row(ui, t!("Lost in storage round trips").to_string(), format!("{:.1} PWh", report.losses * 1e-12));
-            row(ui, t!("Undelivered for lack of storage").to_string(), format!("{:.1} PWh", report.curtailed * 1e-12));
+            row(ui, t!("Lost in storage round trips").to_string(), crate::display::format_power(report.losses));
+            row(ui, t!("Undelivered for lack of storage").to_string(), crate::display::format_power(report.curtailed));
             ui.separator();
             row(ui, t!("Lithium in batteries in use").to_string(), format!("{:.1} Mt", storage.lithium_in_use * 1e-12));
+            row(ui, t!("Lithium needed by electric vehicles").to_string(), format!("{:.1} Mt", report.ev_lithium_needed * 1e-12));
             row(ui, t!("Lithium mined this year").to_string(), format!("{:.0} kt", report.lithium_mined * 1e-9));
             row(ui, t!("Mining capacity").to_string(), format!("{:.0} kt", storage.mining_capacity * 1e-9));
             row(ui, t!("Recovered by recycling").to_string(), format!("{:.0}%", storage.recycling.clamp(0., 1.) * 100.));

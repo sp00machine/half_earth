@@ -737,17 +737,36 @@ impl State {
     }
 
     pub fn process_max_share(&self, process_id: &Id) -> usize {
+        self.process_max_share_planned(process_id, None)
+    }
+
+    /// The most shares of electricity wind and solar together can have.
+    pub fn intermittent_cap_shares(&self) -> usize {
+        (self.supported_intermittent_share() * 20.).floor() as usize
+    }
+
+    /// Whether a process is limited by the shared wind and solar cap.
+    pub fn is_intermittent_electricity(&self, process_id: &Id) -> bool {
+        let process = &self.world.processes[process_id];
+        process.output == Output::Electricity
+            && process.features.contains(&ProcessFeature::IsIntermittent)
+    }
+
+    /// Like `process_max_share`, but `planned_others` gives the planned
+    /// shares of the other wind and solar processes (including changes not
+    /// yet applied), so the shared cap reflects the plan.
+    pub fn process_max_share_planned(&self, process_id: &Id, planned_others: Option<usize>) -> usize {
         let output_demand = self.output_demand.total();
         let feedstocks = self.feedstocks.available;
         let process = &self.world.processes[process_id];
         let max_share = process.max_share(&output_demand, &feedstocks);
 
         // Wind and solar can only grow as far as storage can support them.
-        let max_share = if process.features.contains(&ProcessFeature::IsIntermittent)
-            && process.output == Output::Electricity
-        {
-            let others = ((self.intermittent_share() * 20.).round() as usize).saturating_sub(process.mix_share);
-            let supported = (self.supported_intermittent_share() * 20.).floor() as usize;
+        let max_share = if self.is_intermittent_electricity(process_id) {
+            let others = planned_others.unwrap_or_else(|| {
+                ((self.intermittent_share() * 20.).round() as usize).saturating_sub(process.mix_share)
+            });
+            let supported = self.intermittent_cap_shares();
             max_share.min(supported.saturating_sub(others).max(process.mix_share))
         } else {
             max_share

@@ -12,7 +12,7 @@ pub struct EventPool {
     pub queue: Vec<(Phase, Id, Option<Id>, usize)>,
     pub triggered: Vec<(Phase, Id, Option<Id>)>,
 
-    /// Regional events happen once per region rather than once per game
+    /// Per-region events (unrest) happen once in each region rather than once per game
     /// (e.g. each region can riot), so track which regions have had them.
     #[serde(default)]
     pub occurred_in: HashSet<(Id, Id)>,
@@ -86,7 +86,7 @@ impl EventPool {
             // Icon-type events are always local
             if ev.phase == Phase::Icon || ev.is_regional() {
                 for region in state.world.regions.iter() {
-                    if ev.phase != Phase::Icon && self.occurred_in.contains(&(ev_id, region.id)) {
+                    if ev.per_region && self.occurred_in.contains(&(ev_id, region.id)) {
                         continue;
                     }
                     if ev.roll(state, Some(region.id)) {
@@ -110,10 +110,10 @@ impl EventPool {
                 if !ev.occurred {
                     happening.push((ev_id, region_id));
                     // All events except for Icon events don't repeat.
-                    // Regional events don't repeat in the same region.
+                    // Per-region events don't repeat in the same region.
                     if ev.phase != Phase::Icon {
                         match region_id {
-                            Some(region) if ev.is_regional() => {
+                            Some(region) if ev.per_region => {
                                 self.occurred_in.insert((ev_id, region));
                             }
                             _ => ev.occurred = true,
@@ -201,6 +201,11 @@ pub struct Event {
 
     pub flavor: EventFlavor,
     pub notes: String,
+
+    /// Whether this event can happen once in each region (e.g. unrest
+    /// spreading) rather than once per game.
+    #[serde(default)]
+    pub per_region: bool,
 }
 impl Default for Event {
     fn default() -> Self {
@@ -219,6 +224,7 @@ impl Default for Event {
             }],
             flavor: EventFlavor::default(),
             notes: "".into(),
+            per_region: false,
         }
     }
 }
@@ -466,5 +472,37 @@ mod test {
             let events = pool.roll_for_phase(Phase::WorldMain, &state);
             assert_eq!(events.len(), 0);
         }
+    }
+
+    #[test]
+    fn test_regional_events_once_unless_per_region() {
+        let regional = |name: &str, per_region: bool| Event {
+            id: Id::new_v4(),
+            name: name.into(),
+            phase: Phase::WorldMain,
+            probabilities: vec![Probability {
+                likelihood: Likelihood::Guaranteed,
+                conditions: vec![Condition::LocalVariable(
+                    LocalVariable::Outlook,
+                    Comparator::Greater,
+                    -1000.,
+                )],
+            }],
+            per_region,
+            ..Default::default()
+        };
+        let mut pool = EventPool::new(
+            vec![regional("Once", false), regional("Spreads", true)].into(),
+        );
+        let state = State::default();
+        let n_regions = state.world.regions.len();
+        let mut counts = std::collections::HashMap::new();
+        for _ in 0..3 {
+            for (ev, _) in pool.roll_for_phase(Phase::WorldMain, &state) {
+                *counts.entry(ev.name).or_insert(0) += 1;
+            }
+        }
+        assert_eq!(counts["Once"], 1);
+        assert_eq!(counts["Spreads"], n_regions);
     }
 }

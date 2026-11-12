@@ -444,10 +444,7 @@ fn render_energy(ui: &mut egui::Ui, state: &State, process_changes: &[(Process, 
         tip(icons::ENERGY, t!("Current energy use.")).card(factors_card(None, Var::Energy, state));
     let energy_use = state.energy_pwh();
     let energy_demand = state.output_demand.total().energy();
-    let energy_changed = format!(
-        "{}PWh",
-        (display::pwh(energy_change + energy_demand)).round()
-    );
+    let energy_changed = display::format_power(energy_change + energy_demand);
 
     render_dashboard_item(
         ui,

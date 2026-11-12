@@ -185,7 +185,7 @@ fn project_factors(var: Var, state: &State) -> Vec<Factor> {
             let display = if var.is_demand_var() {
                 let amount = match var {
                     Var::Energy | Var::Electricity | Var::Fuel => {
-                        display::to_energy_units(amount).round_to(1)
+                        display::round_energy(display::to_energy_units(amount))
                     }
                     Var::PlantCalories | Var::AnimalCalories => {
                         display::to_calorie_units(amount).round_to(1)
@@ -286,7 +286,7 @@ fn construction_factor(state: &State, resource: Resource) -> Option<Factor> {
     (amount > 0.).then(|| Factor::Event {
         name: t!("Energy Infrastructure Construction").to_string(),
         amount,
-        display: Some(display::to_energy_units(amount).round_to(1).to_string()),
+        display: Some(display::round_energy(display::to_energy_units(amount)).to_string()),
     })
 }
 
@@ -356,8 +356,7 @@ fn impact_factor<S: HasImpacts>(source: &S, impact: Impact, state: &State) -> Im
     let total_impact = base * demand;
 
     let display = match impact {
-        Impact::Energy => display::to_energy_units(total_impact)
-            .round_to(1)
+        Impact::Energy => display::round_energy(display::to_energy_units(total_impact))
             .to_string(),
         Impact::Electricity => display::output(total_impact, Output::Electricity).to_string(),
         Impact::Fuel => display::output(total_impact, Output::Fuel).to_string(),
@@ -498,7 +497,7 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                         rankings.push(Factor::Event {
                             name: name.to_string(),
                             amount,
-                            display: Some(display::to_energy_units(amount).round_to(1).to_string()),
+                            display: Some(display::round_energy(display::to_energy_units(amount)).to_string()),
                         });
                     }
                 }

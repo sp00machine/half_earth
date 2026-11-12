@@ -1,5 +1,5 @@
 use std::{
-    collections::{BTreeMap, HashMap, VecDeque},
+    collections::{BTreeMap, HashMap, HashSet, VecDeque},
     sync::Arc,
 };
 
@@ -237,6 +237,26 @@ impl WorldEvents {
 
         if next == Subphase::Events {
             let evs = StateExt::roll_events(&mut state.core, EventPhase::WorldMain);
+
+            // Unrest can spread to every region, but only its first
+            // occurrence gets a popup; after that the globe icons show it.
+            let evs: Vec<_> = {
+                let mut in_roll: HashMap<Id, usize> = HashMap::new();
+                for ev in &evs {
+                    *in_roll.entry(ev.id).or_default() += 1;
+                }
+                let mut shown = HashSet::new();
+                evs.into_iter()
+                    .filter(|ev| {
+                        if !ev.per_region {
+                            return true;
+                        }
+                        let total = state.core.events.iter().filter(|e| e.id == ev.id).count();
+                        let before = total.saturating_sub(in_roll[&ev.id]);
+                        before == 0 && shown.insert(ev.id)
+                    })
+                    .collect()
+            };
             for event in &evs {
                 state.ui.world_events.push(event.clone());
             }

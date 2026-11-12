@@ -16,13 +16,40 @@ fn is_subtractable(process: &Process, mix_changes: &EnumMap<Output, BTreeMap<Id,
     process.mix_share as isize + *change != 0
 }
 
+/// Planned shares of the wind and solar processes other than this one.
+pub fn planned_intermittent_others(
+    process: &Process,
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> usize {
+    state
+        .world
+        .processes
+        .iter()
+        .filter(|p| p.id != process.id && state.is_intermittent_electricity(&p.id))
+        .map(|p| (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0))
+        .sum::<isize>() as usize
+}
+
+/// The process's maximum share, counting planned changes to wind and solar.
+pub fn planned_max_share(
+    process: &Process,
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> usize {
+    let others = state
+        .is_intermittent_electricity(&process.id)
+        .then(|| planned_intermittent_others(process, state, process_mix_changes));
+    state.process_max_share_planned(&process.id, others)
+}
+
 fn is_addable(
     process: &Process,
     state: &State,
     process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
     points: isize,
 ) -> bool {
-    let max_share = state.process_max_share(&process.id);
+    let max_share = planned_max_share(process, state, process_mix_changes);
     let change = process_mix_changes[process.output]
         .get(&process.id)
         .unwrap_or(&0);
@@ -100,7 +127,8 @@ impl Scannable for Process {
                 state.ui.tutorial.advance();
             }
 
-            let max_share = state.core.process_max_share(&self.id);
+            let max_share =
+                planned_max_share(self, &state.core, &state.ui.process_mix_changes);
 
             add_point(
                 &mut state.ui.process_points,

@@ -35,12 +35,12 @@ pub impl State {
 
     fn energy_pwh(&self) -> String {
         let energy = self.output_demand.total().energy();
-        format!("{}PWh", display::pwh(energy).round())
+        display::format_power(energy)
     }
 
     fn energy_twh(&self) -> String {
         let energy = self.output_demand.total().energy();
-        format!("{}TWh", display::twh(energy).round())
+        display::format_power(energy)
     }
 
     fn avg_income_level(&self) -> usize {

@@ -186,7 +186,22 @@ impl AsCard for Process {
                         }
                     };
 
-                    let alert_tip = {
+                    let alert_tip = if state.is_intermittent_electricity(&self.id) {
+                        let others = crate::views::scanner::process::planned_intermittent_others(
+                            self,
+                            &state.core,
+                            &state.ui.process_mix_changes,
+                        );
+                        let planned = others as isize + changed_mix_share.max(0);
+                        tip(
+                            icons::ALERT,
+                            t!(
+                                "Wind and solar together can make up at most %{cap}% of electricity: that's what storage can support over the next five years. Planned wind and solar: %{planned}%. Sodium-ion, pumped hydro or long-duration storage, more lithium mining, or battery recycling raise the cap.",
+                                cap = state.intermittent_cap_shares() * 5,
+                                planned = planned * 5,
+                            ),
+                        )
+                    } else {
                         let mix_share = self.mix_share;
                         tip(
                             icons::ALERT,
@@ -625,7 +640,11 @@ fn npc_stances<'a>(proc: &Process, npcs: &'a Collection<NPC>) -> (Vec<&'a NPC>, 
 }
 
 fn max_and_changed_share(proc: &Process, state: &GameState) -> (usize, isize) {
-    let max_share = state.process_max_share(&proc.id);
+    let max_share = crate::views::scanner::process::planned_max_share(
+        proc,
+        &state.core,
+        &state.ui.process_mix_changes,
+    );
     let changed_mix_share = {
         if let Some(change) = state.ui.process_mix_changes[proc.output].get(&proc.id) {
             proc.mix_share as isize + change

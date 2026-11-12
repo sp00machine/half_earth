@@ -1,7 +1,7 @@
 use crate::{state::GameState, views::cards::AsCard};
 
 mod cards;
-mod process;
+pub mod process;
 mod project;
 
 pub use cards::Cards;

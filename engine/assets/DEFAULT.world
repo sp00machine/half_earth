@@ -17806,7 +17806,8 @@
                     "attribution": "cyphunk . (CC BY-SA 2.0)"
                 }
             },
-            "notes": ""
+            "notes": "",
+            "per_region": true
         },
         {
             "name": "Interplanetary Ark or Space Yachts?",
@@ -20905,7 +20906,8 @@
                     "attribution": "Jack Ketcham (CC BY-SA 2.0)"
                 }
             },
-            "notes": ""
+            "notes": "",
+            "per_region": true
         },
         {
             "name": "Wheat Rust Destroys Harvest",
@@ -25791,7 +25793,8 @@
                     "attribution": "Nick Divers (CC BY 2.0)"
                 }
             },
-            "notes": ""
+            "notes": "",
+            "per_region": true
         },
         {
             "name": "Research Intro",
