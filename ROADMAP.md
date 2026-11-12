@@ -34,6 +34,13 @@ Done work lives in the git history; each change's reasoning is in the
   Relocate Industry to Space, Orbital Settlements, Antarctic Pumping,
   Mission to Titan): give them construction costs and realistic effects,
   or keep them clearly as sci-fi.
+- **Atlantropa** (Accelerationist megaproject): dam the Strait of
+  Gibraltar and lower the Mediterranean, as Herman Sörgel proposed in the
+  1920s. Huge hydropower and new farmland, catastrophic for extinction and
+  for Mediterranean regions. Goes with the megaproject rework.
+- **More utopian-fantasy cards** in the spirit of Esperanto, Decimal Time
+  and Dialogue with Dolphins: one for each faction that doesn't have one
+  yet (Malthusian, Environmentalist), avoiding anything too grim.
 
 ## Tooling
 

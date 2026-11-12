@@ -42288,6 +42288,1017 @@
             "notes": "https://www.rollingstone.com/politics/politics-news/another-runaway-general-army-deploys-psy-ops-on-u-s-senators-178088/\n\n"
         },
         {
+            "id": "84834f31-572e-42af-b82e-d4d3d1792326",
+            "name": "Decimal Time",
+            "kind": "Policy",
+            "group": "Behavior",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "OutlookByIncome": [
+                        -0.5,
+                        -0.5,
+                        -0.5,
+                        -0.5
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "04b92453-026e-40a5-9a25-e98244023a69"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646300479.400543.png"
+                    },
+                    "attribution": "Ziko (GFDL)"
+                },
+                "description": "Ten hours a day, a hundred minutes an hour, a hundred seconds a minute. Rational, elegant and completely pointless. Every clock in the world will have to be replaced.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Utopian",
+                                "text": "Midnight is 10 o'clock now. Lunch is at 5."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Consumerist",
+                                "text": "I have a dinner reservation at 7:30. What is that now?"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Revolutionary France made decimal time official in 1793 and gave up on it in 1795. No effect on the climate; -0.5 contentedness everywhere, with grumbling that fades over 10 years.",
+            "construction": {
+                "steel": 0.0,
+                "cement": 0.0,
+                "other_energy": 20000000000.0
+            },
+            "fatigue": {
+                "adapting": true,
+                "rate": 0.3,
+                "years": 10.0,
+                "everywhere": true
+            }
+        },
+        {
+            "id": "86d94060-3199-4067-91d7-9c1a013a4cf1",
+            "name": "World Calendar Reform",
+            "kind": "Policy",
+            "group": "Behavior",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "OutlookByIncome": [
+                        -0.25,
+                        -0.25,
+                        -0.25,
+                        -0.25
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "opposers": [
+                "04b92453-026e-40a5-9a25-e98244023a69"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646300479.400543.png"
+                    },
+                    "attribution": "Ziko (GFDL)"
+                },
+                "description": "Thirteen identical months of 28 days, plus a festival day outside any month. Every date falls on the same weekday every year. Birthdays will never be the same.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": null,
+                                "speaker": "The Utopian",
+                                "text": "The 15th is always a Sunday now. Forever."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork]  Auguste Comte's Positivist calendar (1849), revived by the 1930s World Calendar campaign. No effect on the climate."
+        },
+        {
+            "id": "d6828a28-3204-4522-b9c2-b786f523a760",
+            "name": "Gall-Peters Maps",
+            "kind": "Policy",
+            "group": "Behavior",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "OutlookByIncome": [
+                        0.5,
+                        0.5,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "655dd0c3-3542-4524-98bb-97d61a318669",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "655dd0c3-3542-4524-98bb-97d61a318669"
+            ],
+            "opposers": [
+                "b6694f1d-5597-4bb8-a484-254930838982"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651316273.019448.png"
+                    },
+                    "attribution": "Unknown author, Public domain, via Wikimedia Commons"
+                },
+                "description": "Replace the Mercator projection in every school and atlas with one that shows countries at their true size. Africa is fourteen times bigger than Greenland.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Fanonist",
+                                "text": "Look how big Africa actually is."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Authoritarian",
+                                "text": "Why does everything look stretched?"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Arno Peters' 1973 equal-area map, adopted by UNESCO and many aid groups. Purely symbolic: a little more contentedness in poorer regions."
+        },
+        {
+            "id": "5599c554-812d-477a-a519-3359b9f97fc1",
+            "name": "Rename Earth \"Gaia\"",
+            "kind": "Policy",
+            "group": "Behavior",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyEventProbability": [
+                        "22788128-7da4-4ee3-b5bc-5beb5bb4693e",
+                        0.5
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "5a59715a-3deb-4288-9aa6-14859ad54d5a",
+                        1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -0.5
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "opposers": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1648535146.981587.png"
+                    },
+                    "attribution": "'Curiosity' ca. 1660\u201362 by Gerard ter Borch the Younger, The MET, Public Domain"
+                },
+                "description": "The planet will officially be called Gaia, after the Greek Earth goddess and James Lovelock's living-planet hypothesis. Most people roll their eyes.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": null,
+                                "speaker": "The Ecofeminist",
+                                "text": "She always had a name. We just never asked."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork]  Pure vibes: makes Gaia Worship more likely, and costs a little world contentedness."
+        },
+        {
+            "id": "0760aa89-7b64-4452-a012-35432a91bd5b",
+            "name": "Morning Calisthenics",
+            "kind": "Policy",
+            "group": "Control",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "OutlookByIncome": [
+                        0.0,
+                        -0.5,
+                        -1.0,
+                        -1.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "2bd5e69c-36f0-4e9c-aec0-d0d35e7260bf",
+                        -0.05
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "b6694f1d-5597-4bb8-a484-254930838982",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "b6694f1d-5597-4bb8-a484-254930838982"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645388311.168973.png"
+                    },
+                    "attribution": ""
+                },
+                "description": "Every morning at 7, the whole world does ten minutes of broadcast exercises together.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": null,
+                                "speaker": "The Authoritarian",
+                                "text": "Arms up! And down! Together, comrades!"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork]  Japan's radio taiso has run daily since 1928, and China's broadcast exercises are compulsory in schools. A tiny health benefit; wealthier regions resent it."
+        },
+        {
+            "id": "79fdfae3-4686-4d28-ac0d-33534e9a55e4",
+            "name": "Hyperloop",
+            "kind": "Initiative",
+            "group": "Cities",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 25
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyIndustryResources": [
+                        "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
+                        "Fuel",
+                        -0.01
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "eb491cfc-01fa-4af4-a560-49ad55975868",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868",
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "opposers": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1648178585.643725.png"
+                    },
+                    "attribution": "Tokyo Street Car & Bus - 1957 Japan by Vintage Japan-esque, Openverse,  CC BY-NC-SA 2.0"
+                },
+                "description": "Passenger pods shot through near-vacuum tubes at airliner speeds between the world's big cities.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Accelerationist",
+                                "text": "Paris to Berlin in fifty minutes!"
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "When it works. Which is on Tuesdays."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Proposed in 2013 and never built at scale: the tubes, pumps and stations take enormous amounts of steel and concrete, and it carries a sliver of the trips high-speed rail would have carried anyway (-1% aviation fuel).",
+            "construction": {
+                "steel": 300000000.0,
+                "cement": 600000000.0,
+                "other_energy": 1500000000000.0
+            }
+        },
+        {
+            "id": "19194047-896e-4a0d-88fb-11f8a62619ee",
+            "name": "Monumental Capital",
+            "kind": "Initiative",
+            "group": "Control",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 20
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        3.0
+                    ]
+                },
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        20.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "b6694f1d-5597-4bb8-a484-254930838982",
+                        2.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "b6694f1d-5597-4bb8-a484-254930838982"
+            ],
+            "opposers": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                "655dd0c3-3542-4524-98bb-97d61a318669"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646347134.951567.png"
+                    },
+                    "attribution": "Staff Sgt. Samuel Bendet, U.S. Air Force, Public domain"
+                },
+                "description": "Build a new world capital from scratch: grand avenues, a vast parliament, and the tallest building ever made.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Authoritarian",
+                                "text": "Let them see what we have built."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Fanonist",
+                                "text": "Whose land is it built on?"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Brasilia (1960), Naypyidaw (2005), the never-finished Palace of the Soviets. Nearly a billion tonnes of concrete for prestige: a world contentedness boost and some political capital.",
+            "construction": {
+                "steel": 150000000.0,
+                "cement": 800000000.0,
+                "other_energy": 300000000000.0
+            }
+        },
+        {
+            "id": "b312d786-8b91-4875-9a1f-af81e10918fc",
+            "name": "Seasteading",
+            "kind": "Initiative",
+            "group": "Cities",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 15
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Population",
+                        -20000.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        0.5
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "opposers": [
+                "655dd0c3-3542-4524-98bb-97d61a318669",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651672889.876582.png"
+                    },
+                    "attribution": "Team3LIUCGloria, CC BY-SA 4.0"
+                },
+                "description": "Floating cities on the open ocean, free from the rules of any country on land.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Consumerist",
+                                "text": "No zoning laws. No taxes. Just the open sea."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "And the open sea's opinion of us."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] The Seasteading Institute (2008) has yet to launch a city. Lots of steel for a few tens of thousands of residents.",
+            "construction": {
+                "steel": 200000000.0,
+                "cement": 100000000.0,
+                "other_energy": 300000000000.0
+            }
+        },
+        {
+            "id": "d49bc001-2cc7-4f69-82d8-c806c968a843",
+            "name": "Project Cybersyn",
+            "kind": "Initiative",
+            "group": "Behavior",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 15
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "PlayerVariable": [
+                        "ResearchPoints",
+                        20.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "eb491cfc-01fa-4af4-a560-49ad55975868",
+                        1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1647914515.526886.png"
+                    },
+                    "attribution": "Interior of Winston-Salem Chero-Cola Bottling Company, Winston-Salem, N.C. by unclibraries_commons, via openverse, public domain"
+                },
+                "description": "A planning room with swivel chairs and glowing screens, wired to every factory in the world, to run the economy in real time.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": null,
+                                "speaker": "The Accelerationist",
+                                "text": "The economy, at a glance. Finally."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork]  Stafford Beer's system for Allende's Chile (1971-73), cut short by the coup. A modest boost from better planning: research points and a little contentedness.",
+            "construction": {
+                "steel": 0.0,
+                "cement": 0.0,
+                "other_energy": 50000000000.0
+            }
+        },
+        {
+            "id": "2a88ea25-f308-4f05-8729-12e10435552e",
+            "name": "Dialogue with Dolphins",
+            "kind": "Research",
+            "group": "Other",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [],
+            "outcomes": [
+                {
+                    "effects": [
+                        {
+                            "PlayerVariable": [
+                                "ResearchPoints",
+                                30.0
+                            ]
+                        },
+                        {
+                            "NPCRelationship": [
+                                "53fe6eb5-e144-4cc1-816f-21bf46d4f27e",
+                                2.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Outlook",
+                                3.0
+                            ]
+                        }
+                    ],
+                    "probability": {
+                        "likelihood": "Unlikely",
+                        "conditions": []
+                    }
+                },
+                {
+                    "effects": [
+                        {
+                            "NPCRelationship": [
+                                "53fe6eb5-e144-4cc1-816f-21bf46d4f27e",
+                                1.0
+                            ]
+                        }
+                    ],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "53fe6eb5-e144-4cc1-816f-21bf46d4f27e"
+            ],
+            "opposers": [
+                "04b92453-026e-40a5-9a25-e98244023a69"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1646300728.839284.png"
+                    },
+                    "attribution": "The original uploader was Jom at German Wikipedia., CC BY-SA 2.0 DE, via Wikimedia Commons"
+                },
+                "description": "Fund research into communicating with dolphins, our fellow intelligent beings, who may have much to teach us about living in harmony.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Posadist",
+                                "text": "They spoke! They have been waiting for us to listen."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "They mostly want us to stop dumping plastic, but also: physics."
+                            }
+                        ]
+                    },
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Posadist",
+                                "text": "They are clearly saying something profound."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "They're asking for fish."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] J. Posadas argued that we should communicate with dolphins, whom he believed had their own intelligence and society. Usually nothing comes of it; very occasionally, a breakthrough."
+        },
+        {
+            "id": "d04eb59d-f423-4c71-8291-c694cb5248a4",
+            "name": "Vegan Pets",
+            "kind": "Policy",
+            "group": "Food",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "Demand": [
+                        "AnimalCalories",
+                        -0.04
+                    ]
+                },
+                {
+                    "OutlookByIncome": [
+                        0.0,
+                        0.0,
+                        -0.5,
+                        -1.5
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "5cd771c9-2622-4bd9-8478-c2cbf2294080",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651674642.074072.png"
+                    },
+                    "attribution": "\"Cat hunting\" by filipstepien1 (CC BY 2.0.)"
+                },
+                "description": "Switch the world's cats and dogs to plant-based food.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Animal Liberationist",
+                                "text": "Why kill animals to feed animals?"
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Consumerist",
+                                "text": "My cat will never forgive you."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Pets eat a real share of the meat economy: in the US, pet food is roughly a quarter to a third of the environmental impact of animal products (Okin 2017); worldwide it's smaller. -4% meat demand. Dogs do fine on well-made plant diets; cats are carnivores and it's much more contested. Rich regions, where most pets live, hate it at first.",
+            "fatigue": {
+                "adapting": true,
+                "rate": 0.5,
+                "years": 10.0
+            }
+        },
+        {
             "id": "bf21e46d-ed78-4a22-a14d-a19c62230442",
             "name": "Champagne Socialism",
             "kind": "Policy",
