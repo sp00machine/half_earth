@@ -8,8 +8,10 @@
 //! Most storage, and nearly all electric vehicles, use lithium-ion
 //! batteries. Lithium comes from the world's reserves, but mines can only
 //! be opened so fast: supply starts near today's output and ramps up over
-//! time. If there isn't enough lithium for the storage the grid needs,
-//! energy that couldn't be stored is partly wasted, raising demand further.
+//! time. Lithium mined but not yet needed goes into a stockpile (up to a
+//! few years of output), so a steady period builds up a buffer for a
+//! rapid build-out later. If there isn't enough lithium for the storage
+//! the grid needs, the energy that needed storing goes undelivered.
 //!
 //! Units: energy in kWh, lithium in grams.
 
@@ -46,8 +48,15 @@ const BATTERY_LIFETIME: f32 = 13.;
 /// Lithium mining at the start of the game (g/yr, ~180 kt) and how fast
 /// new mines can open (fractional growth per year), up to a ceiling.
 const STARTING_MINING: f32 = 1.8e11;
+/// Mines expand steadily while they're running near capacity, and faster
+/// when demand is eating into the stockpile.
+const MINING_BASE_GROWTH: f32 = 0.05;
 const MINING_GROWTH: f32 = 0.15;
 const MAX_MINING: f32 = 4e12;
+
+/// Mines keep producing until the stockpile holds this many years of
+/// mining capacity, then slow to what's needed.
+const STOCKPILE_YEARS: f32 = 3.;
 
 /// Share of energy that needed storage which goes undelivered if the
 /// storage can't be built.
@@ -110,6 +119,17 @@ pub fn stored_share(intermittent_share: f32) -> f32 {
     MAX_STORED_SHARE * over.powf(STORAGE_EXPONENT)
 }
 
+/// Lithium (g) in the batteries of vehicles using this much electricity
+/// a year (kWh).
+pub fn ev_lithium_for(ev_electricity: f32) -> f32 {
+    ev_electricity.max(0.) * EV_CAPACITY_PER_KWH_USED * LITHIUM_PER_KWH
+}
+
+/// Grid battery capacity (kWh) needed for a wind and solar share.
+fn grid_capacity_for(electricity: f32, intermittent_share: f32) -> f32 {
+    electricity * intermittent_share * stored_share(intermittent_share) / CYCLES_PER_YEAR
+}
+
 /// This year's storage and lithium.
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize, PartialEq)]
 pub struct StorageReport {
@@ -123,11 +143,48 @@ pub struct StorageReport {
     pub lithium_demand: f32,
     /// Lithium actually mined this year (g).
     pub lithium_mined: f32,
-    /// Share of needed battery capacity that couldn't be built.
+    /// Share of the grid battery capacity needed that couldn't be built.
     pub shortfall: f32,
     /// Lithium needed in electric vehicle batteries (g).
     #[serde(default)]
     pub ev_lithium_needed: f32,
+    /// Lithium needed in grid batteries (g).
+    #[serde(default)]
+    pub grid_lithium_needed: f32,
+    /// Share of the vehicle batteries needed that couldn't be built; those
+    /// vehicles keep running on fuel.
+    #[serde(default)]
+    pub ev_shortfall: f32,
+}
+
+/// What a planned wind and solar share would need in storage and lithium
+/// over a planning cycle, against the lithium that will be available.
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
+pub struct StorageOutlook {
+    /// Planned wind and solar share of electricity.
+    pub intermittent_share: f32,
+    /// Grid battery capacity needed (kWh), lithium and otherwise.
+    pub grid_capacity: f32,
+    /// Lithium needed for grid batteries (g).
+    pub grid_lithium: f32,
+    /// Lithium needed for vehicle batteries (g).
+    pub ev_lithium: f32,
+    /// Lithium available over the cycle: batteries in use, the stockpile
+    /// and mining, less what wears out and isn't recycled (g).
+    pub available: f32,
+    /// Lithium the grid can draw on, since it gets priority (g).
+    pub for_grid: f32,
+    /// The highest wind and solar share the available lithium supports.
+    pub supported_share: f32,
+    /// Share of the vehicle batteries needed that lithium left after the
+    /// grid would cover.
+    pub ev_coverage: f32,
+}
+impl StorageOutlook {
+    /// Whether the grid's storage would fall short.
+    pub fn is_short(&self) -> bool {
+        self.grid_lithium > self.for_grid * 1.01
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -146,6 +203,15 @@ pub struct Storage {
     /// Whether the batteries already in use at the start have been counted.
     #[serde(default)]
     pub initialized: bool,
+    /// Lithium mined but not yet in batteries (g).
+    #[serde(default)]
+    pub stockpile: f32,
+    /// Lithium in grid batteries (g); the rest of `lithium_in_use` is in
+    /// vehicles.
+    #[serde(default)]
+    pub grid_in_use: f32,
+    #[serde(default)]
+    pub pools_split: bool,
 }
 impl Default for Storage {
     fn default() -> Self {
@@ -157,6 +223,9 @@ impl Default for Storage {
             losses_modifier: 0.,
             last: StorageReport::default(),
             initialized: false,
+            stockpile: 0.,
+            grid_in_use: 0.,
+            pools_split: false,
         }
     }
 }
@@ -177,33 +246,81 @@ impl Storage {
         stored * self.last.shortfall * CURTAILMENT_SHARE
     }
 
-    /// The highest wind and solar share of electricity that storage can
-    /// support over the coming `years`: batteries already built that aren't
-    /// in vehicles, plus about half of what mines can supply in that time
-    /// (vehicles take the rest). Storage that doesn't need lithium is
-    /// assumed unlimited.
-    pub fn supported_share(&self, electricity: f32, tech: StorageTech, years: f32) -> f32 {
+    /// Lithium available for batteries over the coming `years`: batteries
+    /// in use, the stockpile, and mining at today's capacity, less what
+    /// wears out and isn't recycled.
+    pub fn available_lithium(&self, years: f32) -> f32 {
+        let worn_out = self.lithium_in_use
+            * (years / BATTERY_LIFETIME).min(1.)
+            * (1. - self.recycling.clamp(0., 1.));
+        self.lithium_in_use + self.stockpile + self.mining_capacity * years - worn_out
+    }
+
+    /// Lithium the grid can draw on over the coming `years`: everything
+    /// available except what stays in vehicle batteries still in service
+    /// (the grid gets priority on new lithium).
+    pub fn available_for_grid(&self, years: f32) -> f32 {
+        let ev_in_use = (self.lithium_in_use - self.grid_in_use).max(0.);
+        let ev_still_in_service = ev_in_use * (1. - (years / BATTERY_LIFETIME).min(1.));
+        (self.available_lithium(years) - ev_still_in_service).max(0.)
+    }
+
+    /// What `intermittent_share` of `electricity` would need over the
+    /// coming `years`, with vehicles needing `ev_lithium`.
+    pub fn outlook(
+        &self,
+        electricity: f32,
+        intermittent_share: f32,
+        ev_lithium: f32,
+        tech: StorageTech,
+        years: f32,
+    ) -> StorageOutlook {
         let mix = StorageMix::new(tech);
-        if mix.lithium <= 0. || electricity <= 0. {
-            return 1.;
-        }
-        let lithium = (self.lithium_in_use - self.last.ev_lithium_needed).max(0.)
-            + 0.5 * self.mining_capacity * years;
-        let capacity = lithium / (LITHIUM_PER_KWH * mix.lithium);
-        let needed = |share: f32| electricity * share * stored_share(share) / CYCLES_PER_YEAR;
-        if needed(1.) <= capacity {
-            return 1.;
-        }
-        let (mut lo, mut hi) = (STORAGE_THRESHOLD, 1.);
-        for _ in 0..30 {
-            let mid = (lo + hi) / 2.;
-            if needed(mid) <= capacity {
-                lo = mid;
+        let grid_capacity = grid_capacity_for(electricity, intermittent_share);
+        let available = self.available_lithium(years);
+        let for_grid = self.available_for_grid(years);
+        let supported_share = if mix.lithium <= 0. || electricity <= 0. {
+            1.
+        } else {
+            let capacity = for_grid / (LITHIUM_PER_KWH * mix.lithium);
+            if grid_capacity_for(electricity, 1.) <= capacity {
+                1.
             } else {
-                hi = mid;
+                let (mut lo, mut hi) = (STORAGE_THRESHOLD, 1.);
+                for _ in 0..30 {
+                    let mid = (lo + hi) / 2.;
+                    if grid_capacity_for(electricity, mid) <= capacity {
+                        lo = mid;
+                    } else {
+                        hi = mid;
+                    }
+                }
+                lo
             }
+        };
+        let grid_lithium = grid_capacity * mix.lithium * LITHIUM_PER_KWH;
+        let ev_coverage = if ev_lithium > 0. {
+            ((available - grid_lithium) / ev_lithium).clamp(0., 1.)
+        } else {
+            1.
+        };
+        StorageOutlook {
+            intermittent_share,
+            grid_capacity,
+            grid_lithium,
+            ev_lithium,
+            available,
+            for_grid,
+            supported_share,
+            ev_coverage,
         }
-        lo
+    }
+
+    /// The highest wind and solar share of electricity that storage can
+    /// support over the coming `years`, with vehicles' needs as now.
+    pub fn supported_share(&self, electricity: f32, tech: StorageTech, years: f32) -> f32 {
+        self.outlook(electricity, 0., self.last.ev_lithium_needed, tech, years)
+            .supported_share
     }
 
     /// Advance one year. `lithium_available` is what's left in reserves.
@@ -218,41 +335,72 @@ impl Storage {
         let mix = StorageMix::new(tech);
         let stored = electricity * intermittent_share * stored_share(intermittent_share);
         let grid_capacity = stored / CYCLES_PER_YEAR;
-        let ev_capacity = ev_electricity.max(0.) * EV_CAPACITY_PER_KWH_USED;
-        let needed = (grid_capacity * mix.lithium + ev_capacity) * LITHIUM_PER_KWH;
+        let ev_needed = ev_lithium_for(ev_electricity);
+        let grid_needed = grid_capacity * mix.lithium * LITHIUM_PER_KWH;
 
         // Batteries already in use when the game starts (today's electric
         // vehicles and grid storage).
         if !self.initialized {
-            self.lithium_in_use = needed;
+            self.lithium_in_use = grid_needed + ev_needed;
+            self.grid_in_use = grid_needed;
             self.initialized = true;
+            self.pools_split = true;
+        }
+        // Older saves tracked one pool.
+        if !self.pools_split {
+            self.grid_in_use = self.lithium_in_use.min(grid_needed);
+            self.pools_split = true;
         }
 
         // Batteries that wear out this year, and how much of their lithium
         // is recovered.
-        let retired = self.lithium_in_use / BATTERY_LIFETIME;
-        let recovered = retired * self.recycling.clamp(0., 1.);
-        let in_use = self.lithium_in_use - retired;
+        let ev_in_use = (self.lithium_in_use - self.grid_in_use).max(0.);
+        let grid_kept = self.grid_in_use * (1. - 1. / BATTERY_LIFETIME);
+        let ev_kept = ev_in_use * (1. - 1. / BATTERY_LIFETIME);
+        let recovered = self.lithium_in_use / BATTERY_LIFETIME * self.recycling.clamp(0., 1.);
+        let new_grid = (grid_needed - grid_kept).max(0.);
+        let new_ev = (ev_needed - ev_kept).max(0.);
+        let new = new_grid + new_ev;
 
-        let new = (needed - in_use).max(0.);
-        let from_recycling = recovered.min(new);
-        let demand = new - from_recycling;
-        let mined = demand.min(self.mining_capacity).min(lithium_available.max(0.));
-        self.lithium_in_use = (in_use + from_recycling + mined).min(needed.max(in_use));
+        // Mines produce what's needed plus enough to fill the stockpile.
+        let target = new - recovered - self.stockpile + STOCKPILE_YEARS * self.mining_capacity;
+        let mined = target
+            .clamp(0., self.mining_capacity)
+            .min(lithium_available.max(0.));
 
-        // Lithium is shared between vehicles and the grid; only the grid's
-        // part of any shortfall affects electricity (wasted power, brownouts).
-        let shortfall = if needed > 0. && grid_capacity * mix.lithium > 0. {
-            (1. - self.lithium_in_use / needed).clamp(0., 1.)
+        // The grid gets lithium first: a shortfall there means blackouts,
+        // while vehicles without batteries just keep burning fuel.
+        let mut supply = self.stockpile + recovered + mined;
+        let grid_used = new_grid.min(supply);
+        supply -= grid_used;
+        let ev_used = new_ev.min(supply);
+        self.stockpile = supply - ev_used;
+        self.grid_in_use = grid_kept + grid_used;
+        self.lithium_in_use = self.grid_in_use + ev_kept + ev_used;
+
+        let shortfall = if grid_needed > 0. {
+            (1. - self.grid_in_use / grid_needed).clamp(0., 1.)
+        } else {
+            0.
+        };
+        let ev_shortfall = if ev_needed > 0. {
+            (1. - (ev_kept + ev_used) / ev_needed).clamp(0., 1.)
         } else {
             0.
         };
 
-        // New mines open over time, faster when demand outstrips supply.
-        let growth = MINING_GROWTH * (1. + self.mining_modifier).max(0.);
-        if demand > 0.8 * self.mining_capacity {
-            self.mining_capacity = (self.mining_capacity * (1. + growth)).min(MAX_MINING);
-        }
+        // New mines open over time: steadily while mines run near capacity,
+        // faster when demand outpaces mining.
+        let modifier = (1. + self.mining_modifier).max(0.);
+        let growth = if new > recovered + self.mining_capacity * 0.8 {
+            MINING_GROWTH * modifier
+        } else if mined > 0.8 * self.mining_capacity {
+            MINING_BASE_GROWTH * modifier
+        } else {
+            0.
+        };
+        self.mining_capacity = (self.mining_capacity * (1. + growth)).min(MAX_MINING);
+        let demand = new;
 
         let losses = stored * mix.losses_per_kwh() * (1. + self.losses_modifier).max(0.);
         self.last = StorageReport {
@@ -262,7 +410,9 @@ impl Storage {
             lithium_demand: demand,
             lithium_mined: mined,
             shortfall,
-            ev_lithium_needed: ev_capacity * LITHIUM_PER_KWH,
+            ev_lithium_needed: ev_needed,
+            grid_lithium_needed: grid_needed,
+            ev_shortfall,
         };
         self.last
     }
@@ -334,5 +484,41 @@ mod tests {
         }
         assert!(storage.last.shortfall > 0.95, "{}", storage.last.shortfall);
         assert!(storage.unserved(ELEC, 0.8) > 0.);
+    }
+
+    #[test]
+    fn steady_years_build_a_stockpile_for_later() {
+        let mut steady = Storage::default();
+        steady.step(ELEC, 0.1, 5e11, StorageTech::default(), 1e14);
+        for _ in 0..10 {
+            steady.step(ELEC, 0.25, 5e11, StorageTech::default(), 1e14);
+        }
+        assert!(steady.stockpile > 2. * STARTING_MINING, "{}", steady.stockpile);
+        assert!(steady.mining_capacity > STARTING_MINING * 1.2);
+
+        // Jumping to 60% wind and solar goes better after the steady decade.
+        let mut rushed = Storage::default();
+        rushed.step(ELEC, 0.1, 5e11, StorageTech::default(), 1e14);
+        let a = steady.step(ELEC, 0.6, 5e11, StorageTech::default(), 1e14).shortfall;
+        let b = rushed.step(ELEC, 0.6, 5e11, StorageTech::default(), 1e14).shortfall;
+        assert!(a < b * 0.6, "{a} vs {b}");
+    }
+
+    #[test]
+    fn grid_gets_lithium_before_vehicles() {
+        let tech = StorageTech::default();
+        // Electrifying every vehicle at once wants far more lithium than
+        // mines can supply...
+        let mut storage = Storage::default();
+        storage.step(ELEC, 0.3, 5e11, tech, 1e14);
+        let report = storage.step(ELEC, 0.3, 7e12, tech, 1e14);
+        assert!(report.ev_shortfall > 0.5, "{}", report.ev_shortfall);
+        // ...but the grid still gets its batteries.
+        assert!(report.shortfall < 0.05, "{}", report.shortfall);
+
+        let outlook = storage.outlook(ELEC, 0.5, 7e12 * 0.02 * 100., tech, 5.);
+        assert!(outlook.ev_coverage < 0.5);
+        let without = storage.outlook(ELEC, 0.5, 0., tech, 5.);
+        assert_eq!(outlook.supported_share, without.supported_share);
     }
 }

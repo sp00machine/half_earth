@@ -61,6 +61,10 @@ pub struct YearRecord {
 }
 
 /// Represents the game state.
+/// Fuel energy a combustion vehicle uses per unit of electricity an
+/// electric one would.
+const FUEL_PER_EV_ELECTRICITY: f32 = 4.;
+
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct State {
     pub world: World,
@@ -430,6 +434,22 @@ impl State {
             output_demand.fuel = industry_demand.fuel;
             output_demand.electricity = industry_demand.electricity;
 
+            // Vehicles that should be electric but couldn't get batteries
+            // keep running on fuel (about four times the energy, since
+            // engines waste most of it as heat).
+            let ev_shortfall = self.storage.last.ev_shortfall;
+            if ev_shortfall > 0. {
+                let ev_electricity = world
+                    .industries
+                    .iter()
+                    .find(|i| i.name == "Road Transport")
+                    .map(|i| i.total_demand_for_resource(lic_pop, Resource::Electricity))
+                    .unwrap_or(0.);
+                let stranded = ev_electricity * ev_shortfall;
+                output_demand.electricity -= stranded;
+                output_demand.fuel += stranded * FUEL_PER_EV_ELECTRICITY;
+            }
+
             // Water and land demand from industries.
             // Process resource demand will be added later.
             resource_demand.water = industry_demand.water;
@@ -737,12 +757,29 @@ impl State {
     }
 
     pub fn process_max_share(&self, process_id: &Id) -> usize {
-        self.process_max_share_planned(process_id, None)
+        self.process_max_share_planned(process_id, None, None)
     }
 
     /// The most shares of electricity wind and solar together can have.
     pub fn intermittent_cap_shares(&self) -> usize {
         (self.supported_intermittent_share() * 20.).floor() as usize
+    }
+
+    /// The wind and solar cap (in shares) for a planned electricity demand.
+    pub fn intermittent_cap_shares_for(&self, electricity: f32) -> usize {
+        (self.storage_outlook(0., electricity).supported_share * 20.).floor() as usize
+    }
+
+    /// Storage and lithium needs for a planned wind and solar share and
+    /// electricity demand over the next planning cycle.
+    pub fn storage_outlook(&self, intermittent_share: f32, electricity: f32) -> crate::storage::StorageOutlook {
+        self.storage.outlook(
+            electricity,
+            intermittent_share,
+            self.storage.last.ev_lithium_needed,
+            self.storage_tech(),
+            5.,
+        )
     }
 
     /// Whether a process is limited by the shared wind and solar cap.
@@ -755,7 +792,12 @@ impl State {
     /// Like `process_max_share`, but `planned_others` gives the planned
     /// shares of the other wind and solar processes (including changes not
     /// yet applied), so the shared cap reflects the plan.
-    pub fn process_max_share_planned(&self, process_id: &Id, planned_others: Option<usize>) -> usize {
+    pub fn process_max_share_planned(
+        &self,
+        process_id: &Id,
+        planned_others: Option<usize>,
+        planned_electricity: Option<f32>,
+    ) -> usize {
         let output_demand = self.output_demand.total();
         let feedstocks = self.feedstocks.available;
         let process = &self.world.processes[process_id];
@@ -766,7 +808,10 @@ impl State {
             let others = planned_others.unwrap_or_else(|| {
                 ((self.intermittent_share() * 20.).round() as usize).saturating_sub(process.mix_share)
             });
-            let supported = self.intermittent_cap_shares();
+            let supported = match planned_electricity {
+                Some(electricity) => self.intermittent_cap_shares_for(electricity),
+                None => self.intermittent_cap_shares(),
+            };
             max_share.min(supported.saturating_sub(others).max(process.mix_share))
         } else {
             max_share

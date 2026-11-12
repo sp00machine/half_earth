@@ -31,16 +31,55 @@ pub fn planned_intermittent_others(
         .sum::<isize>() as usize
 }
 
-/// The process's maximum share, counting planned changes to wind and solar.
+/// Planned wind and solar share of electricity, counting planned changes.
+pub fn planned_intermittent_share(
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> f32 {
+    state
+        .world
+        .processes
+        .iter()
+        .filter(|p| state.is_intermittent_electricity(&p.id))
+        .map(|p| (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0))
+        .sum::<isize>() as f32
+        / 20.
+}
+
+/// Electricity demand after planned production changes: e.g. shifting
+/// fuel to green hydrogen adds the electricity hydrogen takes to make.
+pub fn planned_electricity(
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> f32 {
+    let demand = state.output_demand.total();
+    let change: f32 = state
+        .world
+        .processes
+        .iter()
+        .filter_map(|p| {
+            let change = *process_mix_changes[p.output].get(&p.id)?;
+            let output = change as f32 / 20. * demand[p.output];
+            Some(output * p.adj_resources().electricity)
+        })
+        .sum();
+    (demand[Output::Electricity] + change).max(0.)
+}
+
+/// The process's maximum share, counting planned changes to wind and solar
+/// and to electricity demand.
 pub fn planned_max_share(
     process: &Process,
     state: &State,
     process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
 ) -> usize {
-    let others = state
-        .is_intermittent_electricity(&process.id)
-        .then(|| planned_intermittent_others(process, state, process_mix_changes));
-    state.process_max_share_planned(&process.id, others)
+    if state.is_intermittent_electricity(&process.id) {
+        let others = planned_intermittent_others(process, state, process_mix_changes);
+        let electricity = planned_electricity(state, process_mix_changes);
+        state.process_max_share_planned(&process.id, Some(others), Some(electricity))
+    } else {
+        state.process_max_share(&process.id)
+    }
 }
 
 fn is_addable(
@@ -78,7 +117,8 @@ fn storage_allows(
         .filter(|p| p.output == Output::Electricity && p.features.contains(&ProcessFeature::IsIntermittent))
         .map(|p| p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0))
         .sum();
-    let supported = (state.supported_intermittent_share() * 20.).floor() as isize;
+    let supported =
+        state.intermittent_cap_shares_for(planned_electricity(state, process_mix_changes)) as isize;
     planned < supported
 }
 

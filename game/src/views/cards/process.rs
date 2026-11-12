@@ -196,8 +196,13 @@ impl AsCard for Process {
                         tip(
                             icons::ALERT,
                             t!(
-                                "Wind and solar together can make up at most %{cap}% of electricity: that's what storage can support over the next five years. Planned wind and solar: %{planned}%. Sodium-ion, pumped hydro or long-duration storage, more lithium mining, or battery recycling raise the cap.",
-                                cap = state.intermittent_cap_shares() * 5,
+                                "Wind and solar together can make up at most %{cap}% of electricity: that's what storage can support over the next five years at the planned electricity demand. Planned wind and solar: %{planned}%. Sodium-ion, pumped hydro or long-duration storage, more lithium mining, or battery recycling raise the cap; electrifying more (vehicles, hydrogen) lowers it.",
+                                cap = state.intermittent_cap_shares_for(
+                                    crate::views::scanner::process::planned_electricity(
+                                        &state.core,
+                                        &state.ui.process_mix_changes,
+                                    ),
+                                ) * 5,
                                 planned = planned * 5,
                             ),
                         )

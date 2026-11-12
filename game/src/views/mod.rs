@@ -8,7 +8,7 @@ mod interstitial;
 mod intro;
 mod menu;
 mod report;
-mod scanner;
+pub(crate) mod scanner;
 mod session;
 mod world;
 

@@ -121,6 +121,7 @@ pub fn processes_preview(
     state: &State,
     tutorial: &Tutorial,
     viewed: &[Id],
+    mix_changes: &enum_map::EnumMap<Output, BTreeMap<Id, isize>>,
 ) -> Option<Page> {
     let mut page = None;
 
@@ -148,17 +149,25 @@ pub fn processes_preview(
     });
     let output_demand = state.output_demand.total();
 
-    // Storage falling short, or more wind and solar than storage can support.
-    let supported = state.supported_intermittent_share();
-    let storage_warning = state.storage.last.shortfall > 0.02
-        || state.intermittent_share() > supported + 1e-3;
+    // Storage falling short now, or the plan needing more lithium than
+    // will be available over the cycle.
+    let outlook = {
+        use crate::views::scanner::process::{planned_electricity, planned_intermittent_share};
+        state.storage_outlook(
+            planned_intermittent_share(state, mix_changes),
+            planned_electricity(state, mix_changes),
+        )
+    };
+    let storage_warning = state.storage.last.shortfall > 0.02 || outlook.is_short();
     let storage_tip = tip(
         icons::LITHIUM,
         t!(
-            "Not enough energy storage. %{built}% of the storage the grid needs is built. Storage can support wind and solar up to about %{supported}% of electricity this cycle; they're at %{now}% now.",
+            "Not enough energy storage. %{built}% of the storage the grid needs is built now. The plan (%{planned}% wind and solar) needs %{needed}kt of lithium in grid batteries over the next five years; about %{available}kt will be available, enough for wind and solar up to %{supported}%.",
             built = format!("{:.0}", (1. - state.storage.last.shortfall) * 100.),
-            supported = format!("{:.0}", supported * 100.),
-            now = format!("{:.0}", state.intermittent_share() * 100.)
+            planned = format!("{:.0}", outlook.intermittent_share * 100.),
+            needed = format!("{:.0}", outlook.grid_lithium * 1e-9),
+            available = format!("{:.0}", outlook.for_grid * 1e-9),
+            supported = format!("{:.0}", outlook.supported_share * 100.),
         ),
     )
     .card(crate::tips::TipCard::Storage);

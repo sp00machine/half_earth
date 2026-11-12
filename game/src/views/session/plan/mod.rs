@@ -57,6 +57,7 @@ impl Plan {
                     &state.ui.tutorial,
                     &state.ui.viewed,
                     &state.ui.plan_changes,
+                    &state.ui.process_mix_changes,
                 );
             }
             Page::Processes(processes) => {
@@ -113,6 +114,7 @@ impl Plan {
         tutorial: &Tutorial,
         viewed: &[Id],
         plan_changes: &BTreeMap<Id, PlanChange>,
+        mix_changes: &enum_map::EnumMap<hes_engine::Output, BTreeMap<Id, isize>>,
     ) -> Option<PlanAction> {
         if let Some(page) = slots::projects_preview(ui, state, tutorial, viewed, plan_changes) {
             self.set_page(page);
@@ -120,7 +122,7 @@ impl Plan {
 
         ui.add_space(48.);
 
-        if let Some(page) = slots::processes_preview(ui, state, tutorial, viewed) {
+        if let Some(page) = slots::processes_preview(ui, state, tutorial, viewed, mix_changes) {
             self.set_page(page);
         }
 

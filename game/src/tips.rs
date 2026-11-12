@@ -338,25 +338,61 @@ fn render_storage_card(ui: &mut egui::Ui, state: &GameState) -> egui::Response {
                     });
                 });
             };
+            let li = |g: f32| {
+                if g.abs() >= 1e12 {
+                    format!("{:.1} Mt", g * 1e-12)
+                } else {
+                    format!("{:.0} kt", g * 1e-9)
+                }
+            };
+            let heading = |ui: &mut egui::Ui, text: String| {
+                ui.label(egui::RichText::new(text).strong().color(Color32::from_gray(200)));
+            };
+
+            // The plan, over the next planning cycle.
+            let outlook = {
+                use crate::views::scanner::process::{planned_electricity, planned_intermittent_share};
+                let changes = &state.ui.process_mix_changes;
+                let electricity = planned_electricity(&state.core, changes);
+                (state.storage_outlook(planned_intermittent_share(&state.core, changes), electricity), electricity)
+            };
+            let (outlook, electricity) = outlook;
+            heading(ui, t!("Next five years, as planned").to_string());
+            row(ui, t!("Wind & solar share of electricity").to_string(), format!("{:.0}%", outlook.intermittent_share * 100.));
+            row(ui, t!("Electricity demand").to_string(), crate::display::format_power(electricity));
+            row(ui, t!("Grid batteries needed").to_string(), format!("{:.1} TWh", outlook.grid_capacity * 1e-9));
+            row(ui, t!("Lithium the grid needs").to_string(), li(outlook.grid_lithium));
+            row(ui, t!("Lithium the grid can get").to_string(), li(outlook.for_grid));
+            row(ui, t!("Wind & solar this supports").to_string(), format!("{:.0}%", outlook.supported_share * 100.));
+            row(ui, t!("Lithium vehicles need").to_string(), li(outlook.ev_lithium));
+            row(ui, t!("Vehicles that can go electric").to_string(), format!("{:.0}%", outlook.ev_coverage * 100.));
+            ui.label(
+                egui::RichText::new(t!("The grid gets lithium first: batteries in use, the stockpile and five years of mining. Vehicles get what's left; those that can't get batteries keep running on fuel."))
+                    .size(11.)
+                    .color(Color32::from_gray(190)),
+            );
+
+            ui.separator();
+            heading(ui, t!("This year").to_string());
             row(ui, t!("Wind & solar share of electricity").to_string(), format!("{:.0}%", state.intermittent_share() * 100.));
             row(ui, t!("Energy passed through storage").to_string(), crate::display::format_power(report.stored));
-            row(ui, t!("Storage the grid needs that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
-            row(ui, t!("Wind & solar storage can support this cycle").to_string(), format!("{:.0}%", state.supported_intermittent_share() * 100.));
+            row(ui, t!("Storage needed that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
             row(ui, t!("Lost in storage round trips").to_string(), crate::display::format_power(report.losses));
             row(ui, t!("Undelivered for lack of storage").to_string(), crate::display::format_power(report.curtailed));
-            ui.separator();
-            row(ui, t!("Lithium in batteries in use").to_string(), format!("{:.1} Mt", storage.lithium_in_use * 1e-12));
-            row(ui, t!("Lithium needed by electric vehicles").to_string(), format!("{:.1} Mt", report.ev_lithium_needed * 1e-12));
-            row(ui, t!("Lithium mined this year").to_string(), format!("{:.0} kt", report.lithium_mined * 1e-9));
-            row(ui, t!("Mining capacity").to_string(), format!("{:.0} kt", storage.mining_capacity * 1e-9));
+            row(ui, t!("Lithium in grid batteries").to_string(), format!("{} / {}", li(storage.grid_in_use), li(report.grid_lithium_needed)));
+            row(ui, t!("Lithium in vehicle batteries").to_string(), format!("{} / {}", li(storage.lithium_in_use - storage.grid_in_use), li(report.ev_lithium_needed)));
+            row(ui, t!("Vehicles still on fuel for lack of batteries").to_string(), format!("{:.0}%", report.ev_shortfall * 100.));
+            row(ui, t!("Lithium stockpile").to_string(), li(storage.stockpile));
+            row(ui, t!("Lithium mined").to_string(), li(report.lithium_mined));
+            row(ui, t!("Mining capacity per year").to_string(), li(storage.mining_capacity));
             row(ui, t!("Recovered by recycling").to_string(), format!("{:.0}%", storage.recycling.clamp(0., 1.) * 100.));
             row(
                 ui,
                 t!("Reserves left").to_string(),
                 if years.is_finite() {
-                    format!("{:.0} Mt ({years:.0} yrs)", reserves * 1e-12)
+                    format!("{} ({years:.0} yrs)", li(reserves))
                 } else {
-                    format!("{:.0} Mt", reserves * 1e-12)
+                    li(reserves)
                 },
             );
             ui.separator();

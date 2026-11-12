@@ -287,17 +287,17 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
         ),
         Flag::SodiumIonBatteries => tip(
             icons::ELECTRICITY,
-            t!("Sodium-ion batteries take over part of grid storage, needing no lithium."),
+            t!("Sodium-ion batteries take over 40% of grid battery storage, needing no lithium. That lets lithium support more wind and solar."),
         )
         .card(TipCard::Storage),
         Flag::PumpedHydroStorage => tip(
             icons::ELECTRICITY,
-            t!("Pumped hydro takes over part of grid storage, needing no lithium."),
+            t!("Pumped hydro takes over 15% of grid storage, needing no lithium, but loses 20% of the energy stored (lithium batteries lose 10%)."),
         )
         .card(TipCard::Storage),
         Flag::LongDurationStorage => tip(
             icons::ELECTRICITY,
-            t!("Long-duration storage takes over part of grid storage. It needs no lithium but loses more energy."),
+            t!("Long-duration storage takes over 30% of grid storage, needing no lithium, but loses over half the energy stored."),
         )
         .card(TipCard::Storage),
         Flag::LifeGoesOn => tip(icons::ALERT, t!("The game never ends.")),
@@ -1273,11 +1273,32 @@ impl DisplayEffect {
                         ),
                     )
                 };
+                // Electric vehicles need batteries, which need lithium.
+                let lithium_note = if industry.name == "Road Transport"
+                    && *resource == Resource::Electricity
+                    && *amount > 0.
+                    && !self.is_unknown
+                {
+                    let lithium = hes_engine::storage::ev_lithium_for(amount * demand);
+                    format!(
+                        " {}",
+                        t!(
+                            "Their batteries need about %{amount} of lithium. The grid gets lithium first; vehicles that can't get batteries keep running on fuel until mining catches up.",
+                            amount = if lithium >= 1e12 {
+                                format!("{:.1} Mt", lithium * 1e-12)
+                            } else {
+                                format!("{:.0} kt", lithium * 1e-9)
+                            }
+                        )
+                    )
+                } else {
+                    String::new()
+                };
                 (
                     tip.card(industry.clone()),
                     icon_text(
                         resource.as_key(),
-                        &t!(
+                        &(t!(
                             "%{changeDir} %{resource} demand for %{tag} by %{amount}.",
                             tag = tag,
                             resource = t!(resource.lower()),
@@ -1287,7 +1308,9 @@ impl DisplayEffect {
                                 (after_demand - current_demand).round().abs().to_string()
                             },
                             changeDir = self.change_dir(*amount),
-                        ),
+                        )
+                        .to_string()
+                            + &lithium_note),
                     ),
                 )
             }
