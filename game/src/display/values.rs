@@ -50,20 +50,20 @@ pub fn to_calorie_units(amount: f32) -> f32 {
     amount * (1e-9 / 2e4)
 }
 
-/// From kWh per year to terawatts of average power.
+/// From kWh per year to gigawatts of average power.
 pub fn to_energy_units(amount: f32) -> f32 {
-    amount / (8760. * 1e9)
+    amount / (8760. * 1e6)
 }
 
-/// Round an energy amount in TW for display: more precision for small
-/// amounts so they don't round to zero.
-pub fn round_energy(tw: f32) -> f32 {
-    if tw.abs() < 10. { tw.round_to(2) } else { tw.round_to(1) }
+/// Round an energy amount in GW for display: whole gigawatts, with a
+/// decimal for small amounts so they don't round to zero.
+pub fn round_energy(gw: f32) -> f32 {
+    if gw.abs() < 10. { gw.round_to(1) } else { gw.round() }
 }
 
 /// Format kWh per year as average power.
 pub fn format_power(kwh_per_year: f32) -> String {
-    format!("{}TW", round_energy(to_energy_units(kwh_per_year)))
+    format!("{}GW", round_energy(to_energy_units(kwh_per_year)))
 }
 
 pub fn output(amount: f32, output: Output) -> f32 {
