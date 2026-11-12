@@ -241,7 +241,7 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
                     prevDemandFuel = display::rounded(demand.fuel),
                     nextDemandFuel = display::rounded(demand.fuel - changed_demand),
                     prevDemandElec = display::rounded(demand.electricity),
-                    nextDemandElec = display::rounded(demand.electricity + changed_demand),
+                    nextDemandElec = display::rounded(demand.electricity + changed_demand * 0.5),
                 ),
             )
         }

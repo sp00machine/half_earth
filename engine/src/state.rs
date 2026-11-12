@@ -78,6 +78,9 @@ pub enum OutlookSource {
     Recovery,
 }
 
+/// Electricity needed per unit of fuel replaced by Mass Electrification.
+const ELECTRIFIED_PER_FUEL: f32 = 0.5;
+
 /// Fuel energy a combustion vehicle uses per unit of electricity an
 /// electric one would.
 const FUEL_PER_EV_ELECTRICITY: f32 = 4.;
@@ -474,9 +477,12 @@ impl State {
 
             // Electrification is only relevant for non-modeled industry;
             // for processes we always rely on their actual values.
+            // Electric heat pumps and motors waste far less than burning
+            // fuel, so each kWh of fuel replaced takes about half a kWh of
+            // electricity (upstream swapped them one for one).
             if self.flags.contains(&Flag::Electrified) {
                 let electrified = output_demand.fuel * 0.8;
-                output_demand.electricity += electrified;
+                output_demand.electricity += electrified * ELECTRIFIED_PER_FUEL;
                 output_demand.fuel -= electrified;
             }
 

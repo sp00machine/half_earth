@@ -36932,7 +36932,7 @@
                 {
                     "OutputForProcess": [
                         "17845046-c2c9-4862-88dd-abe0964e54e8",
-                        3.0
+                        0.5
                     ]
                 }
             ],
@@ -36981,7 +36981,7 @@
                     }
                 ]
             },
-            "notes": "(TV: III-V semiconductors allow solar's power density to increase up to 400x, releasing land for other use; perovskite panels use artificial light as a power source have a similar effect; as does 'transmittance wafer' panels on buildings)---all increase solar power density\n\nhttps://www.economist.com/science-and-technology/2019/12/14/transparent-solar-cells-could-be-used-to-glaze-office-blocks\n\nhttps://www.economist.com/science-and-technology/2020/05/21/new-solar-cells-extract-more-energy-from-sunshine"
+            "notes": "[three-quarters fork] Output +300% -> +50%. Tandem perovskite and III-V cells raise efficiency from ~20% to ~30%+, about half again more power from the same panels and land; a fourfold gain isn't physically on the table for flat panels in sunlight.\n\n(TV: III-V semiconductors allow solar's power density to increase up to 400x, releasing land for other use; perovskite panels use artificial light as a power source have a similar effect; as does 'transmittance wafer' panels on buildings)---all increase solar power density\n\nhttps://www.economist.com/science-and-technology/2019/12/14/transparent-solar-cells-could-be-used-to-glaze-office-blocks\n\nhttps://www.economist.com/science-and-technology/2020/05/21/new-solar-cells-extract-more-energy-from-sunshine"
         },
         {
             "id": "43467272-49b6-4106-b22c-8c9aea5a9cb7",
@@ -37586,12 +37586,6 @@
                         "Tropic",
                         2.0
                     ]
-                },
-                {
-                    "Output": [
-                        "PlantCalories",
-                        0.05
-                    ]
                 }
             ],
             "outcomes": [
@@ -37634,7 +37628,7 @@
                     }
                 ]
             },
-            "notes": "turn sewage into fertilizer, clean up rivers, improve health. Not sure how to affect fertilizer inputs...TV\n\nSR: I don't think this would actually require more water use, but it would require more energy."
+            "notes": "[three-quarters fork] Dropped +5% plant calories: treating sewage protects health and rivers but doesn't grow much more food.\n\nturn sewage into fertilizer, clean up rivers, improve health. Not sure how to affect fertilizer inputs...TV\n\nSR: I don't think this would actually require more water use, but it would require more energy."
         },
         {
             "id": "bbb894b3-a0e5-46c7-b2ab-60d3c6b28392",
@@ -42619,7 +42613,12 @@
                     ]
                 },
                 {
-                    "IncomeOutlookChange": -1.0
+                    "OutlookByIncome": [
+                        0.0,
+                        -1.0,
+                        -2.0,
+                        -3.0
+                    ]
                 }
             ],
             "outcomes": [
@@ -42672,7 +42671,7 @@
                     }
                 ]
             },
-            "notes": "Air only used for occasional long-distance travel, all other trips are to be taken by train\n\nIPCC report--no good options for aviation: https://www.ipcc.ch/site/assets/uploads/2018/03/av-en-1.pdf\n\nBreakthroughs around ~2060 possibly\n\naviation causes only 2% of co2 emissions, so perhaps this is halved"
+            "notes": "[three-quarters fork] Same contentedness cost as before, shown by income level: most flying is done by the richest.\n\nAir only used for occasional long-distance travel, all other trips are to be taken by train\n\nIPCC report--no good options for aviation: https://www.ipcc.ch/site/assets/uploads/2018/03/av-en-1.pdf\n\nBreakthroughs around ~2060 possibly\n\naviation causes only 2% of co2 emissions, so perhaps this is halved"
         },
         {
             "id": "c9c74d65-7da5-4d89-8442-d0f8fe529773",
@@ -42799,7 +42798,14 @@
                 {
                     "OutputForFeature": [
                         "IsCombustion",
-                        0.6
+                        0.1
+                    ]
+                },
+                {
+                    "ModifyIndustryResources": [
+                        "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
+                        "Fuel",
+                        -0.15
                     ]
                 }
             ],
@@ -42840,7 +42846,7 @@
                     }
                 ]
             },
-            "notes": "Easier if denser cities have also been planned (e.g. banning cars)\n\nNot sure how much it would reduce energy costs for buildings, but a significant amount. Probably this and passive buildings get your energy use down to zero\n\nA simple but effective technology widely used in the USSR and Scandinavia, but failed in the US because it provided unwelcome competition to energy utilities.\n\nhttps://www.scientificamerican.com/article/how-does-cogeneration-provide-heat-power/ \"Cogeneration power plants often operate at 50 to 70 percent higher efficiency rates than single-generation facilities.\"\n\nEffect values: https://www.sciencedirect.com/topics/engineering/cogeneration\n\"Along with the saving of fossil fuels, cogeneration also allows to reduce the emission of greenhouse gases (particularly CO2 emission). The production of electricity being on-site, the burden on the utility network is reduced and the transmission line losses eliminated.\""
+            "notes": "[three-quarters fork] Was +60% output for all combustion power, which made fossil electricity 37% cleaner per kWh. Combined heat and power doesn't make more electricity; it puts the waste heat to use, so it now cuts buildings' heating fuel by 15% (district heating) and adds 10% to combustion output.\n\nEasier if denser cities have also been planned (e.g. banning cars)\n\nNot sure how much it would reduce energy costs for buildings, but a significant amount. Probably this and passive buildings get your energy use down to zero\n\nA simple but effective technology widely used in the USSR and Scandinavia, but failed in the US because it provided unwelcome competition to energy utilities.\n\nhttps://www.scientificamerican.com/article/how-does-cogeneration-provide-heat-power/ \"Cogeneration power plants often operate at 50 to 70 percent higher efficiency rates than single-generation facilities.\"\n\nEffect values: https://www.sciencedirect.com/topics/engineering/cogeneration\n\"Along with the saving of fossil fuels, cogeneration also allows to reduce the emission of greenhouse gases (particularly CO2 emission). The production of electricity being on-site, the burden on the utility network is reduced and the transmission line losses eliminated.\""
         },
         {
             "id": "4d2a8f61-c93e-47b5-8e10-2b7f6a9d3c58",
@@ -42950,9 +42956,11 @@
             "required_majority": 0.0,
             "effects": [
                 {
-                    "DemandOutlookChange": [
-                        "Electricity",
-                        -1.0
+                    "OutlookByIncome": [
+                        0.0,
+                        -1.0,
+                        -2.0,
+                        -3.0
                     ]
                 },
                 {
@@ -42982,9 +42990,11 @@
                     "cost": 20,
                     "effects": [
                         {
-                            "DemandOutlookChange": [
-                                "Electricity",
-                                -1.5
+                            "OutlookByIncome": [
+                                0.0,
+                                -2.0,
+                                -3.5,
+                                -5.5
                             ]
                         },
                         {
@@ -43000,9 +43010,11 @@
                     "cost": 20,
                     "effects": [
                         {
-                            "DemandOutlookChange": [
-                                "Electricity",
-                                -2.0
+                            "OutlookByIncome": [
+                                -0.5,
+                                -3.0,
+                                -5.5,
+                                -8.0
                             ]
                         },
                         {
@@ -43085,7 +43097,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Living within a hard energy quota wears on people over time.\n\n[three-quarters fork] Unlocked from the start (was unlocked by Energy Conservation Campaign, Battery Storage Network or Continental Smart Grid) so drastic demand cuts are available early.\n\nhttps://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes",
+            "notes": "[three-quarters fork] Contentedness by income level, on the same scale as Wartime Rationing (roughly -1 in rich regions per 10% cut of a major kind of consumption). It used to scale with electricity use, so even low-income regions lost 2 at level 1, though a quota wouldn't bind on households already using little. Low/lower-middle/upper-middle/high: level 1 0/-1/-2/-3, level 2 0/-2/-3.5/-5.5, level 3 -0.5/-3/-5.5/-8.\n\n[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Living within a hard energy quota wears on people over time.\n\n[three-quarters fork] Unlocked from the start (was unlocked by Energy Conservation Campaign, Battery Storage Network or Continental Smart Grid) so drastic demand cuts are available early.\n\nhttps://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes",
             "fatigue": {
                 "adapting": false,
                 "rate": 0.7,
@@ -44749,12 +44761,6 @@
                     ]
                 },
                 {
-                    "OutputForProcess": [
-                        "1db29e91-98a7-4264-bb2b-874458ea44b7",
-                        0.1
-                    ]
-                },
-                {
                     "UnlocksProject": "f8b508d6-5aba-4b0e-9e00-311475ec558a"
                 },
                 {
@@ -44807,7 +44813,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Was +10% output for all intermittent processes, a stand-in for storage. Storage is now modeled (engine/src/storage.rs), so this instead cuts storage round-trip losses by 25% through smarter dispatch and transmission.\n\nCould you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL"
+            "notes": "[three-quarters fork] Dropped +10% hydropower output: batteries don't make dams generate more.\n\n[three-quarters fork] Was +10% output for all intermittent processes, a stand-in for storage. Storage is now modeled (engine/src/storage.rs), so this instead cuts storage round-trip losses by 25% through smarter dispatch and transmission.\n\nCould you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL"
         },
         {
             "id": "532d9684-e653-4eee-a181-f1c958ee2d8b",
@@ -45073,6 +45079,14 @@
                         "PlantCalories",
                         0.14
                     ]
+                },
+                {
+                    "OutlookByIncome": [
+                        0.0,
+                        0.0,
+                        -0.5,
+                        -1.0
+                    ]
                 }
             ],
             "outcomes": [
@@ -45140,7 +45154,7 @@
                     }
                 ]
             },
-            "notes": "LC: added an effect of unlocking vegetarian mandate? \nI want to reduce meat consumption by 14%\n\nphoto from: \n[[File:Vegan Sausages, vegan coffee latte and a vegan muffin (5090679024).jpg|Vegan_Sausages,_vegan_coffee_latte_and_a_vegan_muffin_(5090679024)]]"
+            "notes": "[three-quarters fork] Now has a small contentedness cost in richer regions (0/0/-0.5/-1): cutting meat 14% by rule is a mild version of rationing.\n\nLC: added an effect of unlocking vegetarian mandate? \nI want to reduce meat consumption by 14%\n\nphoto from: \n[[File:Vegan Sausages, vegan coffee latte and a vegan muffin (5090679024).jpg|Vegan_Sausages,_vegan_coffee_latte_and_a_vegan_muffin_(5090679024)]]"
         },
         {
             "id": "648f947a-7cbb-4a7e-8af9-7601b2295055",
@@ -45799,7 +45813,13 @@
                 {
                     "ModifyIndustryDemand": [
                         "d630701f-8c2d-4a1f-b5fb-d92ad9199d57",
-                        -0.45
+                        -0.15
+                    ]
+                },
+                {
+                    "ModifyIndustryDemand": [
+                        "070740c0-de99-462a-9217-7b29495fba09",
+                        -0.15
                     ]
                 }
             ],
@@ -45888,7 +45908,7 @@
                     }
                 ]
             },
-            "notes": "reduces steel demand significantly, but increases demand on tree plantations. Not great if you are doing BECCS, but easy if you have banned meat\n\n\ngreat study:\nChurkina, Galina, Alan Organschi, Christopher PO Reyer, Andrew Ruff, Kira Vinke, Zhu Liu, Barbara K. Reck, T. E. Graedel, and Hans Joachim Schellnhuber. \"Buildings as a global carbon sink.\" Nature Sustainability 3, no. 4 (2020): 269-276.\n\nChurkina basically has four scenarios, including one with 90% of buildings made of wood rather than 99.5% steel and concrete. Significant co2 sequestration (2-20 Gt C) but needs about 40% of current wood production."
+            "notes": "[three-quarters fork] Steel demand -45% -> -15%, plus concrete -15%. Buildings use about half of all steel and mass timber suits mid-rise buildings, not bridges, ships or machines. The -0.37 Gt is carbon stored in the wood.\n\nreduces steel demand significantly, but increases demand on tree plantations. Not great if you are doing BECCS, but easy if you have banned meat\n\n\ngreat study:\nChurkina, Galina, Alan Organschi, Christopher PO Reyer, Andrew Ruff, Kira Vinke, Zhu Liu, Barbara K. Reck, T. E. Graedel, and Hans Joachim Schellnhuber. \"Buildings as a global carbon sink.\" Nature Sustainability 3, no. 4 (2020): 269-276.\n\nChurkina basically has four scenarios, including one with 90% of buildings made of wood rather than 99.5% steel and concrete. Significant co2 sequestration (2-20 Gt C) but needs about 40% of current wood production."
         },
         {
             "id": "42371710-7e7c-489f-aa25-16e60b7d3981",
@@ -48845,7 +48865,7 @@
                 {
                     "Demand": [
                         "Electricity",
-                        -0.1
+                        -0.05
                     ]
                 },
                 {
@@ -48905,7 +48925,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Electricity demand -10% -> -5%. Voluntary campaigns rarely hold more than a few percent once a crisis passes (Japan's post-Fukushima setsuden peaked around 15% and then eased).\n\n"
         },
         {
             "id": "cea435be-918a-473e-b8d1-c11f40f8dcc2",
@@ -48933,6 +48953,12 @@
                         "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
                         "Electricity",
                         -0.056
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Emissions",
+                        -1.0
                     ]
                 }
             ],
@@ -49005,7 +49031,7 @@
                     }
                 ]
             },
-            "notes": "https://drawdown.org/solutions/alternative-refrigerants/technical-summary#\nhttps://www.epa.gov/sites/default/files/documents/en-gtz-proklima-natural-refrigerants.pdf\n\"Implications of refrigerant choice\nRefrigerant choice is normally a function of several factors, some of which are propertybased and some of which are influenced by market issues.\nThe property-based factors include:\n\u2013 Global warming potential\n\u2013 Ozone depleting potential\n\u2013 Flammability\n\u2013 Toxicity\n\u2013 Chemical reactivity and material compatibility\n\u2013 Potential efficiency (thermo-physical properties)\nThe market issues are:\n\u2013 Refrigerant cost (per kg or per system charge)\n\u2013 Cost of components\n\u2013 Access to refrigerant\n\u2013 Availability of suitable components, oils, service equipment\n\u2013 Adequate expertise and training \"\n\n\nWe aren't modeling HFCs specifically (though hector supports it)\n\nThis report suggests that \"Reductions of between 210 and 460 billion tonnes of carbon dioxide (CO2) equivalent emissions can be delivered over the next four decades through actions to improve the cooling industry\u2019s energy efficiency together with the transition to climate-friendly refrigerants\"\nhttps://www.iea.org/news/climate-friendly-cooling-could-cut-years-of-greenhouse-gas-emissions-and-save-trillions-of-dollars\nhttps://iea.blob.core.windows.net/assets/71c8db7e-1137-41ef-99c3-8f2c8d3a5d86/Cooling_Emissions_and_Policy_Synthesis_Report.pdf\n\nSo let's say that's like 8.375GtCO2eq annual emissions reduction\nThis is using best available technology in 2018; 3/4 of the emissions reduction is from energy efficient improvements, \"equivalent to an average 40% efficiency improvement.\"\n\nHFC-134a is the most common refrigerant with a GWP of 1360\nGlobal AC energy demand in 2016 was 2,000TWh; total of all cooling equipment in 2018 estimated to be 3900TWh\n\nSince we aren't modeling HFCs (as far as I can tell they are relatively insignificant in overall CO2eq emissions) we can just focus on the energy use of cooling, especially if energy efficiency makes up the bulk of those emissions improvements.\n\nWe're modeling \"buildings\" as one sector, so we don't have specifics on cooling energy usage. This is for NYC: https://qsel.columbia.edu/nycenergy/about.html but shows that cooling is a relatively small part of energy use. I imagine it's much higher for warmer climates.\n\nFor the US as a whole, https://www.eia.gov/tools/faqs/faq.php?id=1174&t=1\n> The residential sector\u2019s electricity use for cooling was about 236 billion kWh in 2020, which was equal to about 16% of total residential sector electricity consumption and 6% of total U.S. electricity consumption.\n>\n> The commercial sector, which includes commercial and institutional buildings, used about 155 billion kWh for cooling in 2020, which was equal to about 12% of total commercial sector electricity consumption and 4% of total U.S. electricity consumption.\n\nSo making the really crude assumption that the US covers a wide enough range of climates that we can take these numbers to be representative of the whole world, let's say 14% of building electricity use in general is from cooling, and assume this research gives us 40% energy use efficiency on cooling, then this is roughly gives us an overall electricity use modifier of 0.96"
+            "notes": "[three-quarters fork] Now cuts emissions by 1 Gt CO2e: replacing HFCs is mainly about their huge warming potential (Project Drawdown counts it among the biggest climate solutions), not the electricity saved.\n\nhttps://drawdown.org/solutions/alternative-refrigerants/technical-summary#\nhttps://www.epa.gov/sites/default/files/documents/en-gtz-proklima-natural-refrigerants.pdf\n\"Implications of refrigerant choice\nRefrigerant choice is normally a function of several factors, some of which are propertybased and some of which are influenced by market issues.\nThe property-based factors include:\n\u2013 Global warming potential\n\u2013 Ozone depleting potential\n\u2013 Flammability\n\u2013 Toxicity\n\u2013 Chemical reactivity and material compatibility\n\u2013 Potential efficiency (thermo-physical properties)\nThe market issues are:\n\u2013 Refrigerant cost (per kg or per system charge)\n\u2013 Cost of components\n\u2013 Access to refrigerant\n\u2013 Availability of suitable components, oils, service equipment\n\u2013 Adequate expertise and training \"\n\n\nWe aren't modeling HFCs specifically (though hector supports it)\n\nThis report suggests that \"Reductions of between 210 and 460 billion tonnes of carbon dioxide (CO2) equivalent emissions can be delivered over the next four decades through actions to improve the cooling industry\u2019s energy efficiency together with the transition to climate-friendly refrigerants\"\nhttps://www.iea.org/news/climate-friendly-cooling-could-cut-years-of-greenhouse-gas-emissions-and-save-trillions-of-dollars\nhttps://iea.blob.core.windows.net/assets/71c8db7e-1137-41ef-99c3-8f2c8d3a5d86/Cooling_Emissions_and_Policy_Synthesis_Report.pdf\n\nSo let's say that's like 8.375GtCO2eq annual emissions reduction\nThis is using best available technology in 2018; 3/4 of the emissions reduction is from energy efficient improvements, \"equivalent to an average 40% efficiency improvement.\"\n\nHFC-134a is the most common refrigerant with a GWP of 1360\nGlobal AC energy demand in 2016 was 2,000TWh; total of all cooling equipment in 2018 estimated to be 3900TWh\n\nSince we aren't modeling HFCs (as far as I can tell they are relatively insignificant in overall CO2eq emissions) we can just focus on the energy use of cooling, especially if energy efficiency makes up the bulk of those emissions improvements.\n\nWe're modeling \"buildings\" as one sector, so we don't have specifics on cooling energy usage. This is for NYC: https://qsel.columbia.edu/nycenergy/about.html but shows that cooling is a relatively small part of energy use. I imagine it's much higher for warmer climates.\n\nFor the US as a whole, https://www.eia.gov/tools/faqs/faq.php?id=1174&t=1\n> The residential sector\u2019s electricity use for cooling was about 236 billion kWh in 2020, which was equal to about 16% of total residential sector electricity consumption and 6% of total U.S. electricity consumption.\n>\n> The commercial sector, which includes commercial and institutional buildings, used about 155 billion kWh for cooling in 2020, which was equal to about 12% of total commercial sector electricity consumption and 4% of total U.S. electricity consumption.\n\nSo making the really crude assumption that the US covers a wide enough range of climates that we can take these numbers to be representative of the whole world, let's say 14% of building electricity use in general is from cooling, and assume this research gives us 40% energy use efficiency on cooling, then this is roughly gives us an overall electricity use modifier of 0.96"
         },
         {
             "id": "30ee9181-3dbd-4599-91a9-295f9ca30b23",
@@ -49127,6 +49153,14 @@
                         "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
                         6
                     ]
+                },
+                {
+                    "OutlookByIncome": [
+                        0.0,
+                        -0.5,
+                        -1.0,
+                        -1.5
+                    ]
                 }
             ],
             "outcomes": [
@@ -49170,7 +49204,12 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Now costs contentedness, as its description says it will (0/-0.5/-1/-1.5 by income level, plus a backlash that fades over 10 years): -20% meat is more than rationing level 1.\n\n",
+            "fatigue": {
+                "adapting": true,
+                "rate": 0.5,
+                "years": 10.0
+            }
         },
         {
             "id": "cfb956d4-b16c-4be0-a31b-34803908e1fd",
@@ -49825,7 +49864,7 @@
                     "ModifyIndustryResources": [
                         "3e171a02-8708-47ea-a10c-66e9c199f383",
                         "Fuel",
-                        -0.66
+                        -0.55
                     ]
                 },
                 {
@@ -49881,7 +49920,7 @@
                     }
                 ]
             },
-            "notes": "Got picture from here: https://www.tuvie.com/michelin-wisamo-inflatable-wing-sails-contribute-to-the-decarbonization-of-maritime-shipping/\n\nProbably has copyright...\n\nSource:\nhttps://www.economist.com/business/2018/04/14/the-shipping-industry-attempts-to-cap-carbon-emissions"
+            "notes": "[three-quarters fork] Fuel -66% -> -55%, the figure its own description gives for slow steaming, better hulls and sails.\n\nGot picture from here: https://www.tuvie.com/michelin-wisamo-inflatable-wing-sails-contribute-to-the-decarbonization-of-maritime-shipping/\n\nProbably has copyright...\n\nSource:\nhttps://www.economist.com/business/2018/04/14/the-shipping-industry-attempts-to-cap-carbon-emissions"
         },
         {
             "id": "b32e09ea-7971-4ee3-96d2-9cadaf81678e",
@@ -49913,7 +49952,7 @@
                 {
                     "WorldVariable": [
                         "Emissions",
-                        -1.2
+                        -0.1
                     ]
                 },
                 {
@@ -49968,7 +50007,7 @@
                     }
                 ]
             },
-            "notes": "Values based on roughly 1/3 (30X30 goal) of total benefit of full phase-out (above)"
+            "notes": "[three-quarters fork] Emissions -1.2 -> -0.1 Gt. It's meant to be a third of a full fishing phase-out, which is -0.15 Gt; -1.2 came from the estimate that bottom trawling releases ~1 Gt of seabed carbon a year (Sala et al. 2021), which later work found far too high.\n\nValues based on roughly 1/3 (30X30 goal) of total benefit of full phase-out (above)"
         },
         {
             "id": "e34f1a39-ebe7-48d4-b5ad-1193bf14d97f",
@@ -50801,6 +50840,13 @@
                                 "Fuel",
                                 -0.9
                             ]
+                        },
+                        {
+                            "ModifyIndustryResourcesAmount": [
+                                "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
+                                "Electricity",
+                                146.0
+                            ]
                         }
                     ],
                     "probability": {
@@ -50822,6 +50868,13 @@
                                 "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
                                 "Fuel",
                                 -0.2
+                            ]
+                        },
+                        {
+                            "ModifyIndustryResourcesAmount": [
+                                "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
+                                "Electricity",
+                                32.5
                             ]
                         }
                     ],
@@ -50871,7 +50924,7 @@
                     }
                 ]
             },
-            "notes": "TV: I don't think this is doing to happen any time soon, perhaps in the second half of the century. Only things being proposed now are for 500km jaunts, which are useless.\n\nhttps://www.bbc.com/future/article/20200617-the-largest-electric-plane-ever-to-fly\n\nAlso see this:\n\nhttps://www.ft.com/content/87941b8d-0460-4b54-a861-d6ebc6da29e8\n\nSR: I took a stab at outlining two possible futures, one in a world with investments in hydrogen research and one without.\nhttps://www.sciencedirect.com/science/article/abs/pii/S1364032119301157\nhttps://www.sciencedirect.com/science/article/abs/pii/S0306261920302993\n\nThis is nice! Here's Drawdown's take. Efficiency gains rather than substitution. TV.\nhttps://drawdown.org/solutions/efficient-aviation"
+            "notes": "[three-quarters fork] Replacing jet fuel now takes electricity: long-haul flights can't run on batteries, so this means hydrogen or synthetic fuels, which take about 1.5 kWh of electricity per kWh of fuel they replace.\n\nTV: I don't think this is doing to happen any time soon, perhaps in the second half of the century. Only things being proposed now are for 500km jaunts, which are useless.\n\nhttps://www.bbc.com/future/article/20200617-the-largest-electric-plane-ever-to-fly\n\nAlso see this:\n\nhttps://www.ft.com/content/87941b8d-0460-4b54-a861-d6ebc6da29e8\n\nSR: I took a stab at outlining two possible futures, one in a world with investments in hydrogen research and one without.\nhttps://www.sciencedirect.com/science/article/abs/pii/S1364032119301157\nhttps://www.sciencedirect.com/science/article/abs/pii/S0306261920302993\n\nThis is nice! Here's Drawdown's take. Efficiency gains rather than substitution. TV.\nhttps://drawdown.org/solutions/efficient-aviation"
         },
         {
             "id": "2748a050-f04c-4bb3-8d74-cf32186a1235",
