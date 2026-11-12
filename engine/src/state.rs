@@ -1177,16 +1177,21 @@ pub struct Emissions {
     /// Net CO2 from land-use change (clearing, regrowth, deforestation), g CO2.
     #[serde(default)]
     pub land: f32,
+
+    /// Fluorinated gases (HFCs), g CO2-equivalent.
+    #[serde(default)]
+    pub fgas: f32,
 }
 impl Emissions {
     pub fn update(&mut self, byproducts: ByproductMap) {
         self.co2 = byproducts.co2;
         self.ch4 = byproducts.ch4;
         self.n2o = byproducts.n2o;
+        self.fgas = byproducts.fgas;
     }
 
     pub fn as_co2eq(&self) -> f32 {
-        self.co2 + self.land + (self.n2o * 298.) + (self.ch4 * 36.)
+        self.co2 + self.land + (self.n2o * 298.) + (self.ch4 * 36.) + self.fgas
     }
 
     /// Land-use change emissions in the units Hector expects (Pg C/y).
@@ -1207,8 +1212,12 @@ impl Emissions {
     /// (see `land_for_hector`).
     ///
     /// Units: <https://github.com/JGCRI/hector/wiki/Hector-Units>
+    ///
+    /// Our Hector bridge takes no fluorinated gases, so they're passed as
+    /// their CO2 equivalent. That gets the warming roughly right, though
+    /// HFCs leave the air faster than CO2.
     pub fn for_hector(&self) -> (f32, f32, f32) {
-        let co2 = self.co2 * 12. / 44. * 1e-15; // Pg C/y
+        let co2 = (self.co2 + self.fgas) * 12. / 44. * 1e-15; // Pg C/y
         let ch4 = self.ch4 * 1e-12; // Tg/y
         let n2o = self.n2o * 1e-12; // Tg/y
         (co2, ch4, n2o)

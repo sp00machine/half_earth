@@ -96,6 +96,7 @@ impl DebugOpts {
                 ch4: 0.,
                 n2o: 0.,
                 biodiversity: 0.,
+                fgas: 0.,
             });
             state.world.extinction_rate = 0.;
             state.world.temperature = 0.;

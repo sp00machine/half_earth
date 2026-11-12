@@ -139,6 +139,7 @@ macro_rules! define_enum_map {
 
         paste! {
             #[derive(Default, Clone, Copy, Serialize, Deserialize, PartialEq, Debug)]
+            #[serde(default)]
             pub struct [<$name Map>] {
                 $(
                     pub [<$field:snake>]: f32,
@@ -414,7 +415,10 @@ define_enum_map!(Byproduct {
     Co2,
     Ch4,
     N2o,
-    Biodiversity
+    Biodiversity,
+    // Fluorinated gases (HFCs from refrigerants and air conditioning),
+    // already in g CO2-equivalent.
+    Fgas
 });
 
 define_enum_map!(Output {
@@ -504,7 +508,7 @@ macro_rules! feedstocks {
 
 impl ByproductMap {
     pub fn co2eq(&self) -> f32 {
-        self.co2 + self.ch4 * 36. + self.n2o * 298.
+        self.co2 + self.ch4 * 36. + self.n2o * 298. + self.fgas
     }
 
     pub fn gtco2eq(&self) -> f32 {
@@ -650,6 +654,7 @@ impl Display for Byproduct {
                 Byproduct::N2o => "N2O",
                 Byproduct::Ch4 => "CH4 (Methane)",
                 Byproduct::Biodiversity => "Biodiversity Pressure",
+                Byproduct::Fgas => "F-gases (HFCs)",
             }
         )
     }
@@ -699,6 +704,7 @@ mod tests {
             ch4: -20.,
             n2o: -5.,
             biodiversity: 2.,
+            ..Default::default()
         };
         let max = map.max(0.);
         assert_eq!(
@@ -707,7 +713,8 @@ mod tests {
                 co2: 10.,
                 ch4: 0.,
                 n2o: 0.,
-                biodiversity: 2.
+                biodiversity: 2.,
+                ..Default::default()
             }
         );
     }
@@ -719,12 +726,14 @@ mod tests {
             ch4: 2.,
             n2o: 5.,
             biodiversity: 2.,
+            ..Default::default()
         };
         let b = ByproductMap {
             co2: 2.,
             ch4: 3.,
             n2o: -1.,
             biodiversity: 0.,
+            ..Default::default()
         };
         let c = a.or_negative(b);
         assert_eq!(
@@ -733,7 +742,8 @@ mod tests {
                 co2: 1.,
                 ch4: 2.,
                 n2o: -1.,
-                biodiversity: 2.
+                biodiversity: 2.,
+                ..Default::default()
             }
         );
     }

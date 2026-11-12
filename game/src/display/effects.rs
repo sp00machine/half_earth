@@ -129,6 +129,7 @@ impl AsKey for Byproduct {
             Byproduct::N2o => "n2o",
             Byproduct::Ch4 => "ch4",
             Byproduct::Biodiversity => "biodiversity",
+            Byproduct::Fgas => "emissions",
         }
     }
 }
@@ -1435,6 +1436,9 @@ impl DisplayEffect {
                     }
                     Byproduct::N2o => {
                         t!("%{kind} emissions", kind = t!("N2O"))
+                    }
+                    Byproduct::Fgas => {
+                        t!("%{kind} emissions", kind = t!("F-gas"))
                     }
                     Byproduct::Ch4 => {
                         t!("%{kind} emissions", kind = t!("CH4"))

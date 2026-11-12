@@ -309,6 +309,9 @@ impl Editable for &mut ByproductMap {
                 edit(&mut self.biodiversity)
                     .label("Biodiversity")
                     .help(r#"Effects on biodiversity, in "pressure"; e.g. -1 pressure means +1 to the extinction rate."#),
+                edit(&mut self.fgas)
+                    .label("F-gases")
+                    .help("Fluorinated gases (HFCs), in grams of CO2-equivalent."),
             ]
         );
     }

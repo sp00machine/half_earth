@@ -131,7 +131,9 @@ impl Infrastructure {
             let Some(materials) = process.materials else {
                 continue;
             };
-            let per_mw = materials.output_per_mw();
+            // Output modifiers (e.g. more efficient solar cells) get more
+            // out of each plant, so less has to be built per kWh.
+            let per_mw = materials.output_per_mw() * (1. + process.output_modifier).max(0.01);
             if per_mw <= 0. {
                 continue;
             }

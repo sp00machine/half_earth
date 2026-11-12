@@ -1259,4 +1259,23 @@ mod tests {
         let poor = state.world.regions.iter().find(|r| r.income.level() == 0).unwrap().id;
         assert!(state.fatigue_applied[&poor] > 0.5);
     }
+
+    #[test]
+    fn test_refrigerants_and_passive_buildings_cut_fgases() {
+        let mut state = State::default();
+        state.step_year(state.world.temperature);
+        let before = state.emissions.fgas;
+        assert!(before > 5e14, "buildings start with F-gas emissions: {before}");
+        let effects = |name: &str, state: &State| {
+            state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone()
+        };
+        let alt = effects("Alternative Refrigerants", &state);
+        state.apply_effects(&alt, None);
+        state.step_year(state.world.temperature);
+        assert!(state.emissions.fgas < before * 0.2);
+        let passive = effects("Passive Building Mandate & Retrofit", &state);
+        state.apply_effects(&passive, None);
+        state.step_year(state.world.temperature);
+        assert_eq!(state.emissions.fgas, 0.);
+    }
 }

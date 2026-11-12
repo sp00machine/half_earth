@@ -252,6 +252,7 @@ pub struct Gases {
     pub co2: f32,
     pub ch4: f32,
     pub n2o: f32,
+    pub fgas: f32,
 }
 impl Gases {
     /// From byproducts in grams.
@@ -260,11 +261,12 @@ impl Gases {
             co2: b.co2 * amount * 1e-15,
             ch4: b.ch4 * 36. * amount * 1e-15,
             n2o: b.n2o * 298. * amount * 1e-15,
+            fgas: b.fgas * amount * 1e-15,
         }
     }
 
     pub fn total(&self) -> f32 {
-        self.co2 + self.ch4 + self.n2o
+        self.co2 + self.ch4 + self.n2o + self.fgas
     }
 }
 
@@ -619,6 +621,7 @@ pub fn factors_card(current_name: Option<String>, var: Var, state: &State) -> Fa
             co2: (state.emissions.co2 + state.emissions.land) * 1e-15,
             ch4: state.emissions.ch4 * 36. * 1e-15,
             n2o: state.emissions.n2o * 298. * 1e-15,
+            fgas: state.emissions.fgas * 1e-15,
         }),
         total: match var {
             Var::Emissions => state.emissions.as_gtco2eq(),

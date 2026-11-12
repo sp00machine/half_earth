@@ -196,6 +196,7 @@ impl AsText for Byproduct {
             Byproduct::Ch4 => "CH4",
             Byproduct::N2o => "N2O",
             Byproduct::Biodiversity => "biodiversity",
+            Byproduct::Fgas => "F-gases",
         }
     }
 
@@ -205,6 +206,7 @@ impl AsText for Byproduct {
             Byproduct::Ch4 => "CH4",
             Byproduct::N2o => "N2O",
             Byproduct::Biodiversity => "Biodiversity",
+            Byproduct::Fgas => "F-gases",
         }
     }
 }

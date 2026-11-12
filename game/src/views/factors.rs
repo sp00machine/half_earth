@@ -59,6 +59,7 @@ fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
 const CO2_COLOR: Color32 = Color32::from_rgb(0x9a, 0x9a, 0x9a);
 const CH4_COLOR: Color32 = Color32::from_rgb(0xf2, 0xa9, 0x3b);
 const N2O_COLOR: Color32 = Color32::from_rgb(0x9b, 0x7b, 0xd4);
+const FGAS_COLOR: Color32 = Color32::from_rgb(0x4f, 0xb6, 0xc9);
 
 /// A thin bar showing how emissions split between gases, plus a short label.
 fn gas_bar(ui: &mut egui::Ui, gases: &Gases, label: bool) {
@@ -66,6 +67,7 @@ fn gas_bar(ui: &mut egui::Ui, gases: &Gases, label: bool) {
         (gases.co2, CO2_COLOR, "CO₂"),
         (gases.ch4, CH4_COLOR, "CH₄"),
         (gases.n2o, N2O_COLOR, "N₂O"),
+        (gases.fgas, FGAS_COLOR, "F-gases"),
     ];
     let positive: f32 = parts.iter().map(|(v, ..)| v.max(0.)).sum();
     if positive > 0. {
@@ -188,7 +190,7 @@ impl FactorsCard {
                                     | Factor::Industry { gases: Some(gases), .. } = user
                                     {
                                         // Only spell out the gases when it's not almost all CO2.
-                                        let non_co2 = gases.ch4.max(0.) + gases.n2o.max(0.);
+                                        let non_co2 = gases.ch4.max(0.) + gases.n2o.max(0.) + gases.fgas.max(0.);
                                         let label = non_co2 > 0.05 * gases.total().abs().max(1e-6);
                                         gas_bar(ui, gases, label);
                                     }

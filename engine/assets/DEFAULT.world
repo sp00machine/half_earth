@@ -46720,6 +46720,13 @@
                 },
                 {
                     "UnlocksProject": "8abc61b5-21a1-45b2-876b-b82d80447a39"
+                },
+                {
+                    "ModifyIndustryByproducts": [
+                        "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
+                        "Fgas",
+                        -0.4
+                    ]
                 }
             ],
             "outcomes": [
@@ -46777,7 +46784,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Also cuts buildings' F-gas emissions by 40%: better-insulated buildings need much less air conditioning, so less refrigerant to leak. With Alternative Refrigerants too, F-gases go to zero.\n\n"
         },
         {
             "id": "d33f1063-298a-487a-bfde-1e2a0817bcd4",
@@ -48956,9 +48963,10 @@
                     ]
                 },
                 {
-                    "WorldVariable": [
-                        "Emissions",
-                        -1.0
+                    "ModifyIndustryByproducts": [
+                        "0cf72412-48f3-4f1c-b9e5-b69e398e59a5",
+                        "Fgas",
+                        -0.85
                     ]
                 }
             ],
@@ -49031,7 +49039,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Now cuts emissions by 1 Gt CO2e: replacing HFCs is mainly about their huge warming potential (Project Drawdown counts it among the biggest climate solutions), not the electricity saved.\n\nhttps://drawdown.org/solutions/alternative-refrigerants/technical-summary#\nhttps://www.epa.gov/sites/default/files/documents/en-gtz-proklima-natural-refrigerants.pdf\n\"Implications of refrigerant choice\nRefrigerant choice is normally a function of several factors, some of which are propertybased and some of which are influenced by market issues.\nThe property-based factors include:\n\u2013 Global warming potential\n\u2013 Ozone depleting potential\n\u2013 Flammability\n\u2013 Toxicity\n\u2013 Chemical reactivity and material compatibility\n\u2013 Potential efficiency (thermo-physical properties)\nThe market issues are:\n\u2013 Refrigerant cost (per kg or per system charge)\n\u2013 Cost of components\n\u2013 Access to refrigerant\n\u2013 Availability of suitable components, oils, service equipment\n\u2013 Adequate expertise and training \"\n\n\nWe aren't modeling HFCs specifically (though hector supports it)\n\nThis report suggests that \"Reductions of between 210 and 460 billion tonnes of carbon dioxide (CO2) equivalent emissions can be delivered over the next four decades through actions to improve the cooling industry\u2019s energy efficiency together with the transition to climate-friendly refrigerants\"\nhttps://www.iea.org/news/climate-friendly-cooling-could-cut-years-of-greenhouse-gas-emissions-and-save-trillions-of-dollars\nhttps://iea.blob.core.windows.net/assets/71c8db7e-1137-41ef-99c3-8f2c8d3a5d86/Cooling_Emissions_and_Policy_Synthesis_Report.pdf\n\nSo let's say that's like 8.375GtCO2eq annual emissions reduction\nThis is using best available technology in 2018; 3/4 of the emissions reduction is from energy efficient improvements, \"equivalent to an average 40% efficiency improvement.\"\n\nHFC-134a is the most common refrigerant with a GWP of 1360\nGlobal AC energy demand in 2016 was 2,000TWh; total of all cooling equipment in 2018 estimated to be 3900TWh\n\nSince we aren't modeling HFCs (as far as I can tell they are relatively insignificant in overall CO2eq emissions) we can just focus on the energy use of cooling, especially if energy efficiency makes up the bulk of those emissions improvements.\n\nWe're modeling \"buildings\" as one sector, so we don't have specifics on cooling energy usage. This is for NYC: https://qsel.columbia.edu/nycenergy/about.html but shows that cooling is a relatively small part of energy use. I imagine it's much higher for warmer climates.\n\nFor the US as a whole, https://www.eia.gov/tools/faqs/faq.php?id=1174&t=1\n> The residential sector\u2019s electricity use for cooling was about 236 billion kWh in 2020, which was equal to about 16% of total residential sector electricity consumption and 6% of total U.S. electricity consumption.\n>\n> The commercial sector, which includes commercial and institutional buildings, used about 155 billion kWh for cooling in 2020, which was equal to about 12% of total commercial sector electricity consumption and 4% of total U.S. electricity consumption.\n\nSo making the really crude assumption that the US covers a wide enough range of climates that we can take these numbers to be representative of the whole world, let's say 14% of building electricity use in general is from cooling, and assume this research gives us 40% energy use efficiency on cooling, then this is roughly gives us an overall electricity use modifier of 0.96"
+            "notes": "[three-quarters fork] Instead of a flat -1 Gt, buildings now have F-gas emissions (about 1 Gt CO2e at the start, growing with demand) and this cuts them by 85%: ammonia, CO2, propane and isobutane have a warming potential near zero, but some HFC equipment stays in service and leaks.\n\n[three-quarters fork] Now cuts emissions by 1 Gt CO2e: replacing HFCs is mainly about their huge warming potential (Project Drawdown counts it among the biggest climate solutions), not the electricity saved.\n\nhttps://drawdown.org/solutions/alternative-refrigerants/technical-summary#\nhttps://www.epa.gov/sites/default/files/documents/en-gtz-proklima-natural-refrigerants.pdf\n\"Implications of refrigerant choice\nRefrigerant choice is normally a function of several factors, some of which are propertybased and some of which are influenced by market issues.\nThe property-based factors include:\n\u2013 Global warming potential\n\u2013 Ozone depleting potential\n\u2013 Flammability\n\u2013 Toxicity\n\u2013 Chemical reactivity and material compatibility\n\u2013 Potential efficiency (thermo-physical properties)\nThe market issues are:\n\u2013 Refrigerant cost (per kg or per system charge)\n\u2013 Cost of components\n\u2013 Access to refrigerant\n\u2013 Availability of suitable components, oils, service equipment\n\u2013 Adequate expertise and training \"\n\n\nWe aren't modeling HFCs specifically (though hector supports it)\n\nThis report suggests that \"Reductions of between 210 and 460 billion tonnes of carbon dioxide (CO2) equivalent emissions can be delivered over the next four decades through actions to improve the cooling industry\u2019s energy efficiency together with the transition to climate-friendly refrigerants\"\nhttps://www.iea.org/news/climate-friendly-cooling-could-cut-years-of-greenhouse-gas-emissions-and-save-trillions-of-dollars\nhttps://iea.blob.core.windows.net/assets/71c8db7e-1137-41ef-99c3-8f2c8d3a5d86/Cooling_Emissions_and_Policy_Synthesis_Report.pdf\n\nSo let's say that's like 8.375GtCO2eq annual emissions reduction\nThis is using best available technology in 2018; 3/4 of the emissions reduction is from energy efficient improvements, \"equivalent to an average 40% efficiency improvement.\"\n\nHFC-134a is the most common refrigerant with a GWP of 1360\nGlobal AC energy demand in 2016 was 2,000TWh; total of all cooling equipment in 2018 estimated to be 3900TWh\n\nSince we aren't modeling HFCs (as far as I can tell they are relatively insignificant in overall CO2eq emissions) we can just focus on the energy use of cooling, especially if energy efficiency makes up the bulk of those emissions improvements.\n\nWe're modeling \"buildings\" as one sector, so we don't have specifics on cooling energy usage. This is for NYC: https://qsel.columbia.edu/nycenergy/about.html but shows that cooling is a relatively small part of energy use. I imagine it's much higher for warmer climates.\n\nFor the US as a whole, https://www.eia.gov/tools/faqs/faq.php?id=1174&t=1\n> The residential sector\u2019s electricity use for cooling was about 236 billion kWh in 2020, which was equal to about 16% of total residential sector electricity consumption and 6% of total U.S. electricity consumption.\n>\n> The commercial sector, which includes commercial and institutional buildings, used about 155 billion kWh for cooling in 2020, which was equal to about 12% of total commercial sector electricity consumption and 4% of total U.S. electricity consumption.\n\nSo making the really crude assumption that the US covers a wide enough range of climates that we can take these numbers to be representative of the whole world, let's say 14% of building electricity use in general is from cooling, and assume this research gives us 40% energy use efficiency on cooling, then this is roughly gives us an overall electricity use modifier of 0.96"
         },
         {
             "id": "30ee9181-3dbd-4599-91a9-295f9ca30b23",
@@ -51702,7 +51710,8 @@
                 "co2": 0.0,
                 "ch4": 0.0,
                 "n2o": 0.0,
-                "biodiversity": 0.0
+                "biodiversity": 0.0,
+                "fgas": 24000.0
             },
             "resource_modifiers": {
                 "land": 0.0,
@@ -51726,7 +51735,7 @@
                 },
                 "description": "Where we live, work, relax, and rest...and use water and energy to sustain ourselves and these interior environments."
             },
-            "notes": "Both residential and commercial. But *not* construction. Water usage is municipal/household water withdrawals."
+            "notes": "[three-quarters fork] F-gases: about 1 Gt CO2e a year at the start from refrigerants leaking out of air conditioners, fridges and heat pumps (global HFC emissions are roughly 1.2-1.5 Gt CO2e, mostly from cooling). Grows with building demand. Cut by Alternative Refrigerants and Passive Building Mandate & Retrofit.\n\nBoth residential and commercial. But *not* construction. Water usage is municipal/household water withdrawals."
         }
     ],
     "processes": [
@@ -51744,7 +51753,7 @@
                 "biodiversity": 0.0
             },
             "resources": {
-                "land": 0.0173,
+                "land": 0.0075,
                 "water": 0.557,
                 "electricity": 0.0,
                 "fuel": 0.0
@@ -51780,7 +51789,7 @@
                 },
                 "description": "Photovoltaic (PV) devices generate electricity directly from sunlight via an electronic process using semiconductors."
             },
-            "notes": "[three-quarters fork] Building capacity takes 45 t steel, 8 t cement and 2.5 GWh of other manufacturing energy per MW (capacity factor 0.17, 30-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 49.9, a lifecycle figure that included manufacturing; it is now 5.0, operation only, since manufacturing is counted through industry.\n\nPer the book, assume land use of 10W/m2 (per year) so about 0.0114m3/kWh.\n\nThe book assumes 0 emissions for solar but we can use this figure from https://www.nrel.gov/docs/fy13osti/56487.pdf, of ~40g CO2eq/kWh\n\nMekonnen, M. M., Gerbens-Leenes, P. W., & Hoekstra, A. Y. (2015). The consumptive water footprint of electricity and heat: a global assessment. Environmental Science: Water Research & Technology, 1(3), 285-297.\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf\nFor PV has a range of 6.4-303 m3 per TJ of net energy produced, so let's say 154.7 m3/TJ, which is about 0.557L/kWh.\n\nFor energy inputs, https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 6-12 for PV, that range is from 2009 and presumably solar PV production has improved a lot since then, so maybe say the higher end of that range (12). Which means about 0.083kWh/kWh\n\nFor biodiversity pressure, assume it's all through land use.\n\nFor feedstock, we assume that it's all captured through land use (of course would vary according to sun/sky conditions/solar irradiance but I believe that land use number encapsulates an average of those)",
+            "notes": "[three-quarters fork] Land 0.0173 -> 0.0075 m2 per kWh. A solar farm takes about 1.5-2 hectares per MW (~0.011 m2/kWh at a 17% capacity factor), and about a third of the world's solar is on rooftops, using no land at all. Still about 3x the land of onshore wind per kWh, which is realistic: wind turbines sit on small pads among fields.\n\n[three-quarters fork] Building capacity takes 45 t steel, 8 t cement and 2.5 GWh of other manufacturing energy per MW (capacity factor 0.17, 30-year lifetime; approximate, after IEA and NREL material intensity estimates). These are charged to the Iron and Steel, Concrete and Other Industry sectors as capacity is built (see engine/src/materials.rs). co2 was 49.9, a lifecycle figure that included manufacturing; it is now 5.0, operation only, since manufacturing is counted through industry.\n\nPer the book, assume land use of 10W/m2 (per year) so about 0.0114m3/kWh.\n\nThe book assumes 0 emissions for solar but we can use this figure from https://www.nrel.gov/docs/fy13osti/56487.pdf, of ~40g CO2eq/kWh\n\nMekonnen, M. M., Gerbens-Leenes, P. W., & Hoekstra, A. Y. (2015). The consumptive water footprint of electricity and heat: a global assessment. Environmental Science: Water Research & Technology, 1(3), 285-297.\nhttps://waterfootprint.org/media/downloads/Mekonnen-et-al-2015_1.pdf\nFor PV has a range of 6.4-303 m3 per TJ of net energy produced, so let's say 154.7 m3/TJ, which is about 0.557L/kWh.\n\nFor energy inputs, https://www.sciencedirect.com/science/article/pii/S0301421513003856 gives a range of 6-12 for PV, that range is from 2009 and presumably solar PV production has improved a lot since then, so maybe say the higher end of that range (12). Which means about 0.083kWh/kWh\n\nFor biodiversity pressure, assume it's all through land use.\n\nFor feedstock, we assume that it's all captured through land use (of course would vary according to sun/sky conditions/solar irradiance but I believe that land use number encapsulates an average of those)",
             "materials": {
                 "capacity_factor": 0.17,
                 "lifetime": 30.0,
