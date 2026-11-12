@@ -265,6 +265,11 @@ impl AsCard for Project {
                     let max_size = egui::vec2(ui.available_width(), ui.available_height());
                     scale_text_ui(ui, max_size, move |ui| {
                         render_effects(ui, state, &effects);
+                        if !p.is_online
+                            && let Some(build) = &self.construction
+                        {
+                            construction_line(ui, state, build);
+                        }
 
                         if p.is_online
                             && let Some((cost, effects)) = &p.next_upgrade
@@ -286,6 +291,13 @@ impl AsCard for Project {
                                 });
                             }
                             render_effects(ui, state, effects);
+                            if let Some(build) = self
+                                .upgrades
+                                .get(self.level)
+                                .and_then(|u| u.construction.as_ref())
+                            {
+                                construction_line(ui, state, build);
+                            }
                         }
 
                         if p.has_downgrade {
@@ -596,4 +608,20 @@ fn npc_supporter(ui: &mut egui::Ui, npc: &NPC) {
         ),
     );
     add_tip(tip, ui.add(npc_icon(npc, true)));
+}
+
+/// What building a project takes in steel, cement and manufacturing,
+/// and the emissions from making them with today's industry.
+fn construction_line(ui: &mut egui::Ui, state: &hes_engine::State, build: &hes_engine::materials::BuildOut) {
+    let (emissions, _) = state.materials_impact(build);
+    let text = t!(
+        "Building it takes about %{steel}Mt of steel and %{cement}Mt of cement, adding about %{emissions}Gt of emissions in all while it's built (with today's industry).",
+        steel = format!("{:.0}", build.steel * 1e-6),
+        cement = format!("{:.0}", build.cement * 1e-6),
+        emissions = format!("{:.1}", emissions * 1e-15),
+    );
+    ui.horizontal_wrapped(|ui| {
+        ui.add(icons::IRON_AND_STEEL.size(13.));
+        ui.label(text);
+    });
 }

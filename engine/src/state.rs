@@ -987,7 +987,25 @@ impl State {
 // Project related functionality.
 impl State {
     fn step_projects(&mut self) -> Vec<(Id, ProjectChanges)> {
+        let progress_before: Vec<(Id, f32)> = self
+            .world
+            .projects
+            .iter()
+            .filter(|p| p.construction.is_some())
+            .map(|p| (p.id, p.progress.min(1.)))
+            .collect();
         let mut changes = self.world.projects.step(self.world.year);
+
+        // Projects use their construction materials as they're built.
+        for (id, before) in progress_before {
+            let project = &self.world.projects[&id];
+            let built = project.progress.min(1.) - before;
+            if built > 0. {
+                if let Some(build) = project.construction {
+                    self.infrastructure.add_project_build(&build, built);
+                }
+            }
+        }
 
         let mut outcomes: Vec<(Id, usize)> = Vec::new();
         for (id, changes) in &mut changes {
@@ -1124,6 +1142,10 @@ impl State {
 
     pub fn upgrade_project(&mut self, project_id: &Id) {
         let changes = self.world.projects[project_id].upgrade();
+        let project = &self.world.projects[project_id];
+        if let Some(build) = project.prev_upgrade().and_then(|u| u.construction) {
+            self.infrastructure.queue(&build);
+        }
         self.apply_changes(changes);
     }
 

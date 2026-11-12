@@ -134,6 +134,9 @@ pub struct Upgrade {
     pub cost: usize,
     pub effects: Vec<Effect>,
     pub active: bool,
+    /// Materials for building this level, used over the following years.
+    #[serde(default)]
+    pub construction: Option<crate::materials::BuildOut>,
 }
 
 /// Ongoing discontent while a policy is in force, felt in proportion to a
@@ -191,6 +194,11 @@ pub struct Project {
     pub outcomes: Vec<Outcome>,
 
     /// Ongoing discontent while this policy is in force (see `Fatigue`).
+    /// Steel, cement and manufacturing energy it takes to build, used up
+    /// as it's built.
+    #[serde(default)]
+    pub construction: Option<crate::materials::BuildOut>,
+
     #[serde(default)]
     pub fatigue: Option<Fatigue>,
     pub upgrades: Vec<Upgrade>,

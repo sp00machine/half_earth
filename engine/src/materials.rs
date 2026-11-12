@@ -67,6 +67,7 @@ pub const OTHER_INDUSTRY: &str = "Other Industry";
 
 /// Materials used for building energy infrastructure this year.
 #[derive(Debug, Default, Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[serde(default)]
 pub struct BuildOut {
     /// Capacity built this year (MW), new and replacement.
     pub capacity: f32,
@@ -130,9 +131,25 @@ pub struct Infrastructure {
     pub pipeline: Vec<BuildOut>,
     /// The most recent year's build-out.
     pub last: BuildOut,
+    /// Materials projects are using this year.
+    #[serde(default)]
+    pub project_build: BuildOut,
 }
 
 impl Infrastructure {
+    /// Materials a project uses this year.
+    pub fn add_project_build(&mut self, build: &BuildOut, share: f32) {
+        self.project_build.combine(build, share);
+    }
+
+    /// Materials for something built over the coming years.
+    pub fn queue(&mut self, build: &BuildOut) {
+        self.pipeline.resize(CONSTRUCTION_YEARS, BuildOut::default());
+        for year in self.pipeline.iter_mut() {
+            year.combine(build, 1. / CONSTRUCTION_YEARS as f32);
+        }
+    }
+
     /// Work out this year's build-out from production, and set the extra
     /// demand on the industries that supply it.
     pub fn step(
@@ -192,6 +209,8 @@ impl Infrastructure {
         }
         let this_year = self.pipeline.remove(0);
         out.combine(&this_year, 1.);
+        out.combine(&self.project_build, 1.);
+        self.project_build = BuildOut::default();
 
         let (steel_units, cement_units) = self.units_per_tonne.unwrap_or_default();
         for industry in industries.iter_mut() {
@@ -269,5 +288,17 @@ mod tests {
             state.step_year(state.world.temperature);
             assert!(state.infrastructure.last.steel > 1e6, "{name}: {}", state.infrastructure.last.steel);
         }
+    }
+
+    #[test]
+    fn building_projects_use_materials() {
+        let mut state = State::new(World::default());
+        state.step_year(state.world.temperature);
+        let id = state.world.projects.iter().find(|p| p.name == "Expand Public Transit").unwrap().id;
+        state.start_project(&id);
+        state.set_project_points(&id, 5);
+        state.step_year(state.world.temperature);
+        let built = state.infrastructure.last.cement;
+        assert!(built > 1e7, "cement {built}");
     }
 }

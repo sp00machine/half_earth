@@ -37628,7 +37628,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Dropped +5% plant calories: treating sewage protects health and rivers but doesn't grow much more food.\n\nturn sewage into fertilizer, clean up rivers, improve health. Not sure how to affect fertilizer inputs...TV\n\nSR: I don't think this would actually require more water use, but it would require more energy."
+            "notes": "[three-quarters fork] Construction: building this takes treatment plants and sewers: about 40 Mt of steel, 200 Mt of cement and 200 TWh of other manufacturing, made by industry as it's built.\n\n[three-quarters fork] Dropped +5% plant calories: treating sewage protects health and rivers but doesn't grow much more food.\n\nturn sewage into fertilizer, clean up rivers, improve health. Not sure how to affect fertilizer inputs...TV\n\nSR: I don't think this would actually require more water use, but it would require more energy.",
+            "construction": {
+                "steel": 40000000.0,
+                "cement": 200000000.0,
+                "other_energy": 200000000000.0
+            }
         },
         {
             "id": "bbb894b3-a0e5-46c7-b2ab-60d3c6b28392",
@@ -37961,7 +37966,12 @@
                     }
                 ]
             },
-            "notes": "I want a way to reduce the risk of black outs if people go hard on renewables--how would I program that?"
+            "notes": "[three-quarters fork] Construction: building this takes long-distance transmission and grid upgrades: about 120 Mt of steel (towers), 60 Mt of cement (foundations) and 1,500 TWh of manufacturing for conductors (aluminium, copper) and transformers, made by industry as it's built.\n\nI want a way to reduce the risk of black outs if people go hard on renewables--how would I program that?",
+            "construction": {
+                "steel": 120000000.0,
+                "cement": 60000000.0,
+                "other_energy": 1500000000000.0
+            }
         },
         {
             "id": "f641150a-2501-459a-ada9-d0ffeb252c01",
@@ -39385,7 +39395,12 @@
                     }
                 ]
             },
-            "notes": "Should scale based on energy usage"
+            "notes": "[three-quarters fork] Construction: building this takes heat pumps, electric boilers and furnaces, and the distribution grid to feed them: about 100 Mt of steel, 20 Mt of cement and 2,000 TWh of manufacturing (copper, electronics), made by industry as it's built.\n\nShould scale based on energy usage",
+            "construction": {
+                "steel": 100000000.0,
+                "cement": 20000000.0,
+                "other_energy": 2000000000000.0
+            }
         },
         {
             "id": "203fe0a1-e5b3-4863-9984-c67b95920abf",
@@ -39630,7 +39645,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39648,7 +39668,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39666,7 +39691,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39684,7 +39714,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39702,7 +39737,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39720,7 +39760,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39738,7 +39783,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39756,7 +39806,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39774,7 +39829,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39792,7 +39852,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39810,7 +39875,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39828,7 +39898,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39846,7 +39921,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39864,7 +39944,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39882,7 +39967,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39900,7 +39990,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39918,7 +40013,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39936,7 +40036,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39954,7 +40059,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 },
                 {
                     "cost": 5,
@@ -39972,7 +40082,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 20000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 300000000000.0
+                    }
                 }
             ],
             "active_outcome": null,
@@ -40018,7 +40133,12 @@
                     }
                 ]
             },
-            "notes": "to sequester 30 gt C a year by 2100, DACCS would require massive amount of energy, up to 300 EJ. total world energy production in 2020 was 550 EJ. Study includes charts comparing water, land, and energy use by DACCS, BECCS, and afforestation. authors expect it to be scaled up 1.5gt C per year\n\nhttps://www.nature.com/articles/s41467-019-10842-5\n\nFrom that paper:\nFor 30\u2009GtCO2/year it requires something like 250EJ/yr, about 500Gt H2O/yr = 500km3/yr, and negligible land use. So every 1.5GtCO2/year requires 12.5EJ/yr (~3.47e12 kWh/year, rounded to 3.5e12kWh/year) and 25km3 water/yr\nSo if it can scale up 1.5GtCO2/year we can make this a 5-year project with upgrades.\n\nUses.\nhttp://www.infinitreellc.com/"
+            "notes": "[three-quarters fork] Construction: each level takes about 20 Mt of steel, 10 Mt of cement and 300 TWh of manufacturing, mostly for sorbents and contactors (capturing 1.5 Gt a year needs thousands of large plants), made by industry over the following years.\n\nto sequester 30 gt C a year by 2100, DACCS would require massive amount of energy, up to 300 EJ. total world energy production in 2020 was 550 EJ. Study includes charts comparing water, land, and energy use by DACCS, BECCS, and afforestation. authors expect it to be scaled up 1.5gt C per year\n\nhttps://www.nature.com/articles/s41467-019-10842-5\n\nFrom that paper:\nFor 30\u2009GtCO2/year it requires something like 250EJ/yr, about 500Gt H2O/yr = 500km3/yr, and negligible land use. So every 1.5GtCO2/year requires 12.5EJ/yr (~3.47e12 kWh/year, rounded to 3.5e12kWh/year) and 25km3 water/yr\nSo if it can scale up 1.5GtCO2/year we can make this a 5-year project with upgrades.\n\nUses.\nhttp://www.infinitreellc.com/",
+            "construction": {
+                "steel": 20000000.0,
+                "cement": 10000000.0,
+                "other_energy": 300000000000.0
+            }
         },
         {
             "id": "ca78e24b-bfa3-4b79-bd37-16c8e03cea2c",
@@ -40558,7 +40678,12 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Construction: building this takes sorting and recycling plants: about 10 Mt of steel, 20 Mt of cement and 100 TWh of other manufacturing, made by industry as it's built.\n\n",
+            "construction": {
+                "steel": 10000000.0,
+                "cement": 20000000.0,
+                "other_energy": 100000000000.0
+            }
         },
         {
             "id": "ce50beb5-243b-44f5-b722-729b9acb94fd",
@@ -40986,7 +41111,12 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Construction: building this takes metro, light rail and bus networks across the world's cities: about 150 Mt of steel (rails, rolling stock), 400 Mt of cement (tunnels, stations, viaducts) and 500 TWh of other manufacturing, made by industry as it's built.\n\n",
+            "construction": {
+                "steel": 150000000.0,
+                "cement": 400000000.0,
+                "other_energy": 500000000000.0
+            }
         },
         {
             "id": "7c1e3b52-4f0a-4d8e-9a61-2b5f0c9d7e13",
@@ -44093,7 +44223,12 @@
                     }
                 ]
             },
-            "notes": "perhaps there is a bonus if you ban cars (electric-arc furnaces need scrap)\n\nAnother ipcc report, seems that EAF is a bit better than other methods, see pg 4.30\nhttps://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/3_Volume3/19R_V3_Ch04_Metal_Industry.pdf\n\nfrom here, EAF is almost 5x (~4.89x) energy efficient compared to basic oxygen furnace (blast furnaces)\nhttp://large.stanford.edu/courses/2016/ph240/martelaro1/docs/fruehan-mar00.pdf\n\nwe have 101.26 kWh fuel per LIC of steel, so change that to 20.71kWh of electricity"
+            "notes": "[three-quarters fork] Construction: building this takes replacing blast furnaces with electric-arc furnaces: about 30 Mt of steel, 30 Mt of cement and 100 TWh of other manufacturing, made by industry as it's built.\n\nperhaps there is a bonus if you ban cars (electric-arc furnaces need scrap)\n\nAnother ipcc report, seems that EAF is a bit better than other methods, see pg 4.30\nhttps://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/3_Volume3/19R_V3_Ch04_Metal_Industry.pdf\n\nfrom here, EAF is almost 5x (~4.89x) energy efficient compared to basic oxygen furnace (blast furnaces)\nhttp://large.stanford.edu/courses/2016/ph240/martelaro1/docs/fruehan-mar00.pdf\n\nwe have 101.26 kWh fuel per LIC of steel, so change that to 20.71kWh of electricity",
+            "construction": {
+                "steel": 30000000.0,
+                "cement": 30000000.0,
+                "other_energy": 100000000000.0
+            }
         },
         {
             "id": "181e487c-0516-42c3-a26d-c08c28237039",
@@ -44419,7 +44554,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New project. Pumped hydro takes over 15% of grid storage (no lithium, 80% round-trip efficiency), limited by geography; +1 extinction rate from reservoirs."
+            "notes": "[three-quarters fork] Construction: building this takes reservoirs, dams and tunnels: about 50 Mt of steel, 300 Mt of cement and 100 TWh of other manufacturing (turbines), made by industry as it's built.\n\n[three-quarters fork] New project. Pumped hydro takes over 15% of grid storage (no lithium, 80% round-trip efficiency), limited by geography; +1 extinction rate from reservoirs.",
+            "construction": {
+                "steel": 50000000.0,
+                "cement": 300000000.0,
+                "other_energy": 100000000000.0
+            }
         },
         {
             "id": "d4c6b2e8-9f31-4a75-8b0d-2e7f5a1c3d96",
@@ -44813,7 +44953,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Dropped +10% hydropower output: batteries don't make dams generate more.\n\n[three-quarters fork] Was +10% output for all intermittent processes, a stand-in for storage. Storage is now modeled (engine/src/storage.rs), so this instead cuts storage round-trip losses by 25% through smarter dispatch and transmission.\n\nCould you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL"
+            "notes": "[three-quarters fork] Construction: building this takes transmission links and control systems for storage (the batteries' lithium is counted separately): about 30 Mt of steel, 20 Mt of cement and 300 TWh of manufacturing, made by industry as it's built.\n\n[three-quarters fork] Dropped +10% hydropower output: batteries don't make dams generate more.\n\n[three-quarters fork] Was +10% output for all intermittent processes, a stand-in for storage. Storage is now modeled (engine/src/storage.rs), so this instead cuts storage round-trip losses by 25% through smarter dispatch and transmission.\n\nCould you say that making renewables more consistent has the overall effect of making them more productive, because there's less wasted energy? This project needs some more useful effects  - SL",
+            "construction": {
+                "steel": 30000000.0,
+                "cement": 20000000.0,
+                "other_energy": 300000000000.0
+            }
         },
         {
             "id": "532d9684-e653-4eee-a181-f1c958ee2d8b",
@@ -46784,7 +46929,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also cuts buildings' F-gas emissions by 40%: better-insulated buildings need much less air conditioning, so less refrigerant to leak. With Alternative Refrigerants too, F-gases go to zero.\n\n"
+            "notes": "[three-quarters fork] Construction: building this takes insulating and re-windowing most of the world's buildings: about 50 Mt of steel, 400 Mt of cement and 3,000 TWh of manufacturing for insulation, glass and heat recovery, made by industry as it's built.\n\n[three-quarters fork] Also cuts buildings' F-gas emissions by 40%: better-insulated buildings need much less air conditioning, so less refrigerant to leak. With Alternative Refrigerants too, F-gases go to zero.\n\n",
+            "construction": {
+                "steel": 50000000.0,
+                "cement": 400000000.0,
+                "other_energy": 3000000000000.0
+            }
         },
         {
             "id": "d33f1063-298a-487a-bfde-1e2a0817bcd4",
@@ -50113,7 +50263,12 @@
                     }
                 ]
             },
-            "notes": "Fill in using this: https://drawdown.org/solutions/walkable-cities\n1.44\u20135.45\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nTV, use this for numbers: drawdown.org/solutions/bicycle-infrastructure\n2.56\u20136.65\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nsay roughly 5 each, so 10Gt total over 30 years, so let's say 0.35 Gt/yr"
+            "notes": "[three-quarters fork] Construction: building this takes bike lanes, wider sidewalks and new intersections: about 5 Mt of steel and 50 Mt of cement, made by industry as it's built.\n\nFill in using this: https://drawdown.org/solutions/walkable-cities\n1.44\u20135.45\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nTV, use this for numbers: drawdown.org/solutions/bicycle-infrastructure\n2.56\u20136.65\nGIGATONS\nCO2 EQUIVALENT\nREDUCED / SEQUESTERED\n(2020\u20132050)\n\nsay roughly 5 each, so 10Gt total over 30 years, so let's say 0.35 Gt/yr",
+            "construction": {
+                "steel": 5000000.0,
+                "cement": 50000000.0,
+                "other_energy": 20000000000.0
+            }
         },
         {
             "id": "31a59c0e-ac6c-4702-ac27-7fc2dacfc2f6",
@@ -50973,7 +51128,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 10000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 50000000000.0
+                    }
                 },
                 {
                     "cost": 10,
@@ -50997,7 +51157,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 10000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 50000000000.0
+                    }
                 },
                 {
                     "cost": 10,
@@ -51021,7 +51186,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 10000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 50000000000.0
+                    }
                 },
                 {
                     "cost": 10,
@@ -51045,7 +51215,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 10000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 50000000000.0
+                    }
                 },
                 {
                     "cost": 10,
@@ -51069,7 +51244,12 @@
                             ]
                         }
                     ],
-                    "active": false
+                    "active": false,
+                    "construction": {
+                        "steel": 10000000.0,
+                        "cement": 10000000.0,
+                        "other_energy": 50000000000.0
+                    }
                 }
             ],
             "active_outcome": null,
@@ -51131,7 +51311,12 @@
                     }
                 ]
             },
-            "notes": "https://waterscarcityatlas.org/desalination-powered-by-renewable-energy/\n\nCurrent most efficient energy use is 3kWh/m3 (3e9kWh/km3), compared to 0.6kWh/m3 for surface water treatment\n\n> The estimated desalination demand for all sectors is 2.6 billion m3 /day. As of 2015, the total online desalination capacity was 44.3 million m3 /day.\n\n44.3e6 m3/day = 16.17e9 m3/year = or about 16.17km3/year\n\nhttps://www.nature.com/articles/s41545-019-0039-9\n> Global water demand for all uses, presently about 4,600 km3 per year, will increase by 20% to 30% by 2050, up to 5,500 to 6,000 km3 per year. 2. Global water demand for agriculture will increase by 60% by 2025.\n\nHu, B., Zhang, Y., Li, Y., Teng, Y., & Yue, W. (2020). Can bioenergy carbon capture and storage aggravate global water crisis?. Science of The Total Environment, 714, 136856.\nGives 45,500km3/year global water availability\n\nThe units we use in-game is 50km3 = 1Water, so let's say each level adds a multiple of that (5e+13L, about 0.1% of the starting supply) to the annual water supply, that would take 15e10kWh according to the current most efficient energy use (above).\n\nhttps://sciencing.com/disadvantages-desalination-5961767.html\n\n"
+            "notes": "[three-quarters fork] Construction: each level takes about 10 Mt of steel, 10 Mt of cement and 50 TWh of manufacturing (membranes, pumps, pipelines), made by industry over the following years.\n\nhttps://waterscarcityatlas.org/desalination-powered-by-renewable-energy/\n\nCurrent most efficient energy use is 3kWh/m3 (3e9kWh/km3), compared to 0.6kWh/m3 for surface water treatment\n\n> The estimated desalination demand for all sectors is 2.6 billion m3 /day. As of 2015, the total online desalination capacity was 44.3 million m3 /day.\n\n44.3e6 m3/day = 16.17e9 m3/year = or about 16.17km3/year\n\nhttps://www.nature.com/articles/s41545-019-0039-9\n> Global water demand for all uses, presently about 4,600 km3 per year, will increase by 20% to 30% by 2050, up to 5,500 to 6,000 km3 per year. 2. Global water demand for agriculture will increase by 60% by 2025.\n\nHu, B., Zhang, Y., Li, Y., Teng, Y., & Yue, W. (2020). Can bioenergy carbon capture and storage aggravate global water crisis?. Science of The Total Environment, 714, 136856.\nGives 45,500km3/year global water availability\n\nThe units we use in-game is 50km3 = 1Water, so let's say each level adds a multiple of that (5e+13L, about 0.1% of the starting supply) to the annual water supply, that would take 15e10kWh according to the current most efficient energy use (above).\n\nhttps://sciencing.com/disadvantages-desalination-5961767.html\n\n",
+            "construction": {
+                "steel": 10000000.0,
+                "cement": 10000000.0,
+                "other_energy": 50000000000.0
+            }
         },
         {
             "id": "26fce718-40e6-47f5-9c09-5fe3ca3192c6",
