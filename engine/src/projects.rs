@@ -461,6 +461,12 @@ impl Project {
         changes
     }
 
+    /// Harsher levels of a policy wear on people more: each level above
+    /// the first adds half again to its fatigue.
+    pub fn fatigue_scale(&self) -> f32 {
+        1. + 0.5 * self.level as f32
+    }
+
     pub fn active_effects(&self) -> &Vec<Effect> {
         if self.level == 0 {
             &self.effects

@@ -698,7 +698,9 @@ impl State {
             if let (Some(fatigue), Some(years)) =
                 (project.fatigue, self.policy_years.get(&project.id))
             {
-                let amount = -fatigue.level(*years) * fatigue.weight(region.income.level());
+                let amount = -fatigue.level(*years)
+                    * project.fatigue_scale()
+                    * fatigue.weight(region.income.level());
                 if amount.abs() > 0.05 {
                     parts.push((OutlookSource::Fatigue(project.name.clone()), amount));
                 }
@@ -740,8 +742,9 @@ impl State {
             if let Some(fatigue) = project.fatigue {
                 if project.status == Status::Active {
                     let years = self.policy_years.get(&project.id).copied().unwrap_or(0.) + 1.;
-                    total += fatigue.level(years);
-                    levels.push((fatigue, fatigue.level(years)));
+                    let level = fatigue.level(years) * project.fatigue_scale();
+                    total += level;
+                    levels.push((fatigue, level));
                     active.insert(project.id, years);
                 }
             }

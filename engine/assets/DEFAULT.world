@@ -41222,17 +41222,22 @@
                 {
                     "Demand": [
                         "AnimalCalories",
-                        -0.25
+                        -0.15
                     ]
                 },
                 {
                     "Demand": [
                         "Fuel",
-                        -0.2
+                        -0.1
                     ]
                 },
                 {
-                    "IncomeOutlookChange": -1.5
+                    "OutlookByIncome": [
+                        0.0,
+                        -1.0,
+                        -1.5,
+                        -2.5
+                    ]
                 }
             ],
             "outcomes": [
@@ -41244,7 +41249,60 @@
                     }
                 }
             ],
-            "upgrades": [],
+            "upgrades": [
+                {
+                    "cost": 10,
+                    "effects": [
+                        {
+                            "Demand": [
+                                "AnimalCalories",
+                                -0.25
+                            ]
+                        },
+                        {
+                            "Demand": [
+                                "Fuel",
+                                -0.2
+                            ]
+                        },
+                        {
+                            "OutlookByIncome": [
+                                0.0,
+                                -1.5,
+                                -3.0,
+                                -5.0
+                            ]
+                        }
+                    ],
+                    "active": false
+                },
+                {
+                    "cost": 10,
+                    "effects": [
+                        {
+                            "Demand": [
+                                "AnimalCalories",
+                                -0.4
+                            ]
+                        },
+                        {
+                            "Demand": [
+                                "Fuel",
+                                -0.3
+                            ]
+                        },
+                        {
+                            "OutlookByIncome": [
+                                -0.5,
+                                -2.5,
+                                -4.5,
+                                -7.5
+                            ]
+                        }
+                    ],
+                    "active": false
+                }
+            ],
             "active_outcome": null,
             "supporters": [
                 "b6694f1d-5597-4bb8-a484-254930838982",
@@ -41292,7 +41350,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 1.0 contentedness per income level in each region (3.0 in the richest), building up over 10 years. Rationing wears on people the longer it lasts, as with Britain's post-war rationing.\n\n[three-quarters fork] New emergency policy: -25% animal calorie demand, -20% fuel demand; contentedness falls by 1.5x each region's income level, so high-income regions are hit hardest and low-income regions not at all.",
+            "notes": "[three-quarters fork] Now has three levels you can raise and lower. Level 1: meat -15%, fuel -10%; contentedness low 0, lower-middle -1, upper-middle -1.5, high -2.5. Level 2 (the old version): meat -25%, fuel -20%; 0/-1.5/-3/-5. Level 3: meat -40%, fuel -30%; -0.5/-2.5/-4.5/-7.5. Fatigue grows by half again with each level. Poorer regions barely mind: rationing guarantees a fair share, and they weren't consuming much meat or fuel to begin with.\n\n[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 1.0 contentedness per income level in each region (3.0 in the richest), building up over 10 years. Rationing wears on people the longer it lasts, as with Britain's post-war rationing.\n\n[three-quarters fork] New emergency policy: -25% animal calorie demand, -20% fuel demand; contentedness falls by 1.5x each region's income level, so high-income regions are hit hardest and low-income regions not at all.",
             "fatigue": {
                 "adapting": false,
                 "rate": 1.0,
