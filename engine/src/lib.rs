@@ -43,6 +43,7 @@ pub use production::{Process, ProcessFeature};
 pub use projects::{
     Cost,
     Factor,
+    Fatigue,
     FactorKind,
     Group,
     Outcome,

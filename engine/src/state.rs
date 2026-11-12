@@ -119,6 +119,18 @@ pub struct State {
     #[serde(default)]
     pub infrastructure: Infrastructure,
 
+    /// Years each fatigue-causing policy has been in force.
+    #[serde(default)]
+    pub policy_years: BTreeMap<Id, f32>,
+
+    /// Policy fatigue currently applied to each region's contentedness.
+    #[serde(default)]
+    pub fatigue_applied: BTreeMap<Id, f32>,
+
+    /// Policy fatigue per income level this year, for display.
+    #[serde(default)]
+    pub policy_fatigue: f32,
+
     /// Temporary yield shocks still recovering.
     #[serde(default)]
     pub yield_shocks: Vec<YieldShock>,
@@ -186,6 +198,9 @@ impl State {
             land_carbon: LandCarbon::default(),
             yield_years: 0.,
             yield_shocks: vec![],
+            policy_years: BTreeMap::new(),
+            fatigue_applied: BTreeMap::new(),
+            policy_fatigue: 0.,
             infrastructure: Infrastructure::default(),
             storage: Storage::default(),
             history: vec![],
@@ -612,6 +627,30 @@ impl State {
             .min(1.)
     }
 
+    /// Apply ongoing discontent from policies in force, as a level that
+    /// changes over time rather than a penalty that piles up each year.
+    fn update_policy_fatigue(&mut self) {
+        let mut total = 0.;
+        let mut active = BTreeMap::new();
+        for project in self.world.projects.iter() {
+            if let Some(fatigue) = project.fatigue {
+                if project.status == Status::Active {
+                    let years = self.policy_years.get(&project.id).copied().unwrap_or(0.) + 1.;
+                    total += fatigue.level(years);
+                    active.insert(project.id, years);
+                }
+            }
+        }
+        self.policy_years = active;
+        self.policy_fatigue = total;
+        for region in self.world.regions.iter_mut() {
+            let target = total * region.income.level() as f32;
+            let applied = self.fatigue_applied.get(&region.id).copied().unwrap_or(0.);
+            region.outlook -= target - applied;
+            self.fatigue_applied.insert(region.id, target);
+        }
+    }
+
     /// The highest wind and solar share storage can support this planning cycle.
     pub fn supported_intermittent_share(&self) -> f32 {
         self.storage
@@ -643,6 +682,7 @@ impl State {
         let consumerist_ally = self.npcs.is_ally("The Consumerist");
         self.world
             .update_outlook(temp_change, wretched_ally, consumerist_ally);
+        self.update_policy_fatigue();
         regions_up
             .into_iter()
             .map(|id| Update::Region { id, up: true })
@@ -1434,3 +1474,56 @@ impl Update {
 //         );
 //     }
 // }
+
+#[cfg(test)]
+mod fatigue_tests {
+    use super::*;
+
+    fn by_name(state: &State, name: &str) -> Id {
+        state.world.projects.iter().find(|p| p.name == name).unwrap().id
+    }
+
+    #[test]
+    fn rationing_fatigue_builds_and_repeal_restores() {
+        let mut state = State::new(World::default());
+        let id = by_name(&state, "Wartime Rationing");
+        let outlooks =
+            |s: &State| s.world.regions.iter().map(|r| r.outlook).collect::<Vec<_>>();
+        let before = outlooks(&state);
+
+        state.world.projects[&id].status = Status::Active;
+        state.update_policy_fatigue();
+        let one = state.policy_fatigue;
+        for _ in 0..9 {
+            state.update_policy_fatigue();
+        }
+        assert!(state.policy_fatigue > one * 5., "grinding fatigue builds up");
+        let after = outlooks(&state);
+        for ((region, b), a) in state.world.regions.iter().zip(&before).zip(&after) {
+            let expected = state.policy_fatigue * region.income.level() as f32;
+            assert!((b - a - expected).abs() < 1e-3);
+        }
+
+        // Repealing it gives the contentedness back.
+        state.world.projects[&id].status = Status::Inactive;
+        state.update_policy_fatigue();
+        assert_eq!(state.policy_fatigue, 0.);
+        for (b, a) in before.iter().zip(outlooks(&state)) {
+            assert!((b - a).abs() < 1e-3);
+        }
+    }
+
+    #[test]
+    fn mandate_fatigue_fades() {
+        let mut state = State::new(World::default());
+        let id = by_name(&state, "Vegan Mandate");
+        state.world.projects[&id].status = Status::Active;
+        state.update_policy_fatigue();
+        let first = state.policy_fatigue;
+        for _ in 0..25 {
+            state.update_policy_fatigue();
+        }
+        assert!(first > 1.5);
+        assert_eq!(state.policy_fatigue, 0.);
+    }
+}

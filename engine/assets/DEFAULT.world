@@ -41177,7 +41177,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also allows 6 process mix changes per sector per cycle instead of 5 (30% instead of 25%). Enables the Lax Oversight, Rushed Construction and Mobilization Fatigue events, and Swords into Turbines after Global Demilitarization.\n\n[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions."
+            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Mobilization loses legitimacy the longer the emergency lasts.\n\n[three-quarters fork] Also allows 6 process mix changes per sector per cycle instead of 5 (30% instead of 25%). Enables the Lax Oversight, Rushed Construction and Mobilization Fatigue events, and Swords into Turbines after Global Demilitarization.\n\n[three-quarters fork] Discount reduced from 40% to 20% after playtesting. Can't be combined with Stakhanovite Shock Workers (each locks the other): both are ways of mobilizing labor.\n\n[three-quarters fork] Cost 10, and grants 15 political capital (a rally-around-the-flag effect), taken back if repealed. [three-quarters fork] New emergency policy. While active: energy, electrification and buildings projects cost 40% less time (WarFooting flag), contentedness falls, most of all in high-income regions.",
+            "fatigue": {
+                "adapting": false,
+                "rate": 0.7,
+                "years": 10.0
+            }
         },
         {
             "id": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64",
@@ -41273,7 +41278,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New emergency policy: -25% animal calorie demand, -20% fuel demand; contentedness falls by 1.5x each region's income level, so high-income regions are hit hardest and low-income regions not at all."
+            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 1.0 contentedness per income level in each region (3.0 in the richest), building up over 10 years. Rationing wears on people the longer it lasts, as with Britain's post-war rationing.\n\n[three-quarters fork] New emergency policy: -25% animal calorie demand, -20% fuel demand; contentedness falls by 1.5x each region's income level, so high-income regions are hit hardest and low-income regions not at all.",
+            "fatigue": {
+                "adapting": false,
+                "rate": 1.0,
+                "years": 10.0
+            }
         },
         {
             "id": "c5b27e90-4d1f-4a63-8e2c-9f6a1b3d7e08",
@@ -42013,36 +42023,6 @@
                         "c398c26c-e6ba-49ac-8f6e-f992ca4ccada",
                         0.5
                     ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "2ff77278-608a-43d9-9837-5585bac74779",
-                        0.5
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "256ec719-4119-4752-ae0e-6a44b0b5d6bc",
-                        0.5
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "7deb850f-9c61-4773-a45d-ec00a3d60f20",
-                        0.5
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "04ec7325-a720-4187-98ea-e8e730e7baf3",
-                        0.5
-                    ]
-                },
-                {
-                    "ModifyEventProbability": [
-                        "64c73fcd-f432-4e1f-8969-dba5269093db",
-                        0.5
-                    ]
                 }
             ],
             "outcomes": [
@@ -42107,7 +42087,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots, revolts and militant attacks are 50% more likely.\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
+            "notes": "[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots and revolts are 50% more likely. (The militant-attack and secondary unrest modifiers were dropped to keep the card readable on phones.)\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
         },
         {
             "id": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9",
@@ -43026,7 +43006,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Unlocked from the start (was unlocked by Energy Conservation Campaign, Battery Storage Network or Continental Smart Grid) so drastic demand cuts are available early.\n\nhttps://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes"
+            "notes": "[three-quarters fork] Policy fatigue (grinding): while in force, costs up to 0.7 contentedness per income level in each region (2.1 in the richest), building up over 10 years. Living within a hard energy quota wears on people over time.\n\n[three-quarters fork] Unlocked from the start (was unlocked by Energy Conservation Campaign, Battery Storage Network or Continental Smart Grid) so drastic demand cuts are available early.\n\nhttps://energypedia.info/wiki/Renewable_Energy_Quota_and_Certificate_Schemes",
+            "fatigue": {
+                "adapting": false,
+                "rate": 0.7,
+                "years": 10.0
+            }
         },
         {
             "id": "b0602718-aed6-4bd1-b358-1a16cd0b5999",
@@ -45051,7 +45036,12 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Policy fatigue (adapting): while in force, costs up to 2.0 contentedness per income level in each region (6.0 in the richest), starting at full strength and fading over 20 years. A bigger backlash than vegetarianism, fading over ~20 years.\n\n",
+            "fatigue": {
+                "adapting": true,
+                "rate": 2.0,
+                "years": 20.0
+            }
         },
         {
             "id": "8abc61b5-21a1-45b2-876b-b82d80447a39",
@@ -46435,7 +46425,12 @@
                     }
                 ]
             },
-            "notes": "Rebuild cities to rely on public transport, cycling, and walking. Private car ownership banned. Suburbs become denser, agricultural communities where they aren't levelled completely and rewilded. \n\nDiscontent higher in global north\n\nLower pollution, lower mortality, reduction in aerosol pollution warms world slightly, healthier population, reduce energy-use for transport drastically\n\nhttps://www.eia.gov/outlooks/ieo/pdf/transportation.pdf says motor gasoline was 39% of transportation energy consumption 2012\n\nhttps://www.wsj.com/articles/green-steel-becomes-a-hot-commodity-for-big-auto-makers-11631525401#:~:text=The%20auto%20industry%20accounts%20for,emissions%20related%20to%20energy%20production puts 12% of global steel production for the auto industry"
+            "notes": "[three-quarters fork] Policy fatigue (adapting): while in force, costs up to 1.5 contentedness per income level in each region (4.5 in the richest), starting at full strength and fading over 15 years. A big initial backlash that fades as cities and habits adapt.\n\nRebuild cities to rely on public transport, cycling, and walking. Private car ownership banned. Suburbs become denser, agricultural communities where they aren't levelled completely and rewilded. \n\nDiscontent higher in global north\n\nLower pollution, lower mortality, reduction in aerosol pollution warms world slightly, healthier population, reduce energy-use for transport drastically\n\nhttps://www.eia.gov/outlooks/ieo/pdf/transportation.pdf says motor gasoline was 39% of transportation energy consumption 2012\n\nhttps://www.wsj.com/articles/green-steel-becomes-a-hot-commodity-for-big-auto-makers-11631525401#:~:text=The%20auto%20industry%20accounts%20for,emissions%20related%20to%20energy%20production puts 12% of global steel production for the auto industry",
+            "fatigue": {
+                "adapting": true,
+                "rate": 1.5,
+                "years": 15.0
+            }
         },
         {
             "id": "27a0e64f-62e3-4881-aad2-84ef5c5ab265",
@@ -47651,7 +47646,12 @@
                     }
                 ]
             },
-            "notes": "Increase discontent\n\nreduce demand for land\n\nreduce greenhouse gas emissions"
+            "notes": "[three-quarters fork] Policy fatigue (adapting): while in force, costs up to 1.5 contentedness per income level in each region (4.5 in the richest), starting at full strength and fading over 15 years. A big initial backlash that fades as food culture adapts over ~15 years.\n\nIncrease discontent\n\nreduce demand for land\n\nreduce greenhouse gas emissions",
+            "fatigue": {
+                "adapting": true,
+                "rate": 1.5,
+                "years": 15.0
+            }
         },
         {
             "id": "002f40c7-9355-4938-90d1-12d502fe5293",

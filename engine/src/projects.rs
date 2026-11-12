@@ -136,6 +136,26 @@ pub struct Upgrade {
     pub active: bool,
 }
 
+/// Ongoing discontent while a policy is in force, felt in proportion to a
+/// region's income level (wealthier regions have more to give up).
+/// "Grinding" policies (rationing, quotas) wear on people more the longer
+/// they last; "adapting" ones (diet mandates) start hard and fade as habits
+/// change.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+pub struct Fatigue {
+    pub adapting: bool,
+    /// Contentedness lost per income level at full strength.
+    pub rate: f32,
+    /// Years to reach full strength (grinding) or to fade out (adapting).
+    pub years: f32,
+}
+impl Fatigue {
+    pub fn level(&self, years_active: f32) -> f32 {
+        let t = (years_active / self.years.max(1.)).clamp(0., 1.);
+        self.rate * if self.adapting { 1. - t } else { t }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Project {
     pub id: Id,
@@ -160,6 +180,10 @@ pub struct Project {
     pub required_majority: f32,
     pub effects: Vec<Effect>,
     pub outcomes: Vec<Outcome>,
+
+    /// Ongoing discontent while this policy is in force (see `Fatigue`).
+    #[serde(default)]
+    pub fatigue: Option<Fatigue>,
     pub upgrades: Vec<Upgrade>,
     pub active_outcome: Option<usize>,
 

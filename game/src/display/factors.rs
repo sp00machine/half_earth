@@ -458,8 +458,20 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                     amount: 30.,
                     display: None,
                 });
+                // Policy fatigue is applied to regions' outlook, so
+                // pull it out of the regional factors to show it separately.
+                let n_regions = state.world.regions.len().max(1) as f32;
+                let fatigue = state.fatigue_applied.values().sum::<f32>() / n_regions;
+                if fatigue.round_to(1) != 0. {
+                    rankings.push(Factor::Event {
+                        name: t!("Policy Fatigue").to_string(),
+                        amount: -fatigue.round_to(1),
+                        display: None,
+                    })
+                }
                 // Delta relative to their starting value of 10.
-                let regions_outlook_delta = (state.world.regions.outlook() - 10.).round_to(1);
+                let regions_outlook_delta =
+                    (state.world.regions.outlook() + fatigue - 10.).round_to(1);
                 if regions_outlook_delta != 0. {
                     rankings.push(Factor::Event {
                         name: t!("Regional Factors").to_string(),
