@@ -132,8 +132,15 @@ fn devel_tip() -> Tip {
     )
 }
 
-fn cont_tip() -> Tip {
-    tip(icons::CONTENTEDNESS, t!("This region's contentedness."))
+fn cont_tip(region: &Region) -> Tip {
+    tip(
+        icons::CONTENTEDNESS,
+        t!(
+            "This region's contentedness: %{value}. Tap for what's behind it.",
+            value = format!("{:.1}", region.outlook)
+        ),
+    )
+    .card(crate::tips::TipCard::Contentedness(Some(region.id)))
 }
 
 fn hab_tip() -> Tip {
@@ -298,7 +305,7 @@ fn region_impacts(ui: &mut egui::Ui, region: &Region, state: &State) {
             );
 
             add_tip(
-                cont_tip(),
+                cont_tip(region),
                 ui.horizontal(|ui| {
                     ui.add(icons::CONTENTEDNESS.size(18.));
                     ui.add(intensity_bar(contentedness).invert().pips(4));

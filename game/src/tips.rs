@@ -87,6 +87,10 @@ impl Tip {
                             set_tip_width(ui);
                             render_storage_card(ui, state)
                         }
+                        TipCard::Contentedness(region) => {
+                            set_tip_width(ui);
+                            render_contentedness_card(ui, state, *region)
+                        }
                         TipCard::EditableProject(cards) => {
                             ui.push_id("editable-project", |ui| {
                                 ui.set_height(ui.ctx().content_rect().height().min(640.));
@@ -260,6 +264,9 @@ pub enum TipCard {
     EditableProject(Cards<Project>),
     /// Grid storage and lithium.
     Storage,
+    /// What's behind contentedness: one region's breakdown (if given) and
+    /// an overview by income level.
+    Contentedness(Option<hes_engine::Id>),
 }
 impl From<Project> for TipCard {
     fn from(value: Project) -> Self {
@@ -305,6 +312,168 @@ impl TipCard {
     pub fn editable_project(value: Project) -> Self {
         TipCard::EditableProject(Cards::new(std::iter::once(value)))
     }
+}
+
+fn outlook_source_name(source: &hes_engine::OutlookSource) -> String {
+    use hes_engine::OutlookSource;
+    use rust_i18n::t;
+    match source {
+        OutlookSource::Start => t!("Starting contentedness").to_string(),
+        OutlookSource::Temperature => t!("Temperature change").to_string(),
+        OutlookSource::Project(name) => t!(name.as_str()).to_string(),
+        OutlookSource::Fatigue(name) => format!("{} ({})", t!(name.as_str()), t!("fatigue")),
+        OutlookSource::Event(name) => t!(name.as_str()).to_string(),
+        OutlookSource::Recovery => t!("Recovery over time & other").to_string(),
+    }
+}
+
+/// Unrest a region is in, and what the next step would take.
+fn unrest_status(region: &hes_engine::Region) -> (String, String) {
+    use hes_engine::RegionFlag;
+    use rust_i18n::t;
+    let has = |f: RegionFlag| region.flags.contains(&f);
+    if region.seceded {
+        (t!("Seceded").to_string(), String::new())
+    } else if has(RegionFlag::Revolts) {
+        (
+            t!("In revolt").to_string(),
+            t!("At 0 or below, it secedes 5 years later.").to_string(),
+        )
+    } else if has(RegionFlag::Riots) {
+        (
+            t!("Rioting").to_string(),
+            t!("Revolts can start at 1 or below, and will at 0 or below.").to_string(),
+        )
+    } else if has(RegionFlag::Protests) {
+        (
+            t!("Protesting").to_string(),
+            t!("Riots are likely at 2 or below, and certain at 1 or below.").to_string(),
+        )
+    } else {
+        (
+            t!("Calm").to_string(),
+            t!("Protests can start at 4 or below, are likely at 3, and certain at 2.").to_string(),
+        )
+    }
+}
+
+/// Contentedness by region and income level.
+fn render_contentedness_card(
+    ui: &mut egui::Ui,
+    state: &GameState,
+    region_id: Option<hes_engine::Id>,
+) -> egui::Response {
+    use crate::display::AsText;
+    use hes_engine::{Income, OutlookSource, RegionFlag};
+    use rust_i18n::t;
+    use strum::IntoEnumIterator;
+
+    egui::Frame::NONE
+        .inner_margin(8)
+        .fill(Color32::from_black_alpha(160))
+        .corner_radius(4)
+        .show(ui, |ui| {
+            ui.style_mut().visuals.override_text_color = Some(Color32::WHITE);
+            ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Wrap);
+            let row = |ui: &mut egui::Ui, label: String, value: String| {
+                ui.horizontal(|ui| {
+                    ui.label(label);
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        ui.label(egui::RichText::new(value).strong());
+                    });
+                });
+            };
+            let small = |ui: &mut egui::Ui, text: String| {
+                ui.label(egui::RichText::new(text).size(11.).color(Color32::from_gray(190)));
+            };
+
+            if let Some(id) = region_id {
+                let region = &state.world.regions[&id];
+                ui.horizontal(|ui| {
+                    ui.add(icons::CONTENTEDNESS.size(24.));
+                    ui.label(egui::RichText::new(t!(&region.name)).size(18.));
+                });
+                let (status, next) = unrest_status(region);
+                row(ui, t!("Contentedness").to_string(), format!("{:.1}", region.outlook));
+                row(ui, t!("Status").to_string(), status);
+                if !next.is_empty() {
+                    small(ui, next);
+                }
+                ui.separator();
+                for (source, amount) in state.region_outlook_breakdown(&id) {
+                    let value = if source == OutlookSource::Start {
+                        format!("{amount:.0}")
+                    } else {
+                        format!("{amount:+.1}")
+                    };
+                    row(ui, outlook_source_name(&source), value);
+                }
+                ui.separator();
+            }
+
+            ui.horizontal(|ui| {
+                ui.add(icons::CONTENTEDNESS.size(20.));
+                ui.label(egui::RichText::new(t!("By income level")).size(16.));
+            });
+            for income in Income::iter().rev() {
+                let regions: Vec<_> = state
+                    .world
+                    .regions
+                    .iter()
+                    .filter(|r| r.income == income && !r.seceded)
+                    .collect();
+                if regions.is_empty() {
+                    continue;
+                }
+                let n = regions.len() as f32;
+                let avg = regions.iter().map(|r| r.outlook).sum::<f32>() / n;
+                let count = |f: RegionFlag| regions.iter().filter(|r| r.flags.contains(&f)).count();
+                ui.add_space(4.);
+                row(
+                    ui,
+                    format!("{} ({})", t!(income.title()), regions.len()),
+                    format!("{avg:.1}"),
+                );
+                let (protests, riots, revolts) =
+                    (count(RegionFlag::Protests), count(RegionFlag::Riots), count(RegionFlag::Revolts));
+                if protests + riots + revolts > 0 {
+                    small(
+                        ui,
+                        t!(
+                            "%{protests} protesting, %{riots} rioting, %{revolts} in revolt",
+                            protests = protests,
+                            riots = riots,
+                            revolts = revolts
+                        )
+                        .to_string(),
+                    );
+                }
+
+                // The biggest average drivers, other than the starting value.
+                let mut totals: Vec<(OutlookSource, f32)> = vec![];
+                for region in &regions {
+                    for (source, amount) in state.region_outlook_breakdown(&region.id) {
+                        if source == OutlookSource::Start {
+                            continue;
+                        }
+                        match totals.iter_mut().find(|(s, _)| *s == source) {
+                            Some((_, total)) => *total += amount,
+                            None => totals.push((source, amount)),
+                        }
+                    }
+                }
+                totals.sort_by(|a, b| a.1.abs().total_cmp(&b.1.abs()).reverse());
+                for (source, total) in totals.into_iter().take(4) {
+                    let avg = total / n;
+                    if avg.abs() >= 0.1 {
+                        row(ui, format!("  {}", outlook_source_name(&source)), format!("{avg:+.1}"));
+                    }
+                }
+            }
+            ui.add_space(4.);
+            small(ui, t!("Every region starts at 10 and slowly recovers toward it. Policies that cost contentedness per income level hit richer regions harder.").to_string());
+        })
+        .response
 }
 
 /// A summary of grid storage and lithium supply.

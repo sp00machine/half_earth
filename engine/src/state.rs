@@ -61,6 +61,23 @@ pub struct YearRecord {
 }
 
 /// Represents the game state.
+/// Where a region's contentedness comes from.
+#[derive(Debug, Clone, PartialEq)]
+pub enum OutlookSource {
+    /// Every region starts at 10.
+    Start,
+    /// Warming (or cooling) since the start.
+    Temperature,
+    /// A policy or project's direct effect.
+    Project(String),
+    /// Ongoing discontent from a policy in force.
+    Fatigue(String),
+    /// A past event's effect.
+    Event(String),
+    /// Slow recovery over time, and anything not accounted for above.
+    Recovery,
+}
+
 /// Fuel energy a combustion vehicle uses per unit of electricity an
 /// electric one would.
 const FUEL_PER_EV_ELECTRICITY: f32 = 4.;
@@ -643,6 +660,62 @@ impl State {
             self.storage_tech(),
             lithium_left,
         );
+    }
+
+    /// What's behind a region's contentedness: (source, amount) pairs that
+    /// add up to its current value. Policy effects are worked out from the
+    /// region as it is now; anything left over (mostly the slow recovery
+    /// toward contentment over time) is the last entry.
+    pub fn region_outlook_breakdown(&self, region_id: &Id) -> Vec<(OutlookSource, f32)> {
+        use crate::events::Effect;
+        let region = &self.world.regions[region_id];
+        let level = region.income.level() as f32;
+        let effect_amount = |effect: &Effect| -> f32 {
+            match effect {
+                Effect::IncomeOutlookChange(mult) => (mult * level).round(),
+                Effect::DemandOutlookChange(output, mult) => (mult
+                    * region.demand_level(output, &self.world.per_capita_demand) as f32)
+                    .round(),
+                _ => 0.,
+            }
+        };
+
+        let mut parts = vec![(OutlookSource::Start, 10.)];
+        let temperature = self.world.temp_outlook * 0.4;
+        if temperature.abs() > 0.05 {
+            parts.push((OutlookSource::Temperature, temperature));
+        }
+        for project in self.world.projects.iter().filter(|p| p.is_online()) {
+            let amount: f32 = project
+                .active_effects_with_outcomes()
+                .into_iter()
+                .map(|e| effect_amount(e))
+                .sum();
+            if amount != 0. {
+                parts.push((OutlookSource::Project(project.name.clone()), amount));
+            }
+            if let (Some(fatigue), Some(years)) =
+                (project.fatigue, self.policy_years.get(&project.id))
+            {
+                let amount = -fatigue.level(*years) * level;
+                if amount.abs() > 0.05 {
+                    parts.push((OutlookSource::Fatigue(project.name.clone()), amount));
+                }
+            }
+        }
+        let mut seen = std::collections::BTreeSet::new();
+        for event in &self.events {
+            let amount: f32 = event.effects.iter().map(|e| effect_amount(e)).sum();
+            if amount != 0. && seen.insert(event.id) {
+                parts.push((OutlookSource::Event(event.name.clone()), amount));
+            }
+        }
+        let accounted: f32 = parts.iter().map(|(_, v)| v).sum();
+        let rest = region.outlook - accounted;
+        if rest.abs() > 0.05 {
+            parts.push((OutlookSource::Recovery, rest));
+        }
+        parts
     }
 
     /// Share of electricity planned from intermittent sources (wind, solar).
@@ -1599,5 +1672,28 @@ mod fatigue_tests {
         }
         assert!(first > 1.5);
         assert_eq!(state.policy_fatigue, 0.);
+    }
+}
+
+#[cfg(test)]
+mod outlook_breakdown_tests {
+    use super::*;
+
+    #[test]
+    fn breakdown_adds_up_and_names_policies() {
+        let mut state = State::new(World::default());
+        let rationing = state.world.projects.iter().find(|p| p.name == "Wartime Rationing").unwrap().id;
+        state.start_project(&rationing);
+        for _ in 0..7 {
+            state.step_year(state.world.temperature);
+        }
+        assert_eq!(state.world.projects[&rationing].status, Status::Active);
+        let rich = state.world.regions.iter().find(|r| r.income.level() == 3).unwrap().id;
+        let parts = state.region_outlook_breakdown(&rich);
+        let total: f32 = parts.iter().map(|(_, v)| v).sum();
+        assert!((total - state.world.regions[&rich].outlook).abs() < 1e-3);
+        assert!(parts.iter().any(|(s, v)| *s == OutlookSource::Project("Wartime Rationing".into()) && *v < 0.));
+        assert!(parts.iter().any(|(s, v)| *s == OutlookSource::Fatigue("Wartime Rationing".into()) && *v < 0.));
+        println!("{parts:?}");
     }
 }

@@ -53,7 +53,7 @@ pub use projects::{
     Upgrade,
 };
 pub use regions::{Income, Latitude, Region};
-pub use state::{Emissions, ResolvedEvent, State, Update, YearRecord, YieldShock};
+pub use state::{Emissions, OutlookSource, ResolvedEvent, State, Update, YearRecord, YieldShock};
 pub use util::*;
 pub use world::World;
 
