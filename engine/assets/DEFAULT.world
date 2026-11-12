@@ -50846,35 +50846,6 @@
                             "ModifyIndustryResources": [
                                 "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
                                 "Fuel",
-                                -0.9
-                            ]
-                        },
-                        {
-                            "ModifyIndustryResourcesAmount": [
-                                "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
-                                "Electricity",
-                                146.0
-                            ]
-                        }
-                    ],
-                    "probability": {
-                        "likelihood": "Likely",
-                        "conditions": [
-                            {
-                                "ProjectStatus": [
-                                    "5607aed4-50cb-45e3-a400-0a07d18a49a5",
-                                    "Active"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "effects": [
-                        {
-                            "ModifyIndustryResources": [
-                                "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
-                                "Fuel",
                                 -0.2
                             ]
                         },
@@ -50882,7 +50853,7 @@
                             "ModifyIndustryResourcesAmount": [
                                 "4e1cb2c2-14b0-4917-b0b2-137c614b273b",
                                 "Electricity",
-                                32.5
+                                8.66
                             ]
                         }
                     ],
@@ -50906,19 +50877,8 @@
                     },
                     "attribution": "NASA (Public Domain)"
                 },
-                "description": "Research ways to decarbonize long-range air travel.",
+                "description": "Research ways to electrify air travel. Batteries are far too heavy for long flights, so this mostly means electric planes on short routes.",
                 "outcomes": [
-                    {
-                        "root": 0,
-                        "lines": [
-                            {
-                                "id": 0,
-                                "next": null,
-                                "speaker": "The Engineer",
-                                "text": "Development of hydrogen technology led to fuel cell adaptations allowing much lighter electric aircraft."
-                            }
-                        ]
-                    },
                     {
                         "root": 0,
                         "lines": [
@@ -50932,7 +50892,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Replacing jet fuel now takes electricity: long-haul flights can't run on batteries, so this means hydrogen or synthetic fuels, which take about 1.5 kWh of electricity per kWh of fuel they replace.\n\nTV: I don't think this is doing to happen any time soon, perhaps in the second half of the century. Only things being proposed now are for 500km jaunts, which are useless.\n\nhttps://www.bbc.com/future/article/20200617-the-largest-electric-plane-ever-to-fly\n\nAlso see this:\n\nhttps://www.ft.com/content/87941b8d-0460-4b54-a861-d6ebc6da29e8\n\nSR: I took a stab at outlining two possible futures, one in a world with investments in hydrogen research and one without.\nhttps://www.sciencedirect.com/science/article/abs/pii/S1364032119301157\nhttps://www.sciencedirect.com/science/article/abs/pii/S0306261920302993\n\nThis is nice! Here's Drawdown's take. Efficiency gains rather than substitution. TV.\nhttps://drawdown.org/solutions/efficient-aviation"
+            "notes": "[three-quarters fork] One outcome: short-haul battery planes, -20% of aviation fuel, using about 0.4 kWh of electricity per kWh of jet fuel replaced (electric motors waste much less than jet engines). There's no separate hydrogen outcome any more: hydrogen and synthetic jet fuel come from switching fuel production to Green Hydrogen, as for any other fuel use.\n\n[three-quarters fork] Replacing jet fuel now takes electricity: long-haul flights can't run on batteries, so this means hydrogen or synthetic fuels, which take about 1.5 kWh of electricity per kWh of fuel they replace.\n\nTV: I don't think this is doing to happen any time soon, perhaps in the second half of the century. Only things being proposed now are for 500km jaunts, which are useless.\n\nhttps://www.bbc.com/future/article/20200617-the-largest-electric-plane-ever-to-fly\n\nAlso see this:\n\nhttps://www.ft.com/content/87941b8d-0460-4b54-a861-d6ebc6da29e8\n\nSR: I took a stab at outlining two possible futures, one in a world with investments in hydrogen research and one without.\nhttps://www.sciencedirect.com/science/article/abs/pii/S1364032119301157\nhttps://www.sciencedirect.com/science/article/abs/pii/S0306261920302993\n\nThis is nice! Here's Drawdown's take. Efficiency gains rather than substitution. TV.\nhttps://drawdown.org/solutions/efficient-aviation"
         },
         {
             "id": "2748a050-f04c-4bb3-8d74-cf32186a1235",
@@ -52121,7 +52081,15 @@
                 },
                 "description": "Cells are harvested from animals, cultured to multiply to create muscle tissue."
             },
-            "notes": "LC: https://gfi.org/science/the-science-of-cultivated-meat/\nCrossover with organ growing tech. \n\ntakes significant scientific capital\n\nseems like lab-meat ain't coming any time soon:\n\nhttps://thecounter.org/lab-grown-cultivated-meat-cost-at-scale/\n\nA friend of mine who work on the topic (Jan Dutkiewicz) says that lab meat might be possible at scale by 2040 or 2050, but that's a big if\n\nmakes vegan or vegetarian mandate easier\n\nProbably too little too late\n\nMaybe it will cut into meat consumption by 20% or so, but will not replace meat unless there is a mandate\n\nhttps://cedelft.eu/wp-content/uploads/sites/2/2021/04/CE_Delft_190107_LCA_of_cultivated_meat_Def.pdf\nEnergy use: 147-264MJ/kg (~205.5MJ/kg = 57.1kWh/kg)\nLand use: 1.8m2/kg\nWater use: 42-56litre/kg (~49litre/kg)\n> The main driver for the carbon footprint in the \nconventional energy scenario is electricity use during production, followed by the \nproduction of medium ingredients. A significant reduction in carbon footprint can be \nachieved by decarbonising the energy mix. In the (upstream) production of medium, \nreductions that can be achieved by decarbonisation are smaller because a part of the \ncarbon footprint there is caused by the agricultural production of the feedstock and \nchemicals used during production of the medium ingredients, which rely on heavy industrial \nprocesses, that are harder to decarbonise. Scaffolds (assumed in this study to be in the \nform of a hydrogel), equipment, wastewater treatment and HVAC of the facility make up a \nrelatively minor part of the carbon footprint (total of < 2%).\nSo aside from energy, the other main contributor to GHG emissions (more significant under the renewable scenario) is the medium's production: roughly 1.25kgCO2eq/kg\nConversion from kg to kcals:\nBeef sausage is about ~3400kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/746779/nutrients)\nPork sausage is about ~3200kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/746780/nutrients)\nChicken is about ~1500kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/331897/nutrients)\nSo say 2700kcals/kg on average\n\nThese figures then are:\nEnergy use: 57.1kWh/kg = 0.2kWh/kcal\nLand use: 1.8m2/kg = 0.00067m2/kcal\nWater use: 49litre/kg = 0.018litre/kcal\nNon-energy GHG emissions: 1.25kgCO2eq/kg = 1250.0gCO2eq/kg = 0.463gCO2eq/kcal"
+            "notes": "[three-quarters fork] Construction: Per tonne of meat a year (about 2.5 million kcal): ~0.5 t of stainless steel bioreactors and plant, ~0.5 t of cement for buildings, and ~3 MWh of manufacturing energy.\n\nLC: https://gfi.org/science/the-science-of-cultivated-meat/\nCrossover with organ growing tech. \n\ntakes significant scientific capital\n\nseems like lab-meat ain't coming any time soon:\n\nhttps://thecounter.org/lab-grown-cultivated-meat-cost-at-scale/\n\nA friend of mine who work on the topic (Jan Dutkiewicz) says that lab meat might be possible at scale by 2040 or 2050, but that's a big if\n\nmakes vegan or vegetarian mandate easier\n\nProbably too little too late\n\nMaybe it will cut into meat consumption by 20% or so, but will not replace meat unless there is a mandate\n\nhttps://cedelft.eu/wp-content/uploads/sites/2/2021/04/CE_Delft_190107_LCA_of_cultivated_meat_Def.pdf\nEnergy use: 147-264MJ/kg (~205.5MJ/kg = 57.1kWh/kg)\nLand use: 1.8m2/kg\nWater use: 42-56litre/kg (~49litre/kg)\n> The main driver for the carbon footprint in the \nconventional energy scenario is electricity use during production, followed by the \nproduction of medium ingredients. A significant reduction in carbon footprint can be \nachieved by decarbonising the energy mix. In the (upstream) production of medium, \nreductions that can be achieved by decarbonisation are smaller because a part of the \ncarbon footprint there is caused by the agricultural production of the feedstock and \nchemicals used during production of the medium ingredients, which rely on heavy industrial \nprocesses, that are harder to decarbonise. Scaffolds (assumed in this study to be in the \nform of a hydrogel), equipment, wastewater treatment and HVAC of the facility make up a \nrelatively minor part of the carbon footprint (total of < 2%).\nSo aside from energy, the other main contributor to GHG emissions (more significant under the renewable scenario) is the medium's production: roughly 1.25kgCO2eq/kg\nConversion from kg to kcals:\nBeef sausage is about ~3400kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/746779/nutrients)\nPork sausage is about ~3200kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/746780/nutrients)\nChicken is about ~1500kcals/kg (https://fdc.nal.usda.gov/fdc-app.html#/food-details/331897/nutrients)\nSo say 2700kcals/kg on average\n\nThese figures then are:\nEnergy use: 57.1kWh/kg = 0.2kWh/kcal\nLand use: 1.8m2/kg = 0.00067m2/kcal\nWater use: 49litre/kg = 0.018litre/kcal\nNon-energy GHG emissions: 1.25kgCO2eq/kg = 1250.0gCO2eq/kg = 0.463gCO2eq/kcal",
+            "materials": {
+                "capacity_factor": 1,
+                "lifetime": 20,
+                "steel": 0.5,
+                "cement": 0.5,
+                "other_energy": 3000,
+                "annual_output": 2500000.0
+            }
         },
         {
             "id": "a69aa868-9970-41bf-a62c-22602d8e1fce",
@@ -52170,7 +52138,14 @@
                 },
                 "description": "Follows the same process as grey, with the additional technologies necessary to capture the CO2 produced when hydrogen is split from methane (or from coal) and store it for long term."
             },
-            "notes": "[three-quarters fork] fuel input was 4.0 (an EROI of 1:4 entered backwards), so each unit of blue hydrogen consumed 4 units of fuel. Set to 0.4: grey hydrogen's process energy (0.3) plus a ~25% carbon capture energy penalty.\n\nMethane and carbon dioxide emissions (averaged b/w with and w/o flue): https://onlinelibrary.wiley.com/doi/full/10.1002/ese3.956\nLand: calculated using fuel requirements and methane fuel efficiency below\nWater: pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nFuel: sciencedirect.com/science/article/abs/pii/S0360319919300230\nElectricity: https://www.sciencedirect.com/science/article/pii/S0306261920314136?via%3Dihub#s0105\n(We'll use the same values for water to conduct hydrolysis.)\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\n\nElsewhere I'm seeing EROI of 1:4 for grey/blue hydrogen (https://theconversation.com/blue-hydrogen-what-is-it-and-should-it-replace-natural-gas-166053), still not great, but 1:45 just seemed way too high -FT"
+            "notes": "[three-quarters fork] Construction: Steam methane reformers plus carbon capture and CO2 pipelines: ~70 t of steel per MW.\n\n[three-quarters fork] fuel input was 4.0 (an EROI of 1:4 entered backwards), so each unit of blue hydrogen consumed 4 units of fuel. Set to 0.4: grey hydrogen's process energy (0.3) plus a ~25% carbon capture energy penalty.\n\nMethane and carbon dioxide emissions (averaged b/w with and w/o flue): https://onlinelibrary.wiley.com/doi/full/10.1002/ese3.956\nLand: calculated using fuel requirements and methane fuel efficiency below\nWater: pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nFuel: sciencedirect.com/science/article/abs/pii/S0360319919300230\nElectricity: https://www.sciencedirect.com/science/article/pii/S0306261920314136?via%3Dihub#s0105\n(We'll use the same values for water to conduct hydrolysis.)\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\n\nElsewhere I'm seeing EROI of 1:4 for grey/blue hydrogen (https://theconversation.com/blue-hydrogen-what-is-it-and-should-it-replace-natural-gas-166053), still not great, but 1:45 just seemed way too high -FT",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 30,
+                "steel": 70,
+                "cement": 25,
+                "other_energy": 400000.0
+            }
         },
         {
             "id": "1db29e91-98a7-4264-bb2b-874458ea44b7",
@@ -52442,7 +52417,14 @@
                 },
                 "description": "Produced from methane (CH4), split with steam into CO2 \u2013 the main culprit for climate change \u2013 and H2, hydrogen. Grey hydrogen has increasingly been produced also from coal, with significantly higher CO2 emissions per unit of hydrogen produced."
             },
-            "notes": "-Changed input to LNG, key difference is CCS for blue hydrogen\n\nMethane and carbon dioxide emissions (averaged b/w with and w/o flue): https://onlinelibrary.wiley.com/doi/full/10.1002/ese3.956\nLand: calculated using fuel requirements and coal efficiency below\nWater: pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nFuel: sciencedirect.com/science/article/abs/pii/S0360319919300230\nElectricity: https://www.sciencedirect.com/science/article/pii/S0306261920314136?via%3Dihub#s0105\n(We'll use the same values for water and kWh to conduct hydrolysis.)\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\n\nElsewhere I'm seeing EROI of 1:4 for grey/blue hydrogen (https://theconversation.com/blue-hydrogen-what-is-it-and-should-it-replace-natural-gas-166053), still not great, but 1:45 just seemed way too high -FT"
+            "notes": "[three-quarters fork] Construction: Steam methane reformers: ~40 t of steel per MW.\n\n-Changed input to LNG, key difference is CCS for blue hydrogen\n\nMethane and carbon dioxide emissions (averaged b/w with and w/o flue): https://onlinelibrary.wiley.com/doi/full/10.1002/ese3.956\nLand: calculated using fuel requirements and coal efficiency below\nWater: pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nFuel: sciencedirect.com/science/article/abs/pii/S0360319919300230\nElectricity: https://www.sciencedirect.com/science/article/pii/S0306261920314136?via%3Dihub#s0105\n(We'll use the same values for water and kWh to conduct hydrolysis.)\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\n\nElsewhere I'm seeing EROI of 1:4 for grey/blue hydrogen (https://theconversation.com/blue-hydrogen-what-is-it-and-should-it-replace-natural-gas-166053), still not great, but 1:45 just seemed way too high -FT",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 30,
+                "steel": 40,
+                "cement": 15,
+                "other_energy": 200000.0
+            }
         },
         {
             "id": "98c7946e-bcac-403a-b3ed-23bb2af6c7bb",
@@ -52604,7 +52586,14 @@
                 },
                 "description": "In coal-fired power plants, bituminous coal, subbituminous coal, or lignite is burned. The heat produced by the combustion of the coal is used to convert water into high-pressure steam, which drives a turbine, which produces electricity."
             },
-            "notes": "Just using the values from Coal Power Generation and from here: https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nValues given:\nCoal (anthracite)\t    228.60\nCoal (bituminous)\t    205.40\nCoal (lignite)\t            216.24\nCoal (subbituminous)  214.13\n\nIn gCO2/kWh:\nCoal (anthracite)\t    353.81\nCoal (bituminous)\t    317.90\nCoal (lignite)\t            334.68\nCoal (subbituminous)  331.41\n\nOr an average of 334.45g/kWh\n\nI'm not sure why these are so much lower than the coal-fired electricity values"
+            "notes": "[three-quarters fork] Construction: Mines and rail: ~10 t of steel per MW.\n\nJust using the values from Coal Power Generation and from here: https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nValues given:\nCoal (anthracite)\t    228.60\nCoal (bituminous)\t    205.40\nCoal (lignite)\t            216.24\nCoal (subbituminous)  214.13\n\nIn gCO2/kWh:\nCoal (anthracite)\t    353.81\nCoal (bituminous)\t    317.90\nCoal (lignite)\t            334.68\nCoal (subbituminous)  331.41\n\nOr an average of 334.45g/kWh\n\nI'm not sure why these are so much lower than the coal-fired electricity values",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 30,
+                "steel": 10,
+                "cement": 5,
+                "other_energy": 50000.0
+            }
         },
         {
             "id": "a889227c-784e-4b7d-8d13-93cab8ffde4a",
@@ -52878,7 +52867,14 @@
                 },
                 "description": "Hydrogen produced by splitting water into hydrogen and oxygen using renewable electricity."
             },
-            "notes": "[three-quarters fork] land was 0.0529, computed from the solar PV area needed to power electrolysis. That electricity is already drawn from the grid (and its land charged to the grid's processes), so it was counted twice. Set to 0.0001 for the electrolyser plant itself.\n\nLand: calculated using electricity requirements and PV efficiency below\nElectricity: https://www.sciencedirect.com/science/article/abs/pii/S0360319919300230\nWater: https://pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\nGHGs assumed negligible, can revisit if we want.\nIsCombustion can be true or false depending on whether used for fuel or fuel cell.\n\nAssuming that because the player is researching green hydrogen, it'll be a more efficient process than it is now...assuming EROI for 1:4 for grey/blue hydrogen, maybe say that advanced green hydrogen is closer to 1:3 -FT\n\n--TV: I say the odds of green hydrogen working is very high, something like 90-99%. The economist seems pretty optimistic. I would set 10 years for research.\nhttps://www.economist.com/briefing/2021/10/09/creating-the-new-hydrogen-economy-is-a-massive-undertaking\n---seems to be optimistic about EROI of green hydrogen. Pellow, Matthew A., Christopher JM Emmott, Charles J. Barnhart, and Sally M. Benson. \"Hydrogen or batteries for grid storage. A net energy analysis.\" Energy & Environmental Science 8, no. 7 (2015): 1938-1952."
+            "notes": "[three-quarters fork] Construction: Electrolyzers, compressors, storage tanks and pipelines: ~60 t of steel per MW of hydrogen output, plus energy-intensive stacks (iridium, platinum, nickel). Runs ~50% of the time, following cheap renewable power.\n\n[three-quarters fork] land was 0.0529, computed from the solar PV area needed to power electrolysis. That electricity is already drawn from the grid (and its land charged to the grid's processes), so it was counted twice. Set to 0.0001 for the electrolyser plant itself.\n\nLand: calculated using electricity requirements and PV efficiency below\nElectricity: https://www.sciencedirect.com/science/article/abs/pii/S0360319919300230\nWater: https://pubs.acs.org/doi/full/10.1021/acsenergylett.1c01375\nkWh/kg H2: https://hypertextbook.com/facts/2005/MichelleFung.shtml\nGHGs assumed negligible, can revisit if we want.\nIsCombustion can be true or false depending on whether used for fuel or fuel cell.\n\nAssuming that because the player is researching green hydrogen, it'll be a more efficient process than it is now...assuming EROI for 1:4 for grey/blue hydrogen, maybe say that advanced green hydrogen is closer to 1:3 -FT\n\n--TV: I say the odds of green hydrogen working is very high, something like 90-99%. The economist seems pretty optimistic. I would set 10 years for research.\nhttps://www.economist.com/briefing/2021/10/09/creating-the-new-hydrogen-economy-is-a-massive-undertaking\n---seems to be optimistic about EROI of green hydrogen. Pellow, Matthew A., Christopher JM Emmott, Charles J. Barnhart, and Sally M. Benson. \"Hydrogen or batteries for grid storage. A net energy analysis.\" Energy & Environmental Science 8, no. 7 (2015): 1938-1952.",
+            "materials": {
+                "capacity_factor": 0.5,
+                "lifetime": 20,
+                "steel": 60,
+                "cement": 15,
+                "other_energy": 1200000.0
+            }
         },
         {
             "id": "31cbb42e-f7a4-4e07-9a02-9f2fe2669a4b",
@@ -52985,7 +52981,14 @@
                 },
                 "description": "Renewable resource, derived from biomass wood, crop residues, sugar, corn, or miscanthus.\n\nHas a low power-density and thus takes up great swathes of land."
             },
-            "notes": "[three-quarters fork] ch4 was 9.65 and n2o 0.06337, identical to BECCS (copied). The co2 figure (~175 g/kWh) is already a lifecycle estimate, so both were set to 0. Land-use change emissions will come from the land clearing system instead.\n\nThe 13.56% figure actually includes waste as well, but for simplicity just assigning it all to biomass.\n\nhttps://en.wikipedia.org/wiki/Environmental_impact_of_biodiesel#/media/File:BiodieselsCountryOfOrigin.jpg\nGives an average of 48.57gCO2/MJ, or about 174.86g/kWh\nBut this does not account for LUC\n\nTV--shouldn't this have some biodiversity pressure???\n\nsee BECCS for water calculations"
+            "notes": "[three-quarters fork] Construction: Biorefineries: ~20 t of steel per MW.\n\n[three-quarters fork] ch4 was 9.65 and n2o 0.06337, identical to BECCS (copied). The co2 figure (~175 g/kWh) is already a lifecycle estimate, so both were set to 0. Land-use change emissions will come from the land clearing system instead.\n\nThe 13.56% figure actually includes waste as well, but for simplicity just assigning it all to biomass.\n\nhttps://en.wikipedia.org/wiki/Environmental_impact_of_biodiesel#/media/File:BiodieselsCountryOfOrigin.jpg\nGives an average of 48.57gCO2/MJ, or about 174.86g/kWh\nBut this does not account for LUC\n\nTV--shouldn't this have some biodiversity pressure???\n\nsee BECCS for water calculations",
+            "materials": {
+                "capacity_factor": 0.8,
+                "lifetime": 25,
+                "steel": 20,
+                "cement": 10,
+                "other_energy": 150000.0
+            }
         },
         {
             "id": "3d13995d-c42f-4282-bd73-c5b6a99f5c4d",
@@ -53036,7 +53039,14 @@
                 },
                 "description": "Methane is the 'cleanest' fossil fuel one can use for electrical production, but it is not without its costs."
             },
-            "notes": "Just using the values from Natural Gas Power Generation and from https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nGives 116.65lbsCO2/million Btu or 180.54gCO2/kWh\n\nTV--no biodiversity pressure?? What about extraction?"
+            "notes": "[three-quarters fork] Construction: Wells, gathering lines and long-distance pipelines: ~30 t of steel per MW.\n\nJust using the values from Natural Gas Power Generation and from https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nGives 116.65lbsCO2/million Btu or 180.54gCO2/kWh\n\nTV--no biodiversity pressure?? What about extraction?",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 30,
+                "steel": 30,
+                "cement": 10,
+                "other_energy": 100000.0
+            }
         },
         {
             "id": "769e516d-c5ec-4633-aa9f-243c7242966e",
@@ -53089,7 +53099,14 @@
                 },
                 "description": "Produces kerosene, home heating oil, diesel fuel, and gasoline using petroleum."
             },
-            "notes": "Just using the values from Oil Power Generation and from here: https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nValues given:\nDiesel fuel and heating oil\t    163.45\nGasoline (without ethanol)\t    155.77\n\nSo about 252.975g/kWh for diesel and 241.088g/kWh for gasoline so average of 247.03g/kWh\n\nI'm not sure why these are so much lower than the oil electricity values\n\nTV--biodiversity pressure!"
+            "notes": "[three-quarters fork] Construction: Wells (steel casing and drill pipe), pipelines and refineries: ~30 t of steel per MW of oil output. Only growth beyond the starting industry counts.\n\nJust using the values from Oil Power Generation and from here: https://www.eia.gov/tools/faqs/faq.php?id=73&t=11\n\nThose values are given in lbs CO2/million Btu which is 453.592gCO2/293.071kWh.\n\nValues given:\nDiesel fuel and heating oil\t    163.45\nGasoline (without ethanol)\t    155.77\n\nSo about 252.975g/kWh for diesel and 241.088g/kWh for gasoline so average of 247.03g/kWh\n\nI'm not sure why these are so much lower than the oil electricity values\n\nTV--biodiversity pressure!",
+            "materials": {
+                "capacity_factor": 0.9,
+                "lifetime": 25,
+                "steel": 30,
+                "cement": 10,
+                "other_energy": 100000.0
+            }
         },
         {
             "id": "533c5b7a-eaba-46cc-bdf6-0f10d6050acd",
@@ -53243,7 +53260,14 @@
                 },
                 "description": "Grows fast and produces oils that can be refined into different biofuels, including jet and diesel fuels and produces sugars useful for making butanol and ethanol."
             },
-            "notes": "https://natsci.msu.edu/news/recent-algae-discovery-gives-clues-to-boost-biofuel-production/\nFor description: trying out writing the descriptions in a way that gives clues as to why you would want to use them, and a little more info about the process - why it's interesting.\n\n\nhttps://www.sciencedirect.com/science/article/pii/B9780323852692000022\n\nThis assessment of one particular kind of algae biofuel: https://openbiotechnologyjournal.com/VOLUME/12/PAGE/270/FULLTEXT/\n\n> (50.59 MJ/kg) associated with low consumption of water (28.38 m3/kg) and low CO2 emissions (9.18 kg CO2-eq/kg)\n\nThis is about 14kWh/kg, so:\n- water: 2.03 L/kWh\n- CO2: 655.7g CO2eq/kWh\n\nThe energy inputs required is 27.21MJ per kg, will just assume that's all electricity -> 7.5583333kWh\n\nThat paper doesn't have land use, but this one provides a range: https://www.sciencedirect.com/science/article/abs/pii/S1364032117301612\n\nFrom <0.01m2/MJ to around 0.14m2/MJ. Most of the studies are closer to 0.02m2/MJ, so say that, or 0.072m2/kWh\n\nthese numbers seem extremely high--should try to find another source\n\nlooking at this: https://pubs.acs.org/doi/10.1021/es900705j\ngives similar results, looking at the one with the highest energy yield (105MJ per kg), that one has 14.8kgCO2 emitted per kg so something like 507.5g/kWh\n\nAnd this one: https://www.osti.gov/servlets/purl/1177612\ngives 210gCO2eq/MJ which is about 756g/kWh.\n\nso I guess it really is that high\n\n--TV: seems like it would take a huge amount of fertilizer (we should add this to the costs). dangers of it spreading into the wild. No one seems to think it will work. I suggest a range of 5-15%.\n--https://harvardpolitics.com/the-myth-of-algae-biofuels/\n--Bo\u0161njakovi\u0107, Mladen, and Nazaruddin Sinaga. \"The perspective of large-scale production of algae biodiesel.\" Applied Sciences 10, no. 22 (2020): 8181.\n---Shirvani, Tara, Xiaoyu Yan, Oliver R. Inderwildi, Peter P. Edwards, and David A. King. \"Life cycle energy and greenhouse gas analysis for algae-derived biodiesel.\" Energy & Environmental Science 4, no. 10 (2011): 3773-3778.--seems like it is worse than diesel for the environment"
+            "notes": "[three-quarters fork] Construction: Ponds or photobioreactors, pumps and harvesting: lots of concrete and plastic per MW.\n\nhttps://natsci.msu.edu/news/recent-algae-discovery-gives-clues-to-boost-biofuel-production/\nFor description: trying out writing the descriptions in a way that gives clues as to why you would want to use them, and a little more info about the process - why it's interesting.\n\n\nhttps://www.sciencedirect.com/science/article/pii/B9780323852692000022\n\nThis assessment of one particular kind of algae biofuel: https://openbiotechnologyjournal.com/VOLUME/12/PAGE/270/FULLTEXT/\n\n> (50.59 MJ/kg) associated with low consumption of water (28.38 m3/kg) and low CO2 emissions (9.18 kg CO2-eq/kg)\n\nThis is about 14kWh/kg, so:\n- water: 2.03 L/kWh\n- CO2: 655.7g CO2eq/kWh\n\nThe energy inputs required is 27.21MJ per kg, will just assume that's all electricity -> 7.5583333kWh\n\nThat paper doesn't have land use, but this one provides a range: https://www.sciencedirect.com/science/article/abs/pii/S1364032117301612\n\nFrom <0.01m2/MJ to around 0.14m2/MJ. Most of the studies are closer to 0.02m2/MJ, so say that, or 0.072m2/kWh\n\nthese numbers seem extremely high--should try to find another source\n\nlooking at this: https://pubs.acs.org/doi/10.1021/es900705j\ngives similar results, looking at the one with the highest energy yield (105MJ per kg), that one has 14.8kgCO2 emitted per kg so something like 507.5g/kWh\n\nAnd this one: https://www.osti.gov/servlets/purl/1177612\ngives 210gCO2eq/MJ which is about 756g/kWh.\n\nso I guess it really is that high\n\n--TV: seems like it would take a huge amount of fertilizer (we should add this to the costs). dangers of it spreading into the wild. No one seems to think it will work. I suggest a range of 5-15%.\n--https://harvardpolitics.com/the-myth-of-algae-biofuels/\n--Bo\u0161njakovi\u0107, Mladen, and Nazaruddin Sinaga. \"The perspective of large-scale production of algae biodiesel.\" Applied Sciences 10, no. 22 (2020): 8181.\n---Shirvani, Tara, Xiaoyu Yan, Oliver R. Inderwildi, Peter P. Edwards, and David A. King. \"Life cycle energy and greenhouse gas analysis for algae-derived biodiesel.\" Energy & Environmental Science 4, no. 10 (2011): 3773-3778.--seems like it is worse than diesel for the environment",
+            "materials": {
+                "capacity_factor": 0.5,
+                "lifetime": 20,
+                "steel": 80,
+                "cement": 100,
+                "other_energy": 1500000.0
+            }
         },
         {
             "id": "add29249-56ad-4e7d-a900-c3c0d51178e9",
@@ -53289,7 +53313,15 @@
                 },
                 "description": "Automated indoor vertical farming. Requires  less water but relies on lights not the sun. Potential to  bring fresh foods directly into communities."
             },
-            "notes": "[three-quarters fork] limit was 1.026e15 kcal (about 15% of starting plant calorie demand, i.e. 2-3 mix shares). Vertical farms mostly grow leafy greens, which provide very few calories, so it is capped at 6.84e14: exactly one 5% mix share for plant demand between ~6.8e15 and ~1.4e16 kcal. (A cap below 5% of demand rounds down to zero shares.)\n\nLucy -  at this point the facility and conditions required to maintain larger scale vertical farming setups in the US is not significantly more energy efficient. Niel Mattson, professor of horticulture at Cornell University \"One of the things that we\u2019ve found is that if we look at like New York City, production in a greenhouse had very similar energy use and carbon footprint to growing in California and shipping 3000 miles. It was ever so slightly higher, but just a few percentage points higher than field production. However, a vertical farm had about twice the energy cost and twice the carbon footprint of growing 3000 miles away.\"\nhttps://gastropod.com/transcript-dig-for-victory/\n\nTV: for me, it seems that it trades fertilizer and water for electricity. Yet, it can only really apply to salad greens and the like and cannot replace more than 10-20percent of crops at most, and definitely can't be used for animal fodder.\n\n\nEnergy use:\n\n> For example, strawberries grown on a conventional farm in Chile require 0.4524 kiloWatt hours (kWh) of electricity per square metre per year (sq.m/year). Whereas strawberries grown on a vertical farm in Russia require over 3,000% more energy at 1,404 kWh/sq.m/year. To put that in context, a four-room HDB\u2019s average electricity consumption is 3.99 kWh/sq.m/year.\nhttps://www.rsis.edu.sg/rsis-publication/nts/vertical-farms-are-they-sustainable/\n\nOther figures here (per m2): https://ifarm.fi/blog/2020/12/how-much-electricity-does-a-vertical-farm-consume\nRomaine lettuce: 65.26 kWh / Month\nRocket: 52.51 kWh / Month\nStrawberries: 117.10 kWh / Month (in fact, I think this is the Russian vertical farm referenced above)\n\nA major downside that's not really captured here is that vertical farming has a much more limited range of crops it can produce (most often leafy greens).\n\n\n\nOther values from here (Table 3): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7516583/\n\n    water_use = 1 # L/kg/year\n    energy_use = 250 # kWh/kg/year\n    co2_emissions = 158 # kg/ton\n    land_use = 100 # kg/m2, 80-120kg/m2\n\n15kcal/100g of green lettuce, which gives us 15kcal/100g * 1000g/1kg * 1kg/250kWh = 0.6kcal/1kWh = 1.67kWh/kcal\n\nFor \"traditional/outdoor\" farming they give 0.3kWh/kg/year, which, using the same numbers, gives (15/100)*(1000/0.3) = 500, so 1/500 = 0.002kWh/kcal, which is also substantially higher than what we have for industrial plant calorie agriculture (about 0.0001kWh/kcal, so about 20x higher). We could fudge the number to scale the vertical farming estimate down by 20x, but that wouldn't really change much.\n\nPer Troy's suggestion to limit vertical farming output to 10-20% of current demand, the limit is set at 1026000000000000kcals (15% of starting in-game plant calorie demand).\n\nFurther reducing to 684000000000000kcals (10% of starting demand) b/c energy usage is so high that the player instantly loses. I think this will happen even at 5 or 10% of demand though. - FT"
+            "notes": "[three-quarters fork] Construction: Per million kcal a year: a vertical farm grows ~100 kg of leafy greens per m2 of floor a year at ~150 kcal/kg, so it takes about 70 m2 of multi-storey building, ~3 t of steel, ~10 t of cement and ~20 MWh of LEDs and climate control. Growing a meaningful share of the world's calories this way would take more steel than the world makes.\n\n[three-quarters fork] limit was 1.026e15 kcal (about 15% of starting plant calorie demand, i.e. 2-3 mix shares). Vertical farms mostly grow leafy greens, which provide very few calories, so it is capped at 6.84e14: exactly one 5% mix share for plant demand between ~6.8e15 and ~1.4e16 kcal. (A cap below 5% of demand rounds down to zero shares.)\n\nLucy -  at this point the facility and conditions required to maintain larger scale vertical farming setups in the US is not significantly more energy efficient. Niel Mattson, professor of horticulture at Cornell University \"One of the things that we\u2019ve found is that if we look at like New York City, production in a greenhouse had very similar energy use and carbon footprint to growing in California and shipping 3000 miles. It was ever so slightly higher, but just a few percentage points higher than field production. However, a vertical farm had about twice the energy cost and twice the carbon footprint of growing 3000 miles away.\"\nhttps://gastropod.com/transcript-dig-for-victory/\n\nTV: for me, it seems that it trades fertilizer and water for electricity. Yet, it can only really apply to salad greens and the like and cannot replace more than 10-20percent of crops at most, and definitely can't be used for animal fodder.\n\n\nEnergy use:\n\n> For example, strawberries grown on a conventional farm in Chile require 0.4524 kiloWatt hours (kWh) of electricity per square metre per year (sq.m/year). Whereas strawberries grown on a vertical farm in Russia require over 3,000% more energy at 1,404 kWh/sq.m/year. To put that in context, a four-room HDB\u2019s average electricity consumption is 3.99 kWh/sq.m/year.\nhttps://www.rsis.edu.sg/rsis-publication/nts/vertical-farms-are-they-sustainable/\n\nOther figures here (per m2): https://ifarm.fi/blog/2020/12/how-much-electricity-does-a-vertical-farm-consume\nRomaine lettuce: 65.26 kWh / Month\nRocket: 52.51 kWh / Month\nStrawberries: 117.10 kWh / Month (in fact, I think this is the Russian vertical farm referenced above)\n\nA major downside that's not really captured here is that vertical farming has a much more limited range of crops it can produce (most often leafy greens).\n\n\n\nOther values from here (Table 3): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7516583/\n\n    water_use = 1 # L/kg/year\n    energy_use = 250 # kWh/kg/year\n    co2_emissions = 158 # kg/ton\n    land_use = 100 # kg/m2, 80-120kg/m2\n\n15kcal/100g of green lettuce, which gives us 15kcal/100g * 1000g/1kg * 1kg/250kWh = 0.6kcal/1kWh = 1.67kWh/kcal\n\nFor \"traditional/outdoor\" farming they give 0.3kWh/kg/year, which, using the same numbers, gives (15/100)*(1000/0.3) = 500, so 1/500 = 0.002kWh/kcal, which is also substantially higher than what we have for industrial plant calorie agriculture (about 0.0001kWh/kcal, so about 20x higher). We could fudge the number to scale the vertical farming estimate down by 20x, but that wouldn't really change much.\n\nPer Troy's suggestion to limit vertical farming output to 10-20% of current demand, the limit is set at 1026000000000000kcals (15% of starting in-game plant calorie demand).\n\nFurther reducing to 684000000000000kcals (10% of starting demand) b/c energy usage is so high that the player instantly loses. I think this will happen even at 5 or 10% of demand though. - FT",
+            "materials": {
+                "capacity_factor": 1,
+                "lifetime": 25,
+                "steel": 3,
+                "cement": 10,
+                "other_energy": 20000,
+                "annual_output": 1000000.0
+            }
         }
     ],
     "project_lockers": {

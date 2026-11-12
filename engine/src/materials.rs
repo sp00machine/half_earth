@@ -9,6 +9,10 @@
 //! emissions spike; decarbonize industry (Electric-Arc Furnaces,
 //! Carbon-Negative Concrete, clean electricity) and building gets cleaner.
 //!
+//! Fuel plants (refineries, wells, electrolyzers) are counted per MW of fuel
+//! output, and food plants (cellular meat, vertical farms) per unit of
+//! yearly output.
+//!
 //! Only capacity beyond what existed at the start of the game is counted:
 //! the materials for maintaining the starting fleet are already part of
 //! the industries' baseline demand.
@@ -33,12 +37,18 @@ pub struct ProcessMaterials {
     /// Other manufacturing energy per MW, in kWh
     /// (panels, blades, electronics, glass, aluminum).
     pub other_energy: f32,
+    /// For processes not measured in kWh (food, in kcal): output per year
+    /// of one unit of capacity, which `steel`, `cement` and `other_energy`
+    /// are then per. `capacity_factor` is ignored.
+    #[serde(default)]
+    pub annual_output: Option<f32>,
 }
 
 impl ProcessMaterials {
-    /// Output per MW of capacity per year, in kWh.
+    /// Output per MW (or unit) of capacity per year, in the process's
+    /// output units.
     fn output_per_mw(&self) -> f32 {
-        self.capacity_factor * 8760. * 1000.
+        self.annual_output.unwrap_or(self.capacity_factor * 8760. * 1000.)
     }
 }
 
@@ -223,5 +233,18 @@ mod tests {
         // Demand growth builds a few hundred GW a year, nothing like a
         // deliberate build-out.
         assert!(state.infrastructure.last.capacity < 1e6);
+    }
+
+    #[test]
+    fn building_food_and_fuel_plants_takes_steel() {
+        for name in ["Cellular Meat", "Green Hydrogen"] {
+            let mut state = State::new(World::default());
+            let id = state.world.processes.iter().find(|p| p.name == name).unwrap().id;
+            state.world.processes[&id].locked = false;
+            state.step_year(state.world.temperature);
+            state.change_process_mix_share(&id, 4);
+            state.step_year(state.world.temperature);
+            assert!(state.infrastructure.last.steel > 1e6, "{name}: {}", state.infrastructure.last.steel);
+        }
     }
 }
