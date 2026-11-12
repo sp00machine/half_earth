@@ -180,7 +180,13 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
             continue;
         }
         let m = process.output_modifier;
-        if process.frozen_limit.is_some() && *change < 0. {
+        // Frozen now, or frozen by the same policy.
+        let frozen = process.frozen_limit.is_some()
+            || state.world.projects.iter().any(|p| {
+                p.effects.contains(&Effect::FreezeProcess(process.id))
+                    && p.effects.contains(&Effect::OutputForProcess(process.id, *change))
+            });
+        if frozen && *change < 0. {
             frozen_loss = true;
             continue;
         }
@@ -193,7 +199,7 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
     if frozen_loss {
         note.push_str(&format!(
             " {}",
-            t!("The process is frozen, so its output falls instead of spreading onto more land.")
+            t!("It can't expand, so its output falls instead of spreading onto more land.")
         ));
     }
     if extra_land > 1e10 {

@@ -1015,11 +1015,11 @@ mod tests {
     }
 
     #[test]
-    fn test_factory_farm_moratorium_freezes_output() {
+    fn test_factory_farming_reform_freezes_capacity() {
         use crate::Output;
         let mut state = State::default();
         let livestock = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap().id;
-        let effects = state.world.projects.iter().find(|p| p.name == "Factory Farm Moratorium").unwrap().effects.clone();
+        let effects = state.world.projects.iter().find(|p| p.name == "Factory Farming Reform").unwrap().effects.clone();
         state.step_year(state.world.temperature);
         let frozen_at = state.produced.by_process[&livestock];
         state.apply_effects(&effects, None);
