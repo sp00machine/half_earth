@@ -489,9 +489,15 @@ impl State {
         self.output_demand.base.electricity += required_resources.electricity;
         self.output_demand.base.fuel += required_resources.fuel;
 
-        // Storage round-trip losses.
+        // Storage round-trip losses, and power not supplied during
+        // scheduled blackouts.
         let electricity = self.output_demand.total().electricity;
         self.output_demand.base.electricity += self.storage.extra_demand(
+            electricity,
+            self.intermittent_share(),
+            self.storage_tech(),
+        );
+        self.output_demand.base.electricity -= crate::storage::scheduled_cut(
             electricity,
             self.intermittent_share(),
             self.storage_tech(),
@@ -526,7 +532,7 @@ impl State {
         // delivered when it's needed: a real electricity shortage.
         let unserved = self
             .storage
-            .unserved(self.produced.amount.electricity, self.intermittent_share());
+            .unserved(self.produced.amount.electricity, self.intermittent_share(), self.storage_tech());
         self.produced.amount.electricity = (self.produced.amount.electricity - unserved).max(0.);
 
         resource_demand.water += required_resources.water;
@@ -682,6 +688,7 @@ impl State {
             sodium_ion: self.flags.contains(&Flag::SodiumIonBatteries),
             pumped_hydro: self.flags.contains(&Flag::PumpedHydroStorage),
             long_duration: self.flags.contains(&Flag::LongDurationStorage),
+            scheduled_blackouts: self.flags.contains(&Flag::ScheduledBlackouts),
         }
     }
 

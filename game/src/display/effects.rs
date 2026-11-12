@@ -300,6 +300,11 @@ pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
             t!("Long-duration storage takes over 30% of grid storage, needing no lithium, but loses over half the energy stored."),
         )
         .card(TipCard::Storage),
+        Flag::ScheduledBlackouts => tip(
+            icons::ELECTRICITY,
+            t!("Power is cut on a schedule at night instead of storing wind and solar for those hours. Half the energy that would need storing isn't supplied, so grids need half the storage, and wind and solar can go further."),
+        )
+        .card(TipCard::Storage),
         Flag::LifeGoesOn => tip(icons::ALERT, t!("The game never ends.")),
     }
 }

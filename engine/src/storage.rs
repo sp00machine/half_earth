@@ -79,6 +79,31 @@ pub struct StorageTech {
     pub sodium_ion: bool,
     pub pumped_hydro: bool,
     pub long_duration: bool,
+    /// Power is cut on a schedule instead of storing energy for those hours.
+    pub scheduled_blackouts: bool,
+}
+
+/// Share of the energy that would need storing that scheduled blackouts
+/// cut instead (the evening and night-time load that goes unmet).
+const SCHEDULED_CUT: f32 = 0.5;
+
+/// Energy that has to pass through storage (kWh/yr).
+pub fn stored_energy(electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
+    let needed = electricity * intermittent_share * stored_share(intermittent_share);
+    if tech.scheduled_blackouts {
+        needed * (1. - SCHEDULED_CUT)
+    } else {
+        needed
+    }
+}
+
+/// Electricity demand that scheduled blackouts cut (kWh/yr).
+pub fn scheduled_cut(electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
+    if tech.scheduled_blackouts {
+        electricity * intermittent_share * stored_share(intermittent_share) * SCHEDULED_CUT
+    } else {
+        0.
+    }
 }
 
 /// How grid storage is split between technologies.
@@ -126,8 +151,8 @@ pub fn ev_lithium_for(ev_electricity: f32) -> f32 {
 }
 
 /// Grid battery capacity (kWh) needed for a wind and solar share.
-fn grid_capacity_for(electricity: f32, intermittent_share: f32) -> f32 {
-    electricity * intermittent_share * stored_share(intermittent_share) / CYCLES_PER_YEAR
+fn grid_capacity_for(electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
+    stored_energy(electricity, intermittent_share, tech) / CYCLES_PER_YEAR
 }
 
 /// This year's storage and lithium.
@@ -233,7 +258,7 @@ impl Default for Storage {
 impl Storage {
     /// Extra electricity demand from storage round-trip losses (kWh).
     pub fn extra_demand(&self, electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
-        let stored = electricity * intermittent_share * stored_share(intermittent_share);
+        let stored = stored_energy(electricity, intermittent_share, tech);
         let mix = StorageMix::new(tech);
         stored * mix.losses_per_kwh() * (1. + self.losses_modifier).max(0.)
     }
@@ -241,8 +266,8 @@ impl Storage {
     /// Electricity that can't be delivered because the storage it needs
     /// doesn't exist: wind and solar power arrives when it isn't needed and
     /// is missing when it is (kWh). This shows up as a real shortage.
-    pub fn unserved(&self, electricity: f32, intermittent_share: f32) -> f32 {
-        let stored = electricity * intermittent_share * stored_share(intermittent_share);
+    pub fn unserved(&self, electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
+        let stored = stored_energy(electricity, intermittent_share, tech);
         stored * self.last.shortfall * CURTAILMENT_SHARE
     }
 
@@ -276,20 +301,20 @@ impl Storage {
         years: f32,
     ) -> StorageOutlook {
         let mix = StorageMix::new(tech);
-        let grid_capacity = grid_capacity_for(electricity, intermittent_share);
+        let grid_capacity = grid_capacity_for(electricity, intermittent_share, tech);
         let available = self.available_lithium(years);
         let for_grid = self.available_for_grid(years);
         let supported_share = if mix.lithium <= 0. || electricity <= 0. {
             1.
         } else {
             let capacity = for_grid / (LITHIUM_PER_KWH * mix.lithium);
-            if grid_capacity_for(electricity, 1.) <= capacity {
+            if grid_capacity_for(electricity, 1., tech) <= capacity {
                 1.
             } else {
                 let (mut lo, mut hi) = (STORAGE_THRESHOLD, 1.);
                 for _ in 0..30 {
                     let mid = (lo + hi) / 2.;
-                    if grid_capacity_for(electricity, mid) <= capacity {
+                    if grid_capacity_for(electricity, mid, tech) <= capacity {
                         lo = mid;
                     } else {
                         hi = mid;
@@ -333,7 +358,7 @@ impl Storage {
         lithium_available: f32,
     ) -> StorageReport {
         let mix = StorageMix::new(tech);
-        let stored = electricity * intermittent_share * stored_share(intermittent_share);
+        let stored = stored_energy(electricity, intermittent_share, tech);
         let grid_capacity = stored / CYCLES_PER_YEAR;
         let ev_needed = ev_lithium_for(ev_electricity);
         let grid_needed = grid_capacity * mix.lithium * LITHIUM_PER_KWH;
@@ -457,7 +482,7 @@ mod tests {
 
     #[test]
     fn alternatives_cut_lithium_but_some_cost_efficiency() {
-        let all = StorageTech { sodium_ion: true, pumped_hydro: true, long_duration: true };
+        let all = StorageTech { sodium_ion: true, pumped_hydro: true, long_duration: true, ..Default::default() };
         let mix = StorageMix::new(all);
         let base = StorageMix::new(StorageTech::default());
         assert!(mix.lithium < base.lithium * 0.5);
@@ -486,7 +511,7 @@ mod tests {
             storage.step(ELEC, 0.8, 5e12, StorageTech::default(), 0.);
         }
         assert!(storage.last.shortfall > 0.95, "{}", storage.last.shortfall);
-        assert!(storage.unserved(ELEC, 0.8) > 0.);
+        assert!(storage.unserved(ELEC, 0.8, StorageTech::default()) > 0.);
     }
 
     #[test]
@@ -542,5 +567,18 @@ mod tests {
         let pushed = run(2.);
         assert!(pushed.stockpile > normal.stockpile * 1.5);
         assert!(pushed.mining_capacity > normal.mining_capacity);
+    }
+
+    #[test]
+    fn scheduled_blackouts_halve_storage_need() {
+        let storage = Storage::default();
+        let base = StorageTech::default();
+        let cut = StorageTech { scheduled_blackouts: true, ..Default::default() };
+        let a = storage.outlook(ELEC, 0.6, 0., base, 5.);
+        let b = storage.outlook(ELEC, 0.6, 0., cut, 5.);
+        assert!((b.grid_lithium - a.grid_lithium * 0.5).abs() < 1.);
+        assert!(b.supported_share > a.supported_share);
+        assert!(scheduled_cut(ELEC, 0.6, cut) > 0.);
+        assert_eq!(scheduled_cut(ELEC, 0.6, base), 0.);
     }
 }

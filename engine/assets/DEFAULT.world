@@ -42848,6 +42848,87 @@
             "notes": "Easier if denser cities have also been planned (e.g. banning cars)\n\nNot sure how much it would reduce energy costs for buildings, but a significant amount. Probably this and passive buildings get your energy use down to zero\n\nA simple but effective technology widely used in the USSR and Scandinavia, but failed in the US because it provided unwelcome competition to energy utilities.\n\nhttps://www.scientificamerican.com/article/how-does-cogeneration-provide-heat-power/ \"Cogeneration power plants often operate at 50 to 70 percent higher efficiency rates than single-generation facilities.\"\n\nEffect values: https://www.sciencedirect.com/topics/engineering/cogeneration\n\"Along with the saving of fossil fuels, cogeneration also allows to reduce the emission of greenhouse gases (particularly CO2 emission). The production of electricity being on-site, the burden on the utility network is reduced and the transmission line losses eliminated.\""
         },
         {
+            "id": "4d2a8f61-c93e-47b5-8e10-2b7f6a9d3c58",
+            "name": "Scheduled Blackouts",
+            "kind": "Policy",
+            "group": "Energy",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 5
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "AddFlag": "ScheduledBlackouts"
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "04b92453-026e-40a5-9a25-e98244023a69",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645618834.002155.png"
+                    },
+                    "attribution": "Solomon203, CC BY-SA 4.0"
+                },
+                "description": "Rather than storing wind and solar power for the night, cut it on a schedule: the power goes out in the late evening and comes back in the morning. Grids need far less storage, and nobody gets caught off guard. People hate it at first, but they get used to it.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Malthusian",
+                                "text": "Our grandparents went to bed when it got dark. We can too."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Consumerist",
+                                "text": "My fridge would like a word."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Half the energy that would need storing is cut instead of stored, so grid storage (and the lithium for it) halves and the wind and solar cap rises. Costs up to 1 contentedness per income level in each region at first, fading over 10 years as people adapt. Planned load-shedding is familiar from South Africa and Nepal, and is far less disruptive than unplanned blackouts.",
+            "fatigue": {
+                "adapting": true,
+                "rate": 1.0,
+                "years": 10.0
+            }
+        },
+        {
             "id": "f8b508d6-5aba-4b0e-9e00-311475ec558a",
             "name": "Energy Quotas",
             "kind": "Policy",

@@ -379,6 +379,14 @@ fn render_storage_card(ui: &mut egui::Ui, state: &GameState) -> egui::Response {
             row(ui, t!("Storage needed that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
             row(ui, t!("Lost in storage round trips").to_string(), crate::display::format_power(report.losses));
             row(ui, t!("Undelivered for lack of storage").to_string(), crate::display::format_power(report.curtailed));
+            if state.flags.contains(&hes_engine::Flag::ScheduledBlackouts) {
+                let cut = hes_engine::storage::scheduled_cut(
+                    state.produced.amount.electricity,
+                    state.intermittent_share(),
+                    state.storage_tech(),
+                );
+                row(ui, t!("Cut by scheduled blackouts").to_string(), crate::display::format_power(cut));
+            }
             row(ui, t!("Lithium in grid batteries").to_string(), format!("{} / {}", li(storage.grid_in_use), li(report.grid_lithium_needed)));
             row(ui, t!("Lithium in vehicle batteries").to_string(), format!("{} / {}", li(storage.lithium_in_use - storage.grid_in_use), li(report.ev_lithium_needed)));
             row(ui, t!("Vehicles still on fuel for lack of batteries").to_string(), format!("{:.0}%", report.ev_shortfall * 100.));

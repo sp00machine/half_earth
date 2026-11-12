@@ -50,6 +50,7 @@ pub enum Flag {
     SodiumIonBatteries,
     PumpedHydroStorage,
     LongDurationStorage,
+    ScheduledBlackouts,
 }
 impl std::fmt::Display for Flag {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -68,6 +69,7 @@ impl std::fmt::Display for Flag {
             Self::SodiumIonBatteries => "Sodium-ion batteries take over part of grid storage, needing no lithium.",
             Self::PumpedHydroStorage => "Pumped hydro takes over part of grid storage, needing no lithium.",
             Self::LongDurationStorage => "Long-duration storage takes over part of grid storage, needing no lithium but losing more energy.",
+            Self::ScheduledBlackouts => "Power is cut on a schedule at night, halving how much energy needs storing.",
             Self::FastDevelopment => "Underdeveloped regions develop more quickly.",
             Self::Degrowth => "Wealthy regions income levels and consumption will decline.",
             Self::MetalsShortage => "Infrastructure projects take 20% longer to finish.",
