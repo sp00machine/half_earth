@@ -19839,7 +19839,14 @@
                     ]
                 }
             ],
-            "effects": [],
+            "effects": [
+                {
+                    "PlayerVariable": [
+                        "PoliticalCapital",
+                        -1.0
+                    ]
+                }
+            ],
             "prob_modifier": 1.0,
             "intensity": 2,
             "flavor": {
@@ -19857,7 +19864,7 @@
                 },
                 "image": null
             },
-            "notes": "[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
+            "notes": "[three-quarters fork] Each blackout now costs 1 political capital: people blame the planner when the lights go out.\n\n[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
         },
         {
             "name": "Ally - The Utopian",
@@ -35252,13 +35259,13 @@
                                 "id": 2
                             },
                             "speaker": "The Engineer",
-                            "text": "On sunny, windy days we have more power than we can use or store, so we just throw it away."
+                            "text": "On sunny, windy days we have more power than we can store. On still nights, the lights go out."
                         },
                         {
                             "id": 2,
                             "next": null,
                             "speaker": "The Engineer",
-                            "text": "New lithium mines take years to open. Recycling, sodium-ion batteries or pumped hydro would help us catch up."
+                            "text": "New lithium mines take years to open. Recycling, sodium-ion batteries or pumped hydro would help us catch up, or we can slow down the build-out."
                         }
                     ]
                 },
@@ -35269,7 +35276,7 @@
                     "attribution": "UniEnergy Technologies (CC BY-SA 4.0)"
                 }
             },
-            "notes": "[three-quarters fork] New intro event: fires the first time at least 20% of the battery storage the grid needs can't be built."
+            "notes": "[three-quarters fork] Dialogue updated: storage shortfalls now cause real electricity shortages.\n\n[three-quarters fork] New intro event: fires the first time at least 20% of the battery storage the grid needs can't be built."
         },
         {
             "name": "Lax Oversight",

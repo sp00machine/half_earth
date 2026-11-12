@@ -1065,6 +1065,52 @@ mod tests {
     }
 
     #[test]
+    fn test_unrest_can_happen_in_every_region() {
+        use crate::events::Phase;
+        let mut state = State::default();
+        state.world.year = 2030;
+        let protest = state.event_pool.events.iter().find(|e| e.name == "Unrest - Protest").unwrap().id;
+        let ids: Vec<_> = state.world.regions.iter().take(3).map(|r| r.id).collect();
+        for id in &ids {
+            state.world.regions[id].outlook = 0.;
+        }
+        let mut pool = state.event_pool.clone();
+        let fired: Vec<_> = pool
+            .roll_for_phase(Phase::WorldMain, &state)
+            .into_iter()
+            .filter(|(ev, _)| ev.id == protest)
+            .collect();
+        assert!(fired.len() >= 3, "protests fired in {} regions", fired.len());
+        // ...but not twice in the same region.
+        let again = pool
+            .roll_for_phase(Phase::WorldMain, &state)
+            .into_iter()
+            .filter(|(ev, r)| ev.id == protest && r.is_some_and(|r| ids.contains(&r)))
+            .count();
+        assert_eq!(again, 0);
+    }
+
+    #[test]
+    fn test_storage_caps_wind_and_solar() {
+        let mut state = State::default();
+        state.step_year(state.world.temperature);
+        let solar = state.world.processes.iter().find(|p| p.name == "Solar PV").unwrap().id;
+        // At the start there's room to grow well past today's share.
+        let supported = state.supported_intermittent_share();
+        assert!(supported > state.intermittent_share() + 0.2, "{supported}");
+        let open_max = state.process_max_share(&solar);
+        assert!(open_max >= 8, "{open_max}");
+
+        // With no batteries and no mining, wind and solar can't grow past
+        // what needs no storage.
+        state.storage.lithium_in_use = 0.;
+        state.storage.mining_capacity = 0.;
+        let capped = state.process_max_share(&solar);
+        assert!(capped < open_max, "{capped} vs {open_max}");
+        assert!(capped as f32 / 20. <= 0.3 + 0.05);
+    }
+
+    #[test]
     fn test_termination_shock() {
         let mut state = State::default();
         let temp_prev = state.world.temperature;

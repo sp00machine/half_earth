@@ -480,7 +480,7 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                 let storage = state.storage.last;
                 for (name, amount) in [
                     (t!("Storage Losses"), storage.losses),
-                    (t!("Wasted for Lack of Storage"), storage.curtailed),
+                    (t!("Undelivered: Not Enough Storage"), storage.curtailed),
                 ] {
                     if amount > 0. {
                         rankings.push(Factor::Event {

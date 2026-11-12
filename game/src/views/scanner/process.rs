@@ -26,7 +26,33 @@ fn is_addable(
     let change = process_mix_changes[process.output]
         .get(&process.id)
         .unwrap_or(&0);
-    points != 0 && *change < max_share as isize
+    // Compare the resulting share (not just the change) with the maximum.
+    let within_max = (process.mix_share as isize + *change) < max_share as isize;
+    points != 0 && within_max && storage_allows(process, state, process_mix_changes)
+}
+
+/// Wind and solar together can't grow past what storage can support,
+/// counting planned changes to all of them.
+fn storage_allows(
+    process: &Process,
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> bool {
+    use hes_engine::ProcessFeature;
+    if process.output != Output::Electricity
+        || !process.features.contains(&ProcessFeature::IsIntermittent)
+    {
+        return true;
+    }
+    let planned: isize = state
+        .world
+        .processes
+        .iter()
+        .filter(|p| p.output == Output::Electricity && p.features.contains(&ProcessFeature::IsIntermittent))
+        .map(|p| p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0))
+        .sum();
+    let supported = (state.supported_intermittent_share() * 20.).floor() as isize;
+    planned < supported
 }
 
 fn remove_point(
@@ -50,7 +76,7 @@ fn add_point(
 ) {
     if *points > 0 {
         let change = mix_changes[process.output].entry(process.id).or_default();
-        if *change < max_share as isize {
+        if (process.mix_share as isize + *change) < max_share as isize {
             *points -= 1;
             *change += 1;
         }

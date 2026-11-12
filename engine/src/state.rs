@@ -19,6 +19,9 @@ use serde::{Deserialize, Serialize};
 const LIFESPAN: usize = 60;
 const PRODUCTION_SHORTAGE_PENALTY: f32 = 60.;
 
+/// Extra contentedness penalty per share of electricity demand unmet.
+const BLACKOUT_PENALTY: f32 = 50.;
+
 /// Background farm yield growth, approaching a maximum with a time
 /// constant in years. Crops: up to +60% (~1%/yr at first). Livestock
 /// output per hectare has historically grown faster through feed
@@ -451,7 +454,7 @@ impl State {
         self.output_demand.base.electricity += required_resources.electricity;
         self.output_demand.base.fuel += required_resources.fuel;
 
-        // Storage round-trip losses, and energy wasted for lack of storage.
+        // Storage round-trip losses.
         let electricity = self.output_demand.total().electricity;
         self.output_demand.base.electricity += self.storage.extra_demand(
             electricity,
@@ -483,6 +486,13 @@ impl State {
 
         self.produced.by_process = produced_by_process;
         self.produced.amount = produced_by_type;
+
+        // Without enough storage, some wind and solar power can't be
+        // delivered when it's needed: a real electricity shortage.
+        let unserved = self
+            .storage
+            .unserved(self.produced.amount.electricity, self.intermittent_share());
+        self.produced.amount.electricity = (self.produced.amount.electricity - unserved).max(0.);
 
         resource_demand.water += required_resources.water;
         resource_demand.land += required_resources.land;
@@ -526,7 +536,9 @@ impl State {
                 + demand_met.plant_calories)
                 * PRODUCTION_SHORTAGE_PENALTY
                 / 4.))
-            .max(0.);
+            .max(0.)
+            // Blackouts hit everything, so electricity shortages count extra.
+            + BLACKOUT_PENALTY * (1. - demand_met.electricity).clamp(0., 1.);
 
         self.world.update_extinction_rate(&self.produced.by_process);
 
@@ -598,6 +610,12 @@ impl State {
             .map(|p| p.mix_percent())
             .sum::<f32>()
             .min(1.)
+    }
+
+    /// The highest wind and solar share storage can support this planning cycle.
+    pub fn supported_intermittent_share(&self) -> f32 {
+        self.storage
+            .supported_share(self.output_demand.of(Output::Electricity), self.storage_tech(), 5.)
     }
 
     pub fn storage_tech(&self) -> StorageTech {
@@ -683,6 +701,17 @@ impl State {
         let feedstocks = self.feedstocks.available;
         let process = &self.world.processes[process_id];
         let max_share = process.max_share(&output_demand, &feedstocks);
+
+        // Wind and solar can only grow as far as storage can support them.
+        let max_share = if process.features.contains(&ProcessFeature::IsIntermittent)
+            && process.output == Output::Electricity
+        {
+            let others = ((self.intermittent_share() * 20.).round() as usize).saturating_sub(process.mix_share);
+            let supported = (self.supported_intermittent_share() * 20.).floor() as usize;
+            max_share.min(supported.saturating_sub(others).max(process.mix_share))
+        } else {
+            max_share
+        };
 
         // Under a fossil fuel moratorium, fossil processes can shrink but not grow.
         if self.flags.contains(&Flag::FossilMoratorium)

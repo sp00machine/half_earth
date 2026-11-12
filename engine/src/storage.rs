@@ -41,8 +41,9 @@ const STARTING_MINING: f32 = 1.8e11;
 const MINING_GROWTH: f32 = 0.15;
 const MAX_MINING: f32 = 4e12;
 
-/// Share of storage energy wasted if the storage it needs can't be built.
-const CURTAILMENT_SHARE: f32 = 0.5;
+/// Share of energy that needed storage which goes undelivered if the
+/// storage can't be built.
+const CURTAILMENT_SHARE: f32 = 1.0;
 
 /// Round-trip efficiency of each storage technology.
 const LITHIUM_EFFICIENCY: f32 = 0.9;
@@ -108,7 +109,7 @@ pub struct StorageReport {
     pub stored: f32,
     /// Energy lost to round trips (kWh/yr).
     pub losses: f32,
-    /// Energy wasted for lack of storage (kWh/yr).
+    /// Electricity undelivered for lack of storage (kWh/yr).
     pub curtailed: f32,
     /// Lithium needed this year (g).
     pub lithium_demand: f32,
@@ -116,6 +117,9 @@ pub struct StorageReport {
     pub lithium_mined: f32,
     /// Share of needed battery capacity that couldn't be built.
     pub shortfall: f32,
+    /// Lithium needed in electric vehicle batteries (g).
+    #[serde(default)]
+    pub ev_lithium_needed: f32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -150,14 +154,48 @@ impl Default for Storage {
 }
 
 impl Storage {
-    /// Extra electricity demand from storage this year: round-trip losses
-    /// plus energy wasted because storage couldn't be built (kWh).
+    /// Extra electricity demand from storage round-trip losses (kWh).
     pub fn extra_demand(&self, electricity: f32, intermittent_share: f32, tech: StorageTech) -> f32 {
         let stored = electricity * intermittent_share * stored_share(intermittent_share);
         let mix = StorageMix::new(tech);
-        let losses = stored * mix.losses_per_kwh() * (1. + self.losses_modifier).max(0.);
-        let curtailed = stored * self.last.shortfall * CURTAILMENT_SHARE;
-        losses + curtailed
+        stored * mix.losses_per_kwh() * (1. + self.losses_modifier).max(0.)
+    }
+
+    /// Electricity that can't be delivered because the storage it needs
+    /// doesn't exist: wind and solar power arrives when it isn't needed and
+    /// is missing when it is (kWh). This shows up as a real shortage.
+    pub fn unserved(&self, electricity: f32, intermittent_share: f32) -> f32 {
+        let stored = electricity * intermittent_share * stored_share(intermittent_share);
+        stored * self.last.shortfall * CURTAILMENT_SHARE
+    }
+
+    /// The highest wind and solar share of electricity that storage can
+    /// support over the coming `years`: batteries already built that aren't
+    /// in vehicles, plus about half of what mines can supply in that time
+    /// (vehicles take the rest). Storage that doesn't need lithium is
+    /// assumed unlimited.
+    pub fn supported_share(&self, electricity: f32, tech: StorageTech, years: f32) -> f32 {
+        let mix = StorageMix::new(tech);
+        if mix.lithium <= 0. || electricity <= 0. {
+            return 1.;
+        }
+        let lithium = (self.lithium_in_use - self.last.ev_lithium_needed).max(0.)
+            + 0.5 * self.mining_capacity * years;
+        let capacity = lithium / (LITHIUM_PER_KWH * mix.lithium);
+        let needed = |share: f32| electricity * share * stored_share(share) / CYCLES_PER_YEAR;
+        if needed(1.) <= capacity {
+            return 1.;
+        }
+        let (mut lo, mut hi) = (STORAGE_THRESHOLD, 1.);
+        for _ in 0..30 {
+            let mid = (lo + hi) / 2.;
+            if needed(mid) <= capacity {
+                lo = mid;
+            } else {
+                hi = mid;
+            }
+        }
+        lo
     }
 
     /// Advance one year. `lithium_available` is what's left in reserves.
@@ -216,6 +254,7 @@ impl Storage {
             lithium_demand: demand,
             lithium_mined: mined,
             shortfall,
+            ev_lithium_needed: ev_capacity * LITHIUM_PER_KWH,
         };
         self.last
     }
@@ -286,6 +325,6 @@ mod tests {
             storage.step(ELEC, 0.8, 5e12, StorageTech::default(), 0.);
         }
         assert!(storage.last.shortfall > 0.95, "{}", storage.last.shortfall);
-        assert!(storage.extra_demand(ELEC, 0.8, StorageTech::default()) > storage.last.losses);
+        assert!(storage.unserved(ELEC, 0.8) > 0.);
     }
 }

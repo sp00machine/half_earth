@@ -148,6 +148,21 @@ pub fn processes_preview(
     });
     let output_demand = state.output_demand.total();
 
+    // Storage falling short, or more wind and solar than storage can support.
+    let supported = state.supported_intermittent_share();
+    let storage_warning = state.storage.last.shortfall > 0.02
+        || state.intermittent_share() > supported + 1e-3;
+    let storage_tip = tip(
+        icons::LITHIUM,
+        t!(
+            "Not enough energy storage. %{built}% of the storage the grid needs is built. Storage can support wind and solar up to about %{supported}% of electricity this cycle; they're at %{now}% now.",
+            built = format!("{:.0}", (1. - state.storage.last.shortfall) * 100.),
+            supported = format!("{:.0}", supported * 100.),
+            now = format!("{:.0}", state.intermittent_share() * 100.)
+        ),
+    )
+    .card(crate::tips::TipCard::Storage);
+
     h_center(ui, "plan-processes", |tui| {
         tui.ui(|ui| {
                 let resp = inset_frame().show(ui, |ui| {
@@ -170,8 +185,10 @@ pub fn processes_preview(
                                 ui.set_width(105. * sizing.scale);
 
                                 let has_shortage = produced / demand < 0.99;
+                                let storage_problem =
+                                    storage_warning && process.output == Output::Electricity;
 
-                                let image = if has_shortage {
+                                let image = if has_shortage || storage_problem {
                                     icons::ALERT.size(sizing.normal)
                                 } else {
                                     icons::CHECK
@@ -185,7 +202,9 @@ pub fn processes_preview(
 
                                 let resp = ui.add(text);
 
-                                if has_shortage {
+                                if storage_problem {
+                                    add_tip(storage_tip.clone(), resp);
+                                } else if has_shortage {
                                     add_tip(shortages_tip.clone(), resp);
                                 }
 

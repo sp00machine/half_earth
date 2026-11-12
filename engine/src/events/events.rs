@@ -11,6 +11,11 @@ pub struct EventPool {
     // (phase, event id, region id, countdown)
     pub queue: Vec<(Phase, Id, Option<Id>, usize)>,
     pub triggered: Vec<(Phase, Id, Option<Id>)>,
+
+    /// Regional events happen once per region rather than once per game
+    /// (e.g. each region can riot), so track which regions have had them.
+    #[serde(default)]
+    pub occurred_in: HashSet<(Id, Id)>,
 }
 
 impl EventPool {
@@ -19,6 +24,7 @@ impl EventPool {
             events,
             queue: Vec::new(),
             triggered: Vec::new(),
+            occurred_in: HashSet::new(),
         }
     }
 
@@ -80,6 +86,9 @@ impl EventPool {
             // Icon-type events are always local
             if ev.phase == Phase::Icon || ev.is_regional() {
                 for region in state.world.regions.iter() {
+                    if ev.phase != Phase::Icon && self.occurred_in.contains(&(ev_id, region.id)) {
+                        continue;
+                    }
                     if ev.roll(state, Some(region.id)) {
                         self.triggered.push((ev.phase, ev_id, Some(region.id)));
                     }
@@ -100,10 +109,15 @@ impl EventPool {
                 let ev = &mut self.events[&ev_id];
                 if !ev.occurred {
                     happening.push((ev_id, region_id));
-                    // All events except
-                    // for Icon events don't repeat
+                    // All events except for Icon events don't repeat.
+                    // Regional events don't repeat in the same region.
                     if ev.phase != Phase::Icon {
-                        ev.occurred = true;
+                        match region_id {
+                            Some(region) if ev.is_regional() => {
+                                self.occurred_in.insert((ev_id, region));
+                            }
+                            _ => ev.occurred = true,
+                        }
                     }
                 }
                 self.triggered.remove(i);
@@ -306,6 +320,7 @@ mod test {
         fastrand::seed(0);
         let events = gen_events();
         let mut pool = EventPool {
+            occurred_in: HashSet::new(),
             events,
             queue: vec![],
             triggered: vec![],
@@ -351,6 +366,7 @@ mod test {
         }]
         .into();
         let mut pool = EventPool {
+            occurred_in: HashSet::new(),
             events,
             queue: vec![],
             triggered: vec![],
@@ -399,6 +415,7 @@ mod test {
         }]
         .into();
         let mut pool = EventPool {
+            occurred_in: HashSet::new(),
             events,
             queue: vec![(Phase::WorldMain, id, None, 2)],
             triggered: vec![],
@@ -420,6 +437,7 @@ mod test {
         fastrand::seed(0);
         let id = Id::new_v4();
         let mut pool = EventPool {
+            occurred_in: HashSet::new(),
             events: vec![Event {
                 id,
                 name: "Test Event A".into(),

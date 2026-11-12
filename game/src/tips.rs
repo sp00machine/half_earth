@@ -341,8 +341,9 @@ fn render_storage_card(ui: &mut egui::Ui, state: &GameState) -> egui::Response {
             row(ui, t!("Wind & solar share of electricity").to_string(), format!("{:.0}%", state.intermittent_share() * 100.));
             row(ui, t!("Energy passed through storage").to_string(), format!("{:.1} PWh", report.stored * 1e-12));
             row(ui, t!("Storage the grid needs that's built").to_string(), format!("{:.0}%", (1. - report.shortfall) * 100.));
+            row(ui, t!("Wind & solar storage can support this cycle").to_string(), format!("{:.0}%", state.supported_intermittent_share() * 100.));
             row(ui, t!("Lost in storage round trips").to_string(), format!("{:.1} PWh", report.losses * 1e-12));
-            row(ui, t!("Wasted for lack of storage").to_string(), format!("{:.1} PWh", report.curtailed * 1e-12));
+            row(ui, t!("Undelivered for lack of storage").to_string(), format!("{:.1} PWh", report.curtailed * 1e-12));
             ui.separator();
             row(ui, t!("Lithium in batteries in use").to_string(), format!("{:.1} Mt", storage.lithium_in_use * 1e-12));
             row(ui, t!("Lithium mined this year").to_string(), format!("{:.0} kt", report.lithium_mined * 1e-9));
