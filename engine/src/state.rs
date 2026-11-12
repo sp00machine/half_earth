@@ -526,6 +526,9 @@ impl State {
         );
 
         self.produced.by_process = produced_by_process;
+        for process in self.world.processes.iter_mut() {
+            process.produced_modifier = process.output_modifier;
+        }
         self.produced.amount = produced_by_type;
 
         // Without enough storage, some wind and solar power can't be

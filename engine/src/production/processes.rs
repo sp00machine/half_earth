@@ -45,8 +45,15 @@ pub struct Process {
 
     /// Output cap set by a freeze (e.g. a moratorium on new capacity),
     /// on top of `limit`.
+    /// In capacity units (output before output modifiers), so a freeze
+    /// caps the farms or plants, not their output: if yields fall, output
+    /// falls rather than the process spreading onto more land.
     #[serde(default)]
     pub frozen_limit: Option<f32>,
+
+    /// The output modifier when this process last produced.
+    #[serde(default)]
+    pub produced_modifier: f32,
 
     /// What it takes to build this process's capacity, if tracked.
     #[serde(default)]
@@ -122,7 +129,8 @@ impl Process {
 
     /// The lower of the process's own limit and any freeze.
     pub fn effective_limit(&self) -> Option<f32> {
-        match (self.limit, self.frozen_limit) {
+        let frozen = self.frozen_limit.map(|base| base * (1. + self.output_modifier).max(0.));
+        match (self.limit, frozen) {
             (Some(a), Some(b)) => Some(a.min(b)),
             (a, b) => a.or(b),
         }

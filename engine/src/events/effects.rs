@@ -442,7 +442,9 @@ impl Effect {
             }
             Effect::FreezeProcess(id) => {
                 let produced = state.produced.by_process.get(id).copied().unwrap_or(0.);
-                state.world.processes[id].frozen_limit = Some(produced);
+                let process = &mut state.world.processes[id];
+                let base = produced / (1. + process.produced_modifier).max(0.01);
+                process.frozen_limit = Some(base);
             }
             Effect::ProcessLimit(id, change) => {
                 let process = &mut state.world.processes[id];
@@ -1022,11 +1024,15 @@ mod tests {
         let frozen_at = state.produced.by_process[&livestock];
         state.apply_effects(&effects, None);
 
-        // Meat demand keeps growing, but industrial livestock can't.
+        // Meat demand keeps growing, but industrial livestock can't, beyond
+        // what better yields get out of the same farms.
+        let modifier_then = state.world.processes[&livestock].output_modifier;
         for _ in 0..10 {
             state.step_year(state.world.temperature);
         }
-        assert!(state.produced.by_process[&livestock] <= frozen_at * 1.0001);
+        let yield_growth =
+            (1. + state.world.processes[&livestock].output_modifier) / (1. + modifier_then);
+        assert!(state.produced.by_process[&livestock] <= frozen_at * yield_growth * 1.0001);
         assert!(state.produced.amount.animal_calories < state.output_demand.of(Output::AnimalCalories));
 
         // Repealing lifts the freeze.
@@ -1168,5 +1174,34 @@ mod tests {
         let id = Id::new_v4();
         let effect = Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 10.) * 0.5;
         assert_eq!(effect, Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 5.));
+    }
+
+    #[test]
+    fn test_freeze_caps_capacity_not_output() {
+        // Freezing then cutting yields lowers output instead of using
+        // more land, whichever order they happen in.
+        for freeze_first in [true, false] {
+            let mut state = State::default();
+            state.step_year(state.world.temperature);
+            let id = state
+                .world
+                .processes
+                .iter()
+                .find(|p| p.name == "Industrial Livestock Ag")
+                .unwrap()
+                .id;
+            let before = state.produced.by_process[&id];
+            let freeze = Effect::FreezeProcess(id);
+            let cut = Effect::OutputForProcess(id, -0.2);
+            if freeze_first {
+                freeze.apply(&mut state, None);
+                cut.apply(&mut state, None);
+            } else {
+                cut.apply(&mut state, None);
+                freeze.apply(&mut state, None);
+            }
+            let limit = state.world.processes[&id].effective_limit().unwrap();
+            assert!((limit / before - 0.8).abs() < 0.01, "{freeze_first}: {}", limit / before);
+        }
     }
 }

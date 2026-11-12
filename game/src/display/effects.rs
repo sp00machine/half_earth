@@ -167,6 +167,60 @@ fn icon_text(icon: &'static str, text: &str) -> String {
     format!("[{icon}] {text}")
 }
 
+/// What changing these processes' output would do to land: more land
+/// needed (and the clearing emissions), or output lost where a process is
+/// frozen. Empty if it barely changes land.
+fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
+    let mut extra_land = 0.;
+    let mut frozen_loss = false;
+    for (process, change) in changes {
+        let produced = state.produced.by_process.get(&process.id).copied().unwrap_or(0.);
+        let land = process.resources.land;
+        if produced <= 0. || land <= 0. {
+            continue;
+        }
+        let m = process.output_modifier;
+        if process.frozen_limit.is_some() && *change < 0. {
+            frozen_loss = true;
+            continue;
+        }
+        // Land per unit of output is land / (1 + modifier).
+        let before = 1. / (1. + m).max(0.01);
+        let after = 1. / (1. + m + change).max(0.01);
+        extra_land += produced * land * (after - before);
+    }
+    let mut note = String::new();
+    if frozen_loss {
+        note.push_str(&format!(
+            " {}",
+            t!("The process is frozen, so its output falls instead of spreading onto more land.")
+        ));
+    }
+    if extra_land > 1e10 {
+        let from = state.resource_demand.of(Resource::Land);
+        let total = state.world.starting_resources.land;
+        let co2 = state.land_carbon.estimate_clearing(from, from + extra_land, total);
+        note.push_str(&format!(
+            " {}",
+            t!(
+                "Needs about %{area} million km² more farmland: clearing it releases about %{amount}Gt of CO₂ over the next %{years} years.",
+                area = format!("{:.1}", extra_land * 1e-12),
+                amount = format!("{:.0}", co2 * 1e-15),
+                years = format!("{:.0}", (extra_land / 3e11).ceil().max(1.)),
+            )
+        ));
+    } else if extra_land < -1e10 {
+        note.push_str(&format!(
+            " {}",
+            t!(
+                "Frees about %{area} million km² of farmland to grow back.",
+                area = format!("{:.1}", -extra_land * 1e-12),
+            )
+        ));
+    }
+    note
+}
+
 pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
     let demand = display::outputs(demand);
     match flag {
@@ -815,13 +869,13 @@ impl DisplayEffect {
                             percent = display::signed_percent(*amount, true),
                         )).card(process.clone()), icon_text(
                     process.output.as_key(),
-                    &t!(
+                    &(t!(
                         "%{changeDir} %{tag} output by [b]%{percent}%.[/b]",
                         percent = display::percent(amount.abs(), true),
                         tag = icon_card_tag(&t!(&process.name), process.output.icon()),
                         changeDir = self.change_dir(*amount),
                         icon = process.output.icon(),
-                    )))
+                    ).to_string() + &if self.is_unknown { String::new() } else { land_effect_note(state, &[(process, *amount)]) })))
             }
             Effect::OutputForFeature(feat, amount) => {
                 let processes: Vec<_> = state
@@ -835,16 +889,21 @@ impl DisplayEffect {
                         feat.icon(),
                         t!("Changes the output for these processes by %{percent}% without changing their impacts.",
                             percent = display::signed_percent(*amount, true)),
-                ).card(processes),
+                ).card(processes.clone()),
                 icon_text(
                     "output",
-                    &t!(
+                    &(t!(
                         r#"%{changeDir} output for [e][i]%{icon}[/i][b]%{feature}[/b][/e] by [b]%{percent}%.[/b]"#,
                         percent = display::percent(amount.abs(), true),
                         icon = feat.icon(),
                         feature = t!(feat.lower()),
                         changeDir = self.change_dir(*amount),
-                    )))
+                    ).to_string() + &if self.is_unknown {
+                        String::new()
+                    } else {
+                        let changes: Vec<_> = processes.iter().map(|p| (p, *amount)).collect();
+                        land_effect_note(state, &changes)
+                    })))
             }
             Effect::CO2ForFeature(feat, amount) => {
                 let processes: Vec<_> = state
