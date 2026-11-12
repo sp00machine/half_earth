@@ -131,6 +131,9 @@ pub struct Storage {
     /// Change to round-trip losses (fraction).
     pub losses_modifier: f32,
     pub last: StorageReport,
+    /// Whether the batteries already in use at the start have been counted.
+    #[serde(default)]
+    pub initialized: bool,
 }
 impl Default for Storage {
     fn default() -> Self {
@@ -141,6 +144,7 @@ impl Default for Storage {
             mining_modifier: 0.,
             losses_modifier: 0.,
             last: StorageReport::default(),
+            initialized: false,
         }
     }
 }
@@ -171,6 +175,13 @@ impl Storage {
         let ev_capacity = ev_electricity.max(0.) * EV_CAPACITY_PER_KWH_USED;
         let needed = (grid_capacity * mix.lithium + ev_capacity) * LITHIUM_PER_KWH;
 
+        // Batteries already in use when the game starts (today's electric
+        // vehicles and grid storage).
+        if !self.initialized {
+            self.lithium_in_use = needed;
+            self.initialized = true;
+        }
+
         // Batteries that wear out this year, and how much of their lithium
         // is recovered.
         let retired = self.lithium_in_use / BATTERY_LIFETIME;
@@ -183,7 +194,9 @@ impl Storage {
         let mined = demand.min(self.mining_capacity).min(lithium_available.max(0.));
         self.lithium_in_use = (in_use + from_recycling + mined).min(needed.max(in_use));
 
-        let shortfall = if needed > 0. {
+        // Lithium is shared between vehicles and the grid; only the grid's
+        // part of any shortfall affects electricity (wasted power, brownouts).
+        let shortfall = if needed > 0. && grid_capacity * mix.lithium > 0. {
             (1. - self.lithium_in_use / needed).clamp(0., 1.)
         } else {
             0.
@@ -224,6 +237,8 @@ mod tests {
     #[test]
     fn high_renewables_need_lithium_and_mines_ramp_up() {
         let mut storage = Storage::default();
+        // Start from today's grid and a small existing EV fleet.
+        storage.step(ELEC, 0.1, 5e11, StorageTech::default(), 1e14);
         let mut mined_first = None;
         for year in 0..30 {
             let report = storage.step(ELEC, 0.8, 5e12, StorageTech::default(), 1e14);
@@ -253,6 +268,7 @@ mod tests {
     fn recycling_reduces_mining() {
         let run = |recycling: f32| {
             let mut storage = Storage { recycling, ..Default::default() };
+            storage.step(ELEC, 0.1, 5e11, StorageTech::default(), 1e14);
             let mut mined = 0.;
             for _ in 0..40 {
                 mined += storage.step(ELEC, 0.8, 5e12, StorageTech::default(), 1e14).lithium_mined;
@@ -265,10 +281,11 @@ mod tests {
     #[test]
     fn running_out_of_lithium_causes_shortfall() {
         let mut storage = Storage::default();
+        storage.step(ELEC, 0.1, 5e11, StorageTech::default(), 0.);
         for _ in 0..20 {
             storage.step(ELEC, 0.8, 5e12, StorageTech::default(), 0.);
         }
-        assert!(storage.last.shortfall > 0.99);
+        assert!(storage.last.shortfall > 0.95, "{}", storage.last.shortfall);
         assert!(storage.extra_demand(ELEC, 0.8, StorageTech::default()) > storage.last.losses);
     }
 }

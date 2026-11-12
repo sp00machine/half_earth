@@ -126,6 +126,10 @@ pub enum Effect {
 
     /// Cap a process's output at what it produces when this is applied.
     FreezeProcess(Id),
+
+    /// A temporary cut to field farming yields for an output (fraction,
+    /// e.g. -0.05), which recovers evenly over the given number of years.
+    YieldShock(Output, f32, usize),
     Feedstock(Feedstock, f32),
 
     AddEvent(Id),
@@ -200,6 +204,7 @@ impl Effect {
             }
             EffectKind::ProcessLimit => Effect::ProcessLimit(default_process, 0.),
             EffectKind::FreezeProcess => Effect::FreezeProcess(default_process),
+            EffectKind::YieldShock => Effect::YieldShock(Output::PlantCalories, -0.05, 3),
             EffectKind::Feedstock => Effect::Feedstock(Feedstock::Coal, 0.),
             EffectKind::AddEvent => Effect::AddEvent(default_event),
             EffectKind::TriggerEvent => Effect::TriggerEvent(default_event, 5),
@@ -429,6 +434,9 @@ impl Effect {
                 {
                     process.byproduct_modifiers.biodiversity += pct_change;
                 }
+            }
+            Effect::YieldShock(output, change, years) => {
+                state.apply_yield_shock(*output, *change, *years);
             }
             Effect::FreezeProcess(id) => {
                 let produced = state.produced.by_process.get(id).copied().unwrap_or(0.);
@@ -683,6 +691,10 @@ impl Effect {
                 {
                     process.byproduct_modifiers.biodiversity -= pct_change;
                 }
+            }
+            Effect::YieldShock(..) => {
+                // Shocks recover on their own; they are only used by events,
+                // which are never unapplied.
             }
             Effect::FreezeProcess(id) => {
                 state.world.processes[id].frozen_limit = None;
@@ -1030,6 +1042,26 @@ mod tests {
         let years: Vec<usize> = state.history.iter().map(|r| r.year).collect();
         assert_eq!(years, (start..=start + 7).collect::<Vec<_>>());
         assert!(state.history.iter().all(|r| r.emissions > 0.));
+    }
+
+    #[test]
+    fn test_yield_shocks_recover_and_dont_clear_land() {
+        let mut state = State::default();
+        let wheat = state.world.processes.iter().find(|p| p.name == "Industrial Crop Ag").unwrap().id;
+        state.step_year(state.world.temperature);
+        let before = state.world.processes[&wheat].output_modifier;
+
+        Effect::YieldShock(Output::PlantCalories, -0.12, 4).apply(&mut state, None);
+        let mut cleared = 0.;
+        for _ in 0..4 {
+            state.step_year(state.world.temperature);
+            cleared += state.land_carbon.last.clearing;
+        }
+        // Recovered (plus a few years of background yield growth).
+        assert!(state.world.processes[&wheat].output_modifier >= before);
+        assert!(state.yield_shocks.is_empty());
+        // Background clearing only: well under what clearing for the shock would release.
+        assert!(cleared * 1e-15 < 10., "{}", cleared * 1e-15);
     }
 
     #[test]

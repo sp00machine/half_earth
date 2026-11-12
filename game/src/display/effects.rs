@@ -782,6 +782,25 @@ impl DisplayEffect {
                     ),
                 )
             }
+            Effect::YieldShock(output, amount, years) => (
+                tip(
+                    output.icon(),
+                    t!(
+                        "Field farming yields for %{name} drop, then recover over %{years} years. While they're down, more land is needed to grow the same food.",
+                        name = t!(output.lower()),
+                        years = years
+                    ),
+                ),
+                icon_text(
+                    output.as_key(),
+                    &t!(
+                        "%{changeDir} %{name} farm yields by [b]%{percent}%[/b] for a while.",
+                        percent = display::percent(amount.abs(), true),
+                        name = t!(output.lower()),
+                        changeDir = self.change_dir(*amount),
+                    ),
+                ),
+            ),
             Effect::OutputForProcess(id, amount) => {
                 let process = &state.world.processes[id];
                 (tip(

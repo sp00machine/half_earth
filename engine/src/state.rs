@@ -31,6 +31,16 @@ const WIN_EMISSIONS: f32 = 0.0;
 const WIN_EXTINCTION: f32 = 20.0;
 const WIN_TEMPERATURE: f32 = 1.0;
 
+/// A temporary yield shock that is recovering.
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Debug)]
+pub struct YieldShock {
+    pub output: Output,
+    /// Output modifier still to be recovered (positive).
+    pub remaining: f32,
+    /// Recovered per year.
+    pub per_year: f32,
+}
+
 /// Key values for one year, for history charts.
 /// Emissions are in Gt CO2-equivalent; land use is a fraction of all land.
 #[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Debug, Default)]
@@ -106,6 +116,10 @@ pub struct State {
     #[serde(default)]
     pub infrastructure: Infrastructure,
 
+    /// Temporary yield shocks still recovering.
+    #[serde(default)]
+    pub yield_shocks: Vec<YieldShock>,
+
     /// Years of background farm yield growth applied so far.
     #[serde(default)]
     pub yield_years: f32,
@@ -168,6 +182,7 @@ impl State {
             emissions: Emissions::default(),
             land_carbon: LandCarbon::default(),
             yield_years: 0.,
+            yield_shocks: vec![],
             infrastructure: Infrastructure::default(),
             storage: Storage::default(),
             history: vec![],
@@ -279,7 +294,40 @@ impl State {
     /// practices and so on, tapering off over time. Without it, growing
     /// food demand would need far more new farmland each year than the
     /// world has actually been clearing.
+    /// Field farms (not vertical farms or cellular meat) producing `output`.
+    fn farms_mut(&mut self, output: Output) -> impl Iterator<Item = &mut crate::Process> {
+        self.world
+            .processes
+            .iter_mut()
+            .filter(move |p| p.output == output && p.feedstock.0 == Feedstock::Soil)
+    }
+
+    pub fn apply_yield_shock(&mut self, output: Output, change: f32, years: usize) {
+        for process in self.farms_mut(output) {
+            process.output_modifier += change;
+        }
+        if change < 0. && years > 0 {
+            self.yield_shocks.push(YieldShock {
+                output,
+                remaining: -change,
+                per_year: -change / years as f32,
+            });
+        }
+    }
+
     fn step_yields(&mut self) {
+        // Temporary shocks recover.
+        let mut shocks = std::mem::take(&mut self.yield_shocks);
+        for shock in shocks.iter_mut() {
+            let recover = shock.per_year.min(shock.remaining);
+            for process in self.farms_mut(shock.output) {
+                process.output_modifier += recover;
+            }
+            shock.remaining -= recover;
+        }
+        shocks.retain(|s| s.remaining > 1e-6);
+        self.yield_shocks = shocks;
+
         let growth = |(max, time): (f32, f32)| {
             let at = |years: f32| max * (1. - (-years / time).exp());
             at(self.yield_years + 1.) - at(self.yield_years)
@@ -482,9 +530,31 @@ impl State {
 
         self.world.update_extinction_rate(&self.produced.by_process);
 
-        // Land-use change emissions, once per year.
+        // Land-use change emissions, once per year. Extra land used only
+        // because of a temporary yield shock is covered by fallow land and
+        // heavier use of existing farmland, not by clearing, so it's left out.
+        let shock_land: f32 = self
+            .world
+            .processes
+            .iter()
+            .filter(|p| p.feedstock.0 == Feedstock::Soil)
+            .map(|p| {
+                let remaining: f32 = self
+                    .yield_shocks
+                    .iter()
+                    .filter(|s| s.output == p.output)
+                    .map(|s| s.remaining)
+                    .sum();
+                if remaining <= 0. {
+                    return 0.;
+                }
+                let produced = self.produced.by_process.get(&p.id).copied().unwrap_or(0.);
+                let m = 1. + p.output_modifier;
+                produced * p.resources.land * (1. / m.max(1e-3) - 1. / (m + remaining))
+            })
+            .sum();
         let land_emissions = self.land_carbon.step(
-            self.resources.consumed.land,
+            self.resources.consumed.land - shock_land.max(0.),
             self.world.starting_resources.land,
             self.protected_land,
         );

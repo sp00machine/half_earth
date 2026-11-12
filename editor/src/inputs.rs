@@ -1659,6 +1659,14 @@ impl Editable
                     },
                 );
             }
+            Effect::YieldShock(output, value, years) => {
+                ui.add(parts::help(
+                    "A temporary cut to field farming yields for an output, recovering evenly over the given number of years.",
+                ));
+                ui.add(edit(output).label("Output").help("What output is affected.").inline());
+                ui.add(percent(value).label("Percent Change").help("The initial change to yields.").inline());
+                ui.add(edit(years).label("Years").help("How many years yields take to recover.").inline());
+            }
             Effect::DemandAmount(output, value) => {
                 ui.add(parts::help(
                     "Modify all demand for the specified output by an absolute amount.",

@@ -43,6 +43,12 @@ const BASE_DEFORESTATION: f32 = 1e11;
 /// Carbon density of land lost to background deforestation (gC/m²).
 const DEFORESTATION_DENSITY: f32 = 10_000.;
 
+/// Years over which clearing and abandonment catch up with land demand.
+/// A bad harvest or a sudden policy change doesn't bulldoze forest the
+/// same year: short shortfalls are covered by stocks, fallow land and
+/// heavier grazing, and clearing follows sustained demand.
+const LAND_RESPONSE_YEARS: f32 = 5.;
+
 /// Land protection at the start of the game.
 const START_PROTECTION: f32 = 0.1;
 
@@ -107,6 +113,11 @@ pub struct LandCarbon {
 
     /// The most recent year's emissions.
     pub last: LandEmissions,
+
+    /// Override for how many years land use takes to follow demand
+    /// (`None` uses the default; tests use 1 for an immediate response).
+    #[serde(default)]
+    pub response_years: Option<f32>,
 }
 
 impl LandCarbon {
@@ -165,9 +176,16 @@ impl LandCarbon {
 
     /// Advance one year. `used` is land in use this year and `total`
     /// is all land (m²). Returns this year's emissions.
-    pub fn step(&mut self, used: f32, total: f32, protected_land: f32) -> LandEmissions {
+    pub fn step(&mut self, demand: f32, total: f32, protected_land: f32) -> LandEmissions {
         let speed = self.regrowth_speed();
         let mut out = LandEmissions::default();
+
+        // Land in use follows demand with a lag.
+        let response = self.response_years.unwrap_or(LAND_RESPONSE_YEARS).max(1.);
+        let used = match self.prev_used {
+            Some(prev) => prev + (demand - prev) / response,
+            None => demand,
+        };
 
         let prev = match self.prev_used {
             Some(prev) => prev,
@@ -263,7 +281,7 @@ mod tests {
     fn starting_emissions_match_todays_land_use_change() {
         // Global net land-use change emissions are ~4 Gt CO2/yr
         // (Global Carbon Budget).
-        let mut land = LandCarbon::default();
+        let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
         let first = land.step(START_USED, TOTAL, START_PROTECTION);
         let second = land.step(START_USED, TOTAL, START_PROTECTION);
         for year in [first, second] {
@@ -275,7 +293,7 @@ mod tests {
 
     #[test]
     fn clearing_is_fast_and_regrowth_slow() {
-        let mut land = LandCarbon::default();
+        let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
         land.step(START_USED, TOTAL, START_PROTECTION);
         let baseline = land.step(START_USED, TOTAL, START_PROTECTION).total();
 
@@ -303,7 +321,7 @@ mod tests {
 
     #[test]
     fn regrowing_land_cleared_again_releases_only_what_it_regrew() {
-        let mut land = LandCarbon::default();
+        let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
         land.step(START_USED, TOTAL, START_PROTECTION);
         land.step(START_USED - 5e12, TOTAL, START_PROTECTION);
         for _ in 0..5 {
@@ -311,7 +329,7 @@ mod tests {
         }
         let reclear = land.step(START_USED, TOTAL, START_PROTECTION);
 
-        let mut fresh = LandCarbon::default();
+        let mut fresh = LandCarbon { response_years: Some(1.), ..Default::default() };
         fresh.step(START_USED, TOTAL, START_PROTECTION);
         let wild = fresh.step(START_USED + 5e12, TOTAL, START_PROTECTION);
         assert!(reclear.clearing < wild.clearing * 0.3);
@@ -320,7 +338,7 @@ mod tests {
 
     #[test]
     fn clearing_estimate_matches_what_happens() {
-        let mut land = LandCarbon::default();
+        let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
         land.step(START_USED, TOTAL, START_PROTECTION);
         let estimate = land.estimate_clearing(START_USED, START_USED + 3e12, TOTAL);
         let debt_before = land.soil_debt;
@@ -330,6 +348,22 @@ mod tests {
         let soil_added = land.soil_debt - debt_before - deforestation_soil + year.soil / CO2_PER_C;
         let actual = year.clearing + soil_added * CO2_PER_C;
         assert!((estimate - actual).abs() / actual < 0.01, "{estimate} vs {actual}");
+    }
+
+    #[test]
+    fn short_shocks_are_mostly_absorbed() {
+        // A one-year spike in land demand clears far less than a lasting one.
+        let run = |years: usize| {
+            let mut land = LandCarbon::default();
+            land.step(START_USED, TOTAL, START_PROTECTION);
+            let mut cleared = 0.;
+            for year in 0..20 {
+                let demand = if year < years { START_USED + 5e12 } else { START_USED };
+                cleared += land.step(demand, TOTAL, START_PROTECTION).clearing;
+            }
+            cleared
+        };
+        assert!(run(1) < run(20) * 0.3);
     }
 
     #[test]
@@ -349,7 +383,7 @@ mod tests {
         // Sanity check against Hayek et al. (2021), which estimates that
         // ending most animal agriculture and letting the land regrow would
         // remove several hundred Gt CO2 this century.
-        let mut land = LandCarbon::default();
+        let mut land = LandCarbon { response_years: Some(1.), ..Default::default() };
         land.step(START_USED, TOTAL, START_PROTECTION);
         let freed_used = START_USED - 2e13;
         let mut removed = 0.;

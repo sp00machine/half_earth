@@ -15759,15 +15759,17 @@
             ],
             "effects": [
                 {
-                    "OutputForProcess": [
-                        "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
-                        -0.12
+                    "YieldShock": [
+                        "PlantCalories",
+                        -0.12,
+                        10
                     ]
                 },
                 {
-                    "OutputForProcess": [
-                        "c0045e2a-e1d7-4cb7-9d36-870525b46c54",
-                        -0.12
+                    "YieldShock": [
+                        "AnimalCalories",
+                        -0.12,
+                        10
                     ]
                 }
             ],
@@ -15849,7 +15851,7 @@
                     "attribution": "Dust-storm-Texas-1935, via Openverse, CC BY 2.0"
                 }
             },
-            "notes": "Declines are + or - 9% (is there a way to reflect that or do we just pick a number?\n\nThe extent of soil loss across the US Corn Belt\nEvan A. Thaler, Isaac J. Larsen, Qian Yu\nProceedings of the National Academy of Sciences Feb 2021, 118 (8) \n\nOther good stuff: https://www.theguardian.com/environment/2017/sep/12/third-of-earths-soil-acutely-degraded-due-to-agriculture-study\n\nhttps://www.theguardian.com/us-news/2019/may/30/topsoil-farming-agriculture-food-toxic-america\n\n"
+            "notes": "[three-quarters fork] Was a permanent -12% to Industrial Crop Ag and Industrial Livestock Ag, which suddenly demanded ~7 Mkm2 of new farmland. Now a -12% yield shock to field farming that recovers over 10 years.\n\nDeclines are + or - 9% (is there a way to reflect that or do we just pick a number?\n\nThe extent of soil loss across the US Corn Belt\nEvan A. Thaler, Isaac J. Larsen, Qian Yu\nProceedings of the National Academy of Sciences Feb 2021, 118 (8) \n\nOther good stuff: https://www.theguardian.com/environment/2017/sep/12/third-of-earths-soil-acutely-degraded-due-to-agriculture-study\n\nhttps://www.theguardian.com/us-news/2019/may/30/topsoil-farming-agriculture-food-toxic-america\n\n"
         },
         {
             "name": "Last Coral Reef Bleaches",
@@ -19452,9 +19454,10 @@
             ],
             "effects": [
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.05
+                        -0.05,
+                        8
                     ]
                 },
                 {
@@ -19502,7 +19505,7 @@
                     "attribution": "\"AKK 8-009 #2 Panama Disease P Lahi 0670 (3)\" by Plant pests and diseases CC BY 2.0"
                 }
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Yield losses now recover over 8 year(s) (YieldShock) instead of being permanent.\n\n"
         },
         {
             "name": "Nemesis - The Utopian",
@@ -20926,9 +20929,10 @@
             ],
             "effects": [
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.05
+                        -0.05,
+                        3
                     ]
                 },
                 {
@@ -20988,7 +20992,7 @@
                     "attribution": "\"P. Aecia, Pycinia wheat rust 10x, shiv+matt\" by stellarr CC0 1.0"
                 }
             },
-            "notes": "https://www.theguardian.com/science/2007/apr/22/food.foodanddrink"
+            "notes": "[three-quarters fork] Yield losses now recover over 3 year(s) (YieldShock) instead of being permanent.\n\nhttps://www.theguardian.com/science/2007/apr/22/food.foodanddrink"
         },
         {
             "name": "Permafrost Contagion",
@@ -22759,9 +22763,10 @@
             ],
             "effects": [
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.1
+                        -0.1,
+                        3
                     ]
                 },
                 {
@@ -22827,7 +22832,7 @@
                     "attribution": "I.S\u00e1\u010dek, senior, CC0"
                 }
             },
-            "notes": "Trying to find a good figure for plant calorie impact:\n\nhttps://link.springer.com/article/10.1007/s12230-018-09697-1 says \"50% of the world's food energy needs are supplied by potatoes, rice, wheat and maize.\"\n\nhttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC8302968/ says the breakdown b/w for annual consumption for those four are:\npotato: 241Mt\nmaize: 140Mt\nrice: 590Mt\nwheat: 478Mt\nso very quick calc/rough estimate: potatoes are 16.6% of that 50% so ~8% overall. So the original value of 10% seems reasonable. - FT"
+            "notes": "[three-quarters fork] Yield losses now recover over 3 year(s) (YieldShock) instead of being permanent.\n\nTrying to find a good figure for plant calorie impact:\n\nhttps://link.springer.com/article/10.1007/s12230-018-09697-1 says \"50% of the world's food energy needs are supplied by potatoes, rice, wheat and maize.\"\n\nhttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC8302968/ says the breakdown b/w for annual consumption for those four are:\npotato: 241Mt\nmaize: 140Mt\nrice: 590Mt\nwheat: 478Mt\nso very quick calc/rough estimate: potatoes are 16.6% of that 50% so ~8% overall. So the original value of 10% seems reasonable. - FT"
         },
         {
             "name": "Famine - Intro",
@@ -22993,9 +22998,10 @@
                     ]
                 },
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.02
+                        -0.02,
+                        1
                     ]
                 },
                 {
@@ -23049,7 +23055,7 @@
                     "attribution": "Michael Pellant/BLM (CC BY 2.0)"
                 }
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Yield losses now recover over 1 year(s) (YieldShock) instead of being permanent.\n\n"
         },
         {
             "name": "Dashboard Intro",
@@ -24302,15 +24308,17 @@
                     ]
                 },
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.05
+                        -0.05,
+                        5
                     ]
                 },
                 {
-                    "Output": [
+                    "YieldShock": [
                         "AnimalCalories",
-                        -0.05
+                        -0.05,
+                        5
                     ]
                 }
             ],
@@ -24352,7 +24360,7 @@
                     "attribution": "\"DUST STORM 1968\" by expom2uk is marked with CC BY 2.0"
                 }
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Yield losses now recover over 5 year(s) (YieldShock) instead of being permanent.\n\n"
         },
         {
             "name": "West Antarctic Collapse",
@@ -29755,9 +29763,10 @@
             ],
             "effects": [
                 {
-                    "Output": [
+                    "YieldShock": [
                         "PlantCalories",
-                        -0.01
+                        -0.01,
+                        2
                     ]
                 }
             ],
@@ -29791,7 +29800,7 @@
                     "attribution": "CSIRO"
                 }
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Yield losses now recover over 2 year(s) (YieldShock) instead of being permanent.\n\n"
         },
         {
             "name": "Welcome Back",
