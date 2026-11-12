@@ -131,8 +131,14 @@ impl Region {
             Income::UpperMiddle => consumerist_ally,
             Income::High => consumerist_ally,
         };
-        self.outlook += if buffed { 0.3 } else { 0.1 };
-        self.outlook = f32::min(10., self.outlook);
+        // Recovery stops at 10, but popular policies can lift a region
+        // above it: a cushion that later unpopular policies (or repealing
+        // the popular one) take away first. Capping everything at 10 lost
+        // those gains, so repealing a popular policy left a region worse
+        // off than before it was passed.
+        if self.outlook < 10. {
+            self.outlook = (self.outlook + if buffed { 0.3 } else { 0.1 }).min(10.);
+        }
     }
 
     fn develop_by(&mut self, modifier: f32) {

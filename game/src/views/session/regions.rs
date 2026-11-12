@@ -284,7 +284,7 @@ fn region_preview(
 }
 
 fn region_impacts(ui: &mut egui::Ui, region: &Region, state: &State) {
-    let contentedness = intensity::scale(region.outlook, intensity::Variable::Outlook);
+    let contentedness = intensity::scale(region.outlook.min(10.), intensity::Variable::Outlook);
     let habitability = intensity::scale(region.habitability(), intensity::Variable::Habitability);
     let income_tip = {
         let name = t!(region.income.lower());

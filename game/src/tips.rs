@@ -396,6 +396,12 @@ fn render_contentedness_card(
                 });
                 let (status, next) = unrest_status(region);
                 row(ui, t!("Contentedness").to_string(), format!("{:.1}", region.outlook));
+                if region.outlook > 10. {
+                    small(
+                        ui,
+                        t!("Above 10: popular policies have given people a cushion that unpopular ones will use up first.").to_string(),
+                    );
+                }
                 row(ui, t!("Status").to_string(), status);
                 if !next.is_empty() {
                     small(ui, next);

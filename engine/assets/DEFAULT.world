@@ -37663,9 +37663,6 @@
                     ]
                 },
                 {
-                    "UnlocksProject": "2e463e40-efc0-4861-908a-c1cb0f392cc0"
-                },
-                {
                     "UnlocksProject": "d9ef52e4-9dc2-45dc-aad3-d363f4a79b2b"
                 }
             ],
@@ -37708,7 +37705,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] No longer unlocks Global Demilitarization; it's now unlocked by it (or by Emergency Powers).\n\n"
         },
         {
             "id": "f759d87d-69ff-433b-8e3d-f3dbb776543a",
@@ -38833,6 +38830,9 @@
                 },
                 {
                     "AddEvent": "7b5d1f3a-9c42-4e68-a2b7-3f9e6c1d8a54"
+                },
+                {
+                    "UnlocksProject": "bbb894b3-a0e5-46c7-b2ab-60d3c6b28392"
                 }
             ],
             "outcomes": [
@@ -38892,7 +38892,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New policy, unlocked by The Authoritarian's Offer. Mostly suppresses riots and revolts and blocks escalation and secession; enables Crackdown and The Emergency Never Ends. Not available after Global Demilitarization."
+            "notes": "[three-quarters fork] Also unlocks Esperanto, for a Newspeak run.\n\n[three-quarters fork] New policy, unlocked by The Authoritarian's Offer. Mostly suppresses riots and revolts and blocks escalation and secession; enables Crackdown and The Emergency Never Ends. Not available after Global Demilitarization."
         },
         {
             "id": "9d8775b5-4396-4ff3-be3a-1a1ec92351ca",
@@ -42146,6 +42146,9 @@
                         "c398c26c-e6ba-49ac-8f6e-f992ca4ccada",
                         0.5
                     ]
+                },
+                {
+                    "UnlocksProject": "bbb894b3-a0e5-46c7-b2ab-60d3c6b28392"
                 }
             ],
             "outcomes": [
@@ -42210,7 +42213,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots and revolts are 50% more likely. (The militant-attack and secondary unrest modifiers were dropped to keep the card readable on phones.)\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
+            "notes": "[three-quarters fork] Unlocks Esperanto: a world at peace can share a language.\n\n[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots and revolts are 50% more likely. (The militant-attack and secondary unrest modifiers were dropped to keep the card readable on phones.)\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
         },
         {
             "id": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9",
@@ -49703,7 +49706,7 @@
                     ]
                 },
                 {
-                    "UnlocksProject": "bbb894b3-a0e5-46c7-b2ab-60d3c6b28392"
+                    "UnlocksProject": "2e463e40-efc0-4861-908a-c1cb0f392cc0"
                 }
             ],
             "outcomes": [
@@ -49753,7 +49756,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Now unlocks Global Demilitarization instead of Esperanto: a world language comes after peace, not before.\n\n"
         },
         {
             "id": "3e29bc82-d25c-47a5-95df-48c0ddea7304",

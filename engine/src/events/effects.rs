@@ -810,8 +810,13 @@ impl Effect {
             Effect::LocksProject(id) => {
                 state.world.projects[id].locked = false;
             }
+            // Only re-lock a project that hasn't been started; one already
+            // built or under way stays available.
             Effect::UnlocksProject(id) => {
-                state.world.projects[id].locked = true;
+                let project = &mut state.world.projects[id];
+                if project.status == crate::Status::Inactive {
+                    project.locked = true;
+                }
             }
             Effect::UnlocksProcess(id) => {
                 state.world.processes[id].locked = true;
@@ -1344,5 +1349,21 @@ mod tests {
         effect.unapply(&mut state, None);
         assert!((state.outlook() - world).abs() < 1e-3);
         assert!(state.world.regions.iter().all(|r| (r.outlook - 5.).abs() < 1e-3));
+    }
+
+    #[test]
+    fn test_popular_then_repealed_policy_leaves_regions_where_they_were() {
+        let mut state = State::default();
+        let start: Vec<f32> = state.world.regions.iter().map(|r| r.outlook).collect();
+        assert!(start.iter().all(|o| *o == 10.));
+        let popular = Effect::WorldVariable(WorldVariable::Outlook, 2.);
+        popular.apply(&mut state, None);
+        for _ in 0..5 {
+            state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+        }
+        popular.unapply(&mut state, None);
+        for (region, s) in state.world.regions.iter().zip(&start) {
+            assert!((region.outlook - s).abs() < 1e-3, "{} vs {s}", region.outlook);
+        }
     }
 }
