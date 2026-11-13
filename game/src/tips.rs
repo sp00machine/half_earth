@@ -324,7 +324,7 @@ fn outlook_source_name(source: &hes_engine::OutlookSource) -> String {
         OutlookSource::Fatigue(name) => format!("{} ({})", t!(name.as_str()), t!("fatigue")),
         OutlookSource::Event(name) => t!(name.as_str()).to_string(),
         OutlookSource::NotYetFelt => t!("Not felt yet").to_string(),
-        OutlookSource::Recovery => t!("Recovery over time & other").to_string(),
+        OutlookSource::Recovery => t!("Recovery, fading goodwill & other").to_string(),
     }
 }
 
@@ -399,7 +399,7 @@ fn render_contentedness_card(
                 if region.outlook > 10. {
                     small(
                         ui,
-                        t!("Above 10: popular policies have given people a cushion that unpopular ones will use up first.").to_string(),
+                        t!("Above 10: popular policies have given people a cushion that unpopular ones will use up first. It fades by a tenth each year as people get used to it.").to_string(),
                     );
                 }
                 row(ui, t!("Status").to_string(), status);
@@ -488,7 +488,7 @@ fn render_contentedness_card(
                 }
             }
             ui.add_space(4.);
-            small(ui, t!("Every region starts at 10 and slowly recovers toward it. Policies that cost contentedness per income level hit richer regions harder.").to_string());
+            small(ui, t!("Every region starts at 10 and slowly recovers toward it; goodwill above 10 fades as people get used to it. Policies that cost contentedness per income level hit richer regions harder.").to_string());
         })
         .response
 }

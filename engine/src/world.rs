@@ -21,6 +21,10 @@ pub static CLIMATES: LazyLock<BTreeMap<String, Vec<[f32; 4]>>> = LazyLock::new(|
 /// The `World` represents a game configuration,
 /// defining the world's parameters as well
 /// as the projects, processes, regions, and industries.
+/// The world's contentedness at the start ("post-revolution optimism"),
+/// before regions are counted.
+const BASE_WORLD_OUTLOOK: f32 = 20.;
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct World {
     pub year: usize,
@@ -86,6 +90,11 @@ impl World {
         }
         self.base_outlook += temp_outlook;
         self.temp_outlook += temp_outlook;
+        // Goodwill from popular policies fades as people get used to them.
+        if self.base_outlook > BASE_WORLD_OUTLOOK {
+            self.base_outlook -=
+                (self.base_outlook - BASE_WORLD_OUTLOOK) * crate::regions::GOODWILL_FADE;
+        }
         self.regions.update_outlook(wretched_ally, consumerist_ally);
     }
 

@@ -7,6 +7,10 @@ use strum::{Display, EnumIter, EnumString, IntoStaticStr};
 // 40 years per level
 const DEVELOP_SPEED: f32 = 1. / 40.;
 
+/// Share of contentedness above its usual level that fades each year, as
+/// people get used to good things (a region's 10, the world's starting 20).
+pub const GOODWILL_FADE: f32 = 0.1;
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 pub struct Region {
     pub id: Id,
@@ -138,6 +142,10 @@ impl Region {
         // off than before it was passed.
         if self.outlook < 10. {
             self.outlook = (self.outlook + if buffed { 0.3 } else { 0.1 }).min(10.);
+        } else {
+            // People get used to good things: a cushion above 10 fades by
+            // a tenth each year.
+            self.outlook -= (self.outlook - 10.) * GOODWILL_FADE;
         }
     }
 

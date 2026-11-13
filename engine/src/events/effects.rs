@@ -1394,19 +1394,23 @@ mod tests {
     }
 
     #[test]
-    fn test_popular_then_repealed_policy_leaves_regions_where_they_were() {
+    fn test_popular_policy_goodwill_fades() {
         let mut state = State::default();
-        let start: Vec<f32> = state.world.regions.iter().map(|r| r.outlook).collect();
-        assert!(start.iter().all(|o| *o == 10.));
-        let popular = Effect::WorldVariable(WorldVariable::Outlook, 2.);
+        assert!(state.world.regions.iter().all(|r| r.outlook == 10.));
+        let popular = Effect::WorldVariable(WorldVariable::Outlook, 8.);
+
+        // Passed and repealed before it fades: back where it started.
         popular.apply(&mut state, None);
-        for _ in 0..5 {
+        popular.unapply(&mut state, None);
+        assert!(state.world.regions.iter().all(|r| (r.outlook - 10.).abs() < 1e-3));
+
+        // Left in place, the cushion above 10 fades as people get used to it.
+        popular.apply(&mut state, None);
+        for _ in 0..10 {
             state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
         }
-        popular.unapply(&mut state, None);
-        for (region, s) in state.world.regions.iter().zip(&start) {
-            assert!((region.outlook - s).abs() < 1e-3, "{} vs {s}", region.outlook);
-        }
+        let cushion = state.world.regions.by_idx(0).outlook - 10.;
+        assert!(cushion > 0.5 && cushion < 1.0, "{cushion}");
     }
 
     #[test]

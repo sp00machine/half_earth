@@ -22656,7 +22656,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        20.0
+                        10.0
                     ]
                 }
             ],
@@ -22718,7 +22718,7 @@
                     "attribution": "Damian Gadal (CC BY 2.0.)"
                 }
             },
-            "notes": "TV, I reworked the dialogue, made it more socialist."
+            "notes": "[three-quarters fork] World contentedness +20 -> +10. Late game contentedness was too easy.\n\nTV, I reworked the dialogue, made it more socialist."
         },
         {
             "name": "Earth Liberation Front Attacks",
@@ -37996,7 +37996,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        5.0
+                        1.0
                     ]
                 },
                 {
@@ -38042,7 +38042,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] No longer unlocks Global Demilitarization; it's now unlocked by it (or by Emergency Powers).\n\n"
+            "notes": "[three-quarters fork] World contentedness +5 -> +1. Fantasy policies are fun but don't move most people much.\n\n[three-quarters fork] No longer unlocks Global Demilitarization; it's now unlocked by it (or by Emergency Powers).\n\n"
         },
         {
             "id": "f759d87d-69ff-433b-8e3d-f3dbb776543a",
@@ -41186,7 +41186,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        5.0
+                        1.0
                     ]
                 },
                 {
@@ -41252,7 +41252,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Was a flat +1 Gt/yr. Without predators, overgrazing slows regrowth, so freed land now regrows 15% slower.\n\nTV. A ref that mentions the tech is: David Pearce, 'Reprogramming Predators', 2009\nShould we assume this will harm biodiversity and carbon sequestration of ecosystems?"
+            "notes": "[three-quarters fork] World contentedness +5 -> +1. Fantasy policies are fun but don't move most people much.\n\n[three-quarters fork] Was a flat +1 Gt/yr. Without predators, overgrazing slows regrowth, so freed land now regrows 15% slower.\n\nTV. A ref that mentions the tech is: David Pearce, 'Reprogramming Predators', 2009\nShould we assume this will harm biodiversity and carbon sequestration of ecosystems?"
         },
         {
             "id": "6084cbc2-7dbc-4b75-8a0d-6df5fc0be59f",
@@ -42499,7 +42499,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        5.0
+                        3.0
                     ]
                 },
                 {
@@ -42595,7 +42595,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Unlocks Esperanto: a world at peace can share a language.\n\n[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots and revolts are 50% more likely. (The militant-attack and secondary unrest modifiers were dropped to keep the card readable on phones.)\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
+            "notes": "[three-quarters fork] World contentedness +5 -> +3. Late game contentedness was too easy.\n\n[three-quarters fork] Unlocks Esperanto: a world at peace can share a language.\n\n[three-quarters fork] Security costs: without a military, Emergency Powers are unavailable, and riots and revolts are 50% more likely. (The militant-attack and secondary unrest modifiers were dropped to keep the card readable on phones.)\n\n[three-quarters fork] Was a flat -2.5 Gt. Military emissions are now their own industry, which this shuts down.\n\nEmissions decrease derived from estimate of militaries accounting for 6% global emissions:\nhttps://www.sgr.org.uk/resources/carbon-boot-print-military-0\n\nI also added a multiplier to make iron and steel 10% less electric-intensive based on the idea that we could salvage metal from military infrastructure. Couldn't find a source for this, but thought it might be cool to add a side-effect.\n\nChanges the iron and steel effect to affect metal shortage events instead, bit easier that way - FT"
         },
         {
             "id": "8da8f7b9-9ba3-46bd-92ba-0e4162f21aa9",
@@ -43712,7 +43712,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        2.0
+                        1.0
                     ]
                 }
             ],
@@ -43759,7 +43759,7 @@
                     }
                 ]
             },
-            "notes": "No cost, just an easy way for the player to improve outlook.\n\nI got the photo here: https://commons.wikimedia.org/w/index.php?search=Sovetskoye+Shampanskoye&title=Special:MediaSearch&go=Go&type=image"
+            "notes": "[three-quarters fork] World contentedness +2 -> +1. Fantasy policies are fun but don't move most people much.\n\nNo cost, just an easy way for the player to improve outlook.\n\nI got the photo here: https://commons.wikimedia.org/w/index.php?search=Sovetskoye+Shampanskoye&title=Special:MediaSearch&go=Go&type=image"
         },
         {
             "id": "d4ad1b37-0245-4560-a62b-9fbd20e5b13f",
@@ -43788,7 +43788,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        10.0
+                        4.0
                     ]
                 },
                 {
@@ -43869,7 +43869,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] World contentedness +10 -> +4. Late game contentedness was too easy.\n\n"
         },
         {
             "id": "d9ef52e4-9dc2-45dc-aad3-d363f4a79b2b",
@@ -47299,7 +47299,7 @@
                 {
                     "WorldVariable": [
                         "Outlook",
-                        3.0
+                        2.0
                     ]
                 }
             ],
@@ -47352,7 +47352,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] World contentedness +3 -> +2. Late game contentedness was too easy.\n\n"
         },
         {
             "id": "f3054147-92c2-42a0-8f6b-90ef2b4737cd",
@@ -52027,7 +52027,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] World contentedness +1 -> +1. Fantasy policies are fun but don't move most people much.\n\n"
         },
         {
             "id": "71ad0453-7064-4e91-83b9-c50bb135c26f",
