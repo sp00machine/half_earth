@@ -43249,7 +43249,7 @@
         },
         {
             "id": "d04eb59d-f423-4c71-8291-c694cb5248a4",
-            "name": "Vegan Pets",
+            "name": "Herbivorous Pets Only",
             "kind": "Policy",
             "group": "Food",
             "ongoing": false,
@@ -43275,11 +43275,17 @@
                     ]
                 },
                 {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
                     "OutlookByIncome": [
                         0.0,
-                        0.0,
                         -0.5,
-                        -1.5
+                        -2.0,
+                        -3.0
                     ]
                 },
                 {
@@ -43301,10 +43307,12 @@
             "upgrades": [],
             "active_outcome": null,
             "supporters": [
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
+                "5cd771c9-2622-4bd9-8478-c2cbf2294080",
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
             ],
             "opposers": [
-                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
             ],
             "flavor": {
                 "image": {
@@ -43313,7 +43321,7 @@
                     },
                     "attribution": "\"Cat hunting\" by filipstepien1 (CC BY 2.0.)"
                 },
-                "description": "Switch the world's cats and dogs to plant-based food.",
+                "description": "No more breeding cats and dogs. The ones alive today live out their lives, but from now on people keep rabbits, guinea pigs, tortoises and budgies.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -43330,17 +43338,17 @@
                                 "id": 1,
                                 "next": null,
                                 "speaker": "The Consumerist",
-                                "text": "My cat will never forgive you."
+                                "text": "You can't play fetch with a tortoise."
                             }
                         ]
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Pets eat a real share of the meat economy: in the US, pet food is roughly a quarter to a third of the environmental impact of animal products (Okin 2017); worldwide it's smaller. -4% meat demand. Dogs do fine on well-made plant diets; cats are carnivores and it's much more contested. Rich regions, where most pets live, hate it at first.",
+            "notes": "[three-quarters fork] Was Vegan Pets, but feeding pets plant-based food is already what the game's demand implies once meat comes from cellular meat. A ban on meat-eating pets is the real choice: pets eat a real share of the meat economy (in the US, pet food is roughly a quarter to a third of the environmental impact of animal products, Okin 2017; worldwide it's smaller), so -4% meat demand. Cats also kill billions of birds and small animals a year (Loss et al. 2013), so -1 extinction, more than Ban Outdoor Cats. Very unpopular where most pets live, fading over 15 years as the last cats and dogs grow old.",
             "fatigue": {
                 "adapting": true,
-                "rate": 0.5,
-                "years": 10.0
+                "rate": 1.0,
+                "years": 15.0
             }
         },
         {
