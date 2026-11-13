@@ -32,7 +32,7 @@ impl Scannable for Project {
         let changes = state.ui.plan_changes.entry(self.id).or_default();
 
         // Upgrading projects
-        if self.is_online() && self.next_upgrade().is_some() {
+        if self.is_passed_or_online() && self.next_upgrade().is_some() {
             let free = changes.downgrades > 0;
             if free {
                 changes.downgrades -= 1;
@@ -111,7 +111,7 @@ impl Scannable for Project {
         #[allow(clippy::needless_bool)]
         // The majority needed: to pass the project, or, once it's in
         // force, to raise it to its next level.
-        let required_majority = if self.is_online() {
+        let required_majority = if self.is_passed_or_online() {
             self.next_upgrade().map_or(0., |u| u.required_majority)
         } else {
             self.required_majority
@@ -124,8 +124,8 @@ impl Scannable for Project {
             false
         } else if self.next_upgrade().is_some() {
             true
-        } else if self.is_online() {
-            // Already in force (a policy, a finished project, or an ongoing
+        } else if self.is_passed_or_online() {
+            // Already in force or passed this session (a policy, a finished project, or an ongoing
             // one like Direct Air Capture) with no level left to add:
             // points would do nothing.
             false

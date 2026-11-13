@@ -1212,7 +1212,7 @@ impl State {
         let proj = &mut self.world.projects[id];
         proj.locked = false;
         proj.status = Status::Active;
-        let mut effects = proj.effects.clone();
+        let mut effects = proj.active_effects().clone();
         if let Some((outcome_effects, i)) = outcome {
             effects.extend(outcome_effects);
             proj.active_outcome = Some(i);
@@ -1242,7 +1242,9 @@ impl State {
             let proj = &mut self.world.projects[id];
             proj.active_outcome = active_outcome;
             proj.status = Status::Active;
-            for effect in &proj.effects {
+            // At the level it was raised to while queued (upstream always
+            // used the first level's effects).
+            for effect in proj.active_effects() {
                 effects.push(effect.clone());
             }
 
@@ -1812,7 +1814,8 @@ mod fatigue_tests {
         for _ in 0..20 {
             state.update_policy_fatigue();
         }
-        assert_eq!(state.policy_fatigue, 0., "the flexitarian backlash has faded");
+        assert_eq!(state.policy_fatigue, 0., "the Meatless Mondays backlash has faded");
+        state.upgrade_project(&id);
         state.upgrade_project(&id);
         assert!(state.flags.contains(&Flag::Vegetarian));
         state.update_policy_fatigue();
@@ -1823,8 +1826,27 @@ mod fatigue_tests {
     fn vegetarian_and_vegan_levels_need_a_majority() {
         let state = State::new(World::default());
         let p = &state.world.projects[&by_name(&state, "Plant-Based Diets")];
-        assert_eq!(p.upgrades[0].required_majority, 0.5);
-        assert!(p.upgrades[1].required_majority > 0.6);
+        assert_eq!(p.upgrades[0].required_majority, 0.);
+        assert_eq!(p.upgrades[1].required_majority, 0.5);
+        assert!(p.upgrades[2].required_majority > 0.6);
+        assert_eq!(p.display_name(), "Diet: Meatless Mondays");
+    }
+
+    #[test]
+    fn policy_raised_in_the_session_it_passes_takes_effect_at_that_level() {
+        let mut state = State::new(World::default());
+        let id = by_name(&state, "Plant-Based Diets");
+        state.start_project(&id);
+        state.upgrade_project(&id);
+        state.upgrade_project(&id);
+        assert_eq!(state.world.projects[&id].display_name(), "Diet: Vegetarian Mandate");
+        assert!(!state.flags.contains(&Flag::Vegetarian), "not in force yet");
+        // The session ends: queued policies take effect.
+        for _ in 0..5 {
+            state.step_year(state.world.temperature);
+        }
+        assert_eq!(state.world.projects[&id].status, Status::Active);
+        assert!(state.flags.contains(&Flag::Vegetarian));
     }
 }
 

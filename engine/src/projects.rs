@@ -200,6 +200,13 @@ pub struct Project {
     /// Ongoing discontent while this policy is in force (see `Fatigue`).
     /// Steel, cement and manufacturing energy it takes to build, used up
     /// as it's built.
+    /// Names and descriptions for each level, when levels are different
+    /// things (index 0 is the base level).
+    #[serde(default)]
+    pub level_names: Vec<String>,
+    #[serde(default)]
+    pub level_descriptions: Vec<String>,
+
     #[serde(default)]
     pub construction: Option<crate::materials::BuildOut>,
 
@@ -262,6 +269,25 @@ impl Project {
 
     pub fn is_online(&self) -> bool {
         self.is_active() || self.is_finished()
+    }
+
+    /// In force, or a policy passed this planning session that takes effect
+    /// when the session ends. Either can be raised to its next level.
+    pub fn is_passed_or_online(&self) -> bool {
+        self.is_online() || (self.kind == Type::Policy && self.status == Status::Building)
+    }
+
+    /// The name for the current level, for projects whose levels are
+    /// different things (e.g. Diet: Meatless Mondays ... Diet: Vegan Mandate).
+    pub fn display_name(&self) -> &str {
+        self.level_names.get(self.level).map_or(&self.name, |n| n.as_str())
+    }
+
+    /// The description for the current level, if levels have their own.
+    pub fn display_description(&self) -> &str {
+        self.level_descriptions
+            .get(self.level)
+            .map_or(&self.flavor.description, |d| d.as_str())
     }
 
     pub fn is_building(&self) -> bool {
@@ -377,6 +403,15 @@ impl Project {
     pub fn upgrade(&mut self) -> ProjectChanges {
         let mut changes = ProjectChanges::default();
 
+        // A policy passed this session isn't in force yet: just raise its
+        // level, and it takes effect at that level.
+        if self.status == Status::Building {
+            if self.level < self.upgrades.len() {
+                self.level += 1;
+            }
+            return changes;
+        }
+
         // Upgrade effects replace the previous effects.
         // EXCEPT for locks/unlocks.
         let to_remove = self
@@ -411,6 +446,11 @@ impl Project {
 
     pub fn downgrade(&mut self) -> ProjectChanges {
         let mut changes = ProjectChanges::default();
+
+        if self.status == Status::Building {
+            self.level = self.level.saturating_sub(1);
+            return changes;
+        }
         changes.remove_effects.extend(self.active_effects().clone());
 
         let downgraded = if self.level > 0 {

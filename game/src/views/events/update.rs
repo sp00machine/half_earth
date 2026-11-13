@@ -21,7 +21,7 @@ impl AsEventView for EngineUpdate {
         let name = match self {
             EngineUpdate::Project { id } | EngineUpdate::Policy { id } => {
                 let proj = &state.world.projects[id];
-                &proj.name
+                proj.display_name()
             }
             EngineUpdate::Region { id, .. } => {
                 let region = &state.world.regions[id];

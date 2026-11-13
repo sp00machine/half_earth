@@ -40768,9 +40768,6 @@
                     ]
                 },
                 {
-                    "UnlocksProject": "08471304-5e93-49f7-b194-33c9fedaa752"
-                },
-                {
                     "UnlocksProject": "d04eb59d-f423-4c71-8291-c694cb5248a4"
                 },
                 {
@@ -46723,124 +46720,6 @@
             "notes": ""
         },
         {
-            "id": "08471304-5e93-49f7-b194-33c9fedaa752",
-            "name": "Meatless Mondays",
-            "kind": "Policy",
-            "group": "Food",
-            "ongoing": false,
-            "gradual": false,
-            "locked": true,
-            "cost": 0,
-            "base_cost": {
-                "Fixed": 5
-            },
-            "cost_modifier": 1.0,
-            "progress": 0.0,
-            "points": 0,
-            "estimate": 0,
-            "status": "Inactive",
-            "level": 0,
-            "completed_at": 0,
-            "required_majority": 0.0,
-            "effects": [
-                {
-                    "Demand": [
-                        "AnimalCalories",
-                        -0.14
-                    ]
-                },
-                {
-                    "UnlocksProject": "ce50beb5-243b-44f5-b722-729b9acb94fd"
-                },
-                {
-                    "UnlocksProject": "6a8ba52e-d1a8-41f6-a40a-e6cafeb39966"
-                },
-                {
-                    "Demand": [
-                        "PlantCalories",
-                        0.14
-                    ]
-                },
-                {
-                    "OutlookByIncome": [
-                        0.0,
-                        0.0,
-                        -0.5,
-                        -1.0
-                    ]
-                },
-                {
-                    "LocksProject": "fad34ed2-adee-42dd-8dcc-a08838e63faf"
-                }
-            ],
-            "outcomes": [
-                {
-                    "effects": [],
-                    "probability": {
-                        "likelihood": "Guaranteed",
-                        "conditions": []
-                    }
-                }
-            ],
-            "upgrades": [],
-            "active_outcome": null,
-            "supporters": [
-                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
-                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
-            ],
-            "opposers": [
-                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
-            ],
-            "flavor": {
-                "image": {
-                    "data": {
-                        "File": "1651519983.214184.png"
-                    },
-                    "attribution": "Fruit and Flowers, via the MET, public domain."
-                },
-                "description": "One day a week people will abstain from eating meat, which will reduce demand accordingly. This will reduce pressure on ecosystems and greenhouse gas emissions.",
-                "outcomes": [
-                    {
-                        "root": 0,
-                        "lines": [
-                            {
-                                "id": 0,
-                                "next": {
-                                    "id": 1
-                                },
-                                "speaker": "The Citizen",
-                                "text": "I found it surprisingly easy to cut meat out of my diet once a week."
-                            },
-                            {
-                                "id": 1,
-                                "next": {
-                                    "id": 3
-                                },
-                                "speaker": "The Citizen",
-                                "text": "There are certain meals that feature meat that are important to me, and I would hate to lose them."
-                            },
-                            {
-                                "id": 2,
-                                "next": null,
-                                "speaker": "The Consumerist",
-                                "text": "This feels like a slippery slope..."
-                            },
-                            {
-                                "id": 3,
-                                "next": {
-                                    "id": 2
-                                },
-                                "speaker": "The Citizen",
-                                "text": "But cutting it out every once in awhile feels reasonable to me."
-                            }
-                        ]
-                    }
-                ]
-            },
-            "notes": "[three-quarters fork] Can't be in force with Plant-Based Diets, which goes further.\n\n[three-quarters fork] Now has a small contentedness cost in richer regions (0/0/-0.5/-1): cutting meat 14% by rule is a mild version of rationing.\n\nLC: added an effect of unlocking vegetarian mandate? \nI want to reduce meat consumption by 14%\n\nphoto from: \n[[File:Vegan Sausages, vegan coffee latte and a vegan muffin (5090679024).jpg|Vegan_Sausages,_vegan_coffee_latte_and_a_vegan_muffin_(5090679024)]]"
-        },
-        {
             "id": "8abc61b5-21a1-45b2-876b-b82d80447a39",
             "name": "Green Roofs",
             "kind": "Initiative",
@@ -50580,7 +50459,7 @@
             "locked": false,
             "cost": 0,
             "base_cost": {
-                "Fixed": 15
+                "Fixed": 5
             },
             "cost_modifier": 1.0,
             "progress": 0.0,
@@ -50594,19 +50473,28 @@
                 {
                     "Demand": [
                         "AnimalCalories",
-                        -0.2
+                        -0.14
+                    ]
+                },
+                {
+                    "Demand": [
+                        "PlantCalories",
+                        0.03
                     ]
                 },
                 {
                     "OutlookByIncome": [
                         0.0,
+                        0.0,
                         -0.5,
-                        -1.0,
-                        -1.5
+                        -1.0
                     ]
                 },
                 {
-                    "LocksProject": "08471304-5e93-49f7-b194-33c9fedaa752"
+                    "UnlocksProject": "ce50beb5-243b-44f5-b722-729b9acb94fd"
+                },
+                {
+                    "UnlocksProject": "6a8ba52e-d1a8-41f6-a40a-e6cafeb39966"
                 }
             ],
             "outcomes": [
@@ -50619,6 +50507,32 @@
                 }
             ],
             "upgrades": [
+                {
+                    "cost": 10,
+                    "effects": [
+                        {
+                            "Demand": [
+                                "AnimalCalories",
+                                -0.2
+                            ]
+                        },
+                        {
+                            "Demand": [
+                                "PlantCalories",
+                                0.04
+                            ]
+                        },
+                        {
+                            "OutlookByIncome": [
+                                0.0,
+                                -0.5,
+                                -1.0,
+                                -1.5
+                            ]
+                        }
+                    ],
+                    "active": false
+                },
                 {
                     "cost": 25,
                     "effects": [
@@ -50696,7 +50610,7 @@
                     },
                     "attribution": "Still Life, via the MET, public domain."
                 },
-                "description": "Move the world's diet toward plants, one step at a time. Level 1: flexitarian, with meat as a side rather than the main event. Level 2: a vegetarian mandate. Level 3: a vegan mandate. Each step needs more political backing than the last.",
+                "description": "One day a week people will abstain from eating meat, which will reduce demand accordingly. This will reduce pressure on ecosystems and greenhouse gas emissions.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -50711,12 +50625,24 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Flexitarian, Vegetarian Mandate and Vegan Mandate merged into one card with three levels, which can all be raised in one planning session if you can afford them. Level 1 (flexitarian): -20% meat demand. Level 2 (vegetarian): 75% of meat demand shifts to plants; needs a coalition with half of parliament, or a suspended parliament. Level 3 (vegan): 90% shifts; needs two thirds of parliament, or a suspended parliament. A backlash that fades over 15 years restarts with each new level, stronger at higher levels. Without the Animal Liberationist Curriculum, people don't understand why the government suddenly cares about cows (event 'Why Cows?').",
+            "notes": "[three-quarters fork] Meatless Mondays, Flexitarian, Vegetarian Mandate and Vegan Mandate are four levels of one card, each with its own name and description. Several levels can be passed in one planning session if you can afford them. Level 1 (Meatless Mondays): -14% meat, made up with plants. Level 2 (Flexitarian): -20% meat. Level 3 (Vegetarian Mandate): 75% of meat demand shifts to plants; needs a coalition with half of parliament, or a suspended parliament. Level 4 (Vegan Mandate): 90% shifts; needs two thirds, or a suspended parliament. Plant calories replace the meat calories removed (Meatless Mondays used to add +14% plant demand, about five times too much; Flexitarian added none). A backlash that fades over 15 years restarts with each level, stronger at higher levels. Without the Animal Liberationist Curriculum, people don't understand why the government suddenly cares about cows (event 'Why Cows?').",
             "fatigue": {
                 "adapting": true,
-                "rate": 0.75,
+                "rate": 0.6,
                 "years": 15.0
-            }
+            },
+            "level_names": [
+                "Diet: Meatless Mondays",
+                "Diet: Flexitarian",
+                "Diet: Vegetarian Mandate",
+                "Diet: Vegan Mandate"
+            ],
+            "level_descriptions": [
+                "One day a week people will abstain from eating meat, which will reduce demand accordingly. This will reduce pressure on ecosystems and greenhouse gas emissions.",
+                "It is hard to make people give up meat entirely, but what if they are a bit less? Shrinking the livestock industry will help biodiversity and reduce GHG emissions yet even more drastic measures may be needed. Even this moderate policy, however, will likely provoke opposition.",
+                "Implement a ban on all meat products, effective immediately.",
+                "Implement a ban on all animal products, effective immediately."
+            ]
         },
         {
             "id": "cfb956d4-b16c-4be0-a31b-34803908e1fd",
@@ -50898,6 +50824,133 @@
             "notes": ""
         },
         {
+            "id": "0b8d6cbd-1d11-4d6d-8ab2-5eda380d7e1b",
+            "name": "Regreen the Sahara",
+            "kind": "Initiative",
+            "group": "Geoengineering",
+            "ongoing": false,
+            "gradual": false,
+            "locked": true,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 40
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Emissions",
+                        -5.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Temperature",
+                        0.3
+                    ]
+                },
+                {
+                    "DemandAmount": [
+                        "Electricity",
+                        10000000000000.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        3.0
+                    ]
+                },
+                {
+                    "RegionHabitability": [
+                        "Subtropic",
+                        1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                },
+                {
+                    "NPCRelationship": [
+                        "eb491cfc-01fa-4af4-a560-49ad55975868",
+                        1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "opposers": [
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                "655dd0c3-3542-4524-98bb-97d61a318669"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645633111.644397.png"
+                    },
+                    "attribution": "Sfivat, Public domain, via Wikimedia Commons"
+                },
+                "description": "Pipe desalinated seawater deep into the Sahara and plant forests across it. Rain may follow the trees. The Sahara was green only 6,000 years ago; why not again?",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Accelerationist",
+                                "text": "A forest the size of a continent! Planted by us!"
+                            },
+                            {
+                                "id": 1,
+                                "next": {
+                                    "id": 2
+                                },
+                                "speaker": "The Environmentalist",
+                                "text": "The Sahara was never empty. It's a desert, with its own life."
+                            },
+                            {
+                                "id": 2,
+                                "next": null,
+                                "speaker": "The Climatologist",
+                                "text": "Dark forests soak up sunlight that pale sand would have reflected. Whether it cools the planet or warms it is... unclear."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Ornstein et al. (2009) proposed irrigating the Sahara and the Australian outback with desalinated seawater to grow forests that would take up billions of tonnes of carbon a year. In-game: about 5 Gt CO2 a year taken up by the new forests, +0.3C from the darker surface absorbing more sunlight, ~10 PWh a year of electricity for desalination and pumping, about 400 Mt of steel and 800 Mt of cement to build, +3 extinction for the Sahara's own species, and wetter subtropics. Enormous effort for a murky climate payoff. The Sahara really was green during the African Humid Period, which ended about 5,000-6,000 years ago.",
+            "construction": {
+                "steel": 400000000.0,
+                "cement": 800000000.0,
+                "other_energy": 2000000000000.0
+            }
+        },
+        {
             "id": "af9b191a-1b91-483f-bf84-8eff6ce87b80",
             "name": "Restore Desert Habitats",
             "kind": "Initiative",
@@ -50929,6 +50982,9 @@
                         "ExtinctionRate",
                         -3.0
                     ]
+                },
+                {
+                    "UnlocksProject": "0b8d6cbd-1d11-4d6d-8ab2-5eda380d7e1b"
                 }
             ],
             "outcomes": [
@@ -51000,7 +51056,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Warming +0.25/+0.15C -> +0.03/+0.01C. The albedo concern is real for greening deserts (planting forests where there were none, which darkens the surface), but restoring native desert ecosystems leaves sparse, pale ground cover; across the world's drylands the effect on global temperature is tiny.\n\nhttps://www.theguardian.com/environment/2021/mar/20/our-biggest-challenge-lack-of-imagination-the-scientists-turning-the-desert-green\n\nhttps://climatefeedback.org/claimreview/deserts-cool-the-planet-by-reflecting-solar-radiation-to-space-vegetated-areas-have-an-overall-warming-effect-so-planting-trees-in-deserts-doesnt-necessarily-cool-the-planet-the-guardian/\n\nWould this have a positive effect on biodiversity? SL"
+            "notes": "[three-quarters fork] Restores land that has recently become desert, not deep desert: native desert ecosystems are sparse and pale, so the albedo effect is small. Unlocks Regreen the Sahara, the fantasy version.\n\n[three-quarters fork] Warming +0.25/+0.15C -> +0.03/+0.01C. The albedo concern is real for greening deserts (planting forests where there were none, which darkens the surface), but restoring native desert ecosystems leaves sparse, pale ground cover; across the world's drylands the effect on global temperature is tiny.\n\nhttps://www.theguardian.com/environment/2021/mar/20/our-biggest-challenge-lack-of-imagination-the-scientists-turning-the-desert-green\n\nhttps://climatefeedback.org/claimreview/deserts-cool-the-planet-by-reflecting-solar-radiation-to-space-vegetated-areas-have-an-overall-warming-effect-so-planting-trees-in-deserts-doesnt-necessarily-cool-the-planet-the-guardian/\n\nWould this have a positive effect on biodiversity? SL"
         },
         {
             "id": "26da6f29-2add-4de3-8800-22c6b7993a18",
@@ -54935,8 +54991,6 @@
         "b0e2ee8f-9a1d-4919-b51d-02dcf765495c": "b0602718-aed6-4bd1-b358-1a16cd0b5999",
         "b0602718-aed6-4bd1-b358-1a16cd0b5999": "b0e2ee8f-9a1d-4919-b51d-02dcf765495c",
         "002f40c7-9355-4938-90d1-12d502fe5293": "d4ad1b37-0245-4560-a62b-9fbd20e5b13f",
-        "d4ad1b37-0245-4560-a62b-9fbd20e5b13f": "002f40c7-9355-4938-90d1-12d502fe5293",
-        "08471304-5e93-49f7-b194-33c9fedaa752": "fad34ed2-adee-42dd-8dcc-a08838e63faf",
-        "fad34ed2-adee-42dd-8dcc-a08838e63faf": "08471304-5e93-49f7-b194-33c9fedaa752"
+        "d4ad1b37-0245-4560-a62b-9fbd20e5b13f": "002f40c7-9355-4938-90d1-12d502fe5293"
     }
 }

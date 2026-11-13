@@ -168,8 +168,36 @@ fn get_projects(
                 })
                 .cloned()
                 .collect::<Vec<_>>();
-    projects.sort_by_key(|a| a.name.to_lowercase());
+    // Grouped by what they're about (energy first, then electrification,
+    // and so on), alphabetical within each group.
+    projects.sort_by_key(|a| (group_order(a.group), a.display_name().to_lowercase()));
     projects
+}
+
+fn group_order(group: hes_engine::Group) -> usize {
+    use hes_engine::Group::*;
+    [
+        Energy,
+        Electrification,
+        Nuclear,
+        Materials,
+        Buildings,
+        Cities,
+        Agriculture,
+        Food,
+        Restoration,
+        Protection,
+        Geoengineering,
+        Limits,
+        Behavior,
+        Population,
+        Control,
+        Space,
+        Other,
+    ]
+    .iter()
+    .position(|g| *g == group)
+    .unwrap_or(usize::MAX)
 }
 
 fn render_points(ui: &mut egui::Ui, state: &State, points: &Points, kind: ProjectType) {

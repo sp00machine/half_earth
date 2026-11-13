@@ -82,7 +82,7 @@ impl ProjectState {
             level: proj.level,
             passed: proj.kind == ProjectType::Policy && (is_building || proj.is_online()),
             majority: (
-                if proj.is_online() {
+                if proj.is_passed_or_online() {
                     proj.next_upgrade().map_or(0., |u| u.required_majority)
                 } else {
                     proj.required_majority
@@ -92,7 +92,7 @@ impl ProjectState {
             majority_blocked: {
                 let parliament_suspended = state.flags.contains(&Flag::ParliamentSuspended);
                 let player_seats = state.npcs.coalition_seats();
-                let required_majority = if proj.is_online() {
+                let required_majority = if proj.is_passed_or_online() {
                     proj.next_upgrade().map_or(0., |u| u.required_majority)
                 } else {
                     proj.required_majority
@@ -152,7 +152,7 @@ impl AsCard for Project {
 
                     tui.ui(|ui| {
                         let p = ProjectState::from_project(self, state);
-                        if self.is_online() {
+                        if self.is_passed_or_online() {
                             ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Extend);
                             if p.has_levels {
                                 let level = p.level + 1;
@@ -204,9 +204,11 @@ impl AsCard for Project {
         let (opposers, supporters) = npc_stances(self, &state.npcs);
         npc_support(ui, rect, &opposers, &supporters);
 
-        if p.majority_blocked {
+        // Once in force (or passed), a blocked next level is explained under
+        // "Next Level" instead of covering the card.
+        if p.majority_blocked && !self.is_passed_or_online() {
             let (needed, have) = p.majority;
-            let text = if self.is_online() {
+            let text = if self.is_passed_or_online() {
                 t!(
                     "The next level needs %{needed}% of parliament behind you; your coalition has %{have}%. Win over more factions, or suspend parliament.",
                     needed = format!("{:.0}", needed * 100.),
@@ -238,7 +240,7 @@ impl AsCard for Project {
     }
 
     fn name(&self, ui: &mut egui::Ui, _state: &GameState) {
-        super::card_title(ui, &self.name);
+        super::card_title(ui, self.display_name());
     }
 
     fn body(&self, ui: &mut egui::Ui, state: &GameState) {
@@ -301,7 +303,7 @@ impl AsCard for Project {
                             construction_line(ui, state, build);
                         }
 
-                        if p.is_online
+                        if (p.is_online || p.passed)
                             && let Some((cost, effects)) = &p.next_upgrade
                         {
                             if p.is_upgrading {
@@ -314,11 +316,22 @@ impl AsCard for Project {
                                     .bg_stroke
                                     .color = Color32::from_black_alpha(64);
                                 ui.separator();
-                                ui.horizontal(|ui| {
-                                    ui.label(t!("Next Level"));
+                                ui.horizontal_wrapped(|ui| {
+                                    match self.level_names.get(self.level + 1) {
+                                        Some(name) => ui.label(format!("{}: {}", t!("Next Level"), t!(name.as_str()))),
+                                        None => ui.label(t!("Next Level")),
+                                    };
                                     ui.label(cost.to_string());
                                     ui.add(icons::POLITICAL_CAPITAL.size(13.));
                                 });
+                                let (needed, have) = p.majority;
+                                if needed > 0. && !state.flags.contains(&Flag::ParliamentSuspended) {
+                                    ui.label(t!(
+                                        "Needs %{needed}% of parliament behind you (your coalition: %{have}%), or a suspended parliament.",
+                                        needed = format!("{:.0}", needed * 100.),
+                                        have = format!("{:.0}", have * 100.),
+                                    ));
+                                }
                             }
                             render_effects(ui, state, effects);
                             if let Some(build) = self
@@ -378,7 +391,7 @@ impl AsCard for Project {
 
     fn top_back(&self, ui: &mut egui::Ui, _state: &GameState) {
         ui.add_space(12.);
-        super::card_desc(ui, &self.flavor.description);
+        super::card_desc(ui, self.display_description());
     }
 
     fn bottom_back(&self, ui: &mut egui::Ui, state: &GameState) {
