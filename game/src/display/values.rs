@@ -143,6 +143,28 @@ pub fn percent(p: f32, round: bool) -> String {
     }
 }
 
+/// A percent rounded to a whole number, but with one decimal below 1%
+/// (e.g. "0.4") so small contributions don't all read as "<1".
+pub fn percent_fine(p: f32) -> String {
+    let percent = p * 100.;
+    if percent.abs() < 0.05 && percent != 0. {
+        if p < 0. { "-<0.1".into() } else { "<0.1".into() }
+    } else if percent.abs() < 1. {
+        format!("{percent:.1}")
+    } else {
+        format!("{:.0}", percent.round())
+    }
+}
+
+/// Gt with one decimal, "<0.1Gt" for tiny amounts.
+pub fn gigatonnes(gt: f32) -> String {
+    if gt.abs() < 0.05 && gt != 0. {
+        if gt < 0. { "-<0.1Gt".into() } else { "<0.1Gt".into() }
+    } else {
+        format!("{gt:.1}Gt")
+    }
+}
+
 pub fn signed_percent(p: f32, round: bool) -> String {
     let s = percent(p, round);
     if p > 0. { format!("+{s}") } else { s }
@@ -154,24 +176,11 @@ fn is_small(val: f32) -> bool {
 
 pub fn format_impact(impact: Impact, val: f32, available_resources: ResourceMap) -> String {
     match impact {
-        Impact::Land => {
-            if is_small(val) {
-                "<1%".into()
-            } else {
-                format!(
-                    "{}%",
-                    percent(land_use_percent(val, available_resources.land) / 100., true)
-                )
-            }
-        }
-        Impact::Emissions => {
-            let val = val * 1e-15;
-            if is_small(val) {
-                "<1Gt".into()
-            } else {
-                format!("{:.1}Gt", val)
-            }
-        }
+        Impact::Land => format!(
+            "{}%",
+            percent_fine(land_use_percent(val, available_resources.land) / 100.)
+        ),
+        Impact::Emissions => gigatonnes(val * 1e-15),
         Impact::Water => {
             if is_small(val) {
                 "<1%".into()

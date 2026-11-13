@@ -202,8 +202,11 @@ fn project_factors(var: Var, state: &State) -> Vec<Factor> {
             } else if var == Var::Land {
                 format!(
                     "{}%",
-                    display::percent(amount / state.world.starting_resources.land, true)
+                    display::percent_fine(amount / state.world.starting_resources.land)
                 )
+            } else if var == Var::Emissions {
+                // Same units as processes and industries.
+                display::gigatonnes(amount)
             } else {
                 amount.round_to(1).to_string()
             };
