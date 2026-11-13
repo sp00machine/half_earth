@@ -137,6 +137,10 @@ pub struct Upgrade {
     /// Materials for building this level, used over the following years.
     #[serde(default)]
     pub construction: Option<crate::materials::BuildOut>,
+    /// Share of parliament the player's coalition needs to raise the
+    /// project to this level (unless parliament is suspended).
+    #[serde(default)]
+    pub required_majority: f32,
 }
 
 /// Ongoing discontent while a policy is in force, felt in proportion to a

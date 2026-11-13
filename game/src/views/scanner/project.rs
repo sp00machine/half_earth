@@ -109,7 +109,14 @@ impl Scannable for Project {
         // - If the project is a policy, only if it's not already implemented.
         #[allow(clippy::if_same_then_else)]
         #[allow(clippy::needless_bool)]
-        if (self.required_majority > 0. && player_seats < self.required_majority)
+        // The majority needed: to pass the project, or, once it's in
+        // force, to raise it to its next level.
+        let required_majority = if self.is_online() {
+            self.next_upgrade().map_or(0., |u| u.required_majority)
+        } else {
+            self.required_majority
+        };
+        if (required_majority > 0. && player_seats < required_majority)
             && !parliament_suspended
         {
             false

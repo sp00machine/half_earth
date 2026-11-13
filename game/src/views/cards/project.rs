@@ -26,6 +26,9 @@ pub struct ProjectState {
     pub level: usize,
     pub passed: bool,
     pub majority_blocked: bool,
+    /// (needed, coalition) shares of parliament when blocked; for a project
+    /// in force, what its next level needs.
+    pub majority: (f32, f32),
     pub cost_remaining: String,
     pub is_online: bool,
     pub is_countdown: bool,
@@ -78,15 +81,28 @@ impl ProjectState {
             has_points: proj.kind != ProjectType::Policy && is_building,
             level: proj.level,
             passed: proj.kind == ProjectType::Policy && (is_building || proj.is_online()),
+            majority: (
+                if proj.is_online() {
+                    proj.next_upgrade().map_or(0., |u| u.required_majority)
+                } else {
+                    proj.required_majority
+                },
+                state.npcs.coalition_seats(),
+            ),
             majority_blocked: {
                 let parliament_suspended = state.flags.contains(&Flag::ParliamentSuspended);
                 let player_seats = state.npcs.coalition_seats();
+                let required_majority = if proj.is_online() {
+                    proj.next_upgrade().map_or(0., |u| u.required_majority)
+                } else {
+                    proj.required_majority
+                };
                 let majority_satisfied = if parliament_suspended {
                     true
-                } else if proj.required_majority == 0. {
+                } else if required_majority == 0. {
                     true
                 } else {
-                    player_seats > proj.required_majority
+                    player_seats >= required_majority
                 };
                 !majority_satisfied
             },
@@ -189,7 +205,21 @@ impl AsCard for Project {
         npc_support(ui, rect, &opposers, &supporters);
 
         if p.majority_blocked {
-            ui.place(rect, majority_warning(rect));
+            let (needed, have) = p.majority;
+            let text = if self.is_online() {
+                t!(
+                    "The next level needs %{needed}% of parliament behind you; your coalition has %{have}%. Win over more factions, or suspend parliament.",
+                    needed = format!("{:.0}", needed * 100.),
+                    have = format!("{:.0}", have * 100.),
+                )
+            } else {
+                t!(
+                    "Because of opposition, this requires a majority in parliament: %{needed}%. Your coalition has %{have}%.",
+                    needed = format!("{:.0}", needed * 100.),
+                    have = format!("{:.0}", have * 100.),
+                )
+            };
+            ui.place(rect, majority_warning(rect, text.to_string()));
         }
 
         if p.passed {
@@ -449,7 +479,7 @@ fn remaining_cost(project: &Project, plan_changes: &BTreeMap<Id, PlanChange>) ->
     }
 }
 
-fn majority_warning(rect: Rect) -> impl FnOnce(&mut egui::Ui) -> Response {
+fn majority_warning(rect: Rect, text: String) -> impl FnOnce(&mut egui::Ui) -> Response {
     const PADDING: i8 = 6;
     const P: f32 = (PADDING * 2) as f32;
 
@@ -466,9 +496,7 @@ fn majority_warning(rect: Rect) -> impl FnOnce(&mut egui::Ui) -> Response {
                     ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Wrap);
                     ui.add_space(48.);
                     ui.add(icons::WARNING.size(24.));
-                    ui.label(t!(
-                        "Because of opposition, this requires a majority in parliament."
-                    ));
+                    ui.label(text);
                 });
             })
             .response

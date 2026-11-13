@@ -178,7 +178,11 @@ pub impl State {
         };
         if let Some(upgrade) = upgrade {
             let available = self.political_capital;
-            if !is_free && available >= upgrade.cost as isize {
+            if !is_free {
+                // Upstream upgraded anyway when it couldn't be paid for.
+                if available < upgrade.cost as isize {
+                    return false;
+                }
                 self.change_political_capital(-(upgrade.cost as isize));
             }
 

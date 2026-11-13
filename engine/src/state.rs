@@ -1160,6 +1160,11 @@ impl State {
 
     pub fn upgrade_project(&mut self, project_id: &Id) {
         let changes = self.world.projects[project_id].upgrade();
+        // A new level of a policy people have to adapt to brings a new
+        // backlash, which fades again.
+        if self.world.projects[project_id].fatigue.is_some_and(|f| f.adapting) {
+            self.policy_years.remove(project_id);
+        }
         let project = &self.world.projects[project_id];
         if let Some(build) = project.prev_upgrade().and_then(|u| u.construction) {
             self.infrastructure.queue(&build);
@@ -1788,15 +1793,38 @@ mod fatigue_tests {
     #[test]
     fn mandate_fatigue_fades() {
         let mut state = State::new(World::default());
-        let id = by_name(&state, "Vegan Mandate");
+        let id = by_name(&state, "Plant-Based Diets");
         state.world.projects[&id].status = Status::Active;
         state.update_policy_fatigue();
         let first = state.policy_fatigue;
         for _ in 0..25 {
             state.update_policy_fatigue();
         }
-        assert!(first > 1.5);
+        assert!(first > 0.5);
         assert_eq!(state.policy_fatigue, 0.);
+    }
+
+    #[test]
+    fn new_diet_level_brings_a_new_backlash() {
+        let mut state = State::new(World::default());
+        let id = by_name(&state, "Plant-Based Diets");
+        state.world.projects[&id].status = Status::Active;
+        for _ in 0..20 {
+            state.update_policy_fatigue();
+        }
+        assert_eq!(state.policy_fatigue, 0., "the flexitarian backlash has faded");
+        state.upgrade_project(&id);
+        assert!(state.flags.contains(&Flag::Vegetarian));
+        state.update_policy_fatigue();
+        assert!(state.policy_fatigue > 1., "{}", state.policy_fatigue);
+    }
+
+    #[test]
+    fn vegetarian_and_vegan_levels_need_a_majority() {
+        let state = State::new(World::default());
+        let p = &state.world.projects[&by_name(&state, "Plant-Based Diets")];
+        assert_eq!(p.upgrades[0].required_majority, 0.5);
+        assert!(p.upgrades[1].required_majority > 0.6);
     }
 }
 

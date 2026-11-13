@@ -13865,10 +13865,7 @@
                                     "text": "Wait a minute, jellyfish isn't vegan...",
                                     "conditions": [
                                         {
-                                            "ProjectStatus": [
-                                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                                "Active"
-                                            ]
+                                            "HasFlag": "Vegan"
                                         }
                                     ]
                                 }
@@ -15624,10 +15621,7 @@
                     "likelihood": "Impossible",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         }
                     ]
                 },
@@ -15635,10 +15629,7 @@
                     "likelihood": "Improbable",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegetarian"
                         }
                     ]
                 }
@@ -16650,10 +16641,7 @@
                     "likelihood": "Impossible",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         },
                         {
                             "WorldVariable": [
@@ -18354,10 +18342,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         },
                         {
                             "WorldVariable": [
@@ -18372,10 +18357,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegetarian"
                         },
                         {
                             "WorldVariable": [
@@ -27178,10 +27160,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         },
                         {
                             "WorldVariable": [
@@ -27196,10 +27175,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegetarian"
                         },
                         {
                             "WorldVariable": [
@@ -32796,10 +32772,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         },
                         {
                             "WorldVariable": [
@@ -33061,10 +33034,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegan"
                         }
                     ]
                 },
@@ -33072,10 +33042,7 @@
                     "likelihood": "Random",
                     "conditions": [
                         {
-                            "ProjectStatus": [
-                                "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-                                "Active"
-                            ]
+                            "HasFlag": "Vegetarian"
                         }
                     ]
                 }
@@ -35629,6 +35596,91 @@
                 }
             },
             "notes": "[three-quarters fork] New event. Can happen while Climate War Footing is active: -5% onshore wind output."
+        },
+        {
+            "name": "Why Cows?",
+            "locked": false,
+            "occurred": false,
+            "id": "722167c6-b4fe-4322-b2af-2ba73f47fc7f",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "HasFlag": "Vegetarian"
+                        },
+                        {
+                            "ProjectStatus": [
+                                "6847a9ce-b48e-4a81-8847-67da3270a779",
+                                "Inactive"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "HasFlag": "Vegan"
+                        },
+                        {
+                            "ProjectStatus": [
+                                "6847a9ce-b48e-4a81-8847-67da3270a779",
+                                "Inactive"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -3.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Citizen",
+                            "text": "I don't get it. I thought the problem was fossil fuels."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Citizen",
+                            "text": "Now I can't have a burger? What do cows have to do with any of this?"
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Not many people understand why we've gone after meat. We never really made the case."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1634965837.088894.png"
+                    },
+                    "attribution": "cyphunk . (CC BY-SA 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] Fires if a vegetarian or vegan mandate is in force without the Animal Liberationist Curriculum (passing both in the same planning session avoids it): -3 world contentedness. Nobody explained why livestock matter for the climate.",
+            "per_region": false
         },
         {
             "name": "Mobilization Fatigue",
@@ -38424,12 +38476,6 @@
                     "UnlocksProcess": "26713198-bbc6-4ecd-821f-eacfcff7c049"
                 },
                 {
-                    "UnlocksProject": "692486e9-b3d0-47cb-8f42-05ab925b0d93"
-                },
-                {
-                    "UnlocksProject": "648f947a-7cbb-4a7e-8af9-7601b2295055"
-                },
-                {
                     "UnlocksProject": "6a8ba52e-d1a8-41f6-a40a-e6cafeb39966"
                 }
             ],
@@ -40726,6 +40772,9 @@
                 },
                 {
                     "UnlocksProject": "d04eb59d-f423-4c71-8291-c694cb5248a4"
+                },
+                {
+                    "UnlocksProject": "ce50beb5-243b-44f5-b722-729b9acb94fd"
                 }
             ],
             "outcomes": [
@@ -40765,7 +40814,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Also unlocks Abolish Zoos, which was only reachable through Meatless Mondays.\n\n"
         },
         {
             "id": "080116a4-d7a4-4000-86c1-2e28f6f76639",
@@ -42090,12 +42139,6 @@
                         "5cd771c9-2622-4bd9-8478-c2cbf2294080",
                         1.0
                     ]
-                },
-                {
-                    "UnlocksProject": "692486e9-b3d0-47cb-8f42-05ab925b0d93"
-                },
-                {
-                    "UnlocksProject": "648f947a-7cbb-4a7e-8af9-7601b2295055"
                 },
                 {
                     "WorldVariable": [
@@ -45421,16 +45464,10 @@
                         "likelihood": "Guaranteed",
                         "conditions": [
                             {
-                                "ProjectStatus": [
-                                    "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                                    "Inactive"
-                                ]
+                                "WithoutFlag": "Vegan"
                             },
                             {
-                                "ProjectStatus": [
-                                    "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-                                    "Inactive"
-                                ]
+                                "WithoutFlag": "Vegetarian"
                             }
                         ]
                     }
@@ -46713,12 +46750,6 @@
                     ]
                 },
                 {
-                    "UnlocksProject": "692486e9-b3d0-47cb-8f42-05ab925b0d93"
-                },
-                {
-                    "UnlocksProject": "648f947a-7cbb-4a7e-8af9-7601b2295055"
-                },
-                {
                     "UnlocksProject": "ce50beb5-243b-44f5-b722-729b9acb94fd"
                 },
                 {
@@ -46737,6 +46768,9 @@
                         -0.5,
                         -1.0
                     ]
+                },
+                {
+                    "LocksProject": "fad34ed2-adee-42dd-8dcc-a08838e63faf"
                 }
             ],
             "outcomes": [
@@ -46804,139 +46838,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Now has a small contentedness cost in richer regions (0/0/-0.5/-1): cutting meat 14% by rule is a mild version of rationing.\n\nLC: added an effect of unlocking vegetarian mandate? \nI want to reduce meat consumption by 14%\n\nphoto from: \n[[File:Vegan Sausages, vegan coffee latte and a vegan muffin (5090679024).jpg|Vegan_Sausages,_vegan_coffee_latte_and_a_vegan_muffin_(5090679024)]]"
-        },
-        {
-            "id": "648f947a-7cbb-4a7e-8af9-7601b2295055",
-            "name": "Vegan Mandate",
-            "kind": "Policy",
-            "group": "Food",
-            "ongoing": false,
-            "gradual": false,
-            "locked": true,
-            "cost": 0,
-            "base_cost": {
-                "Dynamic": [
-                    4e-14,
-                    {
-                        "Output": "AnimalCalories"
-                    }
-                ]
-            },
-            "cost_modifier": 1.0,
-            "progress": 0.0,
-            "points": 0,
-            "estimate": 0,
-            "status": "Inactive",
-            "level": 0,
-            "completed_at": 0,
-            "required_majority": 0.0,
-            "effects": [
-                {
-                    "DemandOutlookChange": [
-                        "AnimalCalories",
-                        -1.0
-                    ]
-                },
-                {
-                    "AddFlag": "Vegan"
-                },
-                {
-                    "UnlocksProject": "27ab61ba-c183-493c-8414-f1dae1f49f9d"
-                },
-                {
-                    "LocksProject": "692486e9-b3d0-47cb-8f42-05ab925b0d93"
-                },
-                {
-                    "TriggerEvent": [
-                        "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
-                        5
-                    ]
-                },
-                {
-                    "LocksProject": "08471304-5e93-49f7-b194-33c9fedaa752"
-                }
-            ],
-            "outcomes": [
-                {
-                    "effects": [],
-                    "probability": {
-                        "likelihood": "Guaranteed",
-                        "conditions": []
-                    }
-                }
-            ],
-            "upgrades": [],
-            "active_outcome": null,
-            "supporters": [
-                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
-                "b6694f1d-5597-4bb8-a484-254930838982",
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
-            ],
-            "opposers": [
-                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
-                "eb491cfc-01fa-4af4-a560-49ad55975868"
-            ],
-            "flavor": {
-                "image": {
-                    "data": {
-                        "File": "1635441188.11888.webp"
-                    },
-                    "attribution": ""
-                },
-                "description": "Implement a ban on all animal products, effective immediately.",
-                "outcomes": [
-                    {
-                        "root": 0,
-                        "lines": [
-                            {
-                                "id": 0,
-                                "next": {
-                                    "id": 2
-                                },
-                                "speaker": "The Consumerist",
-                                "text": "These last few years have been miserable."
-                            },
-                            {
-                                "id": 1,
-                                "next": null,
-                                "speaker": "The Animal Liberationist",
-                                "text": "This was long overdue!"
-                            },
-                            {
-                                "id": 2,
-                                "next": {
-                                    "id": 4
-                                },
-                                "speaker": "The Consumerist",
-                                "text": "Sure, I get eating less meat, but banning it entirely?"
-                            },
-                            {
-                                "id": 3,
-                                "next": {
-                                    "id": 2
-                                },
-                                "speaker": "The Consumerist",
-                                "text": "You're mad with power--how was this a good idea?"
-                            },
-                            {
-                                "id": 4,
-                                "next": {
-                                    "id": 1
-                                },
-                                "speaker": "The Environmentalist",
-                                "text": "Can't we just figure out more sustainable and ethical ways to produce meat?"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "notes": "[three-quarters fork] Policy fatigue (adapting): while in force, costs up to 2.0 contentedness per income level in each region (6.0 in the richest), starting at full strength and fading over 20 years. A bigger backlash than vegetarianism, fading over ~20 years.\n\n",
-            "fatigue": {
-                "adapting": true,
-                "rate": 2.0,
-                "years": 20.0
-            }
+            "notes": "[three-quarters fork] Can't be in force with Plant-Based Diets, which goes further.\n\n[three-quarters fork] Now has a small contentedness cost in richer regions (0/0/-0.5/-1): cutting meat 14% by rule is a mild version of rationing.\n\nLC: added an effect of unlocking vegetarian mandate? \nI want to reduce meat consumption by 14%\n\nphoto from: \n[[File:Vegan Sausages, vegan coffee latte and a vegan muffin (5090679024).jpg|Vegan_Sausages,_vegan_coffee_latte_and_a_vegan_muffin_(5090679024)]]"
         },
         {
             "id": "8abc61b5-21a1-45b2-876b-b82d80447a39",
@@ -49460,126 +49362,6 @@
             "notes": "Biosphere iii program either succeeds or fails\n\nlots of scientific capital\n\nProbably will never get to 100% self sufficient and problems might still occur\n\nThis will eventually open tech tree for space stuff"
         },
         {
-            "id": "692486e9-b3d0-47cb-8f42-05ab925b0d93",
-            "name": "Vegetarian Mandate",
-            "kind": "Policy",
-            "group": "Food",
-            "ongoing": false,
-            "gradual": false,
-            "locked": true,
-            "cost": 0,
-            "base_cost": {
-                "Dynamic": [
-                    2e-14,
-                    {
-                        "Output": "AnimalCalories"
-                    }
-                ]
-            },
-            "cost_modifier": 1.0,
-            "progress": 0.0,
-            "points": 0,
-            "estimate": 0,
-            "status": "Inactive",
-            "level": 0,
-            "completed_at": 0,
-            "required_majority": 0.0,
-            "effects": [
-                {
-                    "DemandOutlookChange": [
-                        "AnimalCalories",
-                        -0.5
-                    ]
-                },
-                {
-                    "AddFlag": "Vegetarian"
-                },
-                {
-                    "TriggerEvent": [
-                        "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
-                        5
-                    ]
-                },
-                {
-                    "ProjectCostModifier": [
-                        "648f947a-7cbb-4a7e-8af9-7601b2295055",
-                        -0.75
-                    ]
-                },
-                {
-                    "WorldVariable": [
-                        "Outlook",
-                        -1.0
-                    ]
-                }
-            ],
-            "outcomes": [
-                {
-                    "effects": [],
-                    "probability": {
-                        "likelihood": "Guaranteed",
-                        "conditions": []
-                    }
-                }
-            ],
-            "upgrades": [],
-            "active_outcome": null,
-            "supporters": [
-                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
-                "5a59715a-3deb-4288-9aa6-14859ad54d5a",
-                "b6694f1d-5597-4bb8-a484-254930838982",
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
-            ],
-            "opposers": [
-                "04b92453-026e-40a5-9a25-e98244023a69",
-                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
-            ],
-            "flavor": {
-                "image": {
-                    "data": {
-                        "File": "1651520473.403445.png"
-                    },
-                    "attribution": "Still Life with Cheese, via the MET, public domain."
-                },
-                "description": "Implement a ban on all meat products, effective immediately.",
-                "outcomes": [
-                    {
-                        "root": 0,
-                        "lines": [
-                            {
-                                "id": 0,
-                                "next": {
-                                    "id": 2
-                                },
-                                "speaker": "The Citizen",
-                                "text": "I struggled a bit with shifting to a vegetarian diet..."
-                            },
-                            {
-                                "id": 1,
-                                "next": null,
-                                "speaker": "The Citizen",
-                                "text": "And I can still enjoy some milk and cheese, which has also made the transition easier."
-                            },
-                            {
-                                "id": 2,
-                                "next": {
-                                    "id": 1
-                                },
-                                "speaker": "The Citizen",
-                                "text": "but there's been such an explosion of creative vegetarian recipes and techniques that I haven't found myself missing meat."
-                            }
-                        ]
-                    }
-                ]
-            },
-            "notes": "[three-quarters fork] Policy fatigue (adapting): while in force, costs up to 1.5 contentedness per income level in each region (4.5 in the richest), starting at full strength and fading over 15 years. A big initial backlash that fades as food culture adapts over ~15 years.\n\nIncrease discontent\n\nreduce demand for land\n\nreduce greenhouse gas emissions",
-            "fatigue": {
-                "adapting": true,
-                "rate": 1.5,
-                "years": 15.0
-            }
-        },
-        {
             "id": "002f40c7-9355-4938-90d1-12d502fe5293",
             "name": "Keep Global South Poor",
             "kind": "Policy",
@@ -49881,9 +49663,6 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {
-                    "UnlocksProject": "fad34ed2-adee-42dd-8dcc-a08838e63faf"
-                },
                 {
                     "NPCRelationship": [
                         "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
@@ -50793,15 +50572,15 @@
         },
         {
             "id": "fad34ed2-adee-42dd-8dcc-a08838e63faf",
-            "name": "Flexitarian",
+            "name": "Plant-Based Diets",
             "kind": "Policy",
             "group": "Food",
             "ongoing": true,
             "gradual": false,
-            "locked": true,
+            "locked": false,
             "cost": 0,
             "base_cost": {
-                "Fixed": 25
+                "Fixed": 15
             },
             "cost_modifier": 1.0,
             "progress": 0.0,
@@ -50819,24 +50598,15 @@
                     ]
                 },
                 {
-                    "UnlocksProject": "648f947a-7cbb-4a7e-8af9-7601b2295055"
-                },
-                {
-                    "UnlocksProject": "692486e9-b3d0-47cb-8f42-05ab925b0d93"
-                },
-                {
-                    "TriggerEvent": [
-                        "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
-                        6
-                    ]
-                },
-                {
                     "OutlookByIncome": [
                         0.0,
                         -0.5,
                         -1.0,
                         -1.5
                     ]
+                },
+                {
+                    "LocksProject": "08471304-5e93-49f7-b194-33c9fedaa752"
                 }
             ],
             "outcomes": [
@@ -50848,15 +50618,76 @@
                     }
                 }
             ],
-            "upgrades": [],
+            "upgrades": [
+                {
+                    "cost": 25,
+                    "effects": [
+                        {
+                            "AddFlag": "Vegetarian"
+                        },
+                        {
+                            "DemandOutlookChange": [
+                                "AnimalCalories",
+                                -0.5
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Outlook",
+                                -1.0
+                            ]
+                        },
+                        {
+                            "TriggerEvent": [
+                                "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
+                                5
+                            ]
+                        }
+                    ],
+                    "active": false,
+                    "required_majority": 0.5
+                },
+                {
+                    "cost": 30,
+                    "effects": [
+                        {
+                            "AddFlag": "Vegan"
+                        },
+                        {
+                            "DemandOutlookChange": [
+                                "AnimalCalories",
+                                -1.0
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Outlook",
+                                -1.0
+                            ]
+                        },
+                        {
+                            "TriggerEvent": [
+                                "1dd4209c-6254-4097-8ffe-8ac3a94dece7",
+                                5
+                            ]
+                        },
+                        {
+                            "UnlocksProject": "27ab61ba-c183-493c-8414-f1dae1f49f9d"
+                        }
+                    ],
+                    "active": false,
+                    "required_majority": 0.67
+                }
+            ],
             "active_outcome": null,
             "supporters": [
                 "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
+                "5cd771c9-2622-4bd9-8478-c2cbf2294080",
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563"
             ],
             "opposers": [
-                "04b92453-026e-40a5-9a25-e98244023a69",
-                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
+                "04b92453-026e-40a5-9a25-e98244023a69"
             ],
             "flavor": {
                 "image": {
@@ -50865,7 +50696,7 @@
                     },
                     "attribution": "Still Life, via the MET, public domain."
                 },
-                "description": "It is hard to make people give up meat entirely, but what if they are a bit less? Shrinking the livestock industry will help biodiversity and reduce GHG emissions yet even more drastic measures may be needed. Even this moderate policy, however, will likely provoke opposition.",
+                "description": "Move the world's diet toward plants, one step at a time. Level 1: flexitarian, with meat as a side rather than the main event. Level 2: a vegetarian mandate. Level 3: a vegan mandate. Each step needs more political backing than the last.",
                 "outcomes": [
                     {
                         "root": 0,
@@ -50880,11 +50711,11 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Now costs contentedness, as its description says it will (0/-0.5/-1/-1.5 by income level, plus a backlash that fades over 10 years): -20% meat is more than rationing level 1.\n\n",
+            "notes": "[three-quarters fork] Flexitarian, Vegetarian Mandate and Vegan Mandate merged into one card with three levels, which can all be raised in one planning session if you can afford them. Level 1 (flexitarian): -20% meat demand. Level 2 (vegetarian): 75% of meat demand shifts to plants; needs a coalition with half of parliament, or a suspended parliament. Level 3 (vegan): 90% shifts; needs two thirds of parliament, or a suspended parliament. A backlash that fades over 15 years restarts with each new level, stronger at higher levels. Without the Animal Liberationist Curriculum, people don't understand why the government suddenly cares about cows (event 'Why Cows?').",
             "fatigue": {
                 "adapting": true,
-                "rate": 0.5,
-                "years": 10.0
+                "rate": 0.75,
+                "years": 15.0
             }
         },
         {
@@ -55105,7 +54936,7 @@
         "b0602718-aed6-4bd1-b358-1a16cd0b5999": "b0e2ee8f-9a1d-4919-b51d-02dcf765495c",
         "002f40c7-9355-4938-90d1-12d502fe5293": "d4ad1b37-0245-4560-a62b-9fbd20e5b13f",
         "d4ad1b37-0245-4560-a62b-9fbd20e5b13f": "002f40c7-9355-4938-90d1-12d502fe5293",
-        "692486e9-b3d0-47cb-8f42-05ab925b0d93": "648f947a-7cbb-4a7e-8af9-7601b2295055",
-        "08471304-5e93-49f7-b194-33c9fedaa752": "648f947a-7cbb-4a7e-8af9-7601b2295055"
+        "08471304-5e93-49f7-b194-33c9fedaa752": "fad34ed2-adee-42dd-8dcc-a08838e63faf",
+        "fad34ed2-adee-42dd-8dcc-a08838e63faf": "08471304-5e93-49f7-b194-33c9fedaa752"
     }
 }
