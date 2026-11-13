@@ -148,6 +148,10 @@ pub enum Effect {
     RegionLeave,
     TerminationShock,
     AddRegionFlag(RegionFlag),
+    /// Remove a flag from a region, or from every region if the effect
+    /// isn't tied to one (e.g. a policy quelling unrest everywhere). Lets
+    /// that region's unrest events happen again later.
+    RemoveRegionFlag(RegionFlag),
 
     AddFlag(Flag),
     NPCRelationship(Id, f32),
@@ -223,6 +227,7 @@ impl Effect {
             EffectKind::RegionLeave => Effect::RegionLeave,
             EffectKind::TerminationShock => Effect::TerminationShock,
             EffectKind::AddRegionFlag => Effect::AddRegionFlag(RegionFlag::Protests),
+            EffectKind::RemoveRegionFlag => Effect::RemoveRegionFlag(RegionFlag::Riots),
             EffectKind::AddFlag => Effect::AddFlag(Flag::Vegan),
             EffectKind::NPCRelationship => Effect::NPCRelationship(default_npc, 0.),
             EffectKind::ModifyProcessByproducts => {
@@ -463,8 +468,12 @@ impl Effect {
                     process.limit = Some(limit + change);
                 }
             }
-            Effect::Feedstock(feedstock, pct_change) => {
-                state.feedstocks.available[*feedstock] *= 1. + pct_change;
+            // An amount added to reserves (in the reserves' units), as the
+            // data and the card text assume. Upstream multiplied reserves
+            // by it, so e.g. mining the Moon multiplied lithium reserves by
+            // 221 trillion.
+            Effect::Feedstock(feedstock, amount) => {
+                state.feedstocks.available[*feedstock] += amount;
             }
             Effect::AddEvent(id) => {
                 state.event_pool.events[id].locked = false;
@@ -527,6 +536,24 @@ impl Effect {
             Effect::AddRegionFlag(flag) => {
                 if let Some(id) = &region_id {
                     state.world.regions[id].flags.push(*flag);
+                }
+            }
+            Effect::RemoveRegionFlag(flag) => {
+                let ids: Vec<Id> = match region_id {
+                    Some(id) => vec![id],
+                    None => state.world.regions.iter().map(|r| r.id).collect(),
+                };
+                for id in ids {
+                    let region = &mut state.world.regions[&id];
+                    if !region.flags.contains(flag) {
+                        continue;
+                    }
+                    region.flags.retain(|f| f != flag);
+                    // The region's unrest can start again later.
+                    let pool = &mut state.event_pool;
+                    let per_region: Vec<Id> =
+                        pool.events.iter().filter(|e| e.per_region).map(|e| e.id).collect();
+                    pool.occurred_in.retain(|(ev, r)| *r != id || !per_region.contains(ev));
                 }
             }
             Effect::AddFlag(flag) => {
@@ -730,8 +757,9 @@ impl Effect {
                     process.limit = Some(limit - change);
                 }
             }
-            Effect::Feedstock(feedstock, pct_change) => {
-                state.feedstocks.available[*feedstock] /= 1. + pct_change;
+            Effect::Feedstock(feedstock, amount) => {
+                let available = &mut state.feedstocks.available[*feedstock];
+                *available = (*available - amount).max(0.);
             }
             Effect::NPCRelationship(id, change) => {
                 state.npcs[id].relationship -= change;
@@ -1376,5 +1404,54 @@ mod tests {
         let effects = state.world.projects[&find(&state, "Utopian Curriculum")].effects.clone();
         state.apply_effects(&effects, None);
         assert!(!state.world.projects[&decimal].locked);
+    }
+
+    #[test]
+    fn test_feedstock_effect_adds_an_amount() {
+        let mut state = State::default();
+        let before = state.feedstocks.available[Feedstock::Lithium];
+        let effect = Effect::Feedstock(Feedstock::Lithium, 2.21e14);
+        effect.apply(&mut state, None);
+        let after = state.feedstocks.available[Feedstock::Lithium];
+        assert!((after - (before + 2.21e14)).abs() / after < 1e-5);
+        effect.unapply(&mut state, None);
+        assert!((state.feedstocks.available[Feedstock::Lithium] - before).abs() / before < 1e-5);
+    }
+
+    #[test]
+    fn test_unrest_calms_down_and_can_return() {
+        use crate::RegionFlag;
+        let mut state = State::default();
+        let id = state.world.regions.by_idx(0).id;
+        {
+            let region = &mut state.world.regions[&id];
+            region.flags = vec![RegionFlag::Protests, RegionFlag::Riots, RegionFlag::Revolts];
+            region.outlook = 9.;
+        }
+        let protest = state.event_pool.events.iter().find(|e| e.name == "Unrest - Protest").unwrap().id;
+        state.event_pool.occurred_in.insert((protest, id));
+        let mut seen = vec![];
+        for _ in 0..4 {
+            for ev in state.roll_events(crate::events::Phase::WorldMain) {
+                seen.push(ev.event.name.clone());
+            }
+        }
+        assert!(seen.contains(&"Revolt Ends".to_string()), "{seen:?}");
+        assert!(seen.contains(&"Protests End".to_string()), "{seen:?}");
+        assert!(state.world.regions[&id].flags.is_empty());
+        // Protests can start again later.
+        assert!(!state.event_pool.occurred_in.contains(&(protest, id)));
+    }
+
+    #[test]
+    fn test_emergency_powers_quells_to_protests() {
+        use crate::RegionFlag;
+        let mut state = State::default();
+        for region in state.world.regions.iter_mut() {
+            region.flags = vec![RegionFlag::Protests, RegionFlag::Riots, RegionFlag::Revolts];
+        }
+        let effects = state.world.projects.iter().find(|p| p.name == "Emergency Powers").unwrap().effects.clone();
+        state.apply_effects(&effects, None);
+        assert!(state.world.regions.iter().all(|r| r.flags == vec![RegionFlag::Protests]));
     }
 }

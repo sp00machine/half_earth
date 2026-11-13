@@ -1980,6 +1980,10 @@ r#"This effect only triggers when it is *unapplied*, in which case it undoes the
                 ui.add(parts::help("Add a flag to a region."));
                 ui.add(edit(flag).label("Flag").help("Which flag to add.").inline());
             }
+            Effect::RemoveRegionFlag(flag) => {
+                ui.add(parts::help("Remove a flag from the region, or from every region if this isn't a regional event."));
+                ui.add(edit(flag).label("Flag").help("Which flag to remove.").inline());
+            }
             Effect::AddFlag(flag) => {
                 ui.add(parts::help("Set a flag."));
                 ui.add(edit(flag).label("Flag").help("Which flag to add.").inline());

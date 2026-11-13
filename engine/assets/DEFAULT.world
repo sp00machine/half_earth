@@ -17697,6 +17697,181 @@
             "notes": "[three-quarters fork] Also happens when the grid can't build the storage it needs (StorageShortfall).\n\n"
         },
         {
+            "name": "Revolt Ends",
+            "locked": false,
+            "occurred": false,
+            "id": "378f4521-0a27-4826-8caa-edd4fda6802d",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "RegionFlag": "Revolts"
+                        },
+                        {
+                            "LocalVariable": [
+                                "Outlook",
+                                "Greater",
+                                3.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "RemoveRegionFlag": "Revolts"
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "How's My Planning?",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "Gossy",
+                            "text": "The revolt in some regions is winding down. People are going back to their lives."
+                        },
+                        {
+                            "id": 1,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Things are still tense, but the worst seems to be over."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1634965837.088894.png"
+                    },
+                    "attribution": "cyphunk . (CC BY-SA 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] Unrest steps down once contentedness recovers above 3 (a little above where it started, so a region near the line doesn't flicker), and can start again later if it falls.",
+            "per_region": true
+        },
+        {
+            "name": "Riots End",
+            "locked": false,
+            "occurred": false,
+            "id": "c2f44ab7-9d5f-48c9-8844-1be6d7bbdfd6",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "RegionFlag": "Riots"
+                        },
+                        {
+                            "LocalVariable": [
+                                "Outlook",
+                                "Greater",
+                                4.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "RemoveRegionFlag": "Riots"
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "How's My Planning?",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "Gossy",
+                            "text": "The streets are quiet again where there were riots."
+                        },
+                        {
+                            "id": 1,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "People are still unhappy, but they're willing to give us a chance."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1634965837.088894.png"
+                    },
+                    "attribution": "cyphunk . (CC BY-SA 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] Unrest steps down once contentedness recovers above 4 (a little above where it started, so a region near the line doesn't flicker), and can start again later if it falls.",
+            "per_region": true
+        },
+        {
+            "name": "Protests End",
+            "locked": false,
+            "occurred": false,
+            "id": "4356a7de-2ae0-470b-b3dd-3530db3dd109",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "RegionFlag": "Protests"
+                        },
+                        {
+                            "LocalVariable": [
+                                "Outlook",
+                                "Greater",
+                                6.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "RemoveRegionFlag": "Protests"
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "How's My Planning?",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The protests have died down. People seem to feel heard."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1634965837.088894.png"
+                    },
+                    "attribution": "cyphunk . (CC BY-SA 2.0)"
+                }
+            },
+            "notes": "[three-quarters fork] Unrest steps down once contentedness recovers above 6 (a little above where it started, so a region near the line doesn't flicker), and can start again later if it falls.",
+            "per_region": true
+        },
+        {
             "name": "Unrest - Revolts",
             "locked": true,
             "occurred": false,
@@ -38811,6 +38986,12 @@
             "required_majority": 0.0,
             "effects": [
                 {
+                    "RemoveRegionFlag": "Revolts"
+                },
+                {
+                    "RemoveRegionFlag": "Riots"
+                },
+                {
                     "ModifyEventProbability": [
                         "ee5d4582-8d36-47f7-bae5-17ebe314f11a",
                         -0.75
@@ -38913,7 +39094,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also unlocks Esperanto, for a Newspeak run.\n\n[three-quarters fork] New policy, unlocked by The Authoritarian's Offer. Mostly suppresses riots and revolts and blocks escalation and secession; enables Crackdown and The Emergency Never Ends. Not available after Global Demilitarization."
+            "notes": "[three-quarters fork] Quells unrest everywhere the moment it passes: revolts and riots end, leaving regions protesting, and the existing chance cuts keep them from flaring up again while it's in force.\n\n[three-quarters fork] Also unlocks Esperanto, for a Newspeak run.\n\n[three-quarters fork] New policy, unlocked by The Authoritarian's Offer. Mostly suppresses riots and revolts and blocks escalation and secession; enables Crackdown and The Emergency Never Ends. Not available after Global Demilitarization."
         },
         {
             "id": "9d8775b5-4396-4ff3-be3a-1a1ec92351ca",

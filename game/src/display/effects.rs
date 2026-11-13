@@ -1905,6 +1905,20 @@ impl DisplayEffect {
                     return Err(());
                 }
             }
+            Effect::RemoveRegionFlag(flag) => (
+                tip(
+                    icons::CONTENTEDNESS,
+                    t!("Regions in unrest calm down a step. Unrest can return if contentedness falls again."),
+                ),
+                icon_text(
+                    "contentedness",
+                    &match flag {
+                        RegionFlag::Revolts => t!("Ends revolts."),
+                        RegionFlag::Riots => t!("Ends riots."),
+                        RegionFlag::Protests => t!("Ends protests."),
+                    },
+                ),
+            ),
             Effect::AddEvent(..)
             | Effect::TriggerEvent(..)
             | Effect::RegionLeave
