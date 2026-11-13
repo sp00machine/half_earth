@@ -15727,7 +15727,7 @@
                                 {
                                     "id": 0,
                                     "next_line": 4,
-                                    "text": "Pay the people who stay to tend it back to forest.",
+                                    "text": "Ask the people who stay to tend it back to forest.",
                                     "effects": [
                                         {
                                             "RestoreLand": 0.02
@@ -15735,7 +15735,7 @@
                                         {
                                             "PlayerVariable": [
                                                 "PoliticalCapital",
-                                                -15
+                                                -10
                                             ]
                                         }
                                     ]
@@ -15748,13 +15748,13 @@
                                         {
                                             "WorldVariable": [
                                                 "Outlook",
-                                                2.0
+                                                1.0
                                             ]
                                         },
                                         {
                                             "PlayerVariable": [
                                                 "PoliticalCapital",
-                                                -10
+                                                -5
                                             ]
                                         }
                                     ]
@@ -15767,7 +15767,7 @@
                                         {
                                             "WorldVariable": [
                                                 "Outlook",
-                                                -1.0
+                                                -0.5
                                             ]
                                         }
                                     ]
@@ -15803,7 +15803,7 @@
                     "attribution": "NatureDan, CC BY-SA 3.0"
                 }
             },
-            "notes": "[three-quarters fork] Fires once 2% of all land (~2 Mkm\u00b2) is regrowing former farmland. A choice: restore it under protection (+2% land protected, regrowing first; -15 PC), rebuild rural towns (+2 contentedness; -10 PC), or let it go wild (-1 contentedness).",
+            "notes": "[three-quarters fork] Fires once 2% of all land (~2 Mkm\u00b2) is regrowing former farmland. A choice: restore it under protection (+2% land protected, regrowing first; -10 PC), rebuild rural towns (+1 contentedness; -5 PC), or let it go wild (-0.5 contentedness). Can come early (e.g. cutting biofuels frees land fast), when PC is scarce, so costs are small. Text avoids money: it's left open whether the society uses it..",
             "per_region": false
         },
         {
