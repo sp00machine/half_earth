@@ -614,14 +614,22 @@ fn npc_supporter(ui: &mut egui::Ui, npc: &NPC) {
 /// and the emissions from making them with today's industry.
 fn construction_line(ui: &mut egui::Ui, state: &hes_engine::State, build: &hes_engine::materials::BuildOut) {
     let (emissions, _) = state.materials_impact(build);
-    let text = t!(
-        "Building it takes about %{steel}Mt of steel and %{cement}Mt of cement, adding about %{emissions}Gt of emissions in all while it's built (with today's industry).",
+    let yearly = state.emissions.as_co2eq();
+    let share = if yearly > 0. { emissions / yearly } else { 0. };
+    let percent = crate::display::percent(share, true);
+    let text = t!("Building it: +%{percent}% of a year's emissions.", percent = percent);
+    let detail = t!(
+        "Building it takes about %{steel}Mt of steel and %{cement}Mt of cement. Making them with today's industry releases about %{emissions}Gt of emissions in all while it's built, %{percent}% of a year's emissions.",
         steel = format!("{:.0}", build.steel * 1e-6),
         cement = format!("{:.0}", build.cement * 1e-6),
-        emissions = format!("{:.1}", emissions * 1e-15),
+        emissions = format!("{:.2}", emissions * 1e-15),
+        percent = percent,
     );
-    ui.horizontal_wrapped(|ui| {
-        ui.add(icons::IRON_AND_STEEL.size(13.));
-        ui.label(text);
-    });
+    let resp = ui
+        .horizontal_wrapped(|ui| {
+            ui.add(icons::IRON_AND_STEEL.size(13.));
+            ui.label(text);
+        })
+        .response;
+    add_tip(tip(icons::IRON_AND_STEEL, detail), resp);
 }

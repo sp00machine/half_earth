@@ -191,7 +191,10 @@ pub fn render_effects(ui: &mut egui::Ui, state: &State, effects: &[DisplayEffect
             add_tip(effect.tip, resp);
         }
         if let Some(summary) = summary {
-            ui.add(bbcode(&format!("[i]{}[/i] {summary}", icons::LAND)));
+            let resp = ui.add(bbcode(&format!("[i]{}[/i] {summary}", icons::LAND)));
+            if let Some(detail) = land_detail(state, all_effects) {
+                add_tip(tip(icons::LAND, detail), resp);
+            }
         }
     });
 }
@@ -303,9 +306,13 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id
         note.push_str(&format!(
             " {}",
             t!(
-                "+%{area}M km² farmland: ~%{amount}Gt CO₂ over %{years} yrs.",
+                "+%{area}M km² farmland: emissions +%{percent}% for %{years} yrs.",
                 area = format!("{:.1}", extra_land * 1e-12),
-                amount = format!("{:.0}", co2 * 1e-15),
+                percent = {
+                    let years = (extra_land / 3e11).ceil().max(1.);
+                    let yearly = state.emissions.as_co2eq();
+                    display::percent(if yearly > 0. { co2 / years / yearly } else { 0. }, true)
+                },
                 years = format!("{:.0}", (extra_land / 3e11).ceil().max(1.)),
             )
         ));
@@ -319,6 +326,52 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id
         ));
     }
     note
+}
+
+/// The farmland and clearing emissions behind a card's land summary, in Gt.
+fn land_detail(state: &State, effects: &[DisplayEffect]) -> Option<String> {
+    let mut extra_land = 0.;
+    for e in effects.iter().filter(|e| !e.is_unknown) {
+        let changes: Vec<(&Process, f32)> = match &e.effect {
+            Effect::OutputForProcess(id, amount) => vec![(&state.world.processes[id], *amount)],
+            Effect::OutputForFeature(feat, amount) => state
+                .world
+                .processes
+                .iter()
+                .filter(|p| !p.locked && p.features.contains(feat))
+                .map(|p| (p, *amount))
+                .collect(),
+            _ => vec![],
+        };
+        for (process, change) in changes {
+            if process.frozen_limit.is_some()
+                || effects.iter().any(|f| f.effect == Effect::FreezeProcess(process.id))
+            {
+                continue;
+            }
+            let produced = state.produced.by_process.get(&process.id).copied().unwrap_or(0.);
+            let m = process.output_modifier;
+            extra_land += produced
+                * process.resources.land
+                * (1. / (1. + m + change).max(0.01) - 1. / (1. + m).max(0.01));
+        }
+    }
+    if extra_land <= 1e10 {
+        return None;
+    }
+    let from = state.resource_demand.of(Resource::Land);
+    let co2 = state
+        .land_carbon
+        .estimate_clearing(from, from + extra_land, state.world.starting_resources.land);
+    Some(
+        t!(
+            "Clearing about %{area} million km² of land for farms releases about %{amount}Gt of CO₂, most of it right away; land can only be cleared so fast, so it's spread over about %{years} years.",
+            area = format!("{:.1}", extra_land * 1e-12),
+            amount = format!("{:.0}", co2 * 1e-15),
+            years = format!("{:.0}", (extra_land / 3e11).ceil().max(1.)),
+        )
+        .to_string(),
+    )
 }
 
 /// One line on what a card's output changes, taken together, do to land.

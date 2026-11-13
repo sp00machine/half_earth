@@ -450,12 +450,12 @@ mod changes {
                 return;
             }
             let text = t!(
-                "While it's being built (about %{years} years), the %{steel}Mt of steel, %{cement}Mt of cement and equipment it takes add about %{emissions}Gt of emissions and %{energy} of energy use a year. Once built, only replacing worn-out plants continues; that's included above.",
+                "While it's being built (about %{years} years), emissions will be about %{percent}% higher (%{emissions}Gt a year) from making the %{steel}Mt of steel, %{cement}Mt of cement and equipment it takes. Once built, only replacing worn-out plants continues; that's included above.",
                 years = hes_engine::materials::CONSTRUCTION_YEARS,
+                percent = crate::display::percent(self.construction_share(), true),
                 steel = format!("{:.0}", c.steel * 1e-6),
                 cement = format!("{:.0}", c.cement * 1e-6),
-                emissions = format!("{:.1}", c.emissions),
-                energy = crate::display::format_power(c.energy),
+                emissions = format!("{:.2}", c.emissions),
             );
             ui.add(
                 egui::Label::new(egui::RichText::new(text).color(Color32::from_rgb(0xF2, 0xA9, 0x3B)))
@@ -539,20 +539,43 @@ mod changes {
             }
         }
 
-        /// A short line on emissions while new capacity is built, on its own
-        /// row so the badges above stay centered on narrow screens.
-        pub fn render_construction_line(&self, ui: &mut egui::Ui) {
-            if self.construction.emissions >= 0.05 {
-                ui.vertical_centered(|ui| {
-                    ui.label(
-                        egui::RichText::new(t!(
-                            "+%{emissions}Gt/yr while building",
-                            emissions = format!("{:.1}", self.construction.emissions)
-                        ))
-                        .color(Color32::from_rgb(0xF2, 0xA9, 0x3B)),
-                    );
-                });
+        /// Emissions while new capacity is built, as a share of current
+        /// yearly emissions.
+        fn construction_share(&self) -> f32 {
+            if self.before.emissions > 0. {
+                self.construction.emissions / self.before.emissions
+            } else {
+                0.
             }
+        }
+
+        /// A badge for the extra emissions while new capacity is built, in
+        /// the same style as the other changes, on its own row so the badges
+        /// above stay centered on narrow screens. Gt in the tooltip.
+        pub fn render_construction_line(&self, ui: &mut egui::Ui) {
+            let share = self.construction_share();
+            if share < 0.001 {
+                return;
+            }
+            let label = format!(
+                "{} ↑{}%",
+                t!("While building:"),
+                crate::display::percent(share, true)
+            );
+            let tip = crate::tips::tip(
+                icons::EMISSIONS,
+                t!(
+                    "While the new capacity is being built (about %{years} years), making its steel, cement and equipment adds about %{emissions}Gt of emissions a year, %{percent}% of current emissions.",
+                    years = hes_engine::materials::CONSTRUCTION_YEARS,
+                    emissions = format!("{:.2}", self.construction.emissions),
+                    percent = crate::display::percent(share, true),
+                ),
+            );
+            ui.vertical_centered(|ui| {
+                ui.style_mut().visuals.override_text_color = Some(Color32::from_rgb(0xF2, 0xA9, 0x3B));
+                let resp = super::number_box(ui, label, icons::EMISSIONS);
+                crate::tips::add_tip(tip, resp);
+            });
         }
     }
     impl egui::Widget for &Changes {
