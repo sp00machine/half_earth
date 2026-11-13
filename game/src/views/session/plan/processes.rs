@@ -374,7 +374,8 @@ mod changes {
             if change == 0 {
                 continue;
             }
-            let output = change.unsigned_abs() as f32 / 20. * state.output_demand.of(process.output);
+            let output =
+                change.unsigned_abs() as f32 / 20. * state.output_demand.of(process.output);
             if let Some((b, u)) = hes_engine::materials::BuildOut::for_output(process, output) {
                 if change > 0 {
                     build.combine_with(&b);
@@ -458,8 +459,10 @@ mod changes {
                 emissions = format!("{:.2}", c.emissions),
             );
             ui.add(
-                egui::Label::new(egui::RichText::new(text).color(Color32::from_rgb(0xF2, 0xA9, 0x3B)))
-                    .wrap(),
+                egui::Label::new(
+                    egui::RichText::new(text).color(Color32::from_rgb(0xF2, 0xA9, 0x3B)),
+                )
+                .wrap(),
             );
         }
 
@@ -572,7 +575,8 @@ mod changes {
                 ),
             );
             ui.vertical_centered(|ui| {
-                ui.style_mut().visuals.override_text_color = Some(Color32::from_rgb(0xF2, 0xA9, 0x3B));
+                ui.style_mut().visuals.override_text_color =
+                    Some(Color32::from_rgb(0xF2, 0xA9, 0x3B));
                 let resp = super::number_box(ui, label, icons::EMISSIONS);
                 crate::tips::add_tip(tip, resp);
             });
@@ -626,7 +630,9 @@ mod changes {
             } else {
                 ui.vertical(|ui| {
                     ui.set_width(320.);
-                    ui.label(t!("Once the changes are built, this output's production will"));
+                    ui.label(t!(
+                        "Once the changes are built, this output's production will"
+                    ));
                     for desc in descs {
                         ui.add(desc);
                     }

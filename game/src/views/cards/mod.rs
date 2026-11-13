@@ -24,6 +24,9 @@ pub trait AsCard {
     fn body(&self, ui: &mut egui::Ui, state: &GameState);
     fn top_back(&self, ui: &mut egui::Ui, state: &GameState);
     fn bottom_back(&self, ui: &mut egui::Ui, state: &GameState);
+    /// Bring this card's copy of its data up to date with the game, e.g.
+    /// after a policy is passed or raised a level while the card is shown.
+    fn refresh(&mut self, _state: &GameState) {}
 }
 
 pub const CARD_HEIGHT: f32 = 360.;
@@ -80,6 +83,7 @@ impl<C: AsCard + Clone> Card<C> {
         state: &GameState,
         is_offscreen: bool,
     ) -> egui::Response {
+        self.data.refresh(state);
         if self.draggable {
             let top_margin = self.y_offset;
 

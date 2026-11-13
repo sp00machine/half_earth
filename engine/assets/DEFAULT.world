@@ -28749,6 +28749,9 @@
                 },
                 {
                     "AddEvent": "e5ba52e1-103d-4327-8b79-e2057aa65e28"
+                },
+                {
+                    "UnlocksProject": "4d2a8f61-c93e-47b5-8e10-2b7f6a9d3c58"
                 }
             ],
             "prob_modifier": 1.0,
@@ -35388,7 +35391,11 @@
                     ]
                 }
             ],
-            "effects": [],
+            "effects": [
+                {
+                    "UnlocksProject": "4d2a8f61-c93e-47b5-8e10-2b7f6a9d3c58"
+                }
+            ],
             "prob_modifier": 1.0,
             "intensity": 0,
             "flavor": {
@@ -44528,7 +44535,7 @@
             "group": "Energy",
             "ongoing": false,
             "gradual": false,
-            "locked": false,
+            "locked": true,
             "cost": 0,
             "base_cost": {
                 "Fixed": 5
@@ -44595,11 +44602,12 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Half the energy that would need storing is cut instead of stored, so grid storage (and the lithium for it) halves and the wind and solar cap rises. Costs up to 1 contentedness per income level in each region at first, fading over 10 years as people adapt. Planned load-shedding is familiar from South Africa and Nepal, and is far less disruptive than unplanned blackouts.",
+            "notes": "[three-quarters fork] Locked until the grid first falls short (Brownouts or Storage Shortfall intro unlocks it). Discontent grows rather than fades: rolling blackouts hit everyone and wear on people the longer they go on (South Africa's load shedding), up to -1.5 everywhere over 3 years.\n\n[three-quarters fork] Half the energy that would need storing is cut instead of stored, so grid storage (and the lithium for it) halves and the wind and solar cap rises. Costs up to 1 contentedness per income level in each region at first, fading over 10 years as people adapt. Planned load-shedding is familiar from South Africa and Nepal, and is far less disruptive than unplanned blackouts.",
             "fatigue": {
-                "adapting": true,
+                "adapting": false,
                 "rate": 1.0,
-                "years": 10.0
+                "years": 3.0,
+                "everywhere": true
             }
         },
         {

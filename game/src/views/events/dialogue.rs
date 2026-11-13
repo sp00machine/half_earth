@@ -141,8 +141,11 @@ impl Dialogue {
                     for branch in responses {
                         tui.ui(|ui| {
                             let text = t!(&branch.text);
-                            let effects: Vec<crate::display::DisplayEffect> =
-                                branch.effects.iter().map(crate::display::DisplayEffect::from).collect();
+                            let effects: Vec<crate::display::DisplayEffect> = branch
+                                .effects
+                                .iter()
+                                .map(crate::display::DisplayEffect::from)
+                                .collect();
                             ui.vertical(|ui| {
                                 if ui.add(button(text)).clicked() {
                                     let done = self.select_choice(&branch, state);

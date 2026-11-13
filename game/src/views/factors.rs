@@ -30,12 +30,25 @@ pub struct FactorsCard {
 /// A bar showing how land is used: farmed, regrowing, protected, wild.
 fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
     let parts = [
-        (land.farmed, Color32::from_rgb(0xd9, 0xa4, 0x41), t!("Farmed & built")),
-        (land.regrowing, Color32::from_rgb(0x9c, 0xd3, 0x6a), t!("Regrowing")),
-        (land.protected, Color32::from_rgb(0x4c, 0xc0, 0x7d), t!("Protected")),
+        (
+            land.farmed,
+            Color32::from_rgb(0xd9, 0xa4, 0x41),
+            t!("Farmed & built"),
+        ),
+        (
+            land.regrowing,
+            Color32::from_rgb(0x9c, 0xd3, 0x6a),
+            t!("Regrowing"),
+        ),
+        (
+            land.protected,
+            Color32::from_rgb(0x4c, 0xc0, 0x7d),
+            t!("Protected"),
+        ),
         (land.wild, Color32::from_rgb(0x7f, 0xa8, 0x8e), t!("Wild")),
     ];
-    let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 8.), egui::Sense::hover());
+    let (rect, _) =
+        ui.allocate_exact_size(egui::vec2(ui.available_width(), 8.), egui::Sense::hover());
     let mut x = rect.left();
     for (share, color, _) in &parts {
         let w = rect.width() * share.max(0.);
@@ -50,7 +63,11 @@ fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
         ui.style_mut().spacing.item_spacing.x = 8.;
         for (share, color, name) in parts {
             if share >= 0.005 {
-                ui.label(egui::RichText::new(format!("{name} {:.0}%", share * 100.)).color(color).small());
+                ui.label(
+                    egui::RichText::new(format!("{name} {:.0}%", share * 100.))
+                        .color(color)
+                        .small(),
+                );
             }
         }
     });
@@ -71,13 +88,17 @@ fn gas_bar(ui: &mut egui::Ui, gases: &Gases, label: bool) {
     ];
     let positive: f32 = parts.iter().map(|(v, ..)| v.max(0.)).sum();
     if positive > 0. {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 5.), egui::Sense::hover());
+        let (rect, _) =
+            ui.allocate_exact_size(egui::vec2(ui.available_width(), 5.), egui::Sense::hover());
         let mut x = rect.left();
         for (value, color, _) in parts {
             if value > 0. {
                 let w = rect.width() * value / positive;
                 ui.painter().rect_filled(
-                    egui::Rect::from_min_size(egui::pos2(x, rect.top()), egui::vec2(w, rect.height())),
+                    egui::Rect::from_min_size(
+                        egui::pos2(x, rect.top()),
+                        egui::vec2(w, rect.height()),
+                    ),
                     0.,
                     color,
                 );
@@ -90,7 +111,11 @@ fn gas_bar(ui: &mut egui::Ui, gases: &Gases, label: bool) {
             ui.style_mut().spacing.item_spacing.x = 8.;
             for (value, color, name) in parts {
                 if value.abs() >= 0.05 {
-                    ui.label(egui::RichText::new(format!("{name} {value:+.1}")).color(color).small());
+                    ui.label(
+                        egui::RichText::new(format!("{name} {value:+.1}"))
+                            .color(color)
+                            .small(),
+                    );
                 }
             }
         });

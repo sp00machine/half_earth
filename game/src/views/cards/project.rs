@@ -128,6 +128,17 @@ impl AsCard for Project {
         self.id
     }
 
+    fn refresh(&mut self, state: &GameState) {
+        if let Some(live) = state.world.projects.try_get(&self.id)
+            && (live.level != self.level
+                || live.status != self.status
+                || live.points != self.points
+                || live.locked != self.locked)
+        {
+            *self = live.clone();
+        }
+    }
+
     fn bg_color(&self) -> egui::Color32 {
         let (bg, _) = group_color(&self.group);
         bg
@@ -297,6 +308,9 @@ impl AsCard for Project {
                     let max_size = egui::vec2(ui.available_width(), ui.available_height());
                     scale_text_ui(ui, max_size, move |ui| {
                         render_effects(ui, state, &effects);
+                        if let Some(fatigue) = &self.fatigue {
+                            fatigue_line(ui, fatigue, self.fatigue_scale());
+                        }
                         if !p.is_online
                             && let Some(build) = &self.construction
                         {
@@ -653,12 +667,62 @@ fn npc_supporter(ui: &mut egui::Ui, npc: &NPC) {
 
 /// What building a project takes in steel, cement and manufacturing,
 /// and the emissions from making them with today's industry.
-fn construction_line(ui: &mut egui::Ui, state: &hes_engine::State, build: &hes_engine::materials::BuildOut) {
+/// The ongoing discontent a policy causes while it's in force.
+fn fatigue_line(ui: &mut egui::Ui, fatigue: &hes_engine::Fatigue, scale: f32) {
+    let worst = fatigue.rate * fatigue.weight(3) * scale;
+    let amount = format!("-{:.1}", worst);
+    let years = format!("{:.0}", fatigue.years);
+    let text = match (fatigue.adapting, fatigue.everywhere) {
+        (true, true) => t!(
+            "Discontent: %{amount} everywhere at first, fading over %{years} years.",
+            amount = amount,
+            years = years
+        ),
+        (true, false) => t!(
+            "Discontent: %{amount} in rich regions at first, fading over %{years} years.",
+            amount = amount,
+            years = years
+        ),
+        (false, true) => t!(
+            "Discontent: grows to %{amount} everywhere over %{years} years.",
+            amount = amount,
+            years = years
+        ),
+        (false, false) => t!(
+            "Discontent: grows to %{amount} in rich regions over %{years} years.",
+            amount = amount,
+            years = years
+        ),
+    };
+    let detail = if fatigue.everywhere {
+        t!("While in force, this costs contentedness in every region alike.")
+    } else {
+        t!(
+            "While in force, this costs contentedness by income: none in low-income regions, most in high-income ones, which have more to give up."
+        )
+    };
+    let resp = ui
+        .horizontal_wrapped(|ui| {
+            ui.add(icons::CONTENTEDNESS.size(13.));
+            ui.label(text);
+        })
+        .response;
+    add_tip(tip(icons::CONTENTEDNESS, detail), resp);
+}
+
+fn construction_line(
+    ui: &mut egui::Ui,
+    state: &hes_engine::State,
+    build: &hes_engine::materials::BuildOut,
+) {
     let (emissions, _) = state.materials_impact(build);
     let yearly = state.emissions.as_co2eq();
     let share = if yearly > 0. { emissions / yearly } else { 0. };
     let percent = crate::display::percent(share, true);
-    let text = t!("Building it: +%{percent}% of a year's emissions.", percent = percent);
+    let text = t!(
+        "Building it: +%{percent}% of a year's emissions.",
+        percent = percent
+    );
     let detail = t!(
         "Building it takes about %{steel}Mt of steel and %{cement}Mt of cement. Making them with today's industry releases about %{emissions}Gt of emissions in all while it's built, %{percent}% of a year's emissions.",
         steel = format!("{:.0}", build.steel * 1e-6),

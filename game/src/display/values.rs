@@ -58,7 +58,11 @@ pub fn to_energy_units(amount: f32) -> f32 {
 /// Round an energy amount in GW for display: whole gigawatts, with a
 /// decimal for small amounts so they don't round to zero.
 pub fn round_energy(gw: f32) -> f32 {
-    if gw.abs() < 10. { gw.round_to(1) } else { gw.round() }
+    if gw.abs() < 10. {
+        gw.round_to(1)
+    } else {
+        gw.round()
+    }
 }
 
 /// Format kWh per year as average power.
@@ -148,7 +152,11 @@ pub fn percent(p: f32, round: bool) -> String {
 pub fn percent_fine(p: f32) -> String {
     let percent = p * 100.;
     if percent.abs() < 0.05 && percent != 0. {
-        if p < 0. { "-<0.1".into() } else { "<0.1".into() }
+        if p < 0. {
+            "-<0.1".into()
+        } else {
+            "<0.1".into()
+        }
     } else if percent.abs() < 1. {
         format!("{percent:.1}")
     } else {
@@ -159,7 +167,11 @@ pub fn percent_fine(p: f32) -> String {
 /// Gt with one decimal, "<0.1Gt" for tiny amounts.
 pub fn gigatonnes(gt: f32) -> String {
     if gt.abs() < 0.05 && gt != 0. {
-        if gt < 0. { "-<0.1Gt".into() } else { "<0.1Gt".into() }
+        if gt < 0. {
+            "-<0.1Gt".into()
+        } else {
+            "<0.1Gt".into()
+        }
     } else {
         format!("{gt:.1}Gt")
     }

@@ -22,22 +22,14 @@ pub fn scale_text(
 }
 
 trait Resizeable<R> {
-    fn render_scaled(
-        &mut self,
-        ui: &mut egui::Ui,
-        factor: f32,
-    ) -> R;
+    fn render_scaled(&mut self, ui: &mut egui::Ui, factor: f32) -> R;
 }
 
 impl<F, R> Resizeable<R> for F
 where
     F: Fn(&mut egui::Ui) -> R,
 {
-    fn render_scaled(
-        &mut self,
-        ui: &mut egui::Ui,
-        factor: f32,
-    ) -> R {
+    fn render_scaled(&mut self, ui: &mut egui::Ui, factor: f32) -> R {
         scale_text_styles(ui.style_mut(), factor);
         self(ui)
     }
@@ -49,11 +41,7 @@ struct SizedText {
 }
 
 impl Resizeable<egui::Response> for SizedText {
-    fn render_scaled(
-        &mut self,
-        ui: &mut egui::Ui,
-        factor: f32,
-    ) -> egui::Response {
+    fn render_scaled(&mut self, ui: &mut egui::Ui, factor: f32) -> egui::Response {
         let text = self.text.clone();
         let text = text.size(self.size * factor);
         ui.label(text)
@@ -72,10 +60,7 @@ fn scale_text_impl<R, U: Resizeable<R>>(
     // Set the clip rect so that nothing actually renders.
     let mut measure_ui = ui.new_child(
         UiBuilder::new()
-            .max_rect(egui::Rect::from_min_size(
-                egui::pos2(0.0, 0.0),
-                max_size,
-            ))
+            .max_rect(egui::Rect::from_min_size(egui::pos2(0.0, 0.0), max_size))
             .layout(*ui.layout()),
     );
     let empty = egui::Rect::ZERO;
@@ -84,8 +69,7 @@ fn scale_text_impl<R, U: Resizeable<R>>(
     // Scale font sizes and spacing according to the factor,
     // then draw and measure the UI.
     let _ = contents.render_scaled(&mut measure_ui, *factor);
-    let size =
-        measure_ui.min_rect().size().max(egui::vec2(1.0, 1.0));
+    let size = measure_ui.min_rect().size().max(egui::vec2(1.0, 1.0));
 
     // Check if the UI fits.
     let sx = (max_size.x / size.x).min(1.0);

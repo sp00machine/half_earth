@@ -364,8 +364,7 @@ fn impact_factor<S: HasImpacts>(source: &S, impact: Impact, state: &State) -> Im
     let total_impact = base * demand;
 
     let display = match impact {
-        Impact::Energy => display::round_energy(display::to_energy_units(total_impact))
-            .to_string(),
+        Impact::Energy => display::round_energy(display::to_energy_units(total_impact)).to_string(),
         Impact::Electricity => display::output(total_impact, Output::Electricity).to_string(),
         Impact::Fuel => display::output(total_impact, Output::Fuel).to_string(),
         Impact::Land => {
@@ -505,7 +504,9 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                         rankings.push(Factor::Event {
                             name: name.to_string(),
                             amount,
-                            display: Some(display::round_energy(display::to_energy_units(amount)).to_string()),
+                            display: Some(
+                                display::round_energy(display::to_energy_units(amount)).to_string(),
+                            ),
                         });
                     }
                 }
@@ -612,7 +613,8 @@ pub fn factors_card(current_name: Option<String>, var: Var, state: &State) -> Fa
             let total = state.world.starting_resources.land;
             let farmed = (state.resource_demand.of(Resource::Land) / total).clamp(0., 1.);
             let protected = state.protected_land.clamp(0., 1. - farmed);
-            let regrowing = (state.land_carbon.regrowing_area() / total).clamp(0., 1. - farmed - protected);
+            let regrowing =
+                (state.land_carbon.regrowing_area() / total).clamp(0., 1. - farmed - protected);
             LandSplit {
                 farmed,
                 regrowing,
@@ -791,7 +793,12 @@ mod tests {
     #[test]
     fn test_process_impact_factors() {
         let state = State::default();
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.electricity > 0.);
         assert!(source.mix_share > 0);
@@ -799,7 +806,12 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "49");
 
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.mix_share > 0);
@@ -807,7 +819,12 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "136");
 
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.resources.electricity > 0.);
@@ -816,7 +833,12 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "185");
 
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.land > 0.);
         assert!(source.mix_share > 0);
@@ -824,7 +846,12 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "35%");
 
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.water > 0.);
         assert!(source.mix_share > 0);
@@ -832,7 +859,12 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "11%");
 
-        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
+        let source = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.byproducts.gtco2eq() > 0.);
         assert!(source.mix_share > 0);
@@ -844,21 +876,36 @@ mod tests {
     #[test]
     fn test_industry_impact_factors() {
         let state = State::default();
-        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
+        let source = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Iron and Steel")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.electricity > 0.);
         let factors = impact_factor(source, Impact::Electricity, &state);
         println!("  {:?}", factors);
         assert_eq!(factors.display, "278");
 
-        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
+        let source = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Iron and Steel")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         let factors = impact_factor(source, Impact::Fuel, &state);
         println!("  {:?}", factors);
         assert_eq!(factors.display, "1268");
 
-        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
+        let source = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Iron and Steel")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.resources.electricity > 0.);
@@ -866,14 +913,24 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "1546");
 
-        let source = state.world.industries.iter().find(|i| i.name == "Other Industry").unwrap();
+        let source = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Other Industry")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.water > 0.);
         let factors = impact_factor(source, Impact::Water, &state);
         println!("  {:?}", factors);
         assert_eq!(factors.display, "2%");
 
-        let source = state.world.industries.iter().find(|i| i.name == "Chemical").unwrap();
+        let source = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Chemical")
+            .unwrap();
         println!("Name {:?}", source.name);
         assert!(source.byproducts.gtco2eq() > 0.);
         let factors = impact_factor(source, Impact::Emissions, &state);

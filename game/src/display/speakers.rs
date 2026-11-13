@@ -97,9 +97,7 @@ pub fn as_speaker(name: &str) -> Speaker {
         "The Authoritarian" => Speaker::TheAuthoritarian,
         "The Accelerationist" => Speaker::TheAccelerationist,
         "The Environmentalist" => Speaker::TheEnvironmentalist,
-        "The Animal Liberationist" => {
-            Speaker::TheAnimalLiberationist
-        }
+        "The Animal Liberationist" => Speaker::TheAnimalLiberationist,
         _ => Speaker::Gossy,
     }
 }

@@ -275,7 +275,12 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id
     let mut extra_land = 0.;
     let mut frozen_loss = false;
     for (process, change) in changes {
-        let produced = state.produced.by_process.get(&process.id).copied().unwrap_or(0.);
+        let produced = state
+            .produced
+            .by_process
+            .get(&process.id)
+            .copied()
+            .unwrap_or(0.);
         let land = process.resources.land;
         if produced <= 0. || land <= 0. {
             continue;
@@ -294,15 +299,14 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id
     }
     let mut note = String::new();
     if frozen_loss {
-        note.push_str(&format!(
-            " {}",
-            t!("Can't expand, so output falls.")
-        ));
+        note.push_str(&format!(" {}", t!("Can't expand, so output falls.")));
     }
     if extra_land > 1e10 {
         let from = state.resource_demand.of(Resource::Land);
         let total = state.world.starting_resources.land;
-        let co2 = state.land_carbon.estimate_clearing(from, from + extra_land, total);
+        let co2 = state
+            .land_carbon
+            .estimate_clearing(from, from + extra_land, total);
         note.push_str(&format!(
             " {}",
             t!(
@@ -311,7 +315,14 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id
                 percent = {
                     let years = (extra_land / 3e11).ceil().max(1.);
                     let yearly = state.emissions.as_co2eq();
-                    display::percent(if yearly > 0. { co2 / years / yearly } else { 0. }, true)
+                    display::percent(
+                        if yearly > 0. {
+                            co2 / years / yearly
+                        } else {
+                            0.
+                        },
+                        true,
+                    )
                 },
                 years = format!("{:.0}", (extra_land / 3e11).ceil().max(1.)),
             )
@@ -345,11 +356,18 @@ fn land_detail(state: &State, effects: &[DisplayEffect]) -> Option<String> {
         };
         for (process, change) in changes {
             if process.frozen_limit.is_some()
-                || effects.iter().any(|f| f.effect == Effect::FreezeProcess(process.id))
+                || effects
+                    .iter()
+                    .any(|f| f.effect == Effect::FreezeProcess(process.id))
             {
                 continue;
             }
-            let produced = state.produced.by_process.get(&process.id).copied().unwrap_or(0.);
+            let produced = state
+                .produced
+                .by_process
+                .get(&process.id)
+                .copied()
+                .unwrap_or(0.);
             let m = process.output_modifier;
             extra_land += produced
                 * process.resources.land
@@ -360,9 +378,11 @@ fn land_detail(state: &State, effects: &[DisplayEffect]) -> Option<String> {
         return None;
     }
     let from = state.resource_demand.of(Resource::Land);
-    let co2 = state
-        .land_carbon
-        .estimate_clearing(from, from + extra_land, state.world.starting_resources.land);
+    let co2 = state.land_carbon.estimate_clearing(
+        from,
+        from + extra_land,
+        state.world.starting_resources.land,
+    );
     Some(
         t!(
             "Clearing about %{area} million km² of land for farms releases about %{amount}Gt of CO₂, most of it right away; land can only be cleared so fast, so it's spread over about %{years} years.",
@@ -386,7 +406,9 @@ pub fn land_summary(state: &State, effects: &[DisplayEffect]) -> Option<String> 
     let mut changes: Vec<(&Process, f32)> = vec![];
     for e in effects.iter().filter(|e| !e.is_unknown) {
         match &e.effect {
-            Effect::OutputForProcess(id, amount) => changes.push((&state.world.processes[id], *amount)),
+            Effect::OutputForProcess(id, amount) => {
+                changes.push((&state.world.processes[id], *amount))
+            }
             Effect::OutputForFeature(feat, amount) => changes.extend(
                 state
                     .world
@@ -2232,19 +2254,34 @@ mod tests {
     fn test_project_cost_modifier() {
         let state = State::default();
 
-        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Initiative).unwrap();
+        let project = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.kind == ProjectType::Initiative)
+            .unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 0.5));
         assert_eq!(text_vals[0], 50.);
         assert_eq!(tip_vals[0], 50.);
 
-        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Research).unwrap();
+        let project = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.kind == ProjectType::Research)
+            .unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 0.25));
         assert_eq!(text_vals[0], 25.);
         assert_eq!(tip_vals[0], 25.);
 
-        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Policy).unwrap();
+        let project = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.kind == ProjectType::Policy)
+            .unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 2.));
         assert_eq!(text_vals[0], 200.);
@@ -2264,7 +2301,13 @@ mod tests {
     #[test]
     fn test_modify_industry_resources() {
         let state = State::default();
-        let industry_id = state.world.industries.iter().find(|i| i.name == "Shipping").unwrap().id;
+        let industry_id = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Shipping")
+            .unwrap()
+            .id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyIndustryResources(industry_id, Resource::Fuel, 0.2),
@@ -2278,7 +2321,13 @@ mod tests {
     #[test]
     fn test_modify_industry_resources_amount() {
         let state = State::default();
-        let industry_id = state.world.industries.iter().find(|i| i.name == "Shipping").unwrap().id;
+        let industry_id = state
+            .world
+            .industries
+            .iter()
+            .find(|i| i.name == "Shipping")
+            .unwrap()
+            .id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyIndustryResourcesAmount(industry_id, Resource::Fuel, 1000.),
@@ -2296,7 +2345,12 @@ mod tests {
         // The concrete industry, which has direct CO2 emissions. But even
         // then we need to increase direct emissions to have a more
         // noticeable effect.
-        let industry = state.world.industries.iter_mut().find(|i| i.name == "Concrete").unwrap();
+        let industry = state
+            .world
+            .industries
+            .iter_mut()
+            .find(|i| i.name == "Concrete")
+            .unwrap();
         let industry_id = industry.id;
         industry.byproducts.co2 *= 10000.;
 
@@ -2313,7 +2367,13 @@ mod tests {
     #[test]
     fn test_modify_process_byproducts() {
         let state = State::default();
-        let process_id = state.world.processes.iter().find(|p| p.name == "Coal").unwrap().id;
+        let process_id = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Coal")
+            .unwrap()
+            .id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyProcessByproducts(process_id, Byproduct::Co2, 0.6),

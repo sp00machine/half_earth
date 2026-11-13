@@ -1,11 +1,11 @@
 mod effects;
 mod events;
+pub mod factors;
 pub mod icons;
+pub mod intensity;
 mod kinds;
 mod speakers;
 mod values;
-pub mod intensity;
-pub mod factors;
 
 pub use effects::*;
 pub use events::*;

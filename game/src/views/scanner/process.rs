@@ -27,7 +27,9 @@ pub fn planned_intermittent_others(
         .processes
         .iter()
         .filter(|p| p.id != process.id && state.is_intermittent_electricity(&p.id))
-        .map(|p| (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0))
+        .map(|p| {
+            (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0)
+        })
         .sum::<isize>() as usize
 }
 
@@ -41,7 +43,9 @@ pub fn planned_intermittent_share(
         .processes
         .iter()
         .filter(|p| state.is_intermittent_electricity(&p.id))
-        .map(|p| (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0))
+        .map(|p| {
+            (p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0)).max(0)
+        })
         .sum::<isize>() as f32
         / 20.
 }
@@ -125,7 +129,11 @@ pub fn planned_feedstock_warnings(
     let mut warnings: Vec<_> = rates
         .into_values()
         .filter_map(|(feedstock, rate, names)| {
-            let years = if rate > 0. { state.feedstocks.available[feedstock] / rate } else { f32::INFINITY };
+            let years = if rate > 0. {
+                state.feedstocks.available[feedstock] / rate
+            } else {
+                f32::INFINITY
+            };
             (years < WARN_YEARS).then_some((feedstock, years, names))
         })
         .collect();
@@ -181,7 +189,9 @@ fn storage_allows(
         .world
         .processes
         .iter()
-        .filter(|p| p.output == Output::Electricity && p.features.contains(&ProcessFeature::IsIntermittent))
+        .filter(|p| {
+            p.output == Output::Electricity && p.features.contains(&ProcessFeature::IsIntermittent)
+        })
         .map(|p| p.mix_share as isize + process_mix_changes[p.output].get(&p.id).unwrap_or(&0))
         .sum();
     let supported =
@@ -234,8 +244,7 @@ impl Scannable for Process {
                 state.ui.tutorial.advance();
             }
 
-            let max_share =
-                planned_max_share(self, &state.core, &state.ui.process_mix_changes);
+            let max_share = planned_max_share(self, &state.core, &state.ui.process_mix_changes);
 
             add_point(
                 &mut state.ui.process_points,
