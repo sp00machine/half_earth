@@ -50937,7 +50937,7 @@
                         {
                             "WorldVariable": [
                                 "Temperature",
-                                0.25
+                                0.03
                             ]
                         }
                     ],
@@ -50951,7 +50951,7 @@
                         {
                             "WorldVariable": [
                                 "Temperature",
-                                0.15
+                                0.01
                             ]
                         }
                     ],
@@ -51000,7 +51000,7 @@
                     }
                 ]
             },
-            "notes": "https://www.theguardian.com/environment/2021/mar/20/our-biggest-challenge-lack-of-imagination-the-scientists-turning-the-desert-green\n\nhttps://climatefeedback.org/claimreview/deserts-cool-the-planet-by-reflecting-solar-radiation-to-space-vegetated-areas-have-an-overall-warming-effect-so-planting-trees-in-deserts-doesnt-necessarily-cool-the-planet-the-guardian/\n\nWould this have a positive effect on biodiversity? SL"
+            "notes": "[three-quarters fork] Warming +0.25/+0.15C -> +0.03/+0.01C. The albedo concern is real for greening deserts (planting forests where there were none, which darkens the surface), but restoring native desert ecosystems leaves sparse, pale ground cover; across the world's drylands the effect on global temperature is tiny.\n\nhttps://www.theguardian.com/environment/2021/mar/20/our-biggest-challenge-lack-of-imagination-the-scientists-turning-the-desert-green\n\nhttps://climatefeedback.org/claimreview/deserts-cool-the-planet-by-reflecting-solar-radiation-to-space-vegetated-areas-have-an-overall-warming-effect-so-planting-trees-in-deserts-doesnt-necessarily-cool-the-planet-the-guardian/\n\nWould this have a positive effect on biodiversity? SL"
         },
         {
             "id": "26da6f29-2add-4de3-8800-22c6b7993a18",
