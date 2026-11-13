@@ -21,12 +21,38 @@ Done work lives in the git history; each change's reasoning is in the
 
   Needs recording more history each year (per industry, per process, per
   region) and a consistent chart style. To do on a PC, with care.
+- **Tap through from breakdowns.** In the resource and emissions views,
+  tapping an industry or process opens its card (e.g. Other Industry in
+  fuel use, Cellular Meat in electricity use).
+- **Two rows of impacts on process cards.** The existing row (land,
+  water, energy, emissions, extinction) shows efficiency when tapped:
+  "uses X of land to make Y of power". A second row below shows the
+  process's share of the world total, current -> planned (e.g. land
+  2% -> 0%); tapping it opens that resource's view, as the first row does
+  now.
 
 ## Model
 
-- **Soil health:** intensive farming slowly degrades soils (lower yields,
-  more fertilizer); regenerative practices restore them. Make organic
-  farming's N2O easier to see.
+- **Land and farming pass** (next up):
+  - **Five kinds of land:** farmed, wild and unmanaged, regrowing and
+    unmanaged, wild and protected, regrowing and protected. Protected land
+    regrows faster; unmanaged land still regrows, realistically
+    (exponential with a half-life, or linear). Decide how projects that
+    raise protected share interact with land still regrowing.
+  - **Soil health:** intensive farming slowly degrades soils (lower
+    yields, more fertilizer); regenerative practices restore them. Make
+    organic farming's N2O easier to see.
+  - **Fertilizer:** tie the chemical industry's ammonia (about a third of
+    its emissions) to synthetic-fertilizer farming, so fertilizer use
+    shows up in farming's emissions.
+  - **Check industrial vs. organic/smallholder farming** once fertilizer,
+    soil degradation and pesticides are all counted. Right now, with the
+    pesticide ban and all the farming programs, industrial farming is
+    better on every axis; the real trade-off is land (industrial uses
+    less) against emissions, soils and biodiversity.
+- **Authoritarian path pass:** make it possible, with care, to win the
+  Authoritarian over early and rule without parliament (Suspend
+  Parliament), as a real alternative to building a coalition.
 - **Guaranteed Basic Allotments** as a policy, in place of price controls.
 - **Black markets:** a persistent parallel dirty economy that grows when
   rationing and bans bite.
@@ -48,6 +74,12 @@ Done work lives in the git history; each change's reasoning is in the
   balance changes can be checked against many playthroughs at once.
 
 ## Presentation
+
+- **Watch the world after winning:** after a win, keep running years
+  without planning sessions, just watching the world go by, ending with a
+  closing dialogue scene.
+- **Ending screen with your stats:** the stats view, with its detail
+  views and history charts, on the ending screen.
 
 - **Rename** to Three-Quarters Earth Socialism.
 - **Three-Fifths Earth ending** (an achievement for protecting 60%).

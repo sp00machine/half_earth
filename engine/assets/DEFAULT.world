@@ -37707,6 +37707,98 @@
             "notes": "https://ntrs.nasa.gov/citations/20030063128"
         },
         {
+            "id": "4dba5920-4cf5-4509-ab9d-396a498d19be",
+            "name": "Ban Single-Use Plastics",
+            "kind": "Policy",
+            "group": "Limits",
+            "ongoing": false,
+            "gradual": false,
+            "locked": false,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 10
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyIndustryDemand": [
+                        "71f7ead6-2ad7-4434-be8d-5b32f43f2f02",
+                        -0.1
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "OutlookByIncome": [
+                        0.0,
+                        -0.5,
+                        -0.5,
+                        -1.0
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a",
+                "5a59715a-3deb-4288-9aa6-14859ad54d5a"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1651671424.692398.png"
+                    },
+                    "attribution": "Bridge Bay Campground recycle bins by YellowstoneNPS, Public domain"
+                },
+                "description": "Ban plastic bags, straws, cutlery, cups, takeaway containers and most plastic packaging. Shops and cafes switch to paper, glass and refills.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": {
+                                    "id": 1
+                                },
+                                "speaker": "The Environmentalist",
+                                "text": "Every piece of plastic ever made is still out there somewhere."
+                            },
+                            {
+                                "id": 1,
+                                "next": null,
+                                "speaker": "The Consumerist",
+                                "text": "My coffee is getting soggy."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] Single-use plastics are roughly 35-40% of all plastic made, and plastics a large share of the chemical industry's output: -10% chemical industry demand, allowing for paper and glass replacing some of it. -1 extinction for less plastic in rivers and oceans. A mild nuisance, felt most in richer regions. Over 100 countries already ban some single-use plastics."
+        },
+        {
             "id": "e7c3a9f2-5b14-4d86-9a0e-1f6b8d4c2e73",
             "name": "Ban Superyachts and Private Jets",
             "kind": "Policy",

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use hes_engine::{Flag, Id, Project, ProjectType, Status};
+use hes_engine::{Flag, Id, Project, ProjectType};
 
 use crate::{
     consts,
@@ -117,9 +117,10 @@ impl Scannable for Project {
             false
         } else if self.next_upgrade().is_some() {
             true
-        } else if self.kind == ProjectType::Policy && self.status == Status::Active {
-            false
-        } else if self.status == Status::Finished {
+        } else if self.is_online() {
+            // Already in force (a policy, a finished project, or an ongoing
+            // one like Direct Air Capture) with no level left to add:
+            // points would do nothing.
             false
         } else {
             true
