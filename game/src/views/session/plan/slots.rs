@@ -205,6 +205,13 @@ pub fn processes_preview(
         tui.ui(|ui| {
                 let resp = inset_frame().show(ui, |ui| {
                     ui.style_mut().visuals.override_text_color = Some(Color32::BLACK);
+                    // Fix the panel's width to the four production slots.
+                    // Otherwise the centered rows inside it size themselves
+                    // to the space available, the panel grows to fit them,
+                    // and it keeps widening every frame.
+                    let slot_width = 105. * get_sizing(ui).scale;
+                    let panel_width = 4. * slot_width + 3. * ui.spacing().item_spacing.x;
+                    ui.set_width(panel_width);
                     ui.horizontal(|ui| {
                         for process in max_processes {
                             let produced = crate::display::output(
