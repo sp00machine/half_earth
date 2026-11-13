@@ -1504,12 +1504,8 @@ impl DisplayEffect {
                             resource = t!(resource.lower()),
                             icon = resource.icon(),
                             percent = display::signed_percent(demand_change, true),
-                            demandAfter = if after_demand < 1. {
-                                "<1".into()
-                            } else {
-                                after_demand.round().to_string()
-                            },
-                            demandBefore = current_demand.round(),
+                            demandAfter = display::rounded(after_demand),
+                            demandBefore = display::rounded(current_demand),
                         ),
                     )
                 };
@@ -1571,12 +1567,8 @@ impl DisplayEffect {
                             resource = t!(resource.lower()),
                             icon = resource.icon(),
                             percent = display::signed_percent(demand_change, true),
-                            demandAfter = if after_demand < 1. {
-                                "<1".into()
-                            } else {
-                                after_demand.round().to_string()
-                            },
-                            demandBefore = current_demand.round(),
+                            demandAfter = display::rounded(after_demand),
+                            demandBefore = display::rounded(current_demand),
                         ),
                     )
                 };
@@ -1904,8 +1896,8 @@ impl DisplayEffect {
                         (
                             t!("electricity"),
                             t!(
-                                "At today's output that's about %{gw}GW, %{percent}% of the world's electricity.",
-                                gw = gw,
+                                "At today's output that's about %{amount}PWh a year, %{percent}% of the world's electricity.",
+                                amount = gw,
                                 percent = display::percent(share, true)
                             ),
                         )
@@ -2133,7 +2125,7 @@ mod tests {
 
     #[test]
     fn test_electrified_flag_tip() {
-        // Formatting is in GW of average power (1.5e12 kWh/yr is ~171 GW).
+        // Formatting is in PWh per year (1.5e12 kWh/yr is 1.5 PWh/yr).
         let demand = OutputMap {
             fuel: 1.5e12,
             electricity: 2.5e12,
@@ -2152,10 +2144,10 @@ mod tests {
         let next_fuel_demand = vals[1];
         let prev_elec_demand = vals[2];
         let next_elec_demand = vals[3];
-        assert_eq!(prev_fuel_demand, 171.);
-        assert_eq!(next_fuel_demand, 34.);
-        assert_eq!(prev_elec_demand, 285.);
-        assert_eq!(next_elec_demand, 353.);
+        assert_eq!(prev_fuel_demand, 1.5);
+        assert_eq!(next_fuel_demand, 0.3);
+        assert_eq!(prev_elec_demand, 2.5);
+        assert_eq!(next_elec_demand, 3.1);
     }
 
     #[test]
@@ -2177,10 +2169,10 @@ mod tests {
         let next_anim_demand = vals[1];
         let prev_plant_demand = vals[2];
         let next_plant_demand = vals[3];
-        assert_eq!(prev_anim_demand, 2.);
-        assert_eq!(next_anim_demand, SMALL);
-        assert_eq!(prev_plant_demand, 3.);
-        assert_eq!(next_plant_demand, 4.);
+        assert_eq!(prev_anim_demand, 1.5);
+        assert_eq!(next_anim_demand, 0.15);
+        assert_eq!(prev_plant_demand, 2.5);
+        assert_eq!(next_plant_demand, 3.9);
     }
 
     #[test]
@@ -2203,9 +2195,9 @@ mod tests {
         let prev_plant_demand = vals[2];
         let next_plant_demand = vals[3];
         assert_eq!(prev_anim_demand, 3.);
-        assert_eq!(next_anim_demand, 1.);
+        assert_eq!(next_anim_demand, 0.75);
         assert_eq!(prev_plant_demand, 5.);
-        assert_eq!(next_plant_demand, 7.);
+        assert_eq!(next_plant_demand, 7.3);
     }
 
     #[test]
@@ -2225,7 +2217,7 @@ mod tests {
 
         let (text_vals, tip_vals) = get_values(WorldVariable::ExtinctionRate, 7.);
         assert_eq!(text_vals[0], 7.);
-        assert_eq!(tip_vals[0], 98.);
+        assert_eq!(tip_vals[0], 99.0);
 
         let (text_vals, tip_vals) = get_values(WorldVariable::Temperature, 1.5);
         assert_eq!(text_vals[0], 1.5);
@@ -2281,8 +2273,8 @@ mod tests {
         let state = State::default();
         let (text_vals, tip_vals) = effect_values(&state, Effect::Output(Output::Fuel, 0.2));
         assert_eq!(text_vals[0], 20.);
-        assert_eq!(tip_vals[0], 9068.);
-        assert_eq!(tip_vals[1], 10882.);
+        assert_eq!(tip_vals[0], 79.0);
+        assert_eq!(tip_vals[1], 95.0);
     }
 
     #[test]
@@ -2334,8 +2326,8 @@ mod tests {
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::Demand(Output::Electricity, 0.25));
         assert_eq!(text_vals[0], 25.);
-        assert_eq!(tip_vals[0], 2972.);
-        assert_eq!(tip_vals[1], 3715.);
+        assert_eq!(tip_vals[0], 26.0);
+        assert_eq!(tip_vals[1], 33.0);
     }
 
     #[test]
@@ -2343,9 +2335,9 @@ mod tests {
         let state = State::default();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::DemandAmount(Output::Electricity, 3e12));
-        assert_eq!(text_vals[0], 342.);
-        assert_eq!(tip_vals[0], 2972.);
-        assert_eq!(tip_vals[1], 3314.);
+        assert_eq!(text_vals[0], 3.0);
+        assert_eq!(tip_vals[0], 26.0);
+        assert_eq!(tip_vals[1], 29.0);
         assert_eq!(tip_vals[2], 12.);
     }
 
@@ -2412,8 +2404,8 @@ mod tests {
             Effect::ModifyIndustryResources(industry_id, Resource::Fuel, 0.2),
         );
         assert_eq!(text_vals[0], 20.);
-        assert_eq!(tip_vals[0], 447.);
-        assert_eq!(tip_vals[1], 536.);
+        assert_eq!(tip_vals[0], 3.9);
+        assert_eq!(tip_vals[1], 4.7);
         assert_eq!(tip_vals[2], 1.);
     }
 
@@ -2431,9 +2423,9 @@ mod tests {
             &state,
             Effect::ModifyIndustryResourcesAmount(industry_id, Resource::Fuel, 1000.),
         );
-        assert_eq!(text_vals[0], 4742.);
-        assert_eq!(tip_vals[0], 447.);
-        assert_eq!(tip_vals[1], 5189.);
+        assert_eq!(text_vals[0], 42.0);
+        assert_eq!(tip_vals[0], 3.9);
+        assert_eq!(tip_vals[1], 46.0);
         assert_eq!(tip_vals[2], 54.);
     }
 
@@ -2478,8 +2470,8 @@ mod tests {
             Effect::ModifyProcessByproducts(process_id, Byproduct::Co2, 0.6),
         );
         assert_eq!(text_vals[1], 60.);
-        assert_eq!(tip_vals[0], 3.);
-        assert_eq!(tip_vals[1], 5.);
+        assert_eq!(tip_vals[0], 3.4);
+        assert_eq!(tip_vals[1], 5.4);
         assert_eq!(tip_vals[2], 4.);
 
         let (text_vals, tip_vals) = effect_values(

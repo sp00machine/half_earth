@@ -127,9 +127,11 @@ impl World {
         self.extinction_rate = rate.max(0.);
     }
 
-    /// Contribution to extinction rate from the tgav
+    /// Contribution to extinction rate from the tgav: twice upstream's
+    /// T², so warming weighs more against habitat loss (about 2.4 at the
+    /// start, 8 at +2C, 18 at +3C).
     pub fn tgav_extinction_rate(&self) -> f32 {
-        self.temperature.max(0.).powf(2.)
+        2. * self.temperature.max(0.).powf(2.)
     }
 
     /// Contribution to extinction rate from sea level rise

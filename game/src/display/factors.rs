@@ -826,7 +826,7 @@ mod tests {
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Electricity, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "49");
+        assert_eq!(factors.display, "0.42");
 
         let source = state
             .world
@@ -839,7 +839,7 @@ mod tests {
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Fuel, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "136");
+        assert_eq!(factors.display, "1.2");
 
         let source = state
             .world
@@ -853,7 +853,7 @@ mod tests {
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Energy, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "185");
+        assert_eq!(factors.display, "1.6");
 
         let source = state
             .world
@@ -908,7 +908,7 @@ mod tests {
         assert!(source.resources.electricity > 0.);
         let factors = impact_factor(source, Impact::Electricity, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "278");
+        assert_eq!(factors.display, "2.4");
 
         let source = state
             .world
@@ -920,7 +920,7 @@ mod tests {
         assert!(source.resources.fuel > 0.);
         let factors = impact_factor(source, Impact::Fuel, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "1268");
+        assert_eq!(factors.display, "11.1");
 
         let source = state
             .world
@@ -933,7 +933,7 @@ mod tests {
         assert!(source.resources.electricity > 0.);
         let factors = impact_factor(source, Impact::Energy, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "1546");
+        assert_eq!(factors.display, "13.5");
 
         let source = state
             .world
@@ -965,15 +965,15 @@ mod tests {
         let state = State::default();
         let card = factors_card(None, Var::Fuel, &state);
         println!("{:?}: {}", Var::Fuel, card.total_formatted());
-        assert_eq!(card.total_formatted(), "9068GW");
+        assert_eq!(card.total_formatted(), "79.4PWh/yr");
 
         let card = factors_card(None, Var::Electricity, &state);
         println!("{:?}: {}", Var::Electricity, card.total_formatted());
-        assert_eq!(card.total_formatted(), "2972GW");
+        assert_eq!(card.total_formatted(), "26PWh/yr");
 
         let card = factors_card(None, Var::Energy, &state);
         println!("{:?}: {}", Var::Energy, card.total_formatted());
-        assert_eq!(card.total_formatted(), "12040GW");
+        assert_eq!(card.total_formatted(), "105.5PWh/yr");
 
         let card = factors_card(None, Var::Emissions, &state);
         println!("{:?}: {}", Var::Emissions, card.total_formatted());
@@ -997,7 +997,7 @@ mod tests {
 
         let card = factors_card(None, Var::Biodiversity, &state);
         println!("{:?}: {}", Var::Biodiversity, card.total_formatted());
-        assert_eq!(card.total_formatted(), "98");
+        assert_eq!(card.total_formatted(), "99");
 
         let card = factors_card(None, Var::Contentedness, &state);
         println!("{:?}: {}", Var::Contentedness, card.total_formatted());

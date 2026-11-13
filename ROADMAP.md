@@ -72,6 +72,9 @@ Done work lives in the git history; each change's reasoning is in the
 - **Watch the world after winning:** after a win, keep running years
   without planning sessions, just watching the world go by, ending with a
   closing dialogue scene.
+- **Medium ending:** for meeting the biodiversity and emissions goals but
+  not the temperature goal. The Earth will recover, but that will be for
+  the next generation to see.
 - **Ending screen with your stats:** the stats view, with its detail
   views and history charts, on the ending screen.
 

@@ -14,13 +14,13 @@ impl DisplayValue for Emissions {
 pub fn rounded(value: f32) -> String {
     if value == 0. {
         value.to_string()
+    } else if value.abs() >= 10. {
+        value.round().to_string()
+    } else if value.abs() >= 1. {
+        value.round_to(1).to_string()
     } else {
-        let value = value.round();
-        if (0. ..1.).contains(&value) {
-            "<1".into()
-        } else {
-            value.to_string()
-        }
+        let v = value.round_to(2);
+        if v == 0. { "<0.01".into() } else { v.to_string() }
     }
 }
 
@@ -50,24 +50,20 @@ pub fn to_calorie_units(amount: f32) -> f32 {
     amount * (1e-9 / 2e4)
 }
 
-/// From kWh per year to gigawatts of average power.
+/// From kWh per year to PWh per year.
 pub fn to_energy_units(amount: f32) -> f32 {
-    amount / (8760. * 1e6)
+    amount * 1e-12
 }
 
-/// Round an energy amount in GW for display: whole gigawatts, with a
-/// decimal for small amounts so they don't round to zero.
-pub fn round_energy(gw: f32) -> f32 {
-    if gw.abs() < 10. {
-        gw.round_to(1)
-    } else {
-        gw.round()
-    }
+/// Round an energy amount in PWh/yr for display: a decimal, with more
+/// precision for small amounts so they don't round to zero.
+pub fn round_energy(pwh: f32) -> f32 {
+    if pwh.abs() < 1. { pwh.round_to(2) } else { pwh.round_to(1) }
 }
 
-/// Format kWh per year as average power.
+/// Format kWh per year as PWh per year.
 pub fn format_power(kwh_per_year: f32) -> String {
-    format!("{}GW", round_energy(to_energy_units(kwh_per_year)))
+    format!("{}PWh/yr", round_energy(to_energy_units(kwh_per_year)))
 }
 
 pub fn output(amount: f32, output: Output) -> f32 {
