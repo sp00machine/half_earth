@@ -61,6 +61,18 @@ Done work lives in the git history; each change's reasoning is in the
   every system in place and tune costs, effects and contentedness
   together. Consider making policies cheaper in the first planning session,
   so the opening turn isn't starved of political capital.
+  - **Extinction:** give warming its realistic weight (IPBES ranks climate
+    change at ~14% of today's extinction drivers, rising to the main one
+    this century; currently it's 2·T², about 2.4 of 99 at the start).
+    Starting extinction should be 80-100, and the curve smoother overall.
+    Getting extinction to zero late in the game should be hard, and
+    impossible with some builds. Extreme measures in the first two
+    planning sessions should be able to head off some of the
+    extinction events that fire early in every playthrough so far.
+  - **Contentedness:** a Vegetarian Mandate plus every early-game source
+    of contentedness should still bring protests, but not riots or
+    revolts. (A recent playthrough doing exactly that had no unrest at
+    all; it should have had protests and maybe a riot or two.)
 
 ## Tooling
 
