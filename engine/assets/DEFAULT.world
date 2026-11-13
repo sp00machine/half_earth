@@ -40740,7 +40740,7 @@
                 {
                     "ProjectCostModifier": [
                         "7a11d379-19aa-4eb7-932d-0dd9bca568d4",
-                        -0.3
+                        -0.25
                     ]
                 },
                 {
@@ -40756,30 +40756,6 @@
                     "NPCRelationship": [
                         "5cd771c9-2622-4bd9-8478-c2cbf2294080",
                         1.0
-                    ]
-                },
-                {
-                    "ProjectCostModifier": [
-                        "f759d87d-69ff-433b-8e3d-f3dbb776543a",
-                        0.05
-                    ]
-                },
-                {
-                    "ProjectCostModifier": [
-                        "af9b191a-1b91-483f-bf84-8eff6ce87b80",
-                        0.05
-                    ]
-                },
-                {
-                    "ProjectCostModifier": [
-                        "b32e09ea-7971-4ee3-96d2-9cadaf81678e",
-                        0.05
-                    ]
-                },
-                {
-                    "ProjectCostModifier": [
-                        "7a11d379-19aa-4eb7-932d-0dd9bca568d4",
-                        0.05
                     ]
                 }
             ],
@@ -40841,7 +40817,7 @@
                     }
                 ]
             },
-            "notes": "picture from https://apta.biz/2020/02/12/uk-born-cheetah-brothers-arrive-safely-on-african-soil/\n\nstory from: https://www.theguardian.com/world/2020/feb/02/zoos-time-shut-down-conservation-education-wild-animals\n\nI'm guess that zoos play a role in exotic animal trade: https://www.nationalgeographic.com/animals/article/an-obscure-lizard-reveals-zoos-may-indirectly-play-role-in-animal-trafficking"
+            "notes": "[three-quarters fork] Dropped the +5% cost to Expand Nature Preserves, Restore Desert Habitats and Marine Protected Areas (four tiny lines that crowded the card off phone screens) and folded the +5% on Remediate and Protect Ecosystems into its -30%, now -25%.\n\npicture from https://apta.biz/2020/02/12/uk-born-cheetah-brothers-arrive-safely-on-african-soil/\n\nstory from: https://www.theguardian.com/world/2020/feb/02/zoos-time-shut-down-conservation-education-wild-animals\n\nI'm guess that zoos play a role in exotic animal trade: https://www.nationalgeographic.com/animals/article/an-obscure-lizard-reveals-zoos-may-indirectly-play-role-in-animal-trafficking"
         },
         {
             "id": "27ab61ba-c183-493c-8414-f1dae1f49f9d",
@@ -41164,15 +41140,60 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"OutputForProcess": ["f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc", -0.2]},
-                {"OutputForProcess": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", -0.1]},
-                {"OutputForProcess": ["ebb5832e-e3ea-4422-9f9b-115aaa994d85", -0.2]},
-                {"OutputForProcess": ["b5cb5cd5-f339-4918-b8a6-0488b89e5679", -0.2]},
-                {"OutputForProcess": ["c0045e2a-e1d7-4cb7-9d36-870525b46c54", -0.05]},
-                {"BiodiversityPressureForFeature": ["UsesPesticides", -0.5]},
-                {"ModifyEventProbability": ["6880f9ee-5dc0-49ec-8563-1ea9c6289b97", -1.0]},
-                {"ModifyEventProbability": ["56343ea3-1762-4b32-819a-dbf481721c5e", -1.0]},
-                {"WorldVariable": ["Outlook", -3.0]}
+                {
+                    "OutputForProcess": [
+                        "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
+                        -0.2
+                    ]
+                },
+                {
+                    "OutputForProcess": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        -0.1
+                    ]
+                },
+                {
+                    "OutputForProcess": [
+                        "ebb5832e-e3ea-4422-9f9b-115aaa994d85",
+                        -0.2
+                    ]
+                },
+                {
+                    "OutputForProcess": [
+                        "b5cb5cd5-f339-4918-b8a6-0488b89e5679",
+                        -0.2
+                    ]
+                },
+                {
+                    "OutputForProcess": [
+                        "c0045e2a-e1d7-4cb7-9d36-870525b46c54",
+                        -0.1
+                    ]
+                },
+                {
+                    "BiodiversityPressureForFeature": [
+                        "UsesPesticides",
+                        -0.5
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "6880f9ee-5dc0-49ec-8563-1ea9c6289b97",
+                        -1.0
+                    ]
+                },
+                {
+                    "ModifyEventProbability": [
+                        "56343ea3-1762-4b32-819a-dbf481721c5e",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -3.0
+                    ]
+                }
             ],
             "outcomes": [
                 {
@@ -41232,7 +41253,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] New policy. The drastic early option for improving smallholder (and all pesticide-using) agriculture: halves biodiversity pressure from pesticide-using processes and stops pollinator decline events, at the cost of a 20% yield loss for crops (10% for smallholders, who rely on pesticides less; 5% for livestock, whose feed crops are affected but whose pasture is not) and contentedness. Opposed by the Fanonist and the Consumerist."
+            "notes": "[three-quarters fork] Industrial livestock output -5% -> -10%: most of its land is feed crops, which the ban cuts by 20%. (Also merges with the smallholder line, so the card fits on a phone.)\n\n[three-quarters fork] New policy. The drastic early option for improving smallholder (and all pesticide-using) agriculture: halves biodiversity pressure from pesticide-using processes and stops pollinator decline events, at the cost of a 20% yield loss for crops (10% for smallholders, who rely on pesticides less; 5% for livestock, whose feed crops are affected but whose pasture is not) and contentedness. Opposed by the Fanonist and the Consumerist."
         },
         {
             "id": "3f9a2c6e-1b7d-4e58-9c0a-6d2e8f41b7a5",

@@ -84,17 +84,114 @@ pub fn visible_effect(d: &DisplayEffect) -> bool {
     )
 }
 
+/// The lines a set of effects shows as, with effects that say the same
+/// thing about several processes or regions merged into one line (e.g.
+/// "Reduces output for A, B and C by 20%"), so cards stay short.
+pub fn effect_lines(state: &State, effects: &[DisplayEffect]) -> Vec<EffectTip> {
+    let visible: Vec<&DisplayEffect> = effects.iter().filter(|e| !e.is_hidden).collect();
+    let mut lines = vec![];
+    let mut used = vec![false; visible.len()];
+
+    for i in 0..visible.len() {
+        if used[i] || visible[i].is_unknown {
+            continue;
+        }
+        match &visible[i].effect {
+            Effect::OutputForProcess(_, amount) => {
+                let group: Vec<usize> = (i..visible.len())
+                    .filter(|&j| !used[j] && !visible[j].is_unknown)
+                    .filter(|&j| matches!(visible[j].effect, Effect::OutputForProcess(_, a) if a == *amount))
+                    .collect();
+                if group.len() > 1 {
+                    let processes: Vec<Process> = group
+                        .iter()
+                        .map(|&j| match visible[j].effect {
+                            Effect::OutputForProcess(id, _) => state.world.processes[&id].clone(),
+                            _ => unreachable!(),
+                        })
+                        .collect();
+                    let names: Vec<String> = processes
+                        .iter()
+                        .map(|p| icon_card_tag(&t!(&p.name), p.output.icon()))
+                        .collect();
+                    lines.push(EffectTip {
+                        tip: tip(
+                            processes[0].output.icon(),
+                            t!(
+                                "Changes the output for these processes by %{percent}% with no change in impacts.",
+                                percent = display::signed_percent(*amount, true),
+                            ),
+                        )
+                        .card(processes.clone()),
+                        text: icon_text(
+                            "output",
+                            &t!(
+                                "%{changeDir} output for %{names} by [b]%{percent}%.[/b]",
+                                changeDir = visible[i].change_dir(*amount),
+                                names = names.join(", "),
+                                percent = display::percent(amount.abs(), true),
+                            ),
+                        ),
+                    });
+                    group.iter().for_each(|&j| used[j] = true);
+                }
+            }
+            Effect::RegionHabitability(_, amount) => {
+                let group: Vec<usize> = (i..visible.len())
+                    .filter(|&j| !used[j] && !visible[j].is_unknown)
+                    .filter(|&j| matches!(visible[j].effect, Effect::RegionHabitability(_, a) if a == *amount))
+                    .collect();
+                if group.len() > 1 {
+                    let kinds: Vec<String> = group
+                        .iter()
+                        .map(|&j| match &visible[j].effect {
+                            Effect::RegionHabitability(lat, _) => t!(lat.lower()).to_string(),
+                            _ => unreachable!(),
+                        })
+                        .collect();
+                    lines.push(EffectTip {
+                        tip: tip(
+                            icons::HABITABILITY,
+                            t!("Lower habitability means unhappier people who may need to migrate to more hospitable locales."),
+                        ),
+                        text: icon_text(
+                            "habitability",
+                            &t!(
+                                "%{changeDir} habitability in %{kinds} regions by %{amount}.",
+                                changeDir = visible[i].change_dir(*amount),
+                                kinds = kinds.join(", "),
+                                amount = visible[i].fmt_param(*amount),
+                            ),
+                        ),
+                    });
+                    group.iter().for_each(|&j| used[j] = true);
+                }
+            }
+            _ => {}
+        }
+    }
+    for (i, effect) in visible.iter().enumerate() {
+        if !used[i] {
+            if let Ok(tip) = effect.tip(state) {
+                lines.push(tip);
+            }
+        }
+    }
+    lines
+}
+
 pub fn render_effects(ui: &mut egui::Ui, state: &State, effects: &[DisplayEffect]) {
-    let mut effects = effects
-        .iter()
-        .filter(|effect| !effect.is_hidden)
-        .filter_map(|effect| effect.tip(state).ok())
-        .collect::<Vec<_>>();
+    let all_effects = effects;
+    let mut effects = effect_lines(state, effects);
     effects.sort_by_key(|effect| effect.text.clone());
+    let summary = land_summary(state, all_effects);
     ui.vertical(|ui| {
         for effect in effects {
             let resp = ui.add(bbcode(&effect.text));
             add_tip(effect.tip, resp);
+        }
+        if let Some(summary) = summary {
+            ui.add(bbcode(&format!("[i]{}[/i] {summary}", icons::LAND)));
         }
     });
 }
@@ -171,7 +268,7 @@ fn icon_text(icon: &'static str, text: &str) -> String {
 /// What changing these processes' output would do to land: more land
 /// needed (and the clearing emissions), or output lost where a process is
 /// frozen. Empty if it barely changes land.
-fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
+fn land_effect_note(state: &State, changes: &[(&Process, f32)], frozen_ids: &[Id]) -> String {
     let mut extra_land = 0.;
     let mut frozen_loss = false;
     for (process, change) in changes {
@@ -181,12 +278,8 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
             continue;
         }
         let m = process.output_modifier;
-        // Frozen now, or frozen by the same policy.
-        let frozen = process.frozen_limit.is_some()
-            || state.world.projects.iter().any(|p| {
-                p.effects.contains(&Effect::FreezeProcess(process.id))
-                    && p.effects.contains(&Effect::OutputForProcess(process.id, *change))
-            });
+        // Frozen now, or frozen by the same card.
+        let frozen = process.frozen_limit.is_some() || frozen_ids.contains(&process.id);
         if frozen && *change < 0. {
             frozen_loss = true;
             continue;
@@ -200,7 +293,7 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
     if frozen_loss {
         note.push_str(&format!(
             " {}",
-            t!("It can't expand, so its output falls instead of spreading onto more land.")
+            t!("Can't expand, so output falls.")
         ));
     }
     if extra_land > 1e10 {
@@ -210,7 +303,7 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
         note.push_str(&format!(
             " {}",
             t!(
-                "Needs about %{area} million km² more farmland: clearing it releases about %{amount}Gt of CO₂ over the next %{years} years.",
+                "+%{area}M km² farmland: ~%{amount}Gt CO₂ over %{years} yrs.",
                 area = format!("{:.1}", extra_land * 1e-12),
                 amount = format!("{:.0}", co2 * 1e-15),
                 years = format!("{:.0}", (extra_land / 3e11).ceil().max(1.)),
@@ -220,12 +313,41 @@ fn land_effect_note(state: &State, changes: &[(&Process, f32)]) -> String {
         note.push_str(&format!(
             " {}",
             t!(
-                "Frees about %{area} million km² of farmland to grow back.",
+                "Frees %{area}M km² of farmland.",
                 area = format!("{:.1}", -extra_land * 1e-12),
             )
         ));
     }
     note
+}
+
+/// One line on what a card's output changes, taken together, do to land.
+pub fn land_summary(state: &State, effects: &[DisplayEffect]) -> Option<String> {
+    let frozen_ids: Vec<Id> = effects
+        .iter()
+        .filter_map(|e| match e.effect {
+            Effect::FreezeProcess(id) => Some(id),
+            _ => None,
+        })
+        .collect();
+    let mut changes: Vec<(&Process, f32)> = vec![];
+    for e in effects.iter().filter(|e| !e.is_unknown) {
+        match &e.effect {
+            Effect::OutputForProcess(id, amount) => changes.push((&state.world.processes[id], *amount)),
+            Effect::OutputForFeature(feat, amount) => changes.extend(
+                state
+                    .world
+                    .processes
+                    .iter()
+                    .filter(|p| !p.locked && p.features.contains(feat))
+                    .map(|p| (p, *amount)),
+            ),
+            _ => {}
+        }
+    }
+    let note = land_effect_note(state, &changes, &frozen_ids);
+    let note = note.trim();
+    (!note.is_empty()).then(|| note.to_string())
 }
 
 pub fn flag_tip(flag: Flag, demand: &OutputMap) -> Tip {
@@ -459,19 +581,25 @@ impl DisplayEffect {
                 WorldVariable::Outlook => (
                     tip(
                         icons::CONTENTEDNESS,
-                        t!(
-                            r#"Current world contentedness is %{contentedness}[t]/%{maxContentedness}[/t]."#,
-                            contentedness = state.outlook().round(),
-                            maxContentedness = consts::MAX_CONTENTEDNESS,
+                        format!(
+                            "{} {}",
+                            t!(
+                                r#"Current world contentedness is %{contentedness}[t]/%{maxContentedness}[/t]."#,
+                                contentedness = state.outlook().round(),
+                                maxContentedness = consts::MAX_CONTENTEDNESS,
+                            ),
+                            t!(
+                                "A quarter of this (%{regional}) is felt in every region too.",
+                                regional = self.fmt_param(amount * 0.25),
+                            ),
                         ),
                     ),
                     icon_text(
                         "contentedness",
                         &t!(
-                            "%{changeDir} world contentedness by %{amount} (%{regional} of it in every region).",
+                            "%{changeDir} world contentedness by %{amount}.",
                             changeDir = self.change_dir(*amount),
                             amount = self.fmt_param(*amount),
-                            regional = self.fmt_param(amount * 0.25),
                         ),
                     ),
                 ),
@@ -883,7 +1011,7 @@ impl DisplayEffect {
                         tag = icon_card_tag(&t!(&process.name), process.output.icon()),
                         changeDir = self.change_dir(*amount),
                         icon = process.output.icon(),
-                    ).to_string() + &if self.is_unknown { String::new() } else { land_effect_note(state, &[(process, *amount)]) })))
+                    ).to_string())))
             }
             Effect::OutputForFeature(feat, amount) => {
                 let processes: Vec<_> = state
@@ -906,12 +1034,7 @@ impl DisplayEffect {
                         icon = feat.icon(),
                         feature = t!(feat.lower()),
                         changeDir = self.change_dir(*amount),
-                    ).to_string() + &if self.is_unknown {
-                        String::new()
-                    } else {
-                        let changes: Vec<_> = processes.iter().map(|p| (p, *amount)).collect();
-                        land_effect_note(state, &changes)
-                    })))
+                    ).to_string()))) 
             }
             Effect::CO2ForFeature(feat, amount) => {
                 let processes: Vec<_> = state
@@ -1589,12 +1712,16 @@ impl DisplayEffect {
                 } else {
                     format!("{}%", display::percent(amount.abs(), true))
                 };
-                let text = t!(
-                    r#"%{changeDir} the chance of "%{event}" by %{amount}."#,
-                    event = t!(&event.name),
-                    amount = amount_label,
-                    changeDir = self.change_dir(*amount),
-                );
+                let text = if !self.is_unknown && *amount <= -0.999 {
+                    t!(r#"Prevents "%{event}"."#, event = t!(&event.name))
+                } else {
+                    t!(
+                        r#"%{changeDir} the chance of "%{event}" by %{amount}."#,
+                        event = t!(&event.name),
+                        amount = amount_label,
+                        changeDir = self.change_dir(*amount),
+                    )
+                };
                 (
                     tip(icons::CHANCE, t!(text.to_string())).card(DisplayEvent::new(
                         ResolvedEvent {
@@ -1794,7 +1921,7 @@ mod tests {
 
     #[test]
     fn test_electrified_flag_tip() {
-        // Formatting is in PWh, i.e. 1e12 kWh.
+        // Formatting is in GW of average power (1.5e12 kWh/yr is ~171 GW).
         let demand = OutputMap {
             fuel: 1.5e12,
             electricity: 2.5e12,
@@ -1813,10 +1940,10 @@ mod tests {
         let next_fuel_demand = vals[1];
         let prev_elec_demand = vals[2];
         let next_elec_demand = vals[3];
-        assert_eq!(prev_fuel_demand, 2.);
-        assert_eq!(next_fuel_demand, SMALL);
-        assert_eq!(prev_elec_demand, 3.);
-        assert_eq!(next_elec_demand, 4.);
+        assert_eq!(prev_fuel_demand, 171.);
+        assert_eq!(next_fuel_demand, 34.);
+        assert_eq!(prev_elec_demand, 285.);
+        assert_eq!(next_elec_demand, 353.);
     }
 
     #[test]
@@ -1886,7 +2013,7 @@ mod tests {
 
         let (text_vals, tip_vals) = get_values(WorldVariable::ExtinctionRate, 7.);
         assert_eq!(text_vals[0], 7.);
-        assert_eq!(tip_vals[0], 90.);
+        assert_eq!(tip_vals[0], 98.);
 
         let (text_vals, tip_vals) = get_values(WorldVariable::Temperature, 1.5);
         assert_eq!(text_vals[0], 1.5);
@@ -1942,8 +2069,8 @@ mod tests {
         let state = State::default();
         let (text_vals, tip_vals) = effect_values(&state, Effect::Output(Output::Fuel, 0.2));
         assert_eq!(text_vals[0], 20.);
-        assert_eq!(tip_vals[0], 89.);
-        assert_eq!(tip_vals[1], 106.);
+        assert_eq!(tip_vals[0], 9068.);
+        assert_eq!(tip_vals[1], 10882.);
     }
 
     #[test]
@@ -1995,8 +2122,8 @@ mod tests {
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::Demand(Output::Electricity, 0.25));
         assert_eq!(text_vals[0], 25.);
-        assert_eq!(tip_vals[0], 26.);
-        assert_eq!(tip_vals[1], 33.);
+        assert_eq!(tip_vals[0], 2972.);
+        assert_eq!(tip_vals[1], 3715.);
     }
 
     #[test]
@@ -2004,9 +2131,9 @@ mod tests {
         let state = State::default();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::DemandAmount(Output::Electricity, 3e12));
-        assert_eq!(text_vals[0], 3.);
-        assert_eq!(tip_vals[0], 26.);
-        assert_eq!(tip_vals[1], 29.);
+        assert_eq!(text_vals[0], 342.);
+        assert_eq!(tip_vals[0], 2972.);
+        assert_eq!(tip_vals[1], 3314.);
         assert_eq!(tip_vals[2], 12.);
     }
 
@@ -2014,22 +2141,19 @@ mod tests {
     fn test_project_cost_modifier() {
         let state = State::default();
 
-        let project = state.world.projects.by_idx(7);
-        assert_eq!(project.kind, ProjectType::Initiative);
+        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Initiative).unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 0.5));
         assert_eq!(text_vals[0], 50.);
         assert_eq!(tip_vals[0], 50.);
 
-        let project = state.world.projects.by_idx(8);
-        assert_eq!(project.kind, ProjectType::Research);
+        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Research).unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 0.25));
         assert_eq!(text_vals[0], 25.);
         assert_eq!(tip_vals[0], 25.);
 
-        let project = state.world.projects.by_idx(1);
-        assert_eq!(project.kind, ProjectType::Policy);
+        let project = state.world.projects.iter().find(|p| p.kind == ProjectType::Policy).unwrap();
         let (text_vals, tip_vals) =
             effect_values(&state, Effect::ProjectCostModifier(project.id, 2.));
         assert_eq!(text_vals[0], 200.);
@@ -2049,39 +2173,39 @@ mod tests {
     #[test]
     fn test_modify_industry_resources() {
         let state = State::default();
-        let industry_id = state.world.industries.by_idx(2).id;
+        let industry_id = state.world.industries.iter().find(|i| i.name == "Shipping").unwrap().id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyIndustryResources(industry_id, Resource::Fuel, 0.2),
         );
         assert_eq!(text_vals[0], 20.);
-        assert_eq!(tip_vals[0], 4.);
-        assert_eq!(tip_vals[1], 5.);
-        assert_eq!(tip_vals[2], SMALL);
+        assert_eq!(tip_vals[0], 447.);
+        assert_eq!(tip_vals[1], 536.);
+        assert_eq!(tip_vals[2], 1.);
     }
 
     #[test]
     fn test_modify_industry_resources_amount() {
         let state = State::default();
-        let industry_id = state.world.industries.by_idx(2).id;
+        let industry_id = state.world.industries.iter().find(|i| i.name == "Shipping").unwrap().id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyIndustryResourcesAmount(industry_id, Resource::Fuel, 1000.),
         );
-        assert_eq!(text_vals[0], 42.);
-        assert_eq!(tip_vals[0], 4.);
-        assert_eq!(tip_vals[1], 46.);
-        assert_eq!(tip_vals[2], 48.);
+        assert_eq!(text_vals[0], 4742.);
+        assert_eq!(tip_vals[0], 447.);
+        assert_eq!(tip_vals[1], 5189.);
+        assert_eq!(tip_vals[2], 54.);
     }
 
     #[test]
     fn test_modify_industry_byproducts() {
         let mut state = State::default();
 
-        // Should be the concrete industry, which has
-        // direct CO2 emissions. But even then we need to
-        // increase direct emissions to have a more noticeable effect.
-        let industry = state.world.industries.by_idx_mut(7);
+        // The concrete industry, which has direct CO2 emissions. But even
+        // then we need to increase direct emissions to have a more
+        // noticeable effect.
+        let industry = state.world.industries.iter_mut().find(|i| i.name == "Concrete").unwrap();
         let industry_id = industry.id;
         industry.byproducts.co2 *= 10000.;
 
@@ -2090,22 +2214,22 @@ mod tests {
             Effect::ModifyIndustryByproducts(industry_id, Byproduct::Co2, 0.6),
         );
         assert_eq!(text_vals[1], 60.);
-        assert_eq!(tip_vals[0], 16.);
-        assert_eq!(tip_vals[1], 26.);
-        assert_eq!(tip_vals[2], 19.);
+        assert_eq!(tip_vals[0], 16497.);
+        assert_eq!(tip_vals[1], 26396.);
+        assert_eq!(tip_vals[2], 17843.);
     }
 
     #[test]
     fn test_modify_process_byproducts() {
         let state = State::default();
-        let process_id = state.world.processes.by_idx(15).id;
+        let process_id = state.world.processes.iter().find(|p| p.name == "Coal").unwrap().id;
         let (text_vals, tip_vals) = effect_values(
             &state,
             Effect::ModifyProcessByproducts(process_id, Byproduct::Co2, 0.6),
         );
         assert_eq!(text_vals[1], 60.);
-        assert_eq!(tip_vals[0], 4.);
-        assert_eq!(tip_vals[1], 6.);
+        assert_eq!(tip_vals[0], 3.);
+        assert_eq!(tip_vals[1], 5.);
         assert_eq!(tip_vals[2], 4.);
 
         let (text_vals, tip_vals) = effect_values(
@@ -2159,8 +2283,8 @@ mod tests {
     fn test_feedstock() {
         let state = State::default();
         let (text_vals, tip_vals) = effect_values(&state, Effect::Feedstock(Feedstock::Oil, 7e15));
-        assert_eq!(text_vals[0], 865.);
-        assert_eq!(tip_vals[0], 54.);
+        assert_eq!(text_vals[0], 863.);
+        assert_eq!(tip_vals[0], 60.);
     }
 
     #[test]
@@ -2169,5 +2293,123 @@ mod tests {
         let (text_vals, tip_vals) = effect_values(&state, Effect::TerminationShock);
         assert_eq!(text_vals[0], 0.5);
         assert_eq!(tip_vals[0], 0.5);
+    }
+}
+
+#[cfg(test)]
+mod card_length {
+    //! Cards and outcome screens have to fit on a phone: the effects text
+    //! for every project, outcome and upgrade level, in every language the
+    //! game ships with, stays under a cap.
+    use super::*;
+
+    /// Visible characters on a phone-width card before it gets unwieldy
+    /// (about ten lines). Outcome screens scroll past this, but cards
+    /// shrink their text to fit, which gets hard to read.
+    const MAX_VISIBLE_CHARS: usize = 450;
+
+    /// Visible text, without bbcode tags; an icon counts as one character.
+    fn visible(text: &str) -> String {
+        let mut out = String::new();
+        let mut chars = text.chars();
+        let mut in_icon = false;
+        while let Some(c) = chars.next() {
+            if c == '[' {
+                let tag: String = chars.by_ref().take_while(|c| *c != ']').collect();
+                if tag == "i" {
+                    in_icon = true;
+                    out.push('#');
+                }
+                if tag == "/i" {
+                    in_icon = false;
+                }
+                continue;
+            }
+            if !in_icon {
+                out.push(c);
+            }
+        }
+        out
+    }
+
+    /// Each set of effects shown together: a project's own effects plus
+    /// one of its outcomes, and each upgrade level.
+    fn effect_sets(state: &State) -> Vec<(String, Vec<Effect>)> {
+        let mut sets = vec![];
+        for p in state.world.projects.iter() {
+            let outcomes: Vec<Vec<Effect>> = if p.outcomes.is_empty() {
+                vec![vec![]]
+            } else {
+                p.outcomes.iter().map(|o| o.effects.clone()).collect()
+            };
+            for (i, o) in outcomes.iter().enumerate() {
+                let mut effects = p.effects.clone();
+                effects.extend(o.iter().cloned());
+                sets.push((format!("{} (outcome {})", p.name, i + 1), effects));
+            }
+            for (i, u) in p.upgrades.iter().enumerate() {
+                sets.push((format!("{} (level {})", p.name, i + 2), u.effects.clone()));
+            }
+        }
+        sets
+    }
+
+    fn text_length(state: &State, effects: &[Effect]) -> usize {
+        let effects: Vec<DisplayEffect> = effects.iter().map(DisplayEffect::from).collect();
+        let lines: usize = effect_lines(state, &effects)
+            .iter()
+            .map(|t| visible(&t.text).chars().count())
+            .sum();
+        let summary = land_summary(state, &effects).map_or(0, |s| s.chars().count() + 1);
+        lines + summary
+    }
+
+    #[test]
+    fn card_effects_fit_on_a_phone_in_every_language() {
+        // Switching languages is global, and tests run in parallel; do the
+        // check in a child process so it can't change other tests' text.
+        const CHILD: &str = "HES_CARD_LENGTH_CHILD";
+        if std::env::var(CHILD).is_err() {
+            let output = std::process::Command::new(std::env::current_exe().unwrap())
+                .args([
+                    "--exact",
+                    "display::effects::card_length::card_effects_fit_on_a_phone_in_every_language",
+                    "--nocapture",
+                    "--test-threads=1",
+                ])
+                .env(CHILD, "1")
+                .output()
+                .unwrap();
+            assert!(
+                output.status.success(),
+                "{}{}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr)
+            );
+            return;
+        }
+
+        let state = State::default();
+        let mut locales: Vec<String> = rust_i18n::available_locales!()
+            .into_iter()
+            .map(|l| l.to_string())
+            .collect();
+        locales.push("en".into());
+        let mut too_long = vec![];
+        for locale in &locales {
+            rust_i18n::set_locale(locale);
+            for (name, effects) in effect_sets(&state) {
+                let len = text_length(&state, &effects);
+                if len > MAX_VISIBLE_CHARS {
+                    too_long.push(format!("[{locale}] {name}: {len} characters"));
+                }
+            }
+        }
+        rust_i18n::set_locale("en");
+        assert!(
+            too_long.is_empty(),
+            "Card text over {MAX_VISIBLE_CHARS} characters:\n{}",
+            too_long.join("\n")
+        );
     }
 }

@@ -1,0 +1,28 @@
+name: Tests
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      # Native builds need ALSA (audio) and Boost (the native Hector climate model).
+      - name: Install system libraries
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libboost-dev
+
+      - name: Engine tests
+        run: cargo test -p hes-engine
+
+      # Includes the check that every card's text fits on a phone in every language.
+      - name: Game tests
+        run: cargo test -p hes-game --lib

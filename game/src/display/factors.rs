@@ -788,32 +788,32 @@ mod tests {
     #[test]
     fn test_process_impact_factors() {
         let state = State::default();
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.electricity > 0.);
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Electricity, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "0.4");
+        assert_eq!(factors.display, "49");
 
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Fuel, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "1.2");
+        assert_eq!(factors.display, "136");
 
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.resources.electricity > 0.);
         assert!(source.mix_share > 0);
         let factors = impact_factor(source, Impact::Energy, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "1.6");
+        assert_eq!(factors.display, "185");
 
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.land > 0.);
         assert!(source.mix_share > 0);
@@ -821,7 +821,7 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "35%");
 
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.water > 0.);
         assert!(source.mix_share > 0);
@@ -829,7 +829,7 @@ mod tests {
         println!("  {:?}", factors);
         assert_eq!(factors.display, "11%");
 
-        let source = state.world.processes.by_idx(17);
+        let source = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.byproducts.gtco2eq() > 0.);
         assert!(source.mix_share > 0);
@@ -841,41 +841,41 @@ mod tests {
     #[test]
     fn test_industry_impact_factors() {
         let state = State::default();
-        let source = state.world.industries.by_idx(3);
+        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.electricity > 0.);
         let factors = impact_factor(source, Impact::Electricity, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "2.4");
+        assert_eq!(factors.display, "278");
 
-        let source = state.world.industries.by_idx(3);
+        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         let factors = impact_factor(source, Impact::Fuel, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "11.1");
+        assert_eq!(factors.display, "1268");
 
-        let source = state.world.industries.by_idx(3);
+        let source = state.world.industries.iter().find(|i| i.name == "Iron and Steel").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.fuel > 0.);
         assert!(source.resources.electricity > 0.);
         let factors = impact_factor(source, Impact::Energy, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "13.5");
+        assert_eq!(factors.display, "1546");
 
-        let source = state.world.industries.by_idx(5);
+        let source = state.world.industries.iter().find(|i| i.name == "Other Industry").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.resources.water > 0.);
         let factors = impact_factor(source, Impact::Water, &state);
         println!("  {:?}", factors);
         assert_eq!(factors.display, "2%");
 
-        let source = state.world.industries.by_idx(4);
+        let source = state.world.industries.iter().find(|i| i.name == "Chemical").unwrap();
         println!("Name {:?}", source.name);
         assert!(source.byproducts.gtco2eq() > 0.);
         let factors = impact_factor(source, Impact::Emissions, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "<1Gt");
+        assert_eq!(factors.display, "1.2Gt");
     }
 
     #[test]
@@ -883,19 +883,19 @@ mod tests {
         let state = State::default();
         let card = factors_card(None, Var::Fuel, &state);
         println!("{:?}: {}", Var::Fuel, card.total_formatted());
-        assert_eq!(card.total_formatted(), "88");
+        assert_eq!(card.total_formatted(), "9068GW");
 
         let card = factors_card(None, Var::Electricity, &state);
         println!("{:?}: {}", Var::Electricity, card.total_formatted());
-        assert_eq!(card.total_formatted(), "26");
+        assert_eq!(card.total_formatted(), "2972GW");
 
         let card = factors_card(None, Var::Energy, &state);
         println!("{:?}: {}", Var::Energy, card.total_formatted());
-        assert_eq!(card.total_formatted(), "115");
+        assert_eq!(card.total_formatted(), "12040GW");
 
         let card = factors_card(None, Var::Emissions, &state);
         println!("{:?}: {}", Var::Emissions, card.total_formatted());
-        assert_eq!(card.total_formatted(), "51.6Gt");
+        assert_eq!(card.total_formatted(), "55.5Gt");
 
         let card = factors_card(None, Var::Land, &state);
         println!("{:?}: {}", Var::Land, card.total_formatted());
@@ -903,7 +903,7 @@ mod tests {
 
         let card = factors_card(None, Var::Water, &state);
         println!("{:?}: {}", Var::Water, card.total_formatted());
-        assert_eq!(card.total_formatted(), "47%");
+        assert_eq!(card.total_formatted(), "46%");
 
         let card = factors_card(None, Var::PlantCalories, &state);
         println!("{:?}: {}", Var::PlantCalories, card.total_formatted());
@@ -915,7 +915,7 @@ mod tests {
 
         let card = factors_card(None, Var::Biodiversity, &state);
         println!("{:?}: {}", Var::Biodiversity, card.total_formatted());
-        assert_eq!(card.total_formatted(), "90");
+        assert_eq!(card.total_formatted(), "98");
 
         let card = factors_card(None, Var::Contentedness, &state);
         println!("{:?}: {}", Var::Contentedness, card.total_formatted());

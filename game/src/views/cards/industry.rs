@@ -50,6 +50,14 @@ impl AsCard for Industry {
         let resources_demand = state.resource_demand.total();
         let available_resources = state.resources.available;
 
+        // Extra demand while planned new capacity is being built.
+        let planned = crate::views::scanner::process::planned_construction_per_year(
+            &state.core,
+            &state.ui.process_mix_changes,
+        );
+        let extra_units = state.core.materials_units(&planned, self);
+        let planned_resources = self.adj_resources() * (demand + extra_units);
+
         egui::Frame::NONE
             .outer_margin(egui::Margin {
                 left: 6,
@@ -89,10 +97,32 @@ impl AsCard for Industry {
                                 ),
                             );
 
+                            let planned_val = planned_resources[key];
+                            let growing = val > 0. && planned_val > val * 1.005;
+                            let tip = if growing {
+                                crate::tips::tip(key.icon(), t!(
+                                    "This industry's demand for %{output}: %{now} now, about %{planned} a year while your planned changes are being built (the steel, cement and equipment for new capacity).",
+                                    output = key.lower(),
+                                    now = display::format_resource(val, key, available_resources),
+                                    planned = display::format_resource(planned_val, key, available_resources),
+                                ))
+                            } else {
+                                tip
+                            };
+
                             tui.ui(|ui| {
                                 add_tip(tip, ui.vertical_centered(|ui| {
                                     ui.add(key.icon().size(18.));
                                     ui.label(formatted);
+                                    if growing {
+                                        ui.label(
+                                            egui::RichText::new(format!(
+                                                "→ {}",
+                                                display::format_resource(planned_val, key, available_resources)
+                                            ))
+                                            .color(Color32::from_rgb(0xFF, 0xD1, 0x7A)),
+                                        );
+                                    }
                                 }).response);
                             });
                         }

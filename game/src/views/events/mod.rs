@@ -263,15 +263,24 @@ pub fn render_event_card<E: AsEventView>(
             ui.add(center_text(t!(details.name)).size(18.));
         }
 
-        if let Some(effects) = details.effects {
-            ui.add_space(8.);
-            scale_text_styles(ui.style_mut(), 0.9);
-            render_effects(ui, state, effects);
-        }
+        // Effects can run long (a policy with many effects, each with a
+        // note); keep them in a scrolling box so the dialogue and its
+        // Continue button below always stay on screen.
+        let max_height = (ui.ctx().content_rect().height() * 0.3).max(120.);
+        egui::ScrollArea::vertical()
+            .id_salt("event-effects")
+            .max_height(max_height)
+            .show(ui, |ui| {
+                if let Some(effects) = details.effects {
+                    ui.add_space(8.);
+                    scale_text_styles(ui.style_mut(), 0.9);
+                    render_effects(ui, state, effects);
+                }
 
-        ui.add_space(8.);
-        event.render_below(ui, state);
-        ui.add_space(8.);
+                ui.add_space(8.);
+                event.render_below(ui, state);
+                ui.add_space(8.);
+            });
     })
     .response
 }

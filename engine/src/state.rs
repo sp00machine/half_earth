@@ -670,11 +670,25 @@ impl State {
         );
     }
 
+    /// Demand (in the industry's own units) these construction materials
+    /// put on an industry: steel on Iron and Steel, cement on Concrete,
+    /// other manufacturing energy on Other Industry.
+    pub fn materials_units(&self, build: &crate::materials::BuildOut, industry: &crate::Industry) -> f32 {
+        use crate::materials::{CEMENT_INDUSTRY, OTHER_INDUSTRY, STEEL_INDUSTRY};
+        let (steel_units, cement_units) = self.infrastructure.units_per_tonne.unwrap_or_default();
+        let r = industry.adj_resources();
+        match industry.name.as_str() {
+            STEEL_INDUSTRY => build.steel * steel_units,
+            CEMENT_INDUSTRY => build.cement * cement_units,
+            OTHER_INDUSTRY if r.fuel + r.electricity > 0. => build.other_energy / (r.fuel + r.electricity),
+            _ => 0.,
+        }
+    }
+
     /// Emissions (g CO2e) and energy (kWh) from making these construction
     /// materials, with today's industries and today's fuel and electricity
     /// mix.
     pub fn materials_impact(&self, build: &crate::materials::BuildOut) -> (f32, f32) {
-        use crate::materials::{CEMENT_INDUSTRY, OTHER_INDUSTRY, STEEL_INDUSTRY};
         let intensity = |output: Output| {
             let (mut emissions, mut amount) = (0., 0.);
             for p in self.world.processes.iter().filter(|p| p.output == output) {
@@ -685,19 +699,14 @@ impl State {
             if amount > 0. { emissions / amount } else { 0. }
         };
         let (fuel_ei, elec_ei) = (intensity(Output::Fuel), intensity(Output::Electricity));
-        let (steel_units, cement_units) = self.infrastructure.units_per_tonne.unwrap_or_default();
         let mut emissions = 0.;
         let mut energy = 0.;
         for industry in self.world.industries.iter() {
             let r = industry.adj_resources();
-            let units = match industry.name.as_str() {
-                STEEL_INDUSTRY => build.steel * steel_units,
-                CEMENT_INDUSTRY => build.cement * cement_units,
-                OTHER_INDUSTRY if r.fuel + r.electricity > 0. => {
-                    build.other_energy / (r.fuel + r.electricity)
-                }
-                _ => continue,
-            };
+            let units = self.materials_units(build, industry);
+            if units == 0. {
+                continue;
+            }
             emissions += units
                 * (industry.adj_byproducts().co2eq() + r.fuel * fuel_ei + r.electricity * elec_ei);
             energy += units * (r.fuel + r.electricity);

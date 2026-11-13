@@ -66,6 +66,31 @@ pub fn planned_electricity(
     (demand[Output::Electricity] + change).max(0.)
 }
 
+/// Materials a year for building the capacity that planned changes add,
+/// while it's being built.
+pub fn planned_construction_per_year(
+    state: &State,
+    process_mix_changes: &EnumMap<Output, BTreeMap<Id, isize>>,
+) -> hes_engine::materials::BuildOut {
+    let mut build = hes_engine::materials::BuildOut::default();
+    for p in state.world.processes.iter() {
+        let change = *process_mix_changes[p.output].get(&p.id).unwrap_or(&0);
+        if change <= 0 {
+            continue;
+        }
+        let output = change as f32 / 20. * state.output_demand.of(p.output);
+        if let Some((b, _)) = hes_engine::materials::BuildOut::for_output(p, output) {
+            build.combine_with(&b);
+        }
+    }
+    let mut per_year = hes_engine::materials::BuildOut::default();
+    let years = hes_engine::materials::CONSTRUCTION_YEARS as f32;
+    per_year.steel = build.steel / years;
+    per_year.cement = build.cement / years;
+    per_year.other_energy = build.other_energy / years;
+    per_year
+}
+
 /// Fuels (uranium, oil, gas, coal, lithium...) that would run out within
 /// three planning cycles at the planned mix: each with the years left and
 /// the planned processes that need it.

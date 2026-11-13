@@ -188,7 +188,8 @@ impl Processes {
                                 });
 
                         }).response;
-                        add_tip(tip, resp);
+                        add_tip(tip.clone(), resp);
+                        estimated_changes.render_construction_line(ui);
                     }
 
                     ui.horizontal(|ui| {
@@ -536,14 +537,21 @@ mod changes {
                     ui.add(desc);
                 }
             }
+        }
+
+        /// A short line on emissions while new capacity is built, on its own
+        /// row so the badges above stay centered on narrow screens.
+        pub fn render_construction_line(&self, ui: &mut egui::Ui) {
             if self.construction.emissions >= 0.05 {
-                ui.label(
-                    egui::RichText::new(t!(
-                        "+%{emissions}Gt/yr while building",
-                        emissions = format!("{:.1}", self.construction.emissions)
-                    ))
-                    .color(Color32::from_rgb(0xF2, 0xA9, 0x3B)),
-                );
+                ui.vertical_centered(|ui| {
+                    ui.label(
+                        egui::RichText::new(t!(
+                            "+%{emissions}Gt/yr while building",
+                            emissions = format!("{:.1}", self.construction.emissions)
+                        ))
+                        .color(Color32::from_rgb(0xF2, 0xA9, 0x3B)),
+                    );
+                });
             }
         }
     }
