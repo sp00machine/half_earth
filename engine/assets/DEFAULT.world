@@ -50322,7 +50322,7 @@
             "upgrades": [],
             "active_outcome": null,
             "supporters": [
-                "5cd771c9-2622-4bd9-8478-c2cbf2294080"
+                "ccca3d9d-2d69-4c98-aec4-29df691c0c4a"
             ],
             "opposers": [],
             "flavor": {
@@ -50355,7 +50355,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Supporter was the Animal Liberationist (an upstream data slip); now the Environmentalist, matching its relationship effect.\n\n"
         },
         {
             "id": "6d100f29-38a3-41cc-8962-d1dd65601a2e",
