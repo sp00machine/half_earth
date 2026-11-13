@@ -141,12 +141,25 @@ impl Dialogue {
                     for branch in responses {
                         tui.ui(|ui| {
                             let text = t!(&branch.text);
-                            if ui.add(button(text)).clicked() {
-                                let done = self.select_choice(&branch, state);
-                                if done {
-                                    result = Some(DialogueResult::Finished);
+                            let effects: Vec<crate::display::DisplayEffect> =
+                                branch.effects.iter().map(crate::display::DisplayEffect::from).collect();
+                            ui.vertical(|ui| {
+                                if ui.add(button(text)).clicked() {
+                                    let done = self.select_choice(&branch, state);
+                                    if done {
+                                        result = Some(DialogueResult::Finished);
+                                    }
                                 }
-                            }
+                                // What the choice does.
+                                if !effects.is_empty() {
+                                    ui.scope(|ui| {
+                                        ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Wrap);
+                                        ui.set_max_width(260.);
+                                        crate::text::scale_text_styles(ui.style_mut(), 0.8);
+                                        crate::display::render_effects(ui, state, &effects);
+                                    });
+                                }
+                            });
                             ui.add_space(1.);
                         });
                     }

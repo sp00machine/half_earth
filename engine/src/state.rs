@@ -1194,6 +1194,34 @@ impl State {
         outcome
     }
 
+    /// Pass a policy immediately, outside the planning session (e.g. from
+    /// an event choice), at no political capital cost.
+    pub fn enact_policy(&mut self, id: &Id) {
+        let proj = &self.world.projects[id];
+        if proj.status == Status::Active || proj.status == Status::Building {
+            return;
+        }
+        let outcome = self
+            .roll_project_outcome(proj)
+            .map(|(outcome, i)| (outcome.effects.clone(), i));
+        let proj = &mut self.world.projects[id];
+        proj.locked = false;
+        proj.status = Status::Active;
+        let mut effects = proj.effects.clone();
+        if let Some((outcome_effects, i)) = outcome {
+            effects.extend(outcome_effects);
+            proj.active_outcome = Some(i);
+        }
+        let mut changes = ProjectChanges::default();
+        changes.add_supporters(&proj.supporters.clone());
+        changes.add_opposers(&proj.opposers.clone());
+        self.apply_changes(changes);
+        for effect in effects {
+            effect.apply(self, None);
+        }
+        self.update_demand();
+    }
+
     fn roll_new_policy_outcomes(&mut self) -> Vec<Update> {
         let mut effects: Vec<Effect> = Vec::new();
         let ids: Vec<Id> = self.policy_queue.drain(..).collect();

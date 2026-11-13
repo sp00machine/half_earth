@@ -152,6 +152,10 @@ pub enum Effect {
     /// isn't tied to one (e.g. a policy quelling unrest everywhere). Lets
     /// that region's unrest events happen again later.
     RemoveRegionFlag(RegionFlag),
+    /// Pass a policy right away, free (e.g. accepting an offer in an event).
+    EnactPolicy(Id),
+    /// Repeal a policy right away (e.g. giving in to a backlash).
+    RepealPolicy(Id),
 
     AddFlag(Flag),
     NPCRelationship(Id, f32),
@@ -228,6 +232,8 @@ impl Effect {
             EffectKind::TerminationShock => Effect::TerminationShock,
             EffectKind::AddRegionFlag => Effect::AddRegionFlag(RegionFlag::Protests),
             EffectKind::RemoveRegionFlag => Effect::RemoveRegionFlag(RegionFlag::Riots),
+            EffectKind::EnactPolicy => Effect::EnactPolicy(default_project),
+            EffectKind::RepealPolicy => Effect::RepealPolicy(default_project),
             EffectKind::AddFlag => Effect::AddFlag(Flag::Vegan),
             EffectKind::NPCRelationship => Effect::NPCRelationship(default_npc, 0.),
             EffectKind::ModifyProcessByproducts => {
@@ -270,6 +276,8 @@ impl Effect {
         match self {
             Effect::LocksProject(id)
             | Effect::UnlocksProject(id)
+            | Effect::EnactPolicy(id)
+            | Effect::RepealPolicy(id)
             | Effect::ProjectRequest(id, ..)
             | Effect::ProjectCostModifier(id, ..) => Some(*id),
             _ => None,
@@ -536,6 +544,12 @@ impl Effect {
             Effect::AddRegionFlag(flag) => {
                 if let Some(id) = &region_id {
                     state.world.regions[id].flags.push(*flag);
+                }
+            }
+            Effect::EnactPolicy(id) => state.enact_policy(id),
+            Effect::RepealPolicy(id) => {
+                if state.world.projects[id].status == crate::Status::Active {
+                    state.stop_project(id);
                 }
             }
             Effect::RemoveRegionFlag(flag) => {
@@ -1453,5 +1467,26 @@ mod tests {
         let effects = state.world.projects.iter().find(|p| p.name == "Emergency Powers").unwrap().effects.clone();
         state.apply_effects(&effects, None);
         assert!(state.world.regions.iter().all(|r| r.flags == vec![RegionFlag::Protests]));
+    }
+
+    #[test]
+    fn test_event_choices_enact_and_repeal_policies() {
+        use crate::{Flag, RegionFlag};
+        let mut state = State::default();
+        let find = |s: &State, n: &str| s.world.projects.iter().find(|p| p.name == n).unwrap().id;
+        let ep = find(&state, "Emergency Powers");
+        let wf = find(&state, "Climate War Footing");
+        for region in state.world.regions.iter_mut() {
+            region.flags = vec![RegionFlag::Protests, RegionFlag::Riots];
+        }
+        Effect::EnactPolicy(ep).apply(&mut state, None);
+        assert_eq!(state.world.projects[&ep].status, Status::Active);
+        assert!(state.world.regions.iter().all(|r| !r.flags.contains(&RegionFlag::Riots)));
+
+        Effect::EnactPolicy(wf).apply(&mut state, None);
+        assert!(state.flags.contains(&Flag::WarFooting));
+        Effect::RepealPolicy(wf).apply(&mut state, None);
+        assert!(!state.flags.contains(&Flag::WarFooting));
+        assert_ne!(state.world.projects[&wf].status, Status::Active);
     }
 }

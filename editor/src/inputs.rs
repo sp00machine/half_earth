@@ -1880,6 +1880,17 @@ impl Editable
                     },
                 );
             }
+            Effect::EnactPolicy(id) | Effect::RepealPolicy(id) => {
+                ui.add(parts::help(
+                    "Passes (or repeals) a policy right away, e.g. from an event choice.",
+                ));
+                ui.add(
+                    edit((id, projects))
+                        .label("Policy")
+                        .help("Which policy.")
+                        .inline(),
+                );
+            }
             Effect::LocksProject(id) => {
                 ui.add(parts::help(
                     "Locks a project (it will no longer be available).",

@@ -35653,22 +35653,7 @@
                     ]
                 }
             ],
-            "effects": [
-                {
-                    "OutlookByIncome": [
-                        -1.5,
-                        -1.5,
-                        -1.5,
-                        -1.5
-                    ]
-                },
-                {
-                    "WorldVariable": [
-                        "Outlook",
-                        -1.0
-                    ]
-                }
-            ],
+            "effects": [],
             "prob_modifier": 1.0,
             "intensity": 0,
             "flavor": {
@@ -35694,9 +35679,47 @@
                         },
                         {
                             "id": 2,
+                            "next": [
+                                {
+                                    "id": 0,
+                                    "next_line": 3,
+                                    "text": "Stand down the mobilization.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "RepealPolicy": "3f9a2c6e-1b7d-4e58-9c0a-6d2e8f41b7a5"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "next_line": 4,
+                                    "text": "Hold the line.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "PlayerVariable": [
+                                                "PoliticalCapital",
+                                                -10.0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "speaker": "Gossy",
+                            "text": "Support for the mobilization is fading. What should we do?"
+                        },
+                        {
+                            "id": 3,
                             "next": null,
                             "speaker": "Gossy",
-                            "text": "Support for the mobilization is fading, especially in the wealthier regions."
+                            "text": "Climate War Footing is over. People are relieved, though the work is far from done."
+                        },
+                        {
+                            "id": 4,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Keeping everyone mobilized is costing us goodwill in parliament."
                         }
                     ]
                 },
@@ -35707,7 +35730,7 @@
                     "attribution": ""
                 }
             },
-            "notes": "[three-quarters fork] Felt everywhere: -1.5 contentedness in every region (was by income, so poorer regions felt nothing).\n\n[three-quarters fork] New event. Can happen when Climate War Footing is still active from 2035 on."
+            "notes": "[three-quarters fork] Now a choice instead of a permanent contentedness hit: repeal Climate War Footing, or keep it at a cost of 10 political capital. War Footing's own policy fatigue already models the growing discontent, and goes away when it's repealed.\n\n[three-quarters fork] Felt everywhere: -1.5 contentedness in every region (was by income, so poorer regions felt nothing).\n\n[three-quarters fork] New event. Can happen when Climate War Footing is still active from 2035 on."
         },
         {
             "name": "Victory Gardens",
@@ -35807,20 +35830,7 @@
                     ]
                 }
             ],
-            "effects": [
-                {
-                    "WorldVariable": [
-                        "Outlook",
-                        -1.0
-                    ]
-                },
-                {
-                    "NPCRelationship": [
-                        "b6694f1d-5597-4bb8-a484-254930838982",
-                        1.0
-                    ]
-                }
-            ],
+            "effects": [],
             "prob_modifier": 1.0,
             "intensity": 0,
             "flavor": {
@@ -35846,9 +35856,59 @@
                         },
                         {
                             "id": 2,
-                            "next": {
-                                "id": 3
-                            },
+                            "next": [
+                                {
+                                    "id": 0,
+                                    "next_line": 3,
+                                    "text": "End rationing.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "RepealPolicy": "8e4d1a7b-62c3-4f9e-a5b1-0c7f3d9e2a64"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "next_line": 4,
+                                    "text": "Let it be.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "WorldVariable": [
+                                                "Outlook",
+                                                -1.0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "next_line": 5,
+                                    "text": "Crack down on the smugglers.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "NPCRelationship": [
+                                                "b6694f1d-5597-4bb8-a484-254930838982",
+                                                1.0
+                                            ]
+                                        },
+                                        {
+                                            "WorldVariable": [
+                                                "Outlook",
+                                                -1.0
+                                            ]
+                                        },
+                                        {
+                                            "PlayerVariable": [
+                                                "PoliticalCapital",
+                                                5.0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
                             "speaker": "The Authoritarian",
                             "text": "A few examples made of the smugglers would end this quickly. I'm happy to help, Planner."
                         },
@@ -35856,7 +35916,27 @@
                             "id": 3,
                             "next": null,
                             "speaker": "Gossy",
-                            "text": "...let's keep that offer in mind, I suppose."
+                            "text": "Rationing is over. The black market dries up overnight."
+                        },
+                        {
+                            "id": 4,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The black market grows, and so does the feeling that the rules are only for some."
+                        },
+                        {
+                            "id": 5,
+                            "next": {
+                                "id": 6
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "Leave it to me."
+                        },
+                        {
+                            "id": 6,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The markets are gone, and so are a few people who ran them. Parliament seems pleased, at least."
                         }
                     ]
                 },
@@ -35867,7 +35947,7 @@
                     "attribution": "Kurt Kaiser (CC0 1.0)"
                 }
             },
-            "notes": "[three-quarters fork] New event. Can happen while Wartime Rationing is active; the Authoritarian offers to help."
+            "notes": "[three-quarters fork] Now a choice: end rationing, tolerate the black market (-1 contentedness), or crack down (-1 contentedness, +5 political capital, the Authoritarian approves).\n\n[three-quarters fork] New event. Can happen while Wartime Rationing is active; the Authoritarian offers to help."
         },
         {
             "name": "Swords into Turbines",
@@ -36010,9 +36090,26 @@
                         },
                         {
                             "id": 1,
-                            "next": {
-                                "id": 2
-                            },
+                            "next": [
+                                {
+                                    "id": 0,
+                                    "next_line": 2,
+                                    "text": "Do it. Restore order.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "EnactPolicy": "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "next_line": 3,
+                                    "text": "Not yet.",
+                                    "conditions": [],
+                                    "effects": []
+                                }
+                            ],
                             "speaker": "The Authoritarian",
                             "text": "Give me the authority and I'll have order restored within the month. Temporarily, of course."
                         },
@@ -36020,7 +36117,21 @@
                             "id": 2,
                             "next": null,
                             "speaker": "Gossy",
-                            "text": "Emergency Powers are now available. The Authoritarian seems very eager to help..."
+                            "text": "Emergency Powers are in force. The riots will end, one way or another."
+                        },
+                        {
+                            "id": 3,
+                            "next": {
+                                "id": 4
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "As you wish. My offer stands, should things get worse."
+                        },
+                        {
+                            "id": 4,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Emergency Powers are available if we need them."
                         }
                     ]
                 },
@@ -36031,7 +36142,7 @@
                     "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
                 }
             },
-            "notes": "[three-quarters fork] New event. When a region is rioting and its contentedness is at rock bottom, the Authoritarian offers Emergency Powers (unless they're a nemesis or the military has been disbanded)."
+            "notes": "[three-quarters fork] Now a choice: accept and Emergency Powers pass immediately (no political capital needed), or decline and they stay available as a card.\n\n[three-quarters fork] New event. When a region is rioting and its contentedness is at rock bottom, the Authoritarian offers Emergency Powers (unless they're a nemesis or the military has been disbanded)."
         },
         {
             "name": "Crackdown",
@@ -36138,20 +36249,7 @@
                     ]
                 }
             ],
-            "effects": [
-                {
-                    "PlayerVariable": [
-                        "PoliticalCapital",
-                        -10.0
-                    ]
-                },
-                {
-                    "NPCRelationship": [
-                        "b6694f1d-5597-4bb8-a484-254930838982",
-                        1.0
-                    ]
-                }
-            ],
+            "effects": [],
             "prob_modifier": 1.0,
             "intensity": 0,
             "flavor": {
@@ -36177,9 +36275,67 @@
                         },
                         {
                             "id": 2,
-                            "next": null,
+                            "next": [
+                                {
+                                    "id": 0,
+                                    "next_line": 3,
+                                    "text": "Lift the emergency.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "RepealPolicy": "0f3b7d2e-6a19-4c85-9e41-8b2d5f7c3a96"
+                                        },
+                                        {
+                                            "NPCRelationship": [
+                                                "b6694f1d-5597-4bb8-a484-254930838982",
+                                                -1.0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "next_line": 5,
+                                    "text": "Extend it.",
+                                    "conditions": [],
+                                    "effects": [
+                                        {
+                                            "PlayerVariable": [
+                                                "PoliticalCapital",
+                                                -10.0
+                                            ]
+                                        },
+                                        {
+                                            "NPCRelationship": [
+                                                "b6694f1d-5597-4bb8-a484-254930838982",
+                                                1.0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
                             "speaker": "Gossy",
                             "text": "Our own support is slipping. People are starting to ask who really runs things."
+                        },
+                        {
+                            "id": 3,
+                            "next": {
+                                "id": 4
+                            },
+                            "speaker": "The Authoritarian",
+                            "text": "You'll regret this, Planner."
+                        },
+                        {
+                            "id": 4,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The emergency is over. Let's hope it stays that way."
+                        },
+                        {
+                            "id": 5,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "The emergency continues. Each extension costs us more trust."
                         }
                     ]
                 },
@@ -36190,7 +36346,7 @@
                     "attribution": "\"Thailand Military Coup 2014\" by punloph (CC BY-NC 2.0)"
                 }
             },
-            "notes": "[three-quarters fork] New event, unlocked by Emergency Powers; can happen while it's active. Costs political capital as the Authoritarian's power grows."
+            "notes": "[three-quarters fork] Now a choice: lift Emergency Powers (the Authoritarian is displeased), or extend them for 10 political capital (the Authoritarian approves).\n\n[three-quarters fork] New event, unlocked by Emergency Powers; can happen while it's active. Costs political capital as the Authoritarian's power grows."
         },
         {
             "name": "Endangered Species Recover",

@@ -1869,6 +1869,30 @@ impl DisplayEffect {
                     icon_text("locks", &t!("[b]Locks[/b] %{tag}", tag = tag,)),
                 )
             }
+            Effect::EnactPolicy(id) | Effect::RepealPolicy(id) => {
+                let project = &state.world.projects[id];
+                let tag = icon_card_tag(&t!(&project.name), project.kind.icon());
+                let enact = matches!(self.effect, Effect::EnactPolicy(..));
+                (
+                    tip(
+                        icons::POLITICAL_CAPITAL,
+                        if enact {
+                            t!("%{name} is passed right away, at no political capital cost.", name = t!(&project.name))
+                        } else {
+                            t!("%{name} is repealed right away.", name = t!(&project.name))
+                        },
+                    )
+                    .card(project.clone()),
+                    icon_text(
+                        "political_capital",
+                        &if enact {
+                            t!("[b]Passes[/b] %{tag}", tag = tag)
+                        } else {
+                            t!("[b]Repeals[/b] %{tag}", tag = tag)
+                        },
+                    ),
+                )
+            }
             Effect::TerminationShock => {
                 if let Some(project) = state
                     .world
