@@ -853,6 +853,41 @@ impl DisplayEffect {
                         ),
                     ),
                 ),
+                WorldVariable::SoilHealth => (
+                    tip(
+                        icons::LAND,
+                        t!(
+                            "Healthy soils hold more water, nutrients and carbon, so farms need less land and fertilizer. Soil health is now %{health}%.",
+                            health = format!("{:.0}", state.land_carbon.soil_health * 100.)
+                        ),
+                    ),
+                    icon_text(
+                        "land",
+                        &t!(
+                            "%{changeDir} soil health by %{amount} points.",
+                            changeDir = self.change_dir(*amount),
+                            amount = self.fmt_param(amount.abs() * 100.)
+                        ),
+                    ),
+                ),
+                WorldVariable::SoilRegeneration => (
+                    tip(
+                        icons::LAND,
+                        t!(
+                            "Intensive farming (synthetic fertilizer, bare fields between crops, heavy tilling) slowly wears soils down. Regenerative practices undo part of that damage, so soils recover over the following decades. Soil health is now %{health}%, heading toward %{target}% with farming as it is.",
+                            health = format!("{:.0}", state.land_carbon.soil_health * 100.),
+                            target = format!("{:.0}", state.land_carbon.soil_health_target(state.intensive_farming_share()) * 100.)
+                        ),
+                    ),
+                    icon_text(
+                        "land",
+                        &t!(
+                            "%{changeDir} soil damage from intensive farming by %{amount}%.",
+                            changeDir = if *amount > 0. { t!("Reduces") } else { t!("Increases") },
+                            amount = self.fmt_param(amount.abs() * 100.)
+                        ),
+                    ),
+                ),
                 WorldVariable::BatteryRecycling => (
                     tip(
                         icons::ELECTRICITY,
@@ -907,6 +942,8 @@ impl DisplayEffect {
                 WorldVariable::Year
                 | WorldVariable::LandClearing
                 | WorldVariable::LandRegrowth
+                | WorldVariable::RegrowingLand
+                | WorldVariable::FreedLand
                 | WorldVariable::StorageShortfall => return Err(()),
             },
             Effect::PlayerVariable(var, amount) => match var {
@@ -1834,6 +1871,68 @@ impl DisplayEffect {
                     ),
                 )
             }
+            Effect::RestoreLand(amount) => {
+                let before = state.protected_land;
+                let after = state.protected_land + amount;
+                (
+                    tip(
+                        icons::LAND,
+                        t!(
+                            "Restoration protects land that is regrowing first, then farmland as it comes out of use, rather than land that is already wild. Protected regrowing land grows back faster and is never cleared again. The amount of land under protection will change from %{before}% to %{after}%.",
+                            before = display::percent(before, true),
+                            after = display::percent(after, true),
+                        ),
+                    ),
+                    icon_text(
+                        "land",
+                        &t!(
+                            "Restore and protect [b]%{percent}%[/b] of land, regrowing land first.",
+                            percent = display::percent(*amount, true),
+                        ),
+                    ),
+                )
+            }
+            Effect::ModifyProcessResourcesAmount(id, resource, amount) => {
+                let process = &state.world.processes[id];
+                let tag = card_tag(&t!(&process.name));
+                let produced = state.produced.by_process.get(id).copied().unwrap_or(0.);
+                let total = amount * produced;
+                let (label, detail) = match resource {
+                    Resource::Electricity | Resource::Fuel => {
+                        let gw = display::round_energy(display::to_energy_units(total));
+                        let share = total / state.output_demand.of(Output::Electricity).max(1.);
+                        (
+                            t!("electricity"),
+                            t!(
+                                "At today's output that's about %{gw}GW, %{percent}% of the world's electricity.",
+                                gw = gw,
+                                percent = display::percent(share, true)
+                            ),
+                        )
+                    }
+                    other => (t!(other.to_string()), String::new().into()),
+                };
+                (
+                    tip(
+                        icons::ELECTRICITY,
+                        t!(
+                            "This changes how much %{label} %{name} uses for each unit it makes. %{detail}",
+                            label = label,
+                            name = t!(&process.name),
+                            detail = detail,
+                        ),
+                    ),
+                    icon_text(
+                        "electricity",
+                        &t!(
+                            "%{changeDir} %{label} used by %{tag}.",
+                            changeDir = self.change_dir(*amount),
+                            label = label,
+                            tag = tag,
+                        ),
+                    ),
+                )
+            }
             Effect::Feedstock(feedstock, amount) => {
                 let estimate = match feedstock {
                     Feedstock::Other | Feedstock::Soil => None,
@@ -2361,7 +2460,7 @@ mod tests {
         assert_eq!(text_vals[1], 60.);
         assert_eq!(tip_vals[0], 16497.);
         assert_eq!(tip_vals[1], 26396.);
-        assert_eq!(tip_vals[2], 17843.);
+        assert_eq!(tip_vals[2], 17907.);
     }
 
     #[test]

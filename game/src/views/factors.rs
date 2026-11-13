@@ -27,30 +27,50 @@ pub struct FactorsCard {
     pub land: Option<LandSplit>,
 }
 
-/// A bar showing how land is used: farmed, regrowing, protected, wild.
+/// A bar showing how land is used, and how healthy farm soils are.
 fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
     let parts = [
         (
             land.farmed,
             Color32::from_rgb(0xd9, 0xa4, 0x41),
             t!("Farmed & built"),
+            t!("Land used by farms, pasture, energy and industry."),
         ),
         (
             land.regrowing,
-            Color32::from_rgb(0x9c, 0xd3, 0x6a),
+            Color32::from_rgb(0xc4, 0xd8, 0x7a),
             t!("Regrowing"),
+            t!(
+                "Former farmland growing back on its own. Some young regrowth is cleared again each year for grazing, firewood or new fields."
+            ),
+        ),
+        (
+            land.regrowing_protected,
+            Color32::from_rgb(0x8f, 0xcf, 0x6a),
+            t!("Regrowing, protected"),
+            t!(
+                "Former farmland being restored under protection: it grows back about a third faster and is never cleared again."
+            ),
         ),
         (
             land.protected,
-            Color32::from_rgb(0x4c, 0xc0, 0x7d),
-            t!("Protected"),
+            Color32::from_rgb(0x3f, 0xa8, 0x6b),
+            t!("Wild, protected"),
+            t!("Wild land in nature preserves and other protected areas."),
         ),
-        (land.wild, Color32::from_rgb(0x7f, 0xa8, 0x8e), t!("Wild")),
+        (
+            land.wild,
+            Color32::from_rgb(0x7f, 0xa8, 0x8e),
+            t!("Wild"),
+            t!(
+                "Wild land with no protection. Background deforestation eats into it, and new farmland is cleared from it."
+            ),
+        ),
     ];
     let (rect, _) =
         ui.allocate_exact_size(egui::vec2(ui.available_width(), 8.), egui::Sense::hover());
     let mut x = rect.left();
-    for (share, color, _) in &parts {
+    for (share, color, ..) in &parts {
         let w = rect.width() * share.max(0.);
         ui.painter().rect_filled(
             egui::Rect::from_min_size(egui::pos2(x, rect.top()), egui::vec2(w, rect.height())),
@@ -61,16 +81,53 @@ fn land_bar(ui: &mut egui::Ui, land: &LandSplit) {
     }
     ui.horizontal_wrapped(|ui| {
         ui.style_mut().spacing.item_spacing.x = 8.;
-        for (share, color, name) in parts {
+        for (share, color, name, detail) in parts {
             if share >= 0.005 {
                 ui.label(
                     egui::RichText::new(format!("{name} {:.0}%", share * 100.))
                         .color(color)
                         .small(),
-                );
+                )
+                .on_hover_text(detail);
             }
         }
     });
+
+    // Soil health, with where it's heading.
+    let health = land.soil_health;
+    let trend = land.soil_target - health;
+    let arrow = if trend > 0.005 {
+        "↑"
+    } else if trend < -0.005 {
+        "↓"
+    } else {
+        "→"
+    };
+    let color = if health >= 0.8 {
+        Color32::from_rgb(0x3f, 0xa8, 0x6b)
+    } else if health >= 0.6 {
+        Color32::from_rgb(0xd9, 0xa4, 0x41)
+    } else {
+        Color32::from_rgb(0xd9, 0x5a, 0x41)
+    };
+    let (rect, _) =
+        ui.allocate_exact_size(egui::vec2(ui.available_width(), 5.), egui::Sense::hover());
+    ui.painter()
+        .rect_filled(rect, 0., Color32::from_black_alpha(40));
+    let mut filled = rect;
+    filled.set_width(rect.width() * health.clamp(0., 1.));
+    ui.painter().rect_filled(filled, 0., color);
+    ui.label(
+        egui::RichText::new(t!(
+            "Soil health %{health}% %{arrow} heading for %{target}%",
+            health = format!("{:.0}", health * 100.),
+            arrow = arrow,
+            target = format!("{:.0}", land.soil_target * 100.)
+        ))
+        .color(color)
+        .small(),
+    )
+    .on_hover_text(t!("Healthy soils hold more water, nutrients and carbon. Below 70% (today's level), farms need more land for the same harvest, about 1% more for every point lost, and degrading soils release carbon; above it they need less and soils take carbon back up. Intensive farming wears soils down over decades; organic and smallholder farming and regenerative programs restore them."));
 }
 
 const CO2_COLOR: Color32 = Color32::from_rgb(0x9a, 0x9a, 0x9a);

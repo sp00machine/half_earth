@@ -30,7 +30,9 @@ fn effects_factor<E: AsRef<Effect>>(var: Var, effects: &[E], state: &State) -> f
             .sum::<f32>(),
         Var::Land => effects
             .filter_map(|e| match e {
-                Effect::ProtectLand(val) => Some(val * state.world.starting_resources.land),
+                Effect::ProtectLand(val) | Effect::RestoreLand(val) => {
+                    Some(val * state.world.starting_resources.land)
+                }
                 _ => None,
             })
             .sum::<f32>(),
@@ -278,8 +280,12 @@ impl Gases {
 pub struct LandSplit {
     pub farmed: f32,
     pub regrowing: f32,
+    pub regrowing_protected: f32,
     pub protected: f32,
     pub wild: f32,
+    /// Farm soil health now, and where farming as it is takes it.
+    pub soil_health: f32,
+    pub soil_target: f32,
 }
 
 /// Energy used by industry to build energy infrastructure
@@ -519,6 +525,7 @@ pub fn rank(state: &State) -> EnumMap<Var, Vec<Factor>> {
                     (t!("Soil Carbon from Past Clearing"), land.soil),
                     (t!("Background Deforestation"), land.deforestation),
                     (t!("Regrowing Land"), land.regrowth),
+                    (t!("Farm Soils"), land.farm_soil),
                 ] {
                     let amount = amount * 1e-15;
                     if amount.abs() >= 0.05 {
@@ -611,15 +618,30 @@ pub fn factors_card(current_name: Option<String>, var: Var, state: &State) -> Fa
         current: current_name,
         land: (var == Var::Land).then(|| {
             let total = state.world.starting_resources.land;
-            let farmed = (state.resource_demand.of(Resource::Land) / total).clamp(0., 1.);
-            let protected = state.protected_land.clamp(0., 1. - farmed);
-            let regrowing =
-                (state.land_carbon.regrowing_area() / total).clamp(0., 1. - farmed - protected);
+            let pools = state.land_carbon.pools(total);
+            let share = |x: f32| (x / total).clamp(0., 1.);
+            let (farmed, regrowing, regrowing_protected, protected) =
+                if state.land_carbon.prev_used.is_some() {
+                    (
+                        share(pools.farmed),
+                        share(pools.regrowing),
+                        share(pools.regrowing_protected),
+                        share(pools.wild_protected),
+                    )
+                } else {
+                    let farmed = share(state.resource_demand.of(Resource::Land));
+                    (farmed, 0., 0., state.protected_land.clamp(0., 1. - farmed))
+                };
             LandSplit {
                 farmed,
                 regrowing,
+                regrowing_protected,
                 protected,
-                wild: (1. - farmed - regrowing - protected).max(0.),
+                wild: (1. - farmed - regrowing - regrowing_protected - protected).max(0.),
+                soil_health: state.land_carbon.soil_health,
+                soil_target: state
+                    .land_carbon
+                    .soil_health_target(state.intensive_farming_share()),
             }
         }),
         gases: (var == Var::Emissions).then(|| Gases {
@@ -935,7 +957,7 @@ mod tests {
         assert!(source.byproducts.gtco2eq() > 0.);
         let factors = impact_factor(source, Impact::Emissions, &state);
         println!("  {:?}", factors);
-        assert_eq!(factors.display, "1.2Gt");
+        assert_eq!(factors.display, "0.9Gt");
     }
 
     #[test]
@@ -955,7 +977,7 @@ mod tests {
 
         let card = factors_card(None, Var::Emissions, &state);
         println!("{:?}: {}", Var::Emissions, card.total_formatted());
-        assert_eq!(card.total_formatted(), "55.5Gt");
+        assert_eq!(card.total_formatted(), "55.3Gt");
 
         let card = factors_card(None, Var::Land, &state);
         println!("{:?}: {}", Var::Land, card.total_formatted());

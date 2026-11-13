@@ -2142,6 +2142,47 @@ dustry but are rather because of emissions from its energy use. This modifier do
                     },
                 );
             }
+            Effect::ModifyProcessResourcesAmount(id, resource, value) => {
+                ui.add(parts::help(
+                    "Add an amount of a resource used per unit by a single process.",
+                ));
+                ui.add(
+                    edit((id, processes))
+                        .label("Process")
+                        .help("Which process is affected.")
+                        .inline(),
+                );
+                parts::two_columns(
+                    ui,
+                    |ui| {
+                        ui.add(
+                            edit(resource)
+                                .label("Resource")
+                                .help("Which resource is affected.")
+                                .inline(),
+                        );
+                    },
+                    |ui| {
+                        ui.add(
+                            edit(value)
+                                .label("Value")
+                                .help("The amount per unit to add.")
+                                .inline(),
+                        );
+                    },
+                );
+            }
+            Effect::RestoreLand(amount) => {
+                ui.add(parts::help(
+                    "Protect a share of land, restoring regrowing land first rather than wild land.",
+                ));
+                ui.add(
+                    percent(amount)
+                        .label("Percent Change")
+                        .help("The percent of land to add to/remove from protection.")
+                        .inline(),
+                );
+            }
             Effect::ModifyEventProbability(id, value) => {
                 ui.add(parts::help("Modify the probability of an event occurring."));
                 parts::two_columns(

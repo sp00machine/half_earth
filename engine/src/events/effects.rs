@@ -61,15 +61,27 @@ impl std::fmt::Display for Flag {
             Self::ParliamentSuspended => {
                 "A parliamentary majority is no longer required for any project."
             }
-            Self::Electrified => "80% of fuel demand is electrified, needing about half as much electricity (heat pumps and motors waste far less than burning fuel).",
+            Self::Electrified => {
+                "80% of fuel demand is electrified, needing about half as much electricity (heat pumps and motors waste far less than burning fuel)."
+            }
             Self::Vegan => "90% of animal calorie demand is met with plant calories.",
             Self::BailedOut => "You've been bailed out once",
-            Self::WarFooting => "Energy, electrification and buildings projects take 20% less time to complete, and production can shift 30% per planning cycle instead of 25%.",
+            Self::WarFooting => {
+                "Energy, electrification and buildings projects take 20% less time to complete, and production can shift 30% per planning cycle instead of 25%."
+            }
             Self::FossilMoratorium => "Fossil fuel processes can no longer be expanded.",
-            Self::SodiumIonBatteries => "Sodium-ion batteries take over part of grid storage, needing no lithium.",
-            Self::PumpedHydroStorage => "Pumped hydro takes over part of grid storage, needing no lithium.",
-            Self::LongDurationStorage => "Long-duration storage takes over part of grid storage, needing no lithium but losing more energy.",
-            Self::ScheduledBlackouts => "Power is cut on a schedule at night, halving how much energy needs storing.",
+            Self::SodiumIonBatteries => {
+                "Sodium-ion batteries take over part of grid storage, needing no lithium."
+            }
+            Self::PumpedHydroStorage => {
+                "Pumped hydro takes over part of grid storage, needing no lithium."
+            }
+            Self::LongDurationStorage => {
+                "Long-duration storage takes over part of grid storage, needing no lithium but losing more energy."
+            }
+            Self::ScheduledBlackouts => {
+                "Power is cut on a schedule at night, halving how much energy needs storing."
+            }
             Self::FastDevelopment => "Underdeveloped regions develop more quickly.",
             Self::Degrowth => "Wealthy regions income levels and consumption will decline.",
             Self::MetalsShortage => "Infrastructure projects take 20% longer to finish.",
@@ -175,6 +187,13 @@ pub enum Effect {
 
     ProtectLand(f32),
 
+    /// Protect this share of all land, restoring regrowing land first
+    /// (and freed farmland as it comes out of use) rather than wild land.
+    RestoreLand(f32),
+
+    /// Resources per unit added to a process (an amount, not a fraction).
+    ModifyProcessResourcesAmount(Id, Resource, f32),
+
     BailOut(usize),
     GameOver,
 }
@@ -255,6 +274,10 @@ impl Effect {
             EffectKind::OutlookByIncome => Effect::OutlookByIncome([0.; 4]),
             EffectKind::ProjectCostModifier => Effect::ProjectCostModifier(default_project, 0.),
             EffectKind::ProtectLand => Effect::ProtectLand(0.1),
+            EffectKind::RestoreLand => Effect::RestoreLand(0.1),
+            EffectKind::ModifyProcessResourcesAmount => {
+                Effect::ModifyProcessResourcesAmount(default_process, Resource::Electricity, 0.)
+            }
             EffectKind::BailOut => Effect::BailOut(20),
             EffectKind::GameOver => Effect::GameOver,
         }
@@ -267,7 +290,8 @@ impl Effect {
             | Effect::FreezeProcess(id)
             | Effect::UnlocksProcess(id)
             | Effect::ProcessRequest(id, ..)
-            | Effect::ModifyProcessByproducts(id, ..) => Some(*id),
+            | Effect::ModifyProcessByproducts(id, ..)
+            | Effect::ModifyProcessResourcesAmount(id, ..) => Some(*id),
             _ => None,
         }
     }
@@ -368,7 +392,8 @@ impl Effect {
                     // everywhere), the rest stays world-level, so world
                     // contentedness changes by the full amount.
                     WorldVariable::Outlook => {
-                        state.world.base_outlook += *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
+                        state.world.base_outlook +=
+                            *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
                         for region in state.world.regions.iter_mut() {
                             region.outlook += *change * REGIONAL_SHARE_OF_WORLD_OUTLOOK;
                         }
@@ -379,11 +404,20 @@ impl Effect {
                         state.land_carbon.deforestation_modifier += *change
                     }
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier += *change,
+                    WorldVariable::SoilHealth => {
+                        state.land_carbon.soil_health =
+                            (state.land_carbon.soil_health + *change).clamp(0., 1.)
+                    }
+                    WorldVariable::SoilRegeneration => {
+                        state.land_carbon.soil_regeneration += *change
+                    }
                     WorldVariable::BatteryRecycling => state.storage.recycling += *change,
                     WorldVariable::LithiumMining => state.storage.mining_modifier += *change,
                     WorldVariable::StorageLosses => state.storage.losses_modifier += *change,
                     WorldVariable::LandClearing
                     | WorldVariable::LandRegrowth
+                    | WorldVariable::RegrowingLand
+                    | WorldVariable::FreedLand
                     | WorldVariable::StorageShortfall => {}
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier += *change
@@ -565,9 +599,14 @@ impl Effect {
                     region.flags.retain(|f| f != flag);
                     // The region's unrest can start again later.
                     let pool = &mut state.event_pool;
-                    let per_region: Vec<Id> =
-                        pool.events.iter().filter(|e| e.per_region).map(|e| e.id).collect();
-                    pool.occurred_in.retain(|(ev, r)| *r != id || !per_region.contains(ev));
+                    let per_region: Vec<Id> = pool
+                        .events
+                        .iter()
+                        .filter(|e| e.per_region)
+                        .map(|e| e.id)
+                        .collect();
+                    pool.occurred_in
+                        .retain(|(ev, r)| *r != id || !per_region.contains(ev));
                 }
             }
             Effect::AddFlag(flag) => {
@@ -579,6 +618,9 @@ impl Effect {
 
             Effect::ModifyProcessByproducts(id, byproduct, change) => {
                 state.world.processes[id].byproduct_modifiers[*byproduct] += change;
+            }
+            Effect::ModifyProcessResourcesAmount(id, resource, change) => {
+                state.world.processes[id].resource_extras[*resource] += change;
             }
             Effect::ModifyIndustryByproducts(id, byproduct, change) => {
                 state.world.industries[id].byproduct_modifiers[*byproduct] += change;
@@ -641,6 +683,10 @@ impl Effect {
             Effect::ProtectLand(percent) => {
                 state.protected_land += percent;
             }
+            Effect::RestoreLand(percent) => {
+                state.protected_land += percent;
+                state.restored_land += percent;
+            }
         }
     }
 
@@ -665,7 +711,8 @@ impl Effect {
                         state.world.extinction_rate_modifier -= *change
                     }
                     WorldVariable::Outlook => {
-                        state.world.base_outlook -= *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
+                        state.world.base_outlook -=
+                            *change * (1. - REGIONAL_SHARE_OF_WORLD_OUTLOOK);
                         for region in state.world.regions.iter_mut() {
                             region.outlook -= *change * REGIONAL_SHARE_OF_WORLD_OUTLOOK;
                         }
@@ -676,11 +723,18 @@ impl Effect {
                         state.land_carbon.deforestation_modifier -= *change
                     }
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier -= *change,
+                    // A one-off change to soils (from an event) isn't undone.
+                    WorldVariable::SoilHealth => {}
+                    WorldVariable::SoilRegeneration => {
+                        state.land_carbon.soil_regeneration -= *change
+                    }
                     WorldVariable::BatteryRecycling => state.storage.recycling -= *change,
                     WorldVariable::LithiumMining => state.storage.mining_modifier -= *change,
                     WorldVariable::StorageLosses => state.storage.losses_modifier -= *change,
                     WorldVariable::LandClearing
                     | WorldVariable::LandRegrowth
+                    | WorldVariable::RegrowingLand
+                    | WorldVariable::FreedLand
                     | WorldVariable::StorageShortfall => {}
                     WorldVariable::SeaLevelRiseRate => {
                         state.world.sea_level_rise_modifier -= *change
@@ -781,6 +835,9 @@ impl Effect {
             Effect::ModifyProcessByproducts(id, byproduct, change) => {
                 state.world.processes[id].byproduct_modifiers[*byproduct] -= change;
             }
+            Effect::ModifyProcessResourcesAmount(id, resource, change) => {
+                state.world.processes[id].resource_extras[*resource] -= change;
+            }
             Effect::ModifyIndustryByproducts(id, byproduct, change) => {
                 state.world.industries[id].byproduct_modifiers[*byproduct] -= change;
             }
@@ -843,6 +900,10 @@ impl Effect {
             }
             Effect::ProtectLand(percent) => {
                 state.protected_land -= percent;
+            }
+            Effect::RestoreLand(percent) => {
+                state.protected_land -= percent;
+                state.restored_land -= percent;
             }
             Effect::AddFlag(flag) => {
                 if let Some(idx) = state.flags.iter().position(|x| x == flag) {
@@ -911,6 +972,7 @@ impl Mul<f32> for Effect {
             Effect::OutlookByIncome(vals) => Effect::OutlookByIncome(vals.map(|v| v * rhs)),
             Effect::ProjectCostModifier(id, val) => Effect::ProjectCostModifier(id, val * rhs),
             Effect::ProtectLand(val) => Effect::ProtectLand(val * rhs),
+            Effect::RestoreLand(val) => Effect::RestoreLand(val * rhs),
             _ => self,
         }
     }
@@ -960,16 +1022,22 @@ mod tests {
     #[test]
     fn test_extinction_rate_effects_apply() {
         let mut state = State::default();
-        state.world.update_extinction_rate(&state.produced.by_process);
+        state
+            .world
+            .update_extinction_rate(&state.produced.by_process);
         let before = state.world.extinction_rate;
 
         let effect = Effect::WorldVariable(WorldVariable::ExtinctionRate, 7.);
         effect.apply(&mut state, None);
-        state.world.update_extinction_rate(&state.produced.by_process);
+        state
+            .world
+            .update_extinction_rate(&state.produced.by_process);
         assert!((state.world.extinction_rate - (before + 7.)).abs() < 1e-3);
 
         effect.unapply(&mut state, None);
-        state.world.update_extinction_rate(&state.produced.by_process);
+        state
+            .world
+            .update_extinction_rate(&state.produced.by_process);
         assert!((state.world.extinction_rate - before).abs() < 1e-3);
     }
 
@@ -977,10 +1045,23 @@ mod tests {
     fn test_smallholder_upgrade_path() {
         let mut state = State::default();
         let find_process = |state: &State, name: &str| {
-            state.world.processes.iter().find(|p| p.name == name).unwrap().clone()
+            state
+                .world
+                .processes
+                .iter()
+                .find(|p| p.name == name)
+                .unwrap()
+                .clone()
         };
         let project_effects = |state: &State, name: &str| {
-            state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone()
+            state
+                .world
+                .projects
+                .iter()
+                .find(|p| p.name == name)
+                .unwrap()
+                .effects
+                .clone()
         };
 
         let start = find_process(&state, "Smallholder Farms");
@@ -998,7 +1079,10 @@ mod tests {
         }
         let end = find_process(&state, "Smallholder Farms");
         // Biodiversity pressure 0.1 * (1 - 5) = -0.4, with half the N2O.
-        assert!((end.byproducts.biodiversity * (1. + end.byproduct_modifiers.biodiversity) + 0.4).abs() < 1e-4);
+        assert!(
+            (end.byproducts.biodiversity * (1. + end.byproduct_modifiers.biodiversity) + 0.4).abs()
+                < 1e-4
+        );
         assert!((end.byproduct_modifiers.n2o + 0.5).abs() < 1e-4);
         assert!(end.adj_resources().land < start.adj_resources().land);
 
@@ -1019,19 +1103,40 @@ mod tests {
     #[test]
     fn test_vertical_farming_gets_one_share() {
         let state = State::default();
-        let vf = state.world.processes.iter().find(|p| p.name == "Vertical Farming").unwrap();
+        let vf = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Vertical Farming")
+            .unwrap();
         let mut demand = state.output_demand.total();
         for plant_demand in [6.9e15, 1.0e16, 1.35e16] {
             demand.plant_calories = plant_demand;
-            assert_eq!(vf.max_share(&demand, &state.feedstocks.available), 1, "at {plant_demand:e}");
+            assert_eq!(
+                vf.max_share(&demand, &state.feedstocks.available),
+                1,
+                "at {plant_demand:e}"
+            );
         }
     }
 
     #[test]
     fn test_fossil_moratorium_blocks_growth_not_shrinking() {
         let mut state = State::default();
-        let coal = state.world.processes.iter().find(|p| p.name == "Coal Power Generation").unwrap().id;
-        let solar = state.world.processes.iter().find(|p| p.name == "Solar PV").unwrap().id;
+        let coal = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Coal Power Generation")
+            .unwrap()
+            .id;
+        let solar = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Solar PV")
+            .unwrap()
+            .id;
         let share = state.world.processes[&coal].mix_share;
         assert!(state.process_max_share(&coal) > share);
 
@@ -1062,8 +1167,10 @@ mod tests {
         state.step_year(state.world.temperature);
         let energy = pick(&state, Group::Energy);
         let food = pick(&state, Group::Food);
-        let (energy_before, food_before) =
-            (state.world.projects[&energy].cost, state.world.projects[&food].cost);
+        let (energy_before, food_before) = (
+            state.world.projects[&energy].cost,
+            state.world.projects[&food].cost,
+        );
 
         Effect::AddFlag(Flag::WarFooting).apply(&mut state, None);
         state.step_year(state.world.temperature);
@@ -1075,17 +1182,85 @@ mod tests {
     fn test_species_recovery_events_unlock() {
         let mut state = State::default();
         for (extinct, recovery) in [
-            ("Mountain Gorilla Declared Extinct", "Mountain Gorillas Return"),
-            ("Vaquita Porpoise Declared Extinct", "The Vaquita Swims Again"),
-            ("Polar Bear Declared Extinct", "Polar Bears Return to the Ice"),
-            ("Great Barrier Reef Dead", "Coral Returns to the Great Barrier Reef"),
+            (
+                "Mountain Gorilla Declared Extinct",
+                "Mountain Gorillas Return",
+            ),
+            (
+                "Vaquita Porpoise Declared Extinct",
+                "The Vaquita Swims Again",
+            ),
+            (
+                "Polar Bear Declared Extinct",
+                "Polar Bears Return to the Ice",
+            ),
+            (
+                "Great Barrier Reef Dead",
+                "Coral Returns to the Great Barrier Reef",
+            ),
         ] {
-            let recovery = state.event_pool.events.iter().find(|e| e.name == recovery).unwrap().id;
+            let recovery = state
+                .event_pool
+                .events
+                .iter()
+                .find(|e| e.name == recovery)
+                .unwrap()
+                .id;
             assert!(state.event_pool.events[&recovery].locked);
-            let effects = state.event_pool.events.iter().find(|e| e.name == extinct).unwrap().effects.clone();
+            let effects = state
+                .event_pool
+                .events
+                .iter()
+                .find(|e| e.name == extinct)
+                .unwrap()
+                .effects
+                .clone();
             state.apply_effects(&effects, None);
             assert!(!state.event_pool.events[&recovery].locked, "{extinct}");
         }
+    }
+
+    #[test]
+    fn test_restoration_and_green_ammonia_apply_and_unapply() {
+        let mut state = State::default();
+        let start = state.clone();
+
+        let restore = Effect::RestoreLand(0.1);
+        restore.apply(&mut state, None);
+        assert!((state.protected_land - start.protected_land - 0.1).abs() < 1e-6);
+        assert!((state.restored_land - 0.1).abs() < 1e-6);
+        restore.unapply(&mut state, None);
+        assert!((state.protected_land - start.protected_land).abs() < 1e-6);
+        assert!(state.restored_land.abs() < 1e-6);
+
+        let ammonia = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.name == "Green Ammonia")
+            .unwrap()
+            .clone();
+        let crops = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Crop Ag")
+            .unwrap()
+            .id;
+        let before = state.world.processes[&crops].clone();
+        for e in &ammonia.effects {
+            e.apply(&mut state, None);
+        }
+        let after = &state.world.processes[&crops];
+        assert!(after.adj_resources().electricity > before.adj_resources().electricity * 3.);
+        assert!(after.adj_byproducts().co2 < before.adj_byproducts().co2 * 0.9);
+        for e in &ammonia.effects {
+            e.unapply(&mut state, None);
+        }
+        let back = &state.world.processes[&crops];
+        assert!(
+            (back.adj_resources().electricity - before.adj_resources().electricity).abs() < 1e-9
+        );
     }
 
     #[test]
@@ -1107,8 +1282,21 @@ mod tests {
     fn test_factory_farming_reform_freezes_capacity() {
         use crate::Output;
         let mut state = State::default();
-        let livestock = state.world.processes.iter().find(|p| p.name == "Industrial Livestock Ag").unwrap().id;
-        let effects = state.world.projects.iter().find(|p| p.name == "Factory Farming Reform").unwrap().effects.clone();
+        let livestock = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Livestock Ag")
+            .unwrap()
+            .id;
+        let effects = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.name == "Factory Farming Reform")
+            .unwrap()
+            .effects
+            .clone();
         state.step_year(state.world.temperature);
         let frozen_at = state.produced.by_process[&livestock];
         state.apply_effects(&effects, None);
@@ -1122,7 +1310,9 @@ mod tests {
         let yield_growth =
             (1. + state.world.processes[&livestock].output_modifier) / (1. + modifier_then);
         assert!(state.produced.by_process[&livestock] <= frozen_at * yield_growth * 1.0001);
-        assert!(state.produced.amount.animal_calories < state.output_demand.of(Output::AnimalCalories));
+        assert!(
+            state.produced.amount.animal_calories < state.output_demand.of(Output::AnimalCalories)
+        );
 
         // Repealing lifts the freeze.
         for effect in &effects {
@@ -1147,7 +1337,13 @@ mod tests {
     #[test]
     fn test_yield_shocks_recover_and_dont_clear_land() {
         let mut state = State::default();
-        let wheat = state.world.processes.iter().find(|p| p.name == "Industrial Crop Ag").unwrap().id;
+        let wheat = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Industrial Crop Ag")
+            .unwrap()
+            .id;
         state.step_year(state.world.temperature);
         let before = state.world.processes[&wheat].output_modifier;
 
@@ -1169,7 +1365,13 @@ mod tests {
         use crate::events::Phase;
         let mut state = State::default();
         state.world.year = 2030;
-        let protest = state.event_pool.events.iter().find(|e| e.name == "Unrest - Protest").unwrap().id;
+        let protest = state
+            .event_pool
+            .events
+            .iter()
+            .find(|e| e.name == "Unrest - Protest")
+            .unwrap()
+            .id;
         let ids: Vec<_> = state.world.regions.iter().take(3).map(|r| r.id).collect();
         for id in &ids {
             state.world.regions[id].outlook = 0.;
@@ -1180,7 +1382,11 @@ mod tests {
             .into_iter()
             .filter(|(ev, _)| ev.id == protest)
             .collect();
-        assert!(fired.len() >= 3, "protests fired in {} regions", fired.len());
+        assert!(
+            fired.len() >= 3,
+            "protests fired in {} regions",
+            fired.len()
+        );
         // ...but not twice in the same region.
         let again = pool
             .roll_for_phase(Phase::WorldMain, &state)
@@ -1194,7 +1400,13 @@ mod tests {
     fn test_storage_caps_wind_and_solar() {
         let mut state = State::default();
         state.step_year(state.world.temperature);
-        let solar = state.world.processes.iter().find(|p| p.name == "Solar PV").unwrap().id;
+        let solar = state
+            .world
+            .processes
+            .iter()
+            .find(|p| p.name == "Solar PV")
+            .unwrap()
+            .id;
         // At the start there's room to grow well past today's share.
         let supported = state.supported_intermittent_share();
         assert!(supported > state.intermittent_share() + 0.2, "{supported}");
@@ -1262,7 +1474,10 @@ mod tests {
     fn test_scaled_resource_amount_stays_an_amount() {
         let id = Id::new_v4();
         let effect = Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 10.) * 0.5;
-        assert_eq!(effect, Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 5.));
+        assert_eq!(
+            effect,
+            Effect::ModifyIndustryResourcesAmount(id, Resource::Electricity, 5.)
+        );
     }
 
     #[test]
@@ -1290,7 +1505,11 @@ mod tests {
                 freeze.apply(&mut state, None);
             }
             let limit = state.world.processes[&id].effective_limit().unwrap();
-            assert!((limit / before - 0.8).abs() < 0.01, "{freeze_first}: {}", limit / before);
+            assert!(
+                (limit / before - 0.8).abs() < 0.01,
+                "{freeze_first}: {}",
+                limit / before
+            );
         }
     }
 
@@ -1313,12 +1532,24 @@ mod tests {
     #[test]
     fn test_war_footing_fatigue_felt_everywhere() {
         let mut state = State::default();
-        let id = state.world.projects.iter().find(|p| p.name == "Climate War Footing").unwrap().id;
+        let id = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.name == "Climate War Footing")
+            .unwrap()
+            .id;
         state.world.projects[&id].status = Status::Active;
         for _ in 0..10 {
             state.step_year(state.world.temperature);
         }
-        let poor = state.world.regions.iter().find(|r| r.income.level() == 0).unwrap().id;
+        let poor = state
+            .world
+            .regions
+            .iter()
+            .find(|r| r.income.level() == 0)
+            .unwrap()
+            .id;
         assert!(state.fatigue_applied[&poor] > 0.5);
     }
 
@@ -1327,9 +1558,19 @@ mod tests {
         let mut state = State::default();
         state.step_year(state.world.temperature);
         let before = state.emissions.fgas;
-        assert!(before > 5e14, "buildings start with F-gas emissions: {before}");
+        assert!(
+            before > 5e14,
+            "buildings start with F-gas emissions: {before}"
+        );
         let effects = |name: &str, state: &State| {
-            state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone()
+            state
+                .world
+                .projects
+                .iter()
+                .find(|p| p.name == name)
+                .unwrap()
+                .effects
+                .clone()
         };
         let alt = effects("Alternative Refrigerants", &state);
         state.apply_effects(&alt, None);
@@ -1347,13 +1588,24 @@ mod tests {
         state.step_year(state.world.temperature);
         let lic = state.world.lic_population();
         let methane = |s: &State| {
-            s.world.industries.iter().find(|i| i.name == "Waste").unwrap()
+            s.world
+                .industries
+                .iter()
+                .find(|i| i.name == "Waste")
+                .unwrap()
                 .total_for_byproduct(lic, crate::Byproduct::Ch4)
         };
         let before = methane(&state);
         assert!(before * 36. > 1e15, "landfills start near 1.4 Gt CO2e");
         for name in ["Food Waste Campaign", "Compost"] {
-            let effects = state.world.projects.iter().find(|p| p.name == name).unwrap().effects.clone();
+            let effects = state
+                .world
+                .projects
+                .iter()
+                .find(|p| p.name == name)
+                .unwrap()
+                .effects
+                .clone();
             state.apply_effects(&effects, None);
         }
         assert!((methane(&state) / before - 0.5).abs() < 0.01);
@@ -1362,17 +1614,31 @@ mod tests {
     #[test]
     fn test_policy_contentedness_is_felt_over_a_few_years() {
         let mut state = State::default();
-        let rich = state.world.regions.iter().find(|r| r.income.level() == 3).unwrap().id;
+        let rich = state
+            .world
+            .regions
+            .iter()
+            .find(|r| r.income.level() == 3)
+            .unwrap()
+            .id;
         let start = state.world.regions[&rich].outlook;
         Effect::OutlookByIncome([0., 0., 0., -5.]).apply(&mut state, None);
         // Not felt at once...
         assert_eq!(state.world.regions[&rich].outlook, start);
-        state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+        state
+            .world
+            .regions
+            .iter_mut()
+            .for_each(|r| r.update_outlook(false, false));
         let one_year = start - state.world.regions[&rich].outlook;
         assert!((one_year - 2.).abs() < 0.2, "{one_year}");
         // ...but almost all of it within five years.
         for _ in 0..4 {
-            state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+            state
+                .world
+                .regions
+                .iter_mut()
+                .for_each(|r| r.update_outlook(false, false));
         }
         assert!(state.world.regions[&rich].outlook_pending.abs() < 0.5);
     }
@@ -1386,11 +1652,26 @@ mod tests {
         let world = state.outlook();
         let effect = Effect::WorldVariable(WorldVariable::Outlook, 4.);
         effect.apply(&mut state, None);
-        assert!((state.outlook() - world - 4.).abs() < 1e-3, "world changes by the full amount");
-        assert!(state.world.regions.iter().all(|r| (r.outlook - 6.).abs() < 1e-3));
+        assert!(
+            (state.outlook() - world - 4.).abs() < 1e-3,
+            "world changes by the full amount"
+        );
+        assert!(
+            state
+                .world
+                .regions
+                .iter()
+                .all(|r| (r.outlook - 6.).abs() < 1e-3)
+        );
         effect.unapply(&mut state, None);
         assert!((state.outlook() - world).abs() < 1e-3);
-        assert!(state.world.regions.iter().all(|r| (r.outlook - 5.).abs() < 1e-3));
+        assert!(
+            state
+                .world
+                .regions
+                .iter()
+                .all(|r| (r.outlook - 5.).abs() < 1e-3)
+        );
     }
 
     #[test]
@@ -1402,12 +1683,22 @@ mod tests {
         // Passed and repealed before it fades: back where it started.
         popular.apply(&mut state, None);
         popular.unapply(&mut state, None);
-        assert!(state.world.regions.iter().all(|r| (r.outlook - 10.).abs() < 1e-3));
+        assert!(
+            state
+                .world
+                .regions
+                .iter()
+                .all(|r| (r.outlook - 10.).abs() < 1e-3)
+        );
 
         // Left in place, the cushion above 10 fades as people get used to it.
         popular.apply(&mut state, None);
         for _ in 0..10 {
-            state.world.regions.iter_mut().for_each(|r| r.update_outlook(false, false));
+            state
+                .world
+                .regions
+                .iter_mut()
+                .for_each(|r| r.update_outlook(false, false));
         }
         let cushion = state.world.regions.by_idx(0).outlook - 10.;
         assert!(cushion > 0.5 && cushion < 1.0, "{cushion}");
@@ -1419,7 +1710,9 @@ mod tests {
         let find = |s: &State, n: &str| s.world.projects.iter().find(|p| p.name == n).unwrap().id;
         let decimal = find(&state, "Decimal Time");
         assert!(state.world.projects[&decimal].locked);
-        let effects = state.world.projects[&find(&state, "Utopian Curriculum")].effects.clone();
+        let effects = state.world.projects[&find(&state, "Utopian Curriculum")]
+            .effects
+            .clone();
         state.apply_effects(&effects, None);
         assert!(!state.world.projects[&decimal].locked);
     }
@@ -1446,7 +1739,13 @@ mod tests {
             region.flags = vec![RegionFlag::Protests, RegionFlag::Riots, RegionFlag::Revolts];
             region.outlook = 9.;
         }
-        let protest = state.event_pool.events.iter().find(|e| e.name == "Unrest - Protest").unwrap().id;
+        let protest = state
+            .event_pool
+            .events
+            .iter()
+            .find(|e| e.name == "Unrest - Protest")
+            .unwrap()
+            .id;
         state.event_pool.occurred_in.insert((protest, id));
         let mut seen = vec![];
         for _ in 0..4 {
@@ -1468,9 +1767,22 @@ mod tests {
         for region in state.world.regions.iter_mut() {
             region.flags = vec![RegionFlag::Protests, RegionFlag::Riots, RegionFlag::Revolts];
         }
-        let effects = state.world.projects.iter().find(|p| p.name == "Emergency Powers").unwrap().effects.clone();
+        let effects = state
+            .world
+            .projects
+            .iter()
+            .find(|p| p.name == "Emergency Powers")
+            .unwrap()
+            .effects
+            .clone();
         state.apply_effects(&effects, None);
-        assert!(state.world.regions.iter().all(|r| r.flags == vec![RegionFlag::Protests]));
+        assert!(
+            state
+                .world
+                .regions
+                .iter()
+                .all(|r| r.flags == vec![RegionFlag::Protests])
+        );
     }
 
     #[test]
@@ -1485,7 +1797,13 @@ mod tests {
         }
         Effect::EnactPolicy(ep).apply(&mut state, None);
         assert_eq!(state.world.projects[&ep].status, Status::Active);
-        assert!(state.world.regions.iter().all(|r| !r.flags.contains(&RegionFlag::Riots)));
+        assert!(
+            state
+                .world
+                .regions
+                .iter()
+                .all(|r| !r.flags.contains(&RegionFlag::Riots))
+        );
 
         Effect::EnactPolicy(wf).apply(&mut state, None);
         assert!(state.flags.contains(&Flag::WarFooting));

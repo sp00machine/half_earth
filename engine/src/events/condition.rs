@@ -138,6 +138,14 @@ impl Condition {
                     WorldVariable::Precipitation => state.world.precipitation,
                     WorldVariable::Deforestation => state.land_carbon.deforestation_modifier,
                     WorldVariable::Regrowth => state.land_carbon.regrowth_modifier,
+                    WorldVariable::SoilHealth => state.land_carbon.soil_health,
+                    WorldVariable::SoilRegeneration => state.land_carbon.soil_regeneration,
+                    WorldVariable::RegrowingLand => {
+                        state.land_carbon.regrowing_area() / state.world.starting_resources.land
+                    }
+                    WorldVariable::FreedLand => {
+                        state.land_carbon.total_freed / state.world.starting_resources.land
+                    }
                     WorldVariable::BatteryRecycling => state.storage.recycling,
                     WorldVariable::LithiumMining => state.storage.mining_modifier,
                     WorldVariable::StorageLosses => state.storage.losses_modifier,

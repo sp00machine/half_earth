@@ -64,6 +64,16 @@ pub struct Process {
     pub output_modifier: f32,
     pub byproduct_modifiers: ByproductMap,
 
+    /// Resources per unit added by projects, on top of `resources`
+    /// (e.g. electricity to make fertilizer from green hydrogen).
+    #[serde(default)]
+    pub resource_extras: ResourceMap,
+
+    /// Change to land needed per unit from soil health (farming only):
+    /// 0.1 means degraded soils need 10% more land for the same harvest.
+    #[serde(default)]
+    pub soil_land_change: f32,
+
     pub resources: ResourceMap,
     pub byproducts: ByproductMap,
     pub feedstock: (Feedstock, f32),
@@ -137,7 +147,9 @@ impl Process {
     }
 
     pub fn adj_resources(&self) -> ResourceMap {
-        self.resources / (1. + self.output_modifier)
+        let mut resources = self.resources + self.resource_extras;
+        resources.land *= (1. + self.soil_land_change).max(0.);
+        resources / (1. + self.output_modifier)
     }
 
     pub fn adj_byproducts(&self) -> ByproductMap {

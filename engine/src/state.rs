@@ -125,6 +125,11 @@ pub struct State {
 
     pub protected_land: f32,
 
+    /// The part of `protected_land` from restoration projects, which
+    /// protect regrowing land first rather than wild land.
+    #[serde(default)]
+    pub restored_land: f32,
+
     pub shortages_outlook: f32,
     pub emissions: Emissions,
     pub last_outlook: f32,
@@ -211,6 +216,7 @@ impl State {
             feedstocks,
 
             protected_land: 0.1, // Starts at 10%
+            restored_land: 0.,
 
             events: vec![],
             event_pool: EventPool::new(events),
@@ -437,7 +443,38 @@ impl State {
     /// needs to be influenced elsewhere then use
     /// `modifiable.modifier` or `modifiable.factor`
     /// instead.
+    /// Share of farmland farmed intensively, weighting smallholders (who
+    /// use some synthetic fertilizer, alongside manure and crop rotations)
+    /// as half intensive.
+    pub fn intensive_farming_share(&self) -> f32 {
+        let mut intensive = 0.;
+        let mut farmland = 0.;
+        for p in self.world.processes.iter() {
+            if p.feedstock.0 != Feedstock::Soil {
+                continue;
+            }
+            let produced = self.produced.by_process.get(&p.id).copied().unwrap_or(0.);
+            let land = produced * p.adj_resources().land;
+            let weight = if p.features.contains(&ProcessFeature::UsesSynFertilizer) {
+                if p.features.contains(&ProcessFeature::IsLaborIntensive) { 0.5 } else { 1. }
+            } else {
+                0.
+            };
+            intensive += land * weight;
+            farmland += land;
+        }
+        if farmland > 0. { intensive / farmland } else { 0. }
+    }
+
     fn update_demand(&mut self) {
+        // Degraded soils need more land for the same harvest.
+        let soil_change = self.land_carbon.soil_land_factor() - 1.;
+        for p in self.world.processes.iter_mut() {
+            if p.feedstock.0 == Feedstock::Soil {
+                p.soil_land_change = soil_change;
+            }
+        }
+
         let (output_demand, mut resource_demand, industry_byproducts) = {
             let world = &self.world;
             let mut output_demand = outputs!();
@@ -631,15 +668,20 @@ impl State {
                 }
                 let produced = self.produced.by_process.get(&p.id).copied().unwrap_or(0.);
                 let m = 1. + p.output_modifier;
-                produced * p.resources.land * (1. / m.max(1e-3) - 1. / (m + remaining))
+                produced
+                    * p.resources.land
+                    * (1. + p.soil_land_change)
+                    * (1. / m.max(1e-3) - 1. / (m + remaining))
             })
             .sum();
-        let land_emissions = self.land_carbon.step(
-            self.resources.consumed.land - shock_land.max(0.),
-            self.world.starting_resources.land,
-            self.protected_land,
-            self.world.temperature,
-        );
+        let land_emissions = self.land_carbon.step_with(crate::land::LandInputs {
+            demand: self.resources.consumed.land - shock_land.max(0.),
+            total: self.world.starting_resources.land,
+            protected: self.protected_land,
+            restored: self.restored_land,
+            temperature: self.world.temperature,
+            intensive: Some(self.intensive_farming_share()),
+        });
         self.emissions.land = land_emissions.total();
 
         // Materials for energy infrastructure built this year; these feed

@@ -33,23 +33,12 @@ Done work lives in the git history; each change's reasoning is in the
 
 ## Model
 
-- **Land and farming pass** (next up):
-  - **Five kinds of land:** farmed, wild and unmanaged, regrowing and
-    unmanaged, wild and protected, regrowing and protected. Protected land
-    regrows faster; unmanaged land still regrows, realistically
-    (exponential with a half-life, or linear). Decide how projects that
-    raise protected share interact with land still regrowing.
-  - **Soil health:** intensive farming slowly degrades soils (lower
-    yields, more fertilizer); regenerative practices restore them. Make
-    organic farming's N2O easier to see.
-  - **Fertilizer:** tie the chemical industry's ammonia (about a third of
-    its emissions) to synthetic-fertilizer farming, so fertilizer use
-    shows up in farming's emissions.
-  - **Check industrial vs. organic/smallholder farming** once fertilizer,
-    soil degradation and pesticides are all counted. Right now, with the
-    pesticide ban and all the farming programs, industrial farming is
-    better on every axis; the real trade-off is land (industrial uses
-    less) against emissions, soils and biodiversity.
+- **Industrial vs. organic farming check:** now that fertilizer, soil
+  health and pesticides are all modeled, play it through and check the
+  trade-off is real: industrial uses less land; organic and smallholder
+  farming are kinder to soils and biodiversity per hectare.
+- **Soil health on farm process cards:** show each farming process's push
+  on soil health (intensive vs. restorative) on its card.
 - **Authoritarian path pass:** make it possible, with care, to win the
   Authoritarian over early and rule without parliament (Suspend
   Parliament), as a real alternative to building a coalition.
@@ -67,6 +56,11 @@ Done work lives in the git history; each change's reasoning is in the
 - **More utopian-fantasy cards** in the spirit of Esperanto, Decimal Time
   and Dialogue with Dolphins: one for each faction that doesn't have one
   yet (Malthusian, Environmentalist), avoiding anything too grim.
+
+- **Balance pass** (after the rest of the model work): play through with
+  every system in place and tune costs, effects and contentedness
+  together. Consider making policies cheaper in the first planning session,
+  so the opening turn isn't starved of political capital.
 
 ## Tooling
 

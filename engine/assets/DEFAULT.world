@@ -15663,6 +15663,586 @@
             "notes": ""
         },
         {
+            "name": "Fields Gone Wild",
+            "locked": false,
+            "occurred": false,
+            "id": "3b833f16-abfb-4004-a3b0-f9ca8ef3bc16",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "RegrowingLand",
+                                "GreaterEqual",
+                                0.02
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Farmer",
+                            "text": "My family farmed that valley for four generations. Last spring nobody planted it. Now there's thistle and birch saplings coming up through the furrows."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Old fields are where forests begin. Left alone, that valley will hold more carbon in fifty years than it gave up in a century of ploughing. If nobody clears it again."
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Farmer",
+                            "text": "And the people? The co-op closed. The school's down to one class. You can't eat carbon."
+                        },
+                        {
+                            "id": 3,
+                            "next": [
+                                {
+                                    "id": 0,
+                                    "next_line": 4,
+                                    "text": "Pay the people who stay to tend it back to forest.",
+                                    "effects": [
+                                        {
+                                            "RestoreLand": 0.02
+                                        },
+                                        {
+                                            "PlayerVariable": [
+                                                "PoliticalCapital",
+                                                -15
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1,
+                                    "next_line": 5,
+                                    "text": "Rebuild the towns: rail, clinics, new work.",
+                                    "effects": [
+                                        {
+                                            "WorldVariable": [
+                                                "Outlook",
+                                                2.0
+                                            ]
+                                        },
+                                        {
+                                            "PlayerVariable": [
+                                                "PoliticalCapital",
+                                                -10
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "next_line": 6,
+                                    "text": "Let it go wild. That's the point.",
+                                    "effects": [
+                                        {
+                                            "WorldVariable": [
+                                                "Outlook",
+                                                -1.0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "speaker": "Gossy",
+                            "text": "Millions of square kilometers of farmland are coming out of use. What do we do with the people and the land?"
+                        },
+                        {
+                            "id": 4,
+                            "next": null,
+                            "speaker": "The Ecologist",
+                            "text": "Rangers, seed collectors, fire crews. The valley gets protected, it grows back faster, and the jobs stay local."
+                        },
+                        {
+                            "id": 5,
+                            "next": null,
+                            "speaker": "The Farmer",
+                            "text": "Fine. If the land's going back to the trees, at least the town doesn't have to die with the farm."
+                        },
+                        {
+                            "id": 6,
+                            "next": null,
+                            "speaker": "The Farmer",
+                            "text": "Easy to say from a city. Some of that young forest will be cleared again for grazing or firewood, you know. Nobody's watching it."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1645914884.59607.png"
+                    },
+                    "attribution": "NatureDan, CC BY-SA 3.0"
+                }
+            },
+            "notes": "[three-quarters fork] Fires once 2% of all land (~2 Mkm\u00b2) is regrowing former farmland. A choice: restore it under protection (+2% land protected, regrowing first; -15 PC), rebuild rural towns (+2 contentedness; -10 PC), or let it go wild (-1 contentedness).",
+            "per_region": false
+        },
+        {
+            "name": "The Forest Comes Back",
+            "locked": false,
+            "occurred": false,
+            "id": "1dba4760-e277-4904-911a-bc9d60757ee3",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "RegrowingLand",
+                                "GreaterEqual",
+                                0.08
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "The satellite maps are turning green. Regrowing forest, grassland and wetland now covers an area the size of a continent."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Climatologist",
+                            "text": "It's one of the biggest carbon sinks we have. Every year it pulls more out of the air than the year before, as long as it's left standing."
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Citizen",
+                            "text": "My grandmother used to say there were wolves here when she was a girl. I heard one last night."
+                        },
+                        {
+                            "id": 3,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Protected land grows back fastest. What isn't protected, someone eventually clears again."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646266831.52982.png"
+                    },
+                    "attribution": "Colocho, CC BY-SA 3.0"
+                }
+            },
+            "notes": "[three-quarters fork] Fires once 8% of all land (~8 Mkm\u00b2, about the size of Australia) is regrowing. -1 extinction (wildlife returning), +1 contentedness.",
+            "per_region": false
+        },
+        {
+            "name": "Topsoil Blowing Away",
+            "locked": false,
+            "occurred": false,
+            "id": "9f303c4e-04a5-46f7-9b63-20538aaad25c",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "SoilHealth",
+                                "Less",
+                                0.6
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "YieldShock": [
+                        "PlantCalories",
+                        -0.05,
+                        5
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -1.0
+                    ]
+                },
+                {
+                    "UnlocksProject": "b3a75f9b-7d54-4df7-96b8-9c84e9ad2749"
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Farmer",
+                            "text": "The soil's gone pale and hard. It doesn't hold water any more. When the wind comes up, the field just lifts off."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Decades of bare fields, heavy tilling and synthetic fertilizer have burned through the organic matter. Healthy soil is alive. This is dirt."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Degraded soils need more land and more fertilizer for the same harvest. Regenerative practices can bring them back, slowly."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646412838.164568.png"
+                    },
+                    "attribution": "\"DUST STORM 1968\" by expom2uk is marked with CC BY 2.0"
+                }
+            },
+            "notes": "[three-quarters fork] Fires when farm soil health falls below 60%. A 5-year 5% plant calorie yield shock, -1 contentedness, and unlocks Regenerative Agriculture.",
+            "per_region": false
+        },
+        {
+            "name": "Dead Soils",
+            "locked": false,
+            "occurred": false,
+            "id": "54419211-b34a-4cc1-8415-7fea630c9a5f",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "SoilHealth",
+                                "Less",
+                                0.45
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "YieldShock": [
+                        "PlantCalories",
+                        -0.1,
+                        8
+                    ]
+                },
+                {
+                    "YieldShock": [
+                        "AnimalCalories",
+                        -0.1,
+                        8
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        -2.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "Population",
+                        -100000.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Farmer",
+                            "text": "We're putting on twice the fertilizer for half the yield. The ground's like concrete."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Climatologist",
+                            "text": "And it's bleeding carbon: soils that were sinks are sources now."
+                        },
+                        {
+                            "id": 2,
+                            "next": {
+                                "id": 3
+                            },
+                            "speaker": "The Doctor",
+                            "text": "Dust is filling the clinics. Asthma, silicosis, valley fever."
+                        },
+                        {
+                            "id": 3,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Unless farming changes, the soils will only get worse."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1651559727.587973.png"
+                    },
+                    "attribution": "Dust-storm-Texas-1935, via Openverse, CC BY 2.0"
+                }
+            },
+            "notes": "[three-quarters fork] Fires when farm soil health falls below 45%. 8-year 10% yield shocks, -2 contentedness, dust-related deaths (-100,000 people).",
+            "per_region": false
+        },
+        {
+            "name": "Living Soils",
+            "locked": false,
+            "occurred": false,
+            "id": "d6f27aa7-6cbd-40ed-ab21-1fc373db268f",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "SoilHealth",
+                                "GreaterEqual",
+                                0.8
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -1.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Farmer",
+                            "text": "Dig a spade in now and the soil's dark and crumbly, full of worms and fungus threads. It smells sweet."
+                        },
+                        {
+                            "id": 1,
+                            "next": {
+                                "id": 2
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "There are more living things in a handful of healthy soil than there are people on Earth."
+                        },
+                        {
+                            "id": 2,
+                            "next": null,
+                            "speaker": "Gossy",
+                            "text": "Healthy soils hold water through droughts and need less fertilizer. And they're taking carbon back out of the air."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1650388392.403256.png"
+                    },
+                    "attribution": "USDA NRCS South Dakota"
+                }
+            },
+            "notes": "[three-quarters fork] Fires when farm soil health reaches 80%. +1 contentedness, -1 extinction (soil life).",
+            "per_region": false
+        },
+        {
+            "name": "Black Earth",
+            "locked": false,
+            "occurred": false,
+            "id": "cb02ce8f-1bda-4048-bcc4-b545e24ad00e",
+            "phase": "WorldMain",
+            "probabilities": [
+                {
+                    "likelihood": "Guaranteed",
+                    "conditions": [
+                        {
+                            "WorldVariable": [
+                                "SoilHealth",
+                                "GreaterEqual",
+                                0.9
+                            ]
+                        },
+                        {
+                            "WorldVariable": [
+                                "Year",
+                                "Greater",
+                                2023.0
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "effects": [
+                {
+                    "WorldVariable": [
+                        "Outlook",
+                        1.0
+                    ]
+                },
+                {
+                    "WorldVariable": [
+                        "ExtinctionRate",
+                        -2.0
+                    ]
+                }
+            ],
+            "prob_modifier": 1.0,
+            "intensity": 0,
+            "flavor": {
+                "arc": "",
+                "dialogue": {
+                    "root": 0,
+                    "lines": [
+                        {
+                            "id": 0,
+                            "next": {
+                                "id": 1
+                            },
+                            "speaker": "The Ecologist",
+                            "text": "Farm soils everywhere are as rich as the old black earths of the steppe. Some of the carbon lost since the plough was invented is back in the ground."
+                        },
+                        {
+                            "id": 1,
+                            "next": null,
+                            "speaker": "The Farmer",
+                            "text": "My grandfather wouldn't believe these fields. Neither do I, some mornings."
+                        }
+                    ]
+                },
+                "image": {
+                    "data": {
+                        "File": "1646609177.501258.png"
+                    },
+                    "attribution": "Ingimar Erl, CC BY-SA 4.0"
+                }
+            },
+            "notes": "[three-quarters fork] Fires when farm soil health reaches 90%. +1 contentedness, -2 extinction.",
+            "per_region": false
+        },
+        {
             "name": "A Global Dustbowl",
             "locked": false,
             "occurred": false,
@@ -38293,7 +38873,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Protects wild land first (ProtectLand); restoration projects (Remediate and Protect Ecosystems, Coastal Wetlands) protect regrowing land first.\n\n"
         },
         {
             "id": "5607aed4-50cb-45e3-a400-0a07d18a49a5",
@@ -38318,6 +38898,9 @@
             "effects": [
                 {
                     "UnlocksProcess": "d33b57e4-ad34-46fe-8330-acbbd12803df"
+                },
+                {
+                    "UnlocksProject": "73901e05-0d61-4825-841e-6e4470220c92"
                 }
             ],
             "outcomes": [
@@ -38365,7 +38948,7 @@
                     }
                 ]
             },
-            "notes": "SR: I reduced the time frame for developing this and added an emissions cost (will find an estimate for this), since we have this technology now, but the development is mostly infrastructure."
+            "notes": "[three-quarters fork] Unlocks Green Ammonia (fertilizer from green hydrogen).\n\nSR: I reduced the time frame for developing this and added an emissions cost (will find an estimate for this), since we have this technology now, but the development is mostly infrastructure."
         },
         {
             "id": "49a54a02-d71c-49b1-8798-d565791d2973",
@@ -38942,6 +39525,12 @@
                         "f952fd1f-6bf3-418f-ac02-0d6ff87955ca",
                         1.0
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.1
+                    ]
                 }
             ],
             "outcomes": [
@@ -39013,7 +39602,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Undoes 10% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n"
         },
         {
             "id": "05a51de9-436b-4d43-876c-052fda7480ee",
@@ -39544,6 +40133,12 @@
                         "a146d743-cff3-4e72-9b67-d5eb8b18c166",
                         -0.1
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.1
+                    ]
                 }
             ],
             "outcomes": [
@@ -39591,7 +40186,7 @@
                     }
                 ]
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Undoes 10% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n"
         },
         {
             "id": "acbeb238-83ba-4eb1-9582-d5e81a70ef77",
@@ -39693,8 +40288,19 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"OutputForProcess": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", 0.15]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -2.5]},
+                {
+                    "OutputForProcess": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        0.15
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Biodiversity",
+                        -2.5
+                    ]
+                },
                 {
                     "Output": [
                         "PlantCalories",
@@ -44165,6 +44771,12 @@
                         "12ea4cab-32d1-47a7-9184-bbf5164ef92a",
                         5
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.15
+                    ]
                 }
             ],
             "outcomes": [
@@ -44262,7 +44874,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also improves smallholder farms: less biodiversity pressure.\n\nTV. Please fill in, using this: https://drawdown.org/solutions/multistrata-agroforestry\nNote for calculation: If adopted on another 39\u201366 million hectares by 2050, from 100 million hectares currently, 11.3\u201320.4 gigatons of carbon dioxide could be sequestered. Average sequestration rate of 4.45 tons of carbon per hectare per year is strong,\n\nnumbers there give roughly 0.38-0.68Gt/yr\n\nhttps://www.environmentandsociety.org/sites/default/files/2014_i3_satsuka.pdf"
+            "notes": "[three-quarters fork] Undoes 15% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure.\n\nTV. Please fill in, using this: https://drawdown.org/solutions/multistrata-agroforestry\nNote for calculation: If adopted on another 39\u201366 million hectares by 2050, from 100 million hectares currently, 11.3\u201320.4 gigatons of carbon dioxide could be sequestered. Average sequestration rate of 4.45 tons of carbon per hectare per year is strong,\n\nnumbers there give roughly 0.38-0.68Gt/yr\n\nhttps://www.environmentandsociety.org/sites/default/files/2014_i3_satsuka.pdf"
         },
         {
             "id": "a2412f21-54e7-448d-9e4a-1fc3bfbaad81",
@@ -46535,7 +47147,7 @@
                     ]
                 },
                 {
-                    "ProtectLand": 0.07
+                    "RestoreLand": 0.07
                 },
                 {
                     "WorldVariable": [
@@ -46607,7 +47219,7 @@
                     }
                 ]
             },
-            "notes": "https://www.nature.com/articles/s41586-018-0476-5\nGeneral reference\n\n> Rather than being an inevitable consequence of global sea-level rise, our findings indicate that large-scale loss of coastal wetlands might be avoidable, if sufficient additional accommodation space can be created through careful nature-based adaptation solutions to coastal management.\n\nhttps://blog.resourcewatch.org/2019/04/17/map-of-the-month-where-are-the-worlds-wetlands/#:~:text=Developed%20by%20the%20World%20Wildlife,percent%20of%20the%20earth's%20surface.\n7% value\n\nDraw Down for emissions: https://drawdown.org/solutions/coastal-wetland-protection\nThat gives 0.99\u20131.45Gt for 2020-2050 so that's 0.033-0.048Gt/yr"
+            "notes": "[three-quarters fork] Protection is now restoration (RestoreLand): it protects regrowing former farmland first, then farmland as it's freed, rather than land that's already wild. Protected regrowing land regrows ~30% faster and is never cleared again.\n\nhttps://www.nature.com/articles/s41586-018-0476-5\nGeneral reference\n\n> Rather than being an inevitable consequence of global sea-level rise, our findings indicate that large-scale loss of coastal wetlands might be avoidable, if sufficient additional accommodation space can be created through careful nature-based adaptation solutions to coastal management.\n\nhttps://blog.resourcewatch.org/2019/04/17/map-of-the-month-where-are-the-worlds-wetlands/#:~:text=Developed%20by%20the%20World%20Wildlife,percent%20of%20the%20earth's%20surface.\n7% value\n\nDraw Down for emissions: https://drawdown.org/solutions/coastal-wetland-protection\nThat gives 0.99\u20131.45Gt for 2020-2050 so that's 0.033-0.048Gt/yr"
         },
         {
             "id": "4ea6e38c-a119-4942-a170-97f073cc3b43",
@@ -46883,6 +47495,12 @@
                 },
                 {
                     "UnlocksProject": "b3a75f9b-7d54-4df7-96b8-9c84e9ad2749"
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.1
+                    ]
                 }
             ],
             "outcomes": [
@@ -46972,7 +47590,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nTV, use this for data:https://drawdown.org/solutions/biochar-production\nWe should cut regen ag"
+            "notes": "[three-quarters fork] Undoes 10% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nTV, use this for data:https://drawdown.org/solutions/biochar-production\nWe should cut regen ag"
         },
         {
             "id": "1b98f39e-bb87-4e9f-8c95-565839b72197",
@@ -47436,6 +48054,117 @@
             "notes": ""
         },
         {
+            "id": "73901e05-0d61-4825-841e-6e4470220c92",
+            "name": "Green Ammonia",
+            "kind": "Initiative",
+            "group": "Agriculture",
+            "ongoing": false,
+            "gradual": false,
+            "locked": true,
+            "cost": 0,
+            "base_cost": {
+                "Fixed": 12
+            },
+            "cost_modifier": 1.0,
+            "progress": 0.0,
+            "points": 0,
+            "estimate": 0,
+            "status": "Inactive",
+            "level": 0,
+            "completed_at": 0,
+            "required_majority": 0.0,
+            "effects": [
+                {
+                    "ModifyProcessByproducts": [
+                        "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
+                        "Co2",
+                        -0.15
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "c0045e2a-e1d7-4cb7-9d36-870525b46c54",
+                        "Co2",
+                        -0.05
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Co2",
+                        -0.11
+                    ]
+                },
+                {
+                    "ModifyProcessResourcesAmount": [
+                        "f6d43b60-8ec3-4735-9ccd-1f8f7a41dbfc",
+                        "Electricity",
+                        0.000139
+                    ]
+                },
+                {
+                    "ModifyProcessResourcesAmount": [
+                        "c0045e2a-e1d7-4cb7-9d36-870525b46c54",
+                        "Electricity",
+                        0.0004
+                    ]
+                },
+                {
+                    "ModifyProcessResourcesAmount": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Electricity",
+                        8.7e-05
+                    ]
+                }
+            ],
+            "outcomes": [
+                {
+                    "effects": [],
+                    "probability": {
+                        "likelihood": "Guaranteed",
+                        "conditions": []
+                    }
+                }
+            ],
+            "upgrades": [],
+            "active_outcome": null,
+            "supporters": [
+                "cf5a64e6-e61d-405a-9e37-634c45aa1563",
+                "eb491cfc-01fa-4af4-a560-49ad55975868"
+            ],
+            "opposers": [
+                "f952fd1f-6bf3-418f-ac02-0d6ff87955ca"
+            ],
+            "flavor": {
+                "image": {
+                    "data": {
+                        "File": "1645633652.502703.png"
+                    },
+                    "attribution": "Peter Haas / CC BY-SA 3.0"
+                },
+                "description": "Make the world's fertilizer from green hydrogen instead of natural gas: electrolyzers split water, and the hydrogen is combined with nitrogen from the air.",
+                "outcomes": [
+                    {
+                        "root": 0,
+                        "lines": [
+                            {
+                                "id": 0,
+                                "next": null,
+                                "speaker": "The Engineer",
+                                "text": "The fertilizer plants run on electrolyzers now. Every field in the world is fed, in part, by sunlight and wind twice over."
+                            }
+                        ]
+                    }
+                ]
+            },
+            "notes": "[three-quarters fork] About 110 Mt of synthetic nitrogen a year; making its ammonia from gas emits ~2.9 t CO2 per t of N (~0.3 Gt). Green ammonia removes that CO2 (15% of Industrial Crop Ag's CO2, 5% of Industrial Livestock Ag's, 11% of Smallholder Farms') and needs ~13 MWh of electricity per t of N, added per kcal to each process so it scales with farming: ~1,400 TWh/yr at today's output, ~5% of world electricity. Construction: ~300 GW of electrolyzers and new synthesis plants, ~20 Mt steel, ~30 Mt cement, ~100 TWh. Sources: IEA Ammonia Technology Roadmap (2021); Royal Society, Ammonia: zero-carbon fertiliser, fuel and energy store (2020).",
+            "construction": {
+                "steel": 20000000.0,
+                "cement": 30000000.0,
+                "other_energy": 100000000000.0
+            }
+        },
+        {
             "id": "b3a75f9b-7d54-4df7-96b8-9c84e9ad2749",
             "name": "Regenerative Agriculture",
             "kind": "Initiative",
@@ -47456,8 +48185,20 @@
             "completed_at": 0,
             "required_majority": 0.0,
             "effects": [
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "Biodiversity", -1.0]},
-                {"ModifyProcessByproducts": ["8609da2d-a3a0-479a-a8fa-a0d37d5b3535", "N2o", -0.2]},
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "Biodiversity",
+                        -1.0
+                    ]
+                },
+                {
+                    "ModifyProcessByproducts": [
+                        "8609da2d-a3a0-479a-a8fa-a0d37d5b3535",
+                        "N2o",
+                        -0.2
+                    ]
+                },
                 {
                     "ModifyProcessByproducts": [
                         "a6321414-cfff-4f90-b11a-676edf0f9389",
@@ -47467,6 +48208,12 @@
                 },
                 {
                     "UnlocksProject": "d234e590-67a4-4486-86a9-541946298d24"
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.3
+                    ]
                 }
             ],
             "outcomes": [
@@ -47506,7 +48253,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\n"
+            "notes": "[three-quarters fork] Undoes 30% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\n"
         },
         {
             "id": "b0e2ee8f-9a1d-4919-b51d-02dcf765495c",
@@ -50548,15 +51295,11 @@
                             "AddFlag": "Vegetarian"
                         },
                         {
-                            "DemandOutlookChange": [
-                                "AnimalCalories",
-                                -0.5
-                            ]
-                        },
-                        {
-                            "WorldVariable": [
-                                "Outlook",
-                                -1.0
+                            "OutlookByIncome": [
+                                -0.5,
+                                -1.0,
+                                -2.0,
+                                -2.5
                             ]
                         },
                         {
@@ -50576,15 +51319,11 @@
                             "AddFlag": "Vegan"
                         },
                         {
-                            "DemandOutlookChange": [
-                                "AnimalCalories",
-                                -1.0
-                            ]
-                        },
-                        {
-                            "WorldVariable": [
-                                "Outlook",
-                                -1.0
+                            "OutlookByIncome": [
+                                -1.0,
+                                -1.5,
+                                -2.5,
+                                -3.5
                             ]
                         },
                         {
@@ -50633,7 +51372,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Meatless Mondays, Flexitarian, Vegetarian Mandate and Vegan Mandate are four levels of one card, each with its own name and description. Several levels can be passed in one planning session if you can afford them. Level 1 (Meatless Mondays): -14% meat, made up with plants. Level 2 (Flexitarian): -20% meat. Level 3 (Vegetarian Mandate): 75% of meat demand shifts to plants; needs a coalition with half of parliament, or a suspended parliament. Level 4 (Vegan Mandate): 90% shifts; needs two thirds, or a suspended parliament. Plant calories replace the meat calories removed (Meatless Mondays used to add +14% plant demand, about five times too much; Flexitarian added none). A backlash that fades over 15 years restarts with each level, stronger at higher levels. Without the Animal Liberationist Curriculum, people don't understand why the government suddenly cares about cows (event 'Why Cows?').",
+            "notes": "[three-quarters fork] Vegetarian and Vegan mandates now cost contentedness by income (one clear line) instead of a world-wide hit plus a hidden per-region meat-demand penalty. Low-income regions still feel it (pastoralists, dairy as a protein staple), rich regions most.\n\n[three-quarters fork] Meatless Mondays, Flexitarian, Vegetarian Mandate and Vegan Mandate are four levels of one card, each with its own name and description. Several levels can be passed in one planning session if you can afford them. Level 1 (Meatless Mondays): -14% meat, made up with plants. Level 2 (Flexitarian): -20% meat. Level 3 (Vegetarian Mandate): 75% of meat demand shifts to plants; needs a coalition with half of parliament, or a suspended parliament. Level 4 (Vegan Mandate): 90% shifts; needs two thirds, or a suspended parliament. Plant calories replace the meat calories removed (Meatless Mondays used to add +14% plant demand, about five times too much; Flexitarian added none). A backlash that fades over 15 years restarts with each level, stronger at higher levels. Without the Animal Liberationist Curriculum, people don't understand why the government suddenly cares about cows (event 'Why Cows?').",
             "fatigue": {
                 "adapting": true,
                 "rate": 0.6,
@@ -51199,6 +51938,12 @@
                         "Ch4",
                         -0.2
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.1
+                    ]
                 }
             ],
             "outcomes": [
@@ -51241,7 +51986,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] The flat -0.04 Gt is now a 20% cut to landfill methane: organic waste composted with air doesn't make methane the way it does buried in a landfill.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nhttps://drawdown.org/solutions/composting\n\nTV I put this in because Haraway loves compost...\n\ngives 2.14-3.13 Gt over 30 years from the drawdown project, so let's say 0.08Gt/yr"
+            "notes": "[three-quarters fork] Undoes 10% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\n[three-quarters fork] The flat -0.04 Gt is now a 20% cut to landfill methane: organic waste composted with air doesn't make methane the way it does buried in a landfill.\n\n[three-quarters fork] Also improves smallholder farms: less biodiversity pressure and N2O.\n\nhttps://drawdown.org/solutions/composting\n\nTV I put this in because Haraway loves compost...\n\ngives 2.14-3.13 Gt over 30 years from the drawdown project, so let's say 0.08Gt/yr"
         },
         {
             "id": "f6f0645c-982e-40a2-921e-3e418799c26c",
@@ -52159,7 +52904,7 @@
                     ]
                 },
                 {
-                    "ProtectLand": 0.1
+                    "RestoreLand": 0.1
                 },
                 {
                     "WorldVariable": [
@@ -52194,7 +52939,7 @@
                             ]
                         },
                         {
-                            "ProtectLand": 0.15
+                            "RestoreLand": 0.15
                         },
                         {
                             "WorldVariable": [
@@ -52221,7 +52966,7 @@
                             ]
                         },
                         {
-                            "ProtectLand": 0.2
+                            "RestoreLand": 0.2
                         },
                         {
                             "WorldVariable": [
@@ -52236,7 +52981,7 @@
                     "cost": 10,
                     "effects": [
                         {
-                            "ProtectLand": 0.25
+                            "RestoreLand": 0.25
                         },
                         {
                             "WorldVariable": [
@@ -52296,7 +53041,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Most of this project's carbon removal now comes from the land system: each level speeds up regrowth on freed farmland (+25/50/75/100%). The flat removal (was -2/-3/-4/-5 Gt) now only covers restoring degraded land outside farmland: -0.5/-1/-1.5/-2 Gt.\n\nCarbon drawdown numbers from: https://www.carbonbrief.org/qa-can-nature-based-solutions-help-address-climate-change\n* need to create more events to link to effect of positive outcomes. (positive events- x flora and fauna have returned)"
+            "notes": "[three-quarters fork] Protection is now restoration (RestoreLand): it protects regrowing former farmland first, then farmland as it's freed, rather than land that's already wild. Protected regrowing land regrows ~30% faster and is never cleared again.\n\n[three-quarters fork] Most of this project's carbon removal now comes from the land system: each level speeds up regrowth on freed farmland (+25/50/75/100%). The flat removal (was -2/-3/-4/-5 Gt) now only covers restoring degraded land outside farmland: -0.5/-1/-1.5/-2 Gt.\n\nCarbon drawdown numbers from: https://www.carbonbrief.org/qa-can-nature-based-solutions-help-address-climate-change\n* need to create more events to link to effect of positive outcomes. (positive events- x flora and fauna have returned)"
         },
         {
             "id": "dce7b786-b06f-4f4a-b98d-dc941076ceb0",
@@ -52875,6 +53620,12 @@
                         "ExtinctionRate",
                         -0.5
                     ]
+                },
+                {
+                    "WorldVariable": [
+                        "SoilRegeneration",
+                        0.15
+                    ]
                 }
             ],
             "outcomes": [
@@ -52930,7 +53681,7 @@
                     }
                 ]
             },
-            "notes": "https://landinstitute.org/our-work/perennial-crops/kernza/\n\n\nAdd to crop rotation:\n\"Another of the worrying aspects of intensive systems is the reduction in biodiversity associated with the application of pesticides, mainly insecticides and fungicides, and with the extensive cultivation of genetically similar plants.\"\nhttps://www.sciencedirect.com/science/article/pii/S0167880921004515\n\nPerennial crops would not need replanting \u2013as the main characteristic\u2013 because they regrow after harvest. Consequently, production costs would decrease (e.g., lower seed costs) and field management tasks would be reduced (Zhang et al., 2018a, Zhang et al., 2018b). By not disturbing the soil, perennial crops can favor soil biodiversity (McLaughlin and Mineau, 1995), providing, for example, additional niches for soil beetles (Burmeister, 2021). They allow the development of a more natural soil system and, presumably, with improved soil health, high drought resilience and long-term stability (Burmeister, 2021, Sanford et al., 2021). Additionally, considering the higher aboveground biomass production in perennial crops, the use of by-products such as mulch or husks can be increased (Fig. 2)."
+            "notes": "[three-quarters fork] Undoes 15% of intensive farming's damage to soils (soil regeneration); all seven soil programs together undo all of it.\n\nhttps://landinstitute.org/our-work/perennial-crops/kernza/\n\n\nAdd to crop rotation:\n\"Another of the worrying aspects of intensive systems is the reduction in biodiversity associated with the application of pesticides, mainly insecticides and fungicides, and with the extensive cultivation of genetically similar plants.\"\nhttps://www.sciencedirect.com/science/article/pii/S0167880921004515\n\nPerennial crops would not need replanting \u2013as the main characteristic\u2013 because they regrow after harvest. Consequently, production costs would decrease (e.g., lower seed costs) and field management tasks would be reduced (Zhang et al., 2018a, Zhang et al., 2018b). By not disturbing the soil, perennial crops can favor soil biodiversity (McLaughlin and Mineau, 1995), providing, for example, additional niches for soil beetles (Burmeister, 2021). They allow the development of a more natural soil system and, presumably, with improved soil health, high drought resilience and long-term stability (Burmeister, 2021, Sanford et al., 2021). Additionally, considering the higher aboveground biomass production in perennial crops, the use of by-products such as mulch or husks can be increased (Fig. 2)."
         }
     ],
     "industries": [
@@ -53100,7 +53851,7 @@
                 "fuel": 29.37297
             },
             "byproducts": {
-                "co2": 29130.0,
+                "co2": 22138.8,
                 "ch4": 0.0,
                 "n2o": 0.0,
                 "biodiversity": 0.0
@@ -53127,7 +53878,7 @@
                 },
                 "description": "Plastics, pharmaceuticals, cleaning agents, pesticides, and other sorts of compounds that are found scattered throughout our lives and the world."
             },
-            "notes": "[three-quarters fork] co2 was 29.13, which totals only ~1.2 Mt; it looks like it was entered in kg rather than g. Now 29130.0 (~0.0 Gt), in line with real-world process emissions (cement calcination is ~1.6 Gt CO2).\n\nElectricity and water are part of \"Other Industry\"\nWhat about methane and pollution?"
+            "notes": "[three-quarters fork] co2 x0.76 (29130 -> 22138.8): about 0.3 Gt of the chemical industry's CO2 is ammonia for synthetic fertilizer, which is already counted in farming's emissions (Industrial Crop Ag, Industrial Livestock Ag, Smallholder Farms), so it was counted twice. Ammonia is ~0.45 Gt CO2/yr, ~70% of it for fertilizer (IEA Ammonia Technology Roadmap 2021).\n\n[three-quarters fork] co2 was 29.13, which totals only ~1.2 Mt; it looks like it was entered in kg rather than g. Now 29130.0 (~0.0 Gt), in line with real-world process emissions (cement calcination is ~1.6 Gt CO2).\n\nElectricity and water are part of \"Other Industry\"\nWhat about methane and pollution?"
         },
         {
             "id": "4b8e2d61-7a35-4c90-9f1e-6d3a8c5b2e07",
@@ -53590,7 +54341,7 @@
                 },
                 "description": "Peasants tending small farms (<2 Ha) for subsistence production. These small farms produce a large share of the world's crops with relatively few environmental costs, but require more labour than industrial agriculture."
             },
-            "notes": "[three-quarters fork] Smallholders now start as subsistence agriculture is today: land 0.0015 -> 0.0016, n2o 0 -> 0.0003, biodiversity -1 -> 0.1, and they use synthetic fertilizer and pesticides. Reconcile Town and Country (+15% yield, biodiversity modifier -2.5), Regenerative Agriculture (-1.0), Multistrata Agroforestry (-0.75), Compost and Biochar (-0.375 each) improve them; with all five they reach land ~0.00139, biodiversity -0.4 and half the N2O. The Enforce Pesticide Ban policy is the drastic shortcut.\n\nhttps://ourworldindata.org/smallholder-food-production\nSmallholders use 24% of ag land, produce 29% of crops (in kcals), some of which go into fuel and feed, and ultimately contribute to 32% of the food supply (directly consumed crops).\n\nTV, similar numbers here: Ricciardi, Vincent, Navin Ramankutty, Zia Mehrabi, Larissa Jarvis, and Brenton Chookolingo. \"How much of the world's food do smallholders produce?.\" Global food security 17 (2018): 64-72.\n\nThey tend to have higher yields (more labor intensive, less land intensive) and better biodiversity effects.\n\nNicholas suggests 40-50% max. Starting kcal demand is 6840000000000000, so that would be 2736000000000000.0-3420000000000000.0, let's do 3078000000000000.0 which is in the middle."
+            "notes": "[three-quarters fork] Fertilizer: synthetic nitrogen is made from ammonia, mostly from natural gas, which is included in this process's CO2 (about 11% of it) and its N2O from applied nitrogen. Green Ammonia replaces the gas with green hydrogen.\n\n[three-quarters fork] Smallholders now start as subsistence agriculture is today: land 0.0015 -> 0.0016, n2o 0 -> 0.0003, biodiversity -1 -> 0.1, and they use synthetic fertilizer and pesticides. Reconcile Town and Country (+15% yield, biodiversity modifier -2.5), Regenerative Agriculture (-1.0), Multistrata Agroforestry (-0.75), Compost and Biochar (-0.375 each) improve them; with all five they reach land ~0.00139, biodiversity -0.4 and half the N2O. The Enforce Pesticide Ban policy is the drastic shortcut.\n\nhttps://ourworldindata.org/smallholder-food-production\nSmallholders use 24% of ag land, produce 29% of crops (in kcals), some of which go into fuel and feed, and ultimately contribute to 32% of the food supply (directly consumed crops).\n\nTV, similar numbers here: Ricciardi, Vincent, Navin Ramankutty, Zia Mehrabi, Larissa Jarvis, and Brenton Chookolingo. \"How much of the world's food do smallholders produce?.\" Global food security 17 (2018): 64-72.\n\nThey tend to have higher yields (more labor intensive, less land intensive) and better biodiversity effects.\n\nNicholas suggests 40-50% max. Starting kcal demand is 6840000000000000, so that would be 2736000000000000.0-3420000000000000.0, let's do 3078000000000000.0 which is in the middle."
         },
         {
             "id": "b5cb5cd5-f339-4918-b8a6-0488b89e5679",
@@ -53922,7 +54673,7 @@
                 },
                 "description": "Large-scale, intensive production of crops and animals, often involving chemical fertilizers on crops."
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Fertilizer: synthetic nitrogen is made from ammonia, mostly from natural gas, which is included in this process's CO2 (about 15% of it) and its N2O from applied nitrogen. Green Ammonia replaces the gas with green hydrogen.\n\n"
         },
         {
             "id": "92b188fc-1461-4ea0-9aef-7f38eab7a76d",
@@ -54375,7 +55126,7 @@
                 },
                 "description": "Also known as \"factory farming\"  designed to maximize production, while minimizing costs. Uses hormones and vaccines to produce consistent product. Animals are kept in confinement for most of their lives."
             },
-            "notes": ""
+            "notes": "[three-quarters fork] Fertilizer: synthetic nitrogen is made from ammonia, mostly from natural gas, which is included in this process's CO2 (about 5% of it) and its N2O from applied nitrogen. Green Ammonia replaces the gas with green hydrogen.\n\n"
         },
         {
             "id": "2626a0df-b132-44f1-b607-ee2879a90a5c",

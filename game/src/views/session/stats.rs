@@ -404,7 +404,8 @@ fn render_emissions(ui: &mut egui::Ui, state: &State, process_changes: &[(Proces
 
 fn render_land(ui: &mut egui::Ui, state: &State, process_changes: &[(Process, f32)]) {
     let available_land = state.world.starting_resources.land;
-    let tip = tip(icons::LAND, t!("Current land use.")).card(factors_card(None, Var::Land, state));
+    let land_tip =
+        tip(icons::LAND, t!("Current land use.")).card(factors_card(None, Var::Land, state));
     let land_use = state.land_use_percent();
     let land_demand = state.resource_demand.of(Resource::Land);
 
@@ -424,9 +425,42 @@ fn render_land(ui: &mut egui::Ui, state: &State, process_changes: &[(Process, f3
         None,
         &land_use,
         &land_changed,
-        tip,
+        land_tip,
         land_change,
         icons::LAND,
+    );
+
+    // Soil health, right under land use.
+    let health = state.land_carbon.soil_health;
+    let target = state
+        .land_carbon
+        .soil_health_target(state.intensive_farming_share());
+    let arrow = if target - health > 0.005 {
+        "↑"
+    } else if target - health < -0.005 {
+        "↓"
+    } else {
+        "→"
+    };
+    let soil_tip = tip(
+        icons::LAND,
+        t!(
+            "Farm soil health is %{health}%, heading for %{target}% with farming as it is. Degraded soils need more land for the same harvest and release carbon; healthy ones need less and take carbon back up. Intensive farming wears soils down over decades; organic and smallholder farming and regenerative programs restore them.",
+            health = format!("{:.0}", health * 100.),
+            target = format!("{:.0}", target * 100.)
+        ),
+    )
+    .card(factors_card(None, Var::Land, state));
+    add_tip(
+        soil_tip,
+        ui.label(
+            egui::RichText::new(t!(
+                "Soil health %{health}% %{arrow}",
+                health = format!("{:.0}", health * 100.),
+                arrow = arrow
+            ))
+            .small(),
+        ),
     );
 }
 
