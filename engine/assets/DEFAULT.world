@@ -40724,7 +40724,7 @@
                 {
                     "DemandAmount": [
                         "Electricity",
-                        4700000000000.0
+                        4695000000000.0
                     ]
                 }
             ],
@@ -40750,15 +40750,15 @@
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                9400000000000.0
+                                9109000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 18800000.0,
+                        "cement": 9400000.0,
+                        "other_energy": 282000000000.0
                     }
                 },
                 {
@@ -40767,21 +40767,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -4.5
+                                -5.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                14100000000000.0
+                                14502000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 23000000.0,
+                        "cement": 11500000.0,
+                        "other_energy": 345000000000.0
                     }
                 },
                 {
@@ -40790,21 +40790,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -6.0
+                                -8.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                18800000000000.0
+                                22016000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 32000000.0,
+                        "cement": 16000000.0,
+                        "other_energy": 480000000000.0
                     }
                 },
                 {
@@ -40813,21 +40813,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -7.5
+                                -12.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                23500000000000.0
+                                31400000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 40000000.0,
+                        "cement": 20000000.0,
+                        "other_energy": 600000000000.0
                     }
                 },
                 {
@@ -40836,21 +40836,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -9.0
+                                -17.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                28200000000000.0
+                                42485000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 47200000.0,
+                        "cement": 23600000.0,
+                        "other_energy": 708000000000.0
                     }
                 },
                 {
@@ -40859,21 +40859,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -11.5
+                                -23.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                32900000000000.0
+                                55153000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 53900000.0,
+                        "cement": 27000000.0,
+                        "other_energy": 809000000000.0
                     }
                 },
                 {
@@ -40882,21 +40882,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -13.0
+                                -30.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                37600000000000.0
+                                69313000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 60300000.0,
+                        "cement": 30200000.0,
+                        "other_energy": 905000000000.0
                     }
                 },
                 {
@@ -40905,21 +40905,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -14.5
+                                -38.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                42300000000000.0
+                                84895000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 66400000.0,
+                        "cement": 33200000.0,
+                        "other_energy": 996000000000.0
                     }
                 },
                 {
@@ -40928,21 +40928,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -16.0
+                                -47.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                47000000000000.0
+                                101839000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 72200000.0,
+                        "cement": 36100000.0,
+                        "other_energy": 1083000000000.0
                     }
                 },
                 {
@@ -40951,251 +40951,21 @@
                         {
                             "WorldVariable": [
                                 "Emissions",
-                                -17.5
+                                -57.0
                             ]
                         },
                         {
                             "DemandAmount": [
                                 "Electricity",
-                                51700000000000.0
+                                120098000000000.0
                             ]
                         }
                     ],
                     "active": false,
                     "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -19.0
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                56400000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -20.5
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                61100000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -22.0
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                65800000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -23.5
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                70500000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -25.0
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                75200000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -26.5
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                79900000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -28.0
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                84600000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -29.5
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                89300000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -31.0
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                94000000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
-                    }
-                },
-                {
-                    "cost": 5,
-                    "effects": [
-                        {
-                            "WorldVariable": [
-                                "Emissions",
-                                -32.5
-                            ]
-                        },
-                        {
-                            "DemandAmount": [
-                                "Electricity",
-                                98700000000000.0
-                            ]
-                        }
-                    ],
-                    "active": false,
-                    "construction": {
-                        "steel": 20000000.0,
-                        "cement": 10000000.0,
-                        "other_energy": 300000000000.0
+                        "steel": 77800000.0,
+                        "cement": 38900000.0,
+                        "other_energy": 1167000000000.0
                     }
                 }
             ],
@@ -41242,7 +41012,7 @@
                     }
                 ]
             },
-            "notes": "[three-quarters fork] Construction: each level takes about 20 Mt of steel, 10 Mt of cement and 300 TWh of manufacturing, mostly for sorbents and contactors (capturing 1.5 Gt a year needs thousands of large plants), made by industry over the following years.\n\nto sequester 30 gt C a year by 2100, DACCS would require massive amount of energy, up to 300 EJ. total world energy production in 2020 was 550 EJ. Study includes charts comparing water, land, and energy use by DACCS, BECCS, and afforestation. authors expect it to be scaled up 1.5gt C per year\n\nhttps://www.nature.com/articles/s41467-019-10842-5\n\nFrom that paper:\nFor 30\u2009GtCO2/year it requires something like 250EJ/yr, about 500Gt H2O/yr = 500km3/yr, and negligible land use. So every 1.5GtCO2/year requires 12.5EJ/yr (~3.47e12 kWh/year, rounded to 3.5e12kWh/year) and 25km3 water/yr\nSo if it can scale up 1.5GtCO2/year we can make this a 5-year project with upgrades.\n\nUses.\nhttp://www.infinitreellc.com/",
+            "notes": "[three-quarters fork] Scaling: each level adds more than the last, as a new industry grows: +1.5, +1.5, +2, +3, ... +10 Gt/yr, to 57 Gt/yr at level 11 (was a flat +1.5 Gt per level over 21 levels, with a slip at level 7). That's 2x in the first planning cycle, falling to ~1.2x per five years as it gets huge: 4-15% a year, slower than solar's ~25%/yr over the 2010s. Learning: energy per tonne falls 10% per doubling of capacity (Wright's law), from ~3,100 kWh/t (capture, compression, storage) toward a practical floor of 1,500 kWh/t; new capacity is built at the latest efficiency, so each level's electricity is the sum of what each tranche needs. Construction per level scales with the capacity added and falls with the same learning rate (~13 Mt steel, ~7 Mt cement, ~200 TWh per Gt/yr at first). Electricity becomes the real limit: 57 Gt/yr needs ~120,000 TWh/yr, about four and a half times today's world electricity. Sources: Fasihi et al. 2019 (J. Cleaner Production), IEA DAC 2022, Wright's-law rates for chemical plants and electrolyzers.\n\n[three-quarters fork] Construction: each level takes about 20 Mt of steel, 10 Mt of cement and 300 TWh of manufacturing, mostly for sorbents and contactors (capturing 1.5 Gt a year needs thousands of large plants), made by industry over the following years.\n\nto sequester 30 gt C a year by 2100, DACCS would require massive amount of energy, up to 300 EJ. total world energy production in 2020 was 550 EJ. Study includes charts comparing water, land, and energy use by DACCS, BECCS, and afforestation. authors expect it to be scaled up 1.5gt C per year\n\nhttps://www.nature.com/articles/s41467-019-10842-5\n\nFrom that paper:\nFor 30\u2009GtCO2/year it requires something like 250EJ/yr, about 500Gt H2O/yr = 500km3/yr, and negligible land use. So every 1.5GtCO2/year requires 12.5EJ/yr (~3.47e12 kWh/year, rounded to 3.5e12kWh/year) and 25km3 water/yr\nSo if it can scale up 1.5GtCO2/year we can make this a 5-year project with upgrades.\n\nUses.\nhttp://www.infinitreellc.com/",
             "construction": {
                 "steel": 20000000.0,
                 "cement": 10000000.0,
